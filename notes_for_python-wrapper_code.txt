@@ -1,0 +1,133 @@
+NOTES FOR CYTHON WRAPPER FOR IMFIT:
+
+
+[] Model description and parameter input
+
+	Write Python code to parse imfit config file and return object with
+	info
+		-- also write Python functions to make it easy to construct
+		similar object
+	
+	Imfit vs Makeimage config files
+		-- flag in object specifying absence of fitting-related info?
+		(parameter limits, data image, etc.)
+	
+	Two or three levels of "model description"
+		1. Basic model as for makeimage: functions, parameter values, PSF image(s)
+		2. Data images, error & mask images, parameter limits
+		3. Fitting statistic to be used
+
+[] Better function handling
+	Andre's FunctionDescription class allows the user to specify the name and
+	parameter values (and limits) for a function. E.g.
+    	exponential = function_description('Exponential')
+    	exponential.PA.setValue(93.0217, [0, 180])
+    	exponential.ell.setValue(0.37666, [0, 1])
+    	exponential.I_0.setValue(1, [0, 10])
+    	exponential.h.setValue(25, [0, 100])
+    BUT there is no checking of parameter names: "exponential.PA.setValue"
+    automatically creates an attribute named "PA"
+
+	
+	but with NO checks to see if
+	these are valid p
+
+[] std::tuple issues
+	Since Cython doesn't understand C++ std::tuple, but *does* understand std::pair,
+	we may need to convert some of our C++ code that returns tuples so that it returns
+	a pair [assuming it returns 2 values!].
+
+	However, this will only be an issue if we need to call one of the C++ functions
+	or methods from Python. So for the time being, we won't worry about it...
+
+
+[] Functions and object to expose in Python
+	struct mp_par
+	struct mp_result ?
+	class ModelObject
+	class Convolver
+	solver functions:
+		DispatchToSolver ?
+		DiffEvolnFit
+		LevMarFit
+		NMSimplexFit
+		NLOptFit
+		class SolverResults [needed for input/output to solver functions]
+
+cdef extern from 'imfit/add_functions.h':
+    int AddFunctions(ModelObject *theModel, vector[string] &functionNameList,
+                     vector[int] &functionSetIndices, bool subamplingFlag, bool verbose)
+    int GetFunctionParameters(string &functionName, vector[string] &parameterNameList)
+    void GetFunctionNames(vector[string] &functionNameList)
+
+cdef extern from 'imfit/definitions.h':
+    int WEIGHTS_ARE_SIGMAS    = 100 # "weight image" pixel value = sigma
+    int WEIGHTS_ARE_VARIANCES = 110 # "weight image" pixel value = variance (sigma^2)
+    int WEIGHTS_ARE_WEIGHTS   = 120 # "weight image" pixel value = weight
+    int MASK_ZERO_IS_GOOD     =  10 # "standard" input mask format (good pixels = 0)
+    int MASK_ZERO_IS_BAD      =  20 # alternate input mask format (good pixels = 1)
+
+[maybe -- we could replace these with Python code, but since we already have the
+C++ code...]
+cdef extern from 'imfit/statistics.h':
+    double AIC_corrected(double logLikelihood, int nParams, long nData, int chiSquareUsed)
+    double BIC(double logLikelihood, int nParams, long nData, int chiSquareUsed)
+
+
+
+[] Image array issues:
+	[] Byte-order (endian-ness) issues:
+		astropy.fits reads in FITS images as big-endian, 4-byte (single-precision floating point)
+		
+		array.dtype.byteorder [possible values: '<' for little-endian, '>' for big-endian, 
+								'=' for same as current OS/computer]
+	
+		our code ultimately wants the data as little-endian, double-precision
+
+		# Python code snippet to check for and fix byte order
+		sys_byteorder = ('>', '<')[sys.byteorder == 'little']
+
+		def FixByteOrder( array ):
+			if array.dtype.byteorder not in ('=', sys_byteorder):
+				array = array.byteswap().newbyteorder(sys_byteorder)
+			return array
+
+	
+	[] floating-point size
+		astropy.fits will often read a FITS image as 32-bit float (or possibly something
+		simpler or stranger)
+		
+		Our code wants the data as double-precision
+
+		# Python code snippet to convert to double-precision (and C ordering)
+		array_fixed = array.astype(dtype=np.float64, order='C')
+
+
+	[] 1D vs 2D layout
+		astropy.fits produces 2D numpy arrays, in C ordering
+		
+		Our code wants *1D* arrays (with implicit C ordering)
+
+		# Python code snippet for converting to and from 1D format
+		image_x, image_y = image.shape[1], image.shape[0]
+		(OR: image_y, image_x = image.shape)
+		image_1d = image.flatten()
+		...
+		...
+		...
+		image_output = image_1d.reshape((image_y, image_x))
+
+
+	[] Converting Numpy (1D) array to and from C++ double *
+	
+		Assuming we have a C++ function that wants a double *, e.g.
+			void SomeCppFunction( double * input, ...)
+	
+		# Cython code snippet using typed memoryview
+		cdef double[::1] image_data = image_1d
+		SomeCppFunction(&image_data[0], ...)
+
+
+	
+	
+
