@@ -174,6 +174,8 @@ class FunctionDescription(object):
 		if not isinstance(p, ParameterDescription):
 			raise ValueError('p is not a Parameter object.')
 		self._parameters.append(p)
+		# add parameter names as attributes, so we can do function_instance.<param_name>
+		setattr(self, p.name, p)
 		
 	
 	def parameterList(self):
@@ -203,17 +205,17 @@ class FunctionDescription(object):
 		return '\n'.join(lines)
 
 	
-	def __getattr__(self, attr):
-		return self[attr]
-	
-	
-	def __getitem__(self, key):
-		if not isinstance(key, str):
-			raise KeyError('Parameter must be a string.')
-		for p in self._parameters:
-			if key == p.name:
-				return p
-		raise KeyError('Parameter %s not found.' % key)
+# 	def __getattr__(self, attr):
+# 		return self[attr]
+# 	
+# 	
+# 	def __getitem__(self, key):
+# 		if not isinstance(key, str):
+# 			raise KeyError('Parameter must be a string.')
+# 		for p in self._parameters:
+# 			if key == p.name:
+# 				return p
+# 		raise KeyError('Parameter %s not found.' % key)
 	
 
 	def __deepcopy__(self, memo):
@@ -224,10 +226,16 @@ class FunctionDescription(object):
 
 
 class FunctionSetDescription(object):
-	def __init__(self, name, functions=None):
+	def __init__( self, name, x0param=None, y0param=None, functions=None ):
 		self._name = name
-		self.x0 = ParameterDescription('X0', 0.0)
-		self.y0 = ParameterDescription('Y0', 0.0)
+		if x0param is None:
+			self.x0 = ParameterDescription('X0', 0.0)
+		else:
+			self.x0 = x0param
+		if y0param is None:
+			self.y0 = ParameterDescription('Y0', 0.0)
+		else:
+			self.y0 = y0param
 		self._functions = []
 		if functions is not None:
 			for f in functions:
@@ -256,6 +264,8 @@ class FunctionSetDescription(object):
 		if self._contains(f.name):
 			raise KeyError('Function named %s already exists.' % f.name)
 		self._functions.append(f)
+		# add parameter names as attributes, so we can do function_set_instance.<func_name>
+		setattr(self, f.name, f)
 	
 	
 	def _contains(self, name):
@@ -294,6 +304,14 @@ class FunctionSetDescription(object):
 		return params
 	
 	
+	def __eq__(self, rhs):
+		if ((self._name == rhs._name) and (self.x0 == rhs.x0) and (self.y0 == rhs.y0)
+			and (self._functions == rhs._functions)):
+			return True
+		else:
+			return False
+	
+	
 	def __str__(self):
 		lines = []
 		lines.append(str(self.x0))
@@ -301,17 +319,18 @@ class FunctionSetDescription(object):
 		lines.extend(str(f) for f in self._functions)
 		return '\n'.join(lines)
 	
-	def __getattr__(self, attr):
-		return self[attr]
 	
-	
-	def __getitem__(self, key):
-		if not isinstance(key, str):
-			raise KeyError('Function must be a string.')
-		for f in self._functions:
-			if key == f.name:
-				return f
-		raise KeyError('Function %s not found.' % key)
+# 	def __getattr__(self, attr):
+# 		return self[attr]
+# 	
+# 	
+# 	def __getitem__(self, key):
+# 		if not isinstance(key, str):
+# 			raise KeyError('Function must be a string.')
+# 		for f in self._functions:
+# 			if key == f.name:
+# 				return f
+# 		raise KeyError('Function %s not found.' % key)
 	
 	
 	def __deepcopy__(self, memo):

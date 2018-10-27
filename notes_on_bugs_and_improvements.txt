@@ -1,0 +1,60 @@
+* Problem with attribute access:
+
+Problem encountered in writing unit tests for read_function_set()
+
+pytest code calls:
+	return not hasattr(obj, "__name__") and not callable(obj)
+
+hasattr(obj, "__name__") is clearly supposed to return either True or False;
+what actually happens is that we get
+	KeyError: 'Function __name__ not found.'
+
+
+From Python docs:
+hasattr(object, name)
+The arguments are an object and a string. The result is True if the
+string is the name of one of the object’s attributes, False if not.
+(This is implemented by calling getattr(object, name) and seeing whether
+it raises an AttributeError or not.)
+
+getattr(object, name[, default])
+Return the value of the named attribute of object. name must be a
+string. If the string is the name of one of the object’s attributes, the
+result is the value of that attribute. For example, getattr(x, 'foobar')
+is equivalent to x.foobar. If the named attribute does not exist,
+default is returned if provided, otherwise AttributeError is raised.
+
+From elsewhere in Python docs
+[https://docs.python.org/3/reference/datamodel.html#customizing-attribute-access]:
+object.__getattr__(self, name)
+Called when the default attribute access fails with an AttributeError
+(either __getattribute__() raises an AttributeError because name is not
+an instance attribute or an attribute in the class tree for self; or
+__get__() of a name property raises AttributeError). This method should
+either return the (computed) attribute value or raise an AttributeError
+exception.
+
+
+The problem is that Andre has, in the *Description classes (models.py), redefined
+the __getattr__ method as
+	def __getattr__(self, attr):
+		return self[attr]
+which translates to
+	def __getattr__(self, attr):
+		return self.__getitem__(attr)
+and since he's redefined __getitem__ to always raise a KeyError if <attr> is not
+found in the internal _parameters (or _functions or _functionSets) lists, then
+KeyError is returned when hasattr asks about "__name__".  And since hasattr is
+only expecting AttributeError, things fail.
+
+
+CONCLUSION:
+We need to rewrite Andre's approach for adding function or parameter names to
+the *Description objects so that they respect the standard Python conventions
+(e.g., returning AttributeError instead of KeyError when a nonexistent attribute
+name is used).
+
+E.g., use direct modifictions of <classname>.__dict__ as we did for datautils.py
+
+
+
