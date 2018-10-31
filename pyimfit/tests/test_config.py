@@ -2,10 +2,13 @@
 # Execute via
 #    $ pytest test_config.py
 
+import copy
 import pytest
 
 from ..model import ParameterDescription, FunctionDescription, FunctionSetDescription
-from ..config import read_parameter, read_function, read_function_set
+from ..model import ModelDescription
+from ..config import read_parameter, read_function, read_function_set, read_options
+from ..config import parse_config
 
 
 # inputs and reference outputs for read_parameter
@@ -69,6 +72,25 @@ fsetdesc_correct2.addFunction(fdesc_fbloc2_correct1)
 fsetdesc_correct2.addFunction(fdesc_correct2)
 
 
+# inputs and reference outputs for parse_config
+testConfigLines_good1 = ["GAIN 4.5", "READ_NOISE\t0.5", "X0  100", "Y0  200", 
+								"FUNCTION Gaussian", "PA  10", 
+								"ell  0.5", "I_0  100", "sigma  10"]
+testConfigLines_good2 = ["GAIN 4.5", "READ_NOISE\t0.5", "X0  100\tfixed", "Y0  200\tfixed", 
+							"FUNCTION Gaussian", "PA  10\tfixed", "ell  0.5 0.1,0.6", 
+								"I_0  100  0,1e6", "sigma  10   fixed",
+							"FUNCTION Exponential",  "PA  20\tfixed", "ell  0.2 0.1,0.4", 
+								"I_0  100  0,1e6", "h  100   1,400"]
+
+fsetdesc_correct1b = copy.copy(fsetdesc_correct1)
+fsetdesc_correct1b._name = "fs0"
+modeldesc_correct1 = ModelDescription([fsetdesc_correct1b], 
+										options={"GAIN": '4.5', "READ_NOISE": '0.5'})
+fsetdesc_correct2b = copy.copy(fsetdesc_correct2)
+fsetdesc_correct2b._name = "fs0"
+modeldesc_correct2 = ModelDescription([fsetdesc_correct2b], 
+										options={"GAIN": '4.5', "READ_NOISE": '0.5'})
+
 
 
 
@@ -97,6 +119,7 @@ def test_read_parameter_good( ):
 	assert pdesc5 == pdesc_ref_correct5
 
 
+
 def test_read_function_bad( ):
 	"""Test to see that we raise ValueError exceptions when line is malformed."""
 	with pytest.raises(ValueError):
@@ -123,10 +146,39 @@ def test_read_function_attributes( ):
 	assert fdesc2.h == ParameterDescription("h", 100.0, 1.0, 400.0)
 
 
+
 def test_read_function_set_good( ):
 	"""Test that we correctly read valid function-block lines."""
 	fsetdesc1 = read_function_set("function_block_1", testFunctionBlockLines_good1)
 	assert fsetdesc1 == fsetdesc_correct1
 	fsetdesc2 = read_function_set("function_block_2", testFunctionBlockLines_good2)
 	assert fsetdesc2 == fsetdesc_correct2
+
+
+
+def test_read_options_bad( ):
+	"""Test to see that we raise ValueError exceptions when line is malformed."""
+	inputLines1 = ["GAIN\t\t4.5", "READ_NOISE"]
+	with pytest.raises(ValueError):
+		configDict = read_options(inputLines1)
+	inputLines2 = ["FUNCTION   Gaussian"]
+	with pytest.raises(ValueError):
+		configDict = read_options(inputLines2)
+
+def test_read_options_good( ):
+	"""Test that we correctly parse line containing image-description parameters."""
+	inputLines = ["GAIN\t\t4.5", "READ_NOISE   10.0"]
+	configDict = read_options(inputLines)
+	correctDict = {"GAIN": "4.5", "READ_NOISE": "10.0"}
+	assert configDict == correctDict
+
+
+
+def test_parse_config( ):
+	"""Test that we correctly read valid configuration-file lines."""
+	modeldesc1 = parse_config(testConfigLines_good1)
+	assert modeldesc1 == modeldesc_correct1
+	modeldesc2= parse_config(testConfigLines_good2)
+	assert modeldesc2 == modeldesc_correct2
+
 

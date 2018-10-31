@@ -1,0 +1,12 @@
+# This is an example of a configuration file for Imfit.
+# More specifically, it specifies an Exponential model for use in fitting a 
+# 256x256-pixel SDSS r-band cutout image of the galaxy IC 3478.
+
+X0   129.0    125,135
+Y0   129.0    125,135
+FUNCTION Exponential
+PA    18.0    0,90
+ell    0.2    0,1
+I_0    100    0,500
+h      25     0,100
+

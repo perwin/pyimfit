@@ -1,7 +1,8 @@
 '''
-Created on Sep 25, 2013
+Functions to generate simple PSF images, using either Gaussian or Moffat profiles.
 
-@author: andre
+Modified version of code originally created on Sep 25, 2013 by Andre
+
 '''
 
 import numpy as np
@@ -48,17 +49,16 @@ def gaussian_psf(width, type='fwhm', PA=0.0, ell=0.0, size=31):
     psf : 2-D array
         Image of the gaussian.
     '''
-#    from .lib import function_description
 
     if size % 2 != 1:
-        raise ValueError('Size must be an odd number.')
+        raise ValueError('Image size (width and height) must be an odd number.')
     if type == 'fwhm':
         sigma = width / FWHM_to_sigma_factor
     elif type == 'sigma':
         sigma = width
     else:
-        ValueError('type must be either fwhm or sigma.')
-    center = (size+1) / 2
+        ValueError("type must be either 'fwhm' or 'sigma'.")
+    center = (size + 1) / 2
     model = SimpleModelDescription()
     model.x0.setValue(center)
     model.y0.setValue(center)
@@ -102,11 +102,10 @@ def moffat_psf(fwhm, beta=3.1, PA=0.0, ell=0.0, size=31):
     psf : 2-D array
         Image of the gaussian.
     '''
-#    from .lib import function_description
 
     if size % 2 != 1:
-        raise ValueError('Size must be an odd number.')
-    center = (size+1) / 2
+        raise ValueError('Image size (width and height) must be an odd number.')
+    center = (size + 1) / 2
     model = SimpleModelDescription()
     model.x0.setValue(center)
     model.y0.setValue(center)

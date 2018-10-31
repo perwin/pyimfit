@@ -1,6 +1,6 @@
-'''
+"""
 Modification of Andre's "config.py" (originally created 19 Sep 2013).
-'''
+"""
 
 from .model import ParameterDescription, FunctionDescription, FunctionSetDescription, ModelDescription
 
@@ -8,18 +8,18 @@ __all__ = ['parse_config_file', 'parse_config']
 
 
 
-comment = '#'
+commentChar = '#'
 x0_str = 'X0'
 y0_str = 'Y0'
 function_str = 'FUNCTION'
 fixed_str = 'fixed'
 
 
-#FIXME: Need to handle case of optional function parameters
+#FIXME: (PE) Need to handle case of optional image-function parameters
 
 
 def parse_config_file( fname ):
-	'''
+	"""
 	Read an Imfit model configuration file.
 	
 	Parameters
@@ -35,7 +35,7 @@ def parse_config_file( fname ):
 	See also
 	--------
 	parse_config
-	'''
+	"""
 	with open(fname) as fd:
 		return parse_config(fd.readlines())
 			
@@ -43,12 +43,12 @@ def parse_config_file( fname ):
 
 	
 def parse_config( lines ):
-	'''
+	"""
 	Parses an Imfit model configuration from a list of strings.
 	
 	Parameters
 	----------
-	fname : list of strings
+	ines : list of strings
 		String representantion of Imfit model configuration.
 		
 	Returns
@@ -59,23 +59,25 @@ def parse_config( lines ):
 	See also
 	--------
 	parse_config_file
-	'''
+	"""
 	lines = clean_lines(lines)
 
 	model = ModelDescription()
 	
 	block_start = 0
-	id_fs = 0
+	id_fs = 0   # number of current function block ("function set")
 	for i in range(block_start, len(lines)):
 		if lines[i].startswith(x0_str):
 			if block_start == 0: 
 				options = read_options(lines[block_start:i])
 				model.options.update(options)
 			else:
-				model.addFunctionSet(read_function_set('fs%2d' % id_fs, lines[block_start:i]))
+				funcSetName = "fs{0:d}".format(id_fs)
+				model.addFunctionSet(read_function_set(funcSetName, lines[block_start:i]))
 				id_fs += 1
 			block_start = i
-	model.addFunctionSet(read_function_set('fs%d' % id_fs, lines[block_start:i+1]))
+	funcSetName = "fs{0:d}".format(id_fs)
+	model.addFunctionSet(read_function_set(funcSetName, lines[block_start:i+1]))
 	return model
 
 
@@ -85,7 +87,7 @@ def clean_lines( lines ):
 	clean = []
 	for l in lines:
 		# Clean the comments.
-		l = l.split(comment, 1)[0]
+		l = l.split(commentChar, 1)[0]
 		# Remove leading and trailing whitespace.
 		l = l.strip()
 		# Skip the empty lines.
@@ -98,12 +100,31 @@ def clean_lines( lines ):
 
 	
 def read_options( lines ):
+	"""
+	Parse the lines from an Imfit configuration file which contain image-description
+	parameters (GAIN, READ_NOISE, etc.).
+	
+	Parameters
+	----------
+	lines : list of strings
+		String representantion of Imfit model configuration.
+		
+	Returns
+	-------
+	config : dict mapping parameter names to values
+		e.g, {"GAIN": "4.56", "ORIGINAL_SKY": "233.87"}
+	"""
 	config = {}
-	for l in lines:
+	for line in lines:
 		# Options are key-value pairs.
-		k, val = l.split(' ', 1)
+		pieces = line.split()
+		if len(pieces) < 2:
+			msg = "Expected image-description parameter and value"
+			raise ValueError(msg)
+		k, val = pieces[0], pieces[1]
 		if k in [x0_str, y0_str, function_str]:
-			raise ValueError('Expected option, but got %s instead.' % k)
+			msg = "Expected image-description parameter name, but got {0:s} instead.".format(k)
+			raise ValueError(msg)
 		val = val.strip()
 		config[k] = val
 		
@@ -113,11 +134,14 @@ def read_options( lines ):
 
 
 def read_function_set( name, lines ):
-	"""Reads in lines of text corresponding to a function block (or 'set') containing
+	"""
+	Reads in lines of text corresponding to a function block (or 'set') containing
 	X0,Y0 coords and one or more image functions with associated parameter settings.
 	
     Parameters
     ----------
+    name : string
+    
     lines : list of string
     	lines from configuration file
     
@@ -149,7 +173,8 @@ def read_function_set( name, lines ):
 
 		
 def read_function( lines ):
-	"""Reads in lines of text corresponding to a function declaration and
+	"""
+	Reads in lines of text corresponding to a function declaration and
 	initial values, ranges, etc. for its parameters.
 	
     Parameters
@@ -184,7 +209,8 @@ def read_function( lines ):
 
 
 def read_parameter( line ):
-	"""Reads in a single text line containing parameter info, parses it, and
+	"""
+	Reads in a single text line containing parameter info, parses it, and
 	returns a ParameterDescription object with the parameter info.
 	
     Parameters

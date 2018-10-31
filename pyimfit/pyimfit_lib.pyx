@@ -1,4 +1,5 @@
-# Cython implementation file for wrapping Imfit code.
+# Cython implementation file for wrapping Imfit code, by PE; based on code
+# by Andre Luis de Amorim.
 
 # Note that we are using "typed memoryviews" to translate numpy arrays into
 # C-style double * arrays; this apparently the preferred (newer, more flexible)
@@ -139,9 +140,9 @@ def function_description( func_type, name=None ):
 
 def convolve_image( np.ndarray[np.double_t, ndim=2] image not None,
 				   np.ndarray[np.double_t, ndim=2] psf not None,
-				   int nproc=0, verbose=False ):
+				   int nproc=0, verbose=False, normalizePSF=True ):
 	'''
-	Convolve an image with a given PSF.
+	Convolve an image with a given PSF image.
 	
 	Parameters
 	----------
@@ -158,6 +159,9 @@ def convolve_image( np.ndarray[np.double_t, ndim=2] image not None,
 	verbose : bool, optional
 		Print diagnostic messages.
 		Default: ``False`` ,be quiet.
+	
+	normalizePSF : bool, optional
+		Specifies whether input PSF image should be normalized.
 			
 	Returns
 	-------
@@ -174,7 +178,7 @@ def convolve_image( np.ndarray[np.double_t, ndim=2] image not None,
 	# Cython typed memoryview, pointing to flattened (1D) copy of PSF data
 	cdef double[::1] psf_data = psf.flatten()
 	
-	convolver.SetupPSF(&psf_data[0], psf.shape[1], psf.shape[0])
+	convolver.SetupPSF(&psf_data[0], psf.shape[1], psf.shape[0], normalizePSF)
 	
 	if nproc >= 0:
 		convolver.SetMaxThreads(nproc)
@@ -470,7 +474,7 @@ cdef class ModelObjectWrapper( object ):
 			self._model.CreateModelImage(self._paramVect)
 		
 		
-	def fit( self, double ftol=1e-8, int verbose=-1, mode='LM' ):
+	def fit( self, double ftol=1e-8, int verbose=-1, mode='LM', seed=0 ):
 		cdef int solverID
 		cdef string solverName
 		status = self._model.FinalSetupForFitting()
@@ -482,7 +486,7 @@ cdef class ModelObjectWrapper( object ):
 		self._fitStatus = DispatchToSolver(solverID, self._nParams, self._nFreeParams,
 											self._nPixels, self._paramVect, self._paramInfo,
 											self._model, ftol, self._paramLimitsExist,
-											verbose, self._solverResults, solverName)
+											verbose, self._solverResults, solverName, seed)
 		if mode == 'LM':
 			self._fitResult = self._solverResults.GetMPResults()
 

@@ -1,8 +1,9 @@
-'''
+"""
 Modification of Andre's "model.py" (originally created Sep 2013).
-'''
+"""
 
 from copy import copy, deepcopy
+
 
 
 __all__ = ['SimpleModelDescription', 'ModelDescription',
@@ -12,7 +13,16 @@ __all__ = ['SimpleModelDescription', 'ModelDescription',
 
 
 class ParameterDescription(object):
-	def __init__(self, name, value, vmin=None, vmax=None, fixed=False):
+	"""
+	This class acts as a container for a single parameter of an image function,
+	and corresponds to what is encoded in a single parameter line of an Imfit
+	configuration file.
+	
+	It holds the name, current value (e.g., a suggested initial value),
+	possible lower and upper limits for fitting purposes, and whether or
+	not the value is to be held fixed during a fit.
+	"""
+	def __init__( self, name, value, vmin=None, vmax=None, fixed=False ):
 		self._name = name
 		self._limits = None
 		self.setValue(value, vmin, vmax, fixed)
@@ -20,30 +30,30 @@ class ParameterDescription(object):
 	
 	@property
 	def name(self):
-		'''
+		"""
 		The label of the parameter. Example: ``'x0'``, ``'I_e'``.
-		'''
+		"""
 		return self._name
 	
 	
 	@property
 	def value(self):
-		'''
+		"""
 		The value of the parameter.
-		'''
+		"""
 		return self._value
 	
 	
 	@property
 	def limits(self):
-		'''
+		"""
 		The limits of the parameter, as a tuple.
-		'''
+		"""
 		return self._limits
 	
 	
-	def setValue(self, value, vmin=None, vmax=None, fixed=False):
-		'''
+	def setValue( self, value, vmin=None, vmax=None, fixed=False ):
+		"""
 		Set the value and constraints to the parameter.
 		Note: both limits must be present at the same time.
 		
@@ -52,9 +62,12 @@ class ParameterDescription(object):
 		value : float
 			Value of the parameter.
 		
-		vmin : float, optional
+		vmin : float, optional OR 2-element iterable of float
 			Lower limit of the parameter.
 			Default: ``None`` (no limits).
+			
+			Alternately, this can be a two-element list, tuple, or Numpy array
+			containing the lower and upper limits
 			
 		vmax : float, optional
 			Upper limit of the parameter.
@@ -62,41 +75,51 @@ class ParameterDescription(object):
 			
 		fixed : bool, optional
 			Flag the parameter as fixed. Default: ``False``.
-		'''
-		if vmin is not None and vmax is not None:
-			if value < vmin:
-				vmin = value 
-			elif value > vmax:
-				vmax = value
-			self._limits = (vmin, vmax)
-		elif vmin is not None or vmax is not None:
-			raise Exception('Both limits must be set at the same time.')
+		"""
+		if vmin is not None:
+			if vmax is None:
+				try:
+					lower_limit, upper_limit = vmin
+				except TypeError:
+					raise ValueError("If vmax is None, vmin must be None or two-element iterable.")
+			else:
+				lower_limit = vmin
+				upper_limit = vmax
+			# test for valid limits
+			if value < lower_limit:
+				lower_limit = value
+			elif value > upper_limit:
+				upper_limit = value
+			if lower_limit >= upper_limit:
+				raise ValueError("Lower limit must be < upper limit.")
+			self._limits = (lower_limit, upper_limit)
 		
 		self._value = value
 		self.fixed = fixed
 		
 	
-	def setTolerance(self, tol):
-		'''
-		Set the limits using a tolerance fraction value. For example,
-		a tolerance of ``0.2`` for a property of value ``1.0`` sets
+	def setTolerance( self, tol ):
+		"""
+		Set the limits using a fractional "tolerance" value, so that the
+		lower limit = (1 - tol)*value and the upper limit = (1 + tol)*value.
+		For example, a tolerance of ``0.2`` for a property of value ``1.0`` sets
 		the limits to ``[0.8, 1.2]``. 
 		
 		Parameters
 		----------
 		tol : float
-			Tolerance of the property.
+			Fractional offset for lower and upper limits
 			Must lie between ``0.0`` and ``1.0``.
-		'''
+		"""
 		if tol > 1.0 or tol < 0.0:
-			raise Exception('Tolerance must be between 0.0 and 1.0.')
+			raise ValueError('Tolerance must be between 0.0 and 1.0.')
 		self._limits = (self._value * (1 - tol), self._value * (1 + tol))
 	
 	
-	def setLimitsRel(self, i1, i2):
-		'''
+	def setLimitsRel( self, i1, i2 ):
+		"""
 		Set the limits using relative intervals. The limits
-		will be ``[value - i1, value + i2]
+		will be [value - i1, value + i2]
 		
 		Parameters
 		----------
@@ -105,15 +128,15 @@ class ParameterDescription(object):
 
 		d1 : float
 			Upper limit interval.
-		'''
+		"""
 		if i1 < 0.0 or i2 < 0.0:
-			raise Exception('Limit intervals must be positive.')
+			raise ValueError('Limit intervals must be positive.')
 		self.setLimits(self._value - i1, self._value + i2)
 	
 	
-	def setLimits(self, v1, v2):
-		'''
-		Set the limits using absolute values.
+	def setLimits( self, v1, v2 ):
+		"""
+		Set the limits using absolute values: [v1, v2]
 		
 		Parameters
 		----------
@@ -122,9 +145,9 @@ class ParameterDescription(object):
 
 		v1 : float
 			Upper limit.
-		'''
+		"""
 		if v1 >= v2:
-			raise Exception('v2 must be larger than v1.')
+			raise ValueError('v2 must be larger than v1.')
 			if v1 > self._value:
 				v1 = self._value
 			elif v2 < self._value:
@@ -142,15 +165,24 @@ class ParameterDescription(object):
 	
 	def __str__(self):
 		if self.fixed:
-			return '%s	  %f	 fixed' % (self._name, self._value)
+			return '{0:s}      {1:f}    fixed'.format(self._name, self._value)
 		elif self.limits is not None:
-			return '%s	  %f	 %f,%f' % (self._name, self._value, self._limits[0], self._limits[1])
+			return '{0:s}      {1:f}    {2:f},{3:f}'.format(self._name, self._value, self._limits[0], self._limits[1])
 		else:
-			return '%s	  %f' % (self._name, self._value)
+			return '{0:s}      {1:f}'.format(self._name, self._value)
 			
 
 
 class FunctionDescription(object):
+	"""
+	This class holds information describing a single Imfit image function and
+	its associated parameters, including their values and limits.
+	
+	It holds the official Imfit image-function name (e.g., "Gaussian", "EdgeOnDisk"), 
+	an optional label (e.g., "disk", "outer ring"), and a list of ParameterDescription
+	objects which describe the parameter names, values, and limits (or fixed status)
+	for each of the image function's parameters.
+	"""
 	def __init__(self, func_type, name=None, parameters=None):
 		if name is None:
 			name = func_type
@@ -164,13 +196,13 @@ class FunctionDescription(object):
 		
 	@property
 	def name(self):
-		'''
-		Custom name of the function.
-		'''
+		"""
+		Custom name/label for the function (e.g., "disk", "nuclear ring").
+		"""
 		return self._name
 	
 	
-	def addParameter(self, p):
+	def addParameter( self, p ):
 		if not isinstance(p, ParameterDescription):
 			raise ValueError('p is not a Parameter object.')
 		self._parameters.append(p)
@@ -179,18 +211,18 @@ class FunctionDescription(object):
 		
 	
 	def parameterList(self):
-		'''
-		A list of the parameters composing this function.
+		"""
+		A list of the parameters of this function.
 		
 		Returns
 		-------
 		param_list : list of :class:`ParameterDescription`
 			List of the parameters.
-		'''
+		"""
 		return [p for p in self._parameters]
 
 
-	def __eq__(self, rhs):
+	def __eq__( self, rhs ):
 		if ((self.funcType == rhs.funcType) and (self._name == rhs._name)
 			and (self._parameters == rhs._parameters)):
 			return True
@@ -200,24 +232,11 @@ class FunctionDescription(object):
 	
 	def __str__(self):
 		lines = []
-		lines.append('FUNCTION %s # %s' % (self.funcType, self.name))
+		lines.append('FUNCTION {0}   # {1}'.format(self.funcType, self.name))
 		lines.extend(str(p) for p in self._parameters)
 		return '\n'.join(lines)
 
 	
-# 	def __getattr__(self, attr):
-# 		return self[attr]
-# 	
-# 	
-# 	def __getitem__(self, key):
-# 		if not isinstance(key, str):
-# 			raise KeyError('Parameter must be a string.')
-# 		for p in self._parameters:
-# 			if key == p.name:
-# 				return p
-# 		raise KeyError('Parameter %s not found.' % key)
-	
-
 	def __deepcopy__(self, memo):
 		f = FunctionDescription(self.funcType, self.name)
 		f._parameters = [copy(p) for p in self._parameters]
@@ -226,6 +245,14 @@ class FunctionDescription(object):
 
 
 class FunctionSetDescription(object):
+	"""
+	This class holds information describing an image-function block or set: one
+	or more image-functions sharing a common (X0,Y0) position on the image.
+	
+	It holds the X0 and Y0 coordinates, a list of FunctionDescription
+	objects, and name or label for the function set (e.g., "fs0", "star 1", 
+	"galaxy 5", "offset nucleus", etc.)
+	"""
 	def __init__( self, name, x0param=None, y0param=None, functions=None ):
 		self._name = name
 		if x0param is None:
@@ -244,21 +271,21 @@ class FunctionSetDescription(object):
 		
 	@property
 	def name(self):
-		'''
-		Custom name of the function set.
-		'''
+		"""
+		Custom name/label for the function set.
+		"""
 		return self._name
 	
 	
 	def addFunction(self, f):
-		'''
-		Add a function created using :func:`function_description`.
+		"""
+		Add an Imfit image function created using :func:`function_description`.
 		
 		Parameters
 		----------
 		f : :class:`FunctionDescription`.
 			Function description to be added to the function set.
-		'''
+		"""
 		if not isinstance(f, FunctionDescription):
 			raise ValueError('func is not a Function object.')
 		if self._contains(f.name):
@@ -276,26 +303,27 @@ class FunctionSetDescription(object):
 	
 	
 	def functionList(self):
-		'''
-		A list of the function types composing this function set.
+		"""
+		A list of the Imfit image-function types making up this function set.
 		
 		Returns
 		-------
 		function_list : list of strings
 			List of the function types.
-		'''
+		"""
 		return [f.funcType for f in self._functions]
 	
 	
 	def parameterList(self):
-		'''
-		A list of the parameters composing this function set.
+		"""
+		A list of all the parameters corresponding to this function set
+		(including the X0,Y0 position).
 		
 		Returns
 		-------
 		param_list : list of :class:`ParameterDescription`
 			List of the parameters.
-		'''
+		"""
 		params = []
 		params.append(self.x0)
 		params.append(self.y0)
@@ -320,19 +348,6 @@ class FunctionSetDescription(object):
 		return '\n'.join(lines)
 	
 	
-# 	def __getattr__(self, attr):
-# 		return self[attr]
-# 	
-# 	
-# 	def __getitem__(self, key):
-# 		if not isinstance(key, str):
-# 			raise KeyError('Function must be a string.')
-# 		for f in self._functions:
-# 			if key == f.name:
-# 				return f
-# 		raise KeyError('Function %s not found.' % key)
-	
-	
 	def __deepcopy__(self, memo):
 		fs = FunctionSetDescription(self._name)
 		fs.x0 = copy(self.x0)
@@ -343,8 +358,17 @@ class FunctionSetDescription(object):
 
 
 class ModelDescription(object):
+	"""
+	This class holds information describing an Imfit model for a particular
+	image.
 	
-	def __init__(self, function_sets=None, options={}):
+	The main components are a dict containing image-descriptions parameters
+	and their values (e.g., {"GAIN": 4.5, "ORIGINAL_SKY": 325.39} and a list
+	of FunctionSetDescription objects, corresponding to the image-function
+	sets/blocks making up the model proper.
+	"""
+
+	def __init__( self, function_sets=None, options={} ):
 		self.options = {}
 		self.options.update(options)
 		self._functionSets = []
@@ -355,14 +379,14 @@ class ModelDescription(object):
 
 	@classmethod
 	def load(cls, fname):
-		'''
-		Creates a model description from a file. The syntax is the same
-		as the imfit config file.
+		"""
+		This is a convenience method to generate a ModelDescription object from 
+		a standard Imfit configuration file.
 		
 		Parameters
 		----------
 		fname : string
-			Path to the model description file.
+			Path to the Imfit configuration file.
 			
 		Returns
 		-------
@@ -372,25 +396,29 @@ class ModelDescription(object):
 		See also
 		--------
 		parse_config_file
-		'''
+		"""
+		# note that we need to put this here, rather than at the top of the module,
+		# to prevent import errors
 		from .config import parse_config_file
+
 		return parse_config_file(fname)
 	
 	
 	def addFunctionSet(self, fs):
-		'''
+		"""
 		Add a function set to the model description.
 		
 		Parameters
 		----------
 		fs : :class:`FunctionSetDescription`
 			Function set description instance.
-		'''
+		"""
 		if not isinstance(fs, FunctionSetDescription):
 			raise ValueError('fs is not a FunctionSet object.')
 		if self._contains(fs.name):
 			raise KeyError('FunctionSet named %s already exists.' % fs.name)
 		self._functionSets.append(fs)
+		setattr(self, fs.name, fs)
 	
 	
 	def _contains(self, name):
@@ -401,12 +429,10 @@ class ModelDescription(object):
 	
 	
 	def functionSetIndices(self):
-		'''
-		Internal function.
-		
-		Returns the indices in the full parameters list such that
-		imfit can split the parameters for in the function sets.
-		'''
+		"""
+		Returns the indices in the full parameters list corresponding
+		to the starts of individual function sets/blocks.
+		"""
 		indices = [0]
 		for i in range(len(self._functionSets) - 1):
 			indices.append(len(self.functionSets[i].functions))
@@ -414,14 +440,14 @@ class ModelDescription(object):
 		
 		
 	def functionList(self):
-		'''
+		"""
 		List of the function types composing this model, as strings.
 
 		Returns
 		-------
 		func_list : list of string
 			List of the function types.
-		'''
+		"""
 		functions = []
 		for function_set in self._functionSets:
 			functions.extend(function_set.functionList())
@@ -429,18 +455,25 @@ class ModelDescription(object):
 	
 
 	def parameterList(self):
-		'''
+		"""
 		A list of the parameters composing this model.
 		
 		Returns
 		-------
 		param_list : list of :class:`ParameterDescription`
 			List of the parameters.
-		'''
+		"""
 		params = []
 		for function_set in self._functionSets:
 			params.extend(function_set.parameterList())
 		return params
+
+
+	def __eq__(self, rhs):
+		if ((self.options == rhs.options) and (self._functionSets == rhs._functionSets)):
+			return True
+		else:
+			return False
 
 
 	def __str__(self):
@@ -451,17 +484,17 @@ class ModelDescription(object):
 		return '\n'.join(lines)
 		
 
-	def __getattr__(self, attr):
-		return self[attr]
-	
-	
-	def __getitem__(self, key):
-		if not isinstance(key, str):
-			raise KeyError('FunctionSet must be a string.')
-		for fs in self._functionSets:
-			if key == fs.name:
-				return fs
-		raise KeyError('FunctionSet %s not found.' % key)
+# 	def __getattr__(self, attr):
+# 		return self[attr]
+# 	
+# 	
+# 	def __getitem__(self, key):
+# 		if not isinstance(key, str):
+# 			raise KeyError('FunctionSet must be a string.')
+# 		for fs in self._functionSets:
+# 			if key == fs.name:
+# 				return fs
+# 		raise KeyError('FunctionSet %s not found.' % key)
 	
 	
 	def __deepcopy__(self, memo):
@@ -473,7 +506,7 @@ class ModelDescription(object):
 
 
 class SimpleModelDescription(ModelDescription):
-	'''
+	"""
 	Simple model with only one function set.
 	
 	Returns
@@ -488,7 +521,7 @@ class SimpleModelDescription(ModelDescription):
 	See also
 	--------
 	ModelDescription
-	'''
+	"""
 
 	def __init__(self, inst=None):
 		super(SimpleModelDescription, self).__init__()
@@ -504,32 +537,34 @@ class SimpleModelDescription(ModelDescription):
 		
 	@property
 	def x0(self):
-		'''
+		"""
 		X coordinate of the center of the model.
 		Instance of :class:`ParameterDescription`.
-		'''
+		"""
 		return self._functionSets[0].x0
 		
 
 	@property
 	def y0(self):
-		'''
+		"""
 		Y coordinate of the center of the model.
 		Instance of :class:`ParameterDescription`.
-		'''
+		"""
 		return self._functionSets[0].y0
 	
 
 	def addFunction(self, f):
-		'''
+		"""
 		Add a function created using :func:`function_description`.
 		
 		Parameters
 		----------
 		f : :class:`FunctionDescription`.
 			Function description to be added to the model.
-		'''
+		"""
 		self._functionSets[0].addFunction(f)
+# 		for p in f.parameterList():
+# 			setattr(self, p.name, p)
 		
 
 	def addFunctionSet(self, fs):
@@ -537,6 +572,10 @@ class SimpleModelDescription(ModelDescription):
 			raise Exception('Only one function set allowed.')
 		super(SimpleModelDescription, self).addFunctionSet(fs)
 	
-			
+# 	return [attr] from the first (only, really) FunctionSetDescription
+	#    _name; name
+	#    x0; y0
+	#
+	# so simple_model_desc.x0 should --> simple_model_desc.functionSets[0].x0
 	def __getattr__(self, attr):
 		return self._functionSets[0][attr]

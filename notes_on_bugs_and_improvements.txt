@@ -57,4 +57,9 @@ name is used).
 E.g., use direct modifictions of <classname>.__dict__ as we did for datautils.py
 
 
+* How is Andre's SimpleModelDescription supposed to work? What are the
+attributes the use is expected to use?
+
+
+
 
