@@ -13,7 +13,7 @@ from __future__ import print_function
 cimport cython
 
 cimport imfit_lib
-from .imfit_lib cimport Mean, StandardDeviation, AIC_corrected, BIC
+from .imfit_lib cimport AIC_corrected, BIC
 from .imfit_lib cimport AddFunctions, GetFunctionNames, mp_par, mp_result
 from .imfit_lib cimport Convolver, ModelObject, SolverResults, DispatchToSolver
 from .imfit_lib cimport GetFunctionParameterNames
@@ -32,7 +32,7 @@ from copy import deepcopy
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 from libcpp cimport bool
-from libcpp cimport map
+#from libcpp cimport map
 
 from libc.stdlib cimport calloc, free
 from libc.string cimport memcpy
@@ -98,29 +98,29 @@ def FunctionNames():
 
 
 def function_description( func_type, name=None ):
-	'''
+	"""
 	Given a string specifying the name of an Imfit image function,
 	returns an instance of FunctionDescription describing the function
 	and its parameters.
-	
+
 	Parameters
 	----------
 	func_type : string
 		The function type; must be one of the recognized Imfit image-function names
 		(E.g., "Sersic", "BrokenExponential", etc. Use "imfit --list-functions" on
 		the command line to get the full list, or FunctionNames in this module.)
-		
+
 	name : string, optional
-		Custom identifying name for this instance of this function. 
+		Custom identifying name for this instance of this function.
 		Example: "disk", "bulge".
 		Default: None.
-		
+
 	Returns
 	-------
 	func_desc : :class:`FunctionDescription`
 		Instance of :class:`FunctionDescription`.
-		
-	'''
+
+	"""
 	cdef int status
 	cdef vector[string] parameters
 	# convert string to byte form for use by C++
@@ -503,7 +503,7 @@ cdef class ModelObjectWrapper( object ):
 		
 	def getRawParameters(self):
 		vals = []
-		for i in xrange(self._nParams):
+		for i in range(self._nParams):
 			vals.append(self._paramVect[i])
 		return vals
 			
@@ -541,7 +541,7 @@ cdef class ModelObjectWrapper( object ):
 		elif mode == 'AIC':
 			return AIC_corrected(fitstat, self._nFreeParams, n_valid_pix, 1)
 		elif mode == 'BIC':
-			return BIC(fitstat, self._nFreeParams, n_valid_pix, 1);
+			return BIC(fitstat, self._nFreeParams, n_valid_pix, 1)
 		else:
 			raise Exception('Unknown statistic mode: %s' % mode)
 

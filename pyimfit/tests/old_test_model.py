@@ -1,8 +1,8 @@
-'''
+"""
 Created on Sep 23, 2013
 
 @author: andre
-'''
+"""
 from pyimfit import FunctionSetDescription, ModelDescription
 from pyimfit import function_description
 

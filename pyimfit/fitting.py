@@ -1,8 +1,8 @@
-'''
+"""
 Created on Sep 20, 2013
 
 @author: andre
-'''
+"""
 from .model import ModelDescription
 from .pyimfit_lib import ModelObjectWrapper
 import numpy as np
@@ -13,9 +13,9 @@ __all__ = ['Imfit']
 		
 ################################################################################
 def _composemask(arr, mask, mask_zero_is_bad):
-	'''
+	"""
 	Helper function to properly compose masks.
-	'''
+	"""
 	if isinstance(arr, np.ma.MaskedArray):
 		if mask is None:
 			if mask_zero_is_bad:
@@ -33,8 +33,8 @@ def _composemask(arr, mask, mask_zero_is_bad):
 
 ################################################################################
 class Imfit(object):
-	'''
-	A class for fitting models to images using Imfit by Peter Erwin.
+	"""
+	A class for fitting models to images using Imfit.
 	Can also be used to create images based on models.
 	
 	Due to some library limitations, this object can only fit the model
@@ -69,10 +69,10 @@ class Imfit(object):
 	See also
 	--------
 	parse_config_file, fit
-	'''
+	"""
 	
-	def __init__(self, model_descr, psf=None, quiet=True, nproc=0, chunk_size=8, subsampling=True):
-		if not isinstance(model_descr, ModelDescription):
+	def __init__( self, model_descr, psf=None, quiet=True, nproc=0, chunk_size=8, subsampling=True):
+		if not isinstance(model_descr, ModelDescription ):
 			raise ValueError('model_descr must be a ModelDescription object.')
 		self._modelDescr = model_descr
 		self._psf = psf
@@ -90,13 +90,13 @@ class Imfit(object):
 
 
 	def getModelDescription(self):
-		'''
+		"""
 		Returns
 		-------
 		model : :class:`ModelDescription`
 			A copy of the currently fitted model, or a copy of
 			the template model if no fitting has taken place yet.
-		'''
+		"""
 		if self._modelObject is not None:
 			return self._modelObject.getModelDescription()
 		else:
@@ -105,14 +105,14 @@ class Imfit(object):
 
 
 	def getRawParameters(self):
-		'''
+		"""
 		Model parameters for debugging purposes.
 		
 		Returns
 		-------
 		raw_params : array of floats
-			A flat array containing all the model parameter values.	 
-		'''
+			A 1D array containing all the model parameter values.
+		"""
 		return np.array(self._modelObject.getRawParameters())
 
 
@@ -130,10 +130,11 @@ class Imfit(object):
 			self._modelObject.setChunkSize(self._chunkSize)
 			
 	
-	def fit(self, image, error=None, mask=None, mode='LM', **kwargs):
-		'''
-		Fit the model to ``image``, using the inverse of ``noise`` as weight,
-		optionally masking some pixels.
+	def fit( self, image, error=None, mask=None, mode='LM', **kwargs ):
+		"""
+		Fit the model to ``image``, optionally specifying that Gaussian per-pixel errors
+		should be derived from the ``error`` image (by default, this treats the pixel
+		values in ``error`` as Gaussian sigmas) and also optionally masking some pixels.
 		
 		Parameters
 		----------
@@ -142,30 +143,31 @@ class Imfit(object):
 		
 		error : 2-D array, optional
 			error/weight image, same shape as ``image``. If not set,
-			generate errors from ``image``. See also the keyword args
-			``use_cash_statistics`` and ``use_model_for_errors``.
+			errors are generated from ``image``. See also the keyword args
+			``use_poisson_mlr``, ``use_cash_statistics``, and ``use_model_for_errors``.
 		
 		mask : 2-D array, optional
-			Array containing the masked pixels, must have the same shape as ``image``.
-			Pixels set to ``True`` are bad by default, see the kwarg ``mask_format``.
-			If not set and ``image`` is a masked array, it's mask is used. If both
-			masks are present, the effective mask is composed by masking any pixel that
-			is masked in either input masks.
+			Array containing the masked pixels; must have the same shape as ``image``.
+			Pixels set to ``True`` are bad by default (see the kwarg ``mask_format``
+			for other options). If not set and ``image`` is a masked array, then its
+			mask is used. If both masks are present, the final mask is composed by masking
+			any pixel that is masked in either of the input masks.
 			
 		mode : string
-			One of the following algorithms:
-				* ``'LM'`` : Levenberg-Marquardt least squares.
+			One of the following optimization algorithms to be used for the fit:
+				* ``'LM'`` : Levenberg-Marquardt.
 				* ``'NM'`` : Nelder-Mead Simplex.
 				* ``'DE'`` : Differential Evolution.
 			
 		Keyword arguments
 		-----------------
 		n_combined : integer
-			Number of images averaged to make final image (if counts are average or median).
+			Number of images which were averaged to make final image (if counts are average
+			or median).
 			Default: 1
 			
 		exp_time : float
-			Exposure time in sec (only if image is in ADU/sec).
+			Exposure time in seconds (only if image is in ADU/sec).
 			Default: 1.0
 			
 		gain : float
@@ -173,11 +175,11 @@ class Imfit(object):
 			Default: 1.0
 			
 		read_noise : float
-			Image read noise (e-).
+			Image read noise (Gaussian sigma, in e-).
 			Default: 0.0
 			
 		original_sky : float
-			Original sky background (ADUs) which was subtracted from image.
+			Original sky background (ADUs) which has already been subtracted from image.
 			Default: 0.0
 			
 		error_type : string
@@ -198,7 +200,7 @@ class Imfit(object):
 			Default: ``False``
 			
 		use_cash_statistics : boolean
-			Use Cash statistic instead of chi^2. Takes precedence
+			Use Cash statistic instead of chi^2 or Poisson MLR. Takes precedence
 			over ``error`` and ``use_model_for_errors``.
 			Default: ``False``
 			
@@ -211,7 +213,7 @@ class Imfit(object):
 		--------
 		TODO: Examples of fit().
 		
-		'''
+		"""
 		if mode not in ['LM', 'NM', 'DE']:
 			raise Exception('Invalid fit mode: %s' % mode)
 		all_kw = ['n_combined', 'exp_time', 'gain', 'read_noise', 'original_sky',
@@ -277,39 +279,39 @@ class Imfit(object):
 	
 	@property
 	def fitStatistic(self):
-		'''
+		"""
 		The :math:`\\chi^2`, Poisson MLR, or Cash statistic of the fit.
-		'''
+		"""
 		return self._modelObject.getFitStatistic(mode='none')
 	
 	
 	@property
 	def reducedFitStatistic(self):
-		'''
-		The :math:`\\chi^2`, Poisson MLR,  or Cash statistic of the fit.
-		'''
+		"""
+		The "reduced" :math:`\\chi^2` or Poisson MLR of the fit.
+		"""
 		return self._modelObject.getFitStatistic(mode='reduced')
 	
 	
 	@property
 	def AIC(self):
-		'''
+		"""
 		Bias-corrected Akaike Information Criterion for the fit.
-		'''
+		"""
 		return self._modelObject.getFitStatistic(mode='AIC')
 	
 	
 	@property
 	def BIC(self):
-		'''
+		"""
 		Bayesian Information Criterion for the fit.
-		'''
+		"""
 		return self._modelObject.getFitStatistic(mode='BIC')
 	
 	
 	def getModelImage(self, shape=None):
-		'''
-		Computes an image from the currently fitted model.
+		"""
+		Computes and returns the image described by the currently fitted model.
 		If not fitted, use the template model.
 		
 		Parameters
@@ -321,7 +323,7 @@ class Imfit(object):
 		-------
 		image : 2-D array
 			Image computed from the current model.
-		'''
+		"""
 		if self._modelObject is None:
 			self._setupModel()
 		if shape is not None:
@@ -336,6 +338,6 @@ class Imfit(object):
 		
 	def __del__(self):
 		if self._modelObject is not None:
-			# FIXME: Find a better way to free cython resources.
+			# FIXME: Find a better way to free Cython resources.
 			self._modelObject.close()
 ################################################################################

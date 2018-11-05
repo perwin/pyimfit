@@ -1,8 +1,8 @@
-'''
+"""
 Created on 13/03/2014
 
 @author: andre
-'''
+"""
 
 from pyimfit import Imfit, SimpleModelDescription, function_description, gaussian_psf
 import numpy as np
