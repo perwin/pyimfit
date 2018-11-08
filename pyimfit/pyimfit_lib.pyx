@@ -509,8 +509,10 @@ cdef class ModelObjectWrapper( object ):
 			
 	
 	# FIXME: possibly change this to use typed memoryview?
-	# (note that we *do* need to *copy* the data pointed to by model_image,
-	# since we want to return a self-contained numpy array
+	# note that we *do* need to *copy* the data pointed to by model_image,
+	# since we want to return a self-contained numpy array, and we want it to
+	# survive beyond the point where the ModelObject's destructor is called
+	# (which will delete the original data pointed to by model_image)
 	def getModelImage( self ):
 		cdef double *model_image
 		cdef np.ndarray[np.double_t, ndim=2, mode='c'] output_array

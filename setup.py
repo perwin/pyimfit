@@ -15,9 +15,9 @@ os.environ["CC"] = "g++-8"
 os.environ["CXX"] = "g++-8"
 
 
-NAME = "pyimfit-working"   # name for whole project and for "distribution package"
+NAME = "pyimfit-working"   # Name for whole project and for "distribution package"
                            # = how it will be listed on PyPI
-SRC_DIR = "pyimfit"        # will be package ("import package") name (e.g., >>> import pyimfit)
+SRC_DIR = "pyimfit"        # This will be package ("import package") name (e.g., >>> import pyimfit)
 PACKAGES = [SRC_DIR]
 
 libPath = ["/Users/erwin/coding/imfit"]
@@ -28,7 +28,8 @@ libraryList = ["imfit", "cfitsio", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_t
 
 # note that to link the libimfit.a library, we have to
 #    A. Refer to it using the usual truncated form ("imfit" for filename "libimfit.a")
-#    B. Provide a path to the library file via the library_dirs keyword
+#    B. Provide a path to the library file via the library_dirs keyword of the Extension
+#       class
 
 
 # Defining one or more "extensions modules" (single-file C/C++-based modules, usually

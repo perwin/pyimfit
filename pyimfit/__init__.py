@@ -6,3 +6,4 @@ from .model import *
 from .config import *
 from .fitting import *
 from .psf import *
+from . import utils
