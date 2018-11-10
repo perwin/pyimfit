@@ -13,6 +13,14 @@ y0_str = 'Y0'
 function_str = 'FUNCTION'
 fixed_str = 'fixed'
 
+# The following are the currently recognized config-file image options (see
+# imfit_main.cpp) and the functions for transforming string values from a
+# config file:
+recognizedOptions = {"GAIN": float, "READNOISE": float, "EXPTIME": float,
+                    "NCOMBINED": int, "ORIGINAL_SKY": float}
+recognizedOptionNames = list(recognizedOptions.keys())
+
+
 
 #FIXME: (PE) Need to handle case of optional image-function parameters
 
@@ -110,8 +118,8 @@ def read_options( lines ):
 
     Returns
     -------
-    config : dict mapping parameter names to values
-        e.g, {"GAIN": "4.56", "ORIGINAL_SKY": "233.87"}
+    config : dict mapping parameter names to numerical values
+        e.g, {"GAIN": 4.56, "ORIGINAL_SKY": 233.87}
     """
     config = {}
     for line in lines:
@@ -124,8 +132,11 @@ def read_options( lines ):
         if k in [x0_str, y0_str, function_str]:
             msg = "Expected image-description parameter name, but got {0:s} instead.".format(k)
             raise ValueError(msg)
-        val = val.strip()
-        config[k] = val
+        if k in recognizedOptionNames:
+            val = recognizedOptions[k](val)
+            config[k] = val
+        else:
+            print("Ignoring unrecognized image-description parameter \"{0}\"".format(k))
 
     return config
 

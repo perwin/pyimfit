@@ -1,13 +1,16 @@
 # For development work, execute this via:
 # $ python3 setup.py develop
 #
-import os
+import os, sys
 import numpy as np
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
 from Cython.Build import cythonize
 
 REQUIRES = ['numpy', 'cython']
+
+if not sys.version_info[0] >= 3:
+    sys.exit("setup.py: Python 3 required for pyimfit!")
 
 
 # Stuff for compiling Cython and linking libimfit.a (and other libraries)

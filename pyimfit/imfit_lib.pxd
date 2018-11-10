@@ -90,6 +90,7 @@ cdef extern from "model_object.h":
 		void CreateModelImage( double *params )
 		double * GetModelImageVector( )
 		double * GetWeightImageVector( )
+		void SetVerboseLevel( int verbosity )
 		void SetDebugLevel( int debuggingLevel )
 		void SetOMPChunkSize( int chunkSize )
 

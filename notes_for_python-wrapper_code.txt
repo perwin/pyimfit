@@ -128,6 +128,63 @@ cdef extern from 'imfit/statistics.h':
 		SomeCppFunction(&image_data[0], ...)
 
 
-	
-	
 
+[] Future ideas
+
+	[] Things we might want to do
+		1. Load an image
+		2. Specify image parameters
+		3. Both at once
+			==> DataObject
+				-- image data
+				-- error image
+				-- mask image
+				-- gain, readnoise, etc.
+	
+		1. Specify a model
+		2. Specify parameter values for model
+			==> DataObject
+				-- can be used to output model image (makeimage style)
+				-- can be used for fitting
+		
+		1. Combined DataObject and ModelObject
+
+
+import pyimfit                                                                                                                                                                                          
+testDataDir = "/Users/erwin/coding/pyimfit_working/pyimfit/data/"                                                                                                                                       
+imageFile = testDataDir + "ic3478rss_256.fits"                                                                                                                                                          
+configFile = testDataDir + "config_exponential_ic3478_256.dat"                                                                                                                                          
+model_desc = pyimfit.ModelDescription.load(configFile)                                                                                                                                                  
+imfit_fitter = pyimfit.Imfit(model_desc)                                                                                                                                                                
+image_ic3478 = pyimfit.FixImage(fits.getdata(imageFile))                                                                                                                                                
+
+
+
+model_desc = pyimfit.ModelDescription.load(configFile)                                                                                                                                                  
+ -- creates ModelDescription instance
+
+imfit_fitter = pyimfit.Imfit(model_desc) 
+ -- creates Imfit instance with model_desc as input
+ fitting.Imfit.__init__(self, model_desc)
+ [x] Imfit: self._verboseLevel = -1
+
+imfit_fitter.fit(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)  
+ fitting.Imfit.fit()
+ 	self._setupModel()
+ 		self._modelObject = ModelObjectWrapper(self._modelDescr, self._debugLevel,
+                                               self._verboseLevel, self._subsampling)
+            BUT somehow ModelObjectWrapper.__init__ is NOT being called!
+ 	self._modelObject.loadData(image, error, mask, **kwargs)
+ 	self._modelObject.fit(verbose=self._verboseLevel, mode=mode)
+ 	                
+ 	                
+[] Change fitting.Imfit's "self._modelObject" to "self._modelObjectWrapper" ?                                                                                                 
+	-- makes it clearer that this is instance of ModelObjectWrapper, not
+	of [C++] ModelObject
+
+
+pyimfit_lib.pyx:
+	ModelObjectWrapper
+		self._model
+ 
+                                                                                                                                                                
