@@ -16,7 +16,7 @@ cimport imfit_lib
 from .imfit_lib cimport AIC_corrected, BIC
 from .imfit_lib cimport AddFunctions, GetFunctionNames, mp_par, mp_result
 from .imfit_lib cimport Convolver, ModelObject, SolverResults, DispatchToSolver
-from .imfit_lib cimport GetFunctionParameterNames
+from .imfit_lib cimport GetFunctionParameterNames, BootstrapErrorsArrayOnly
 from .imfit_lib cimport MASK_ZERO_IS_GOOD, MASK_ZERO_IS_BAD
 from .imfit_lib cimport WEIGHTS_ARE_SIGMAS, WEIGHTS_ARE_VARIANCES, WEIGHTS_ARE_WEIGHTS
 from .imfit_lib cimport NO_FITTING, MPFIT_SOLVER, DIFF_EVOLN_SOLVER, NMSIMPLEX_SOLVER
@@ -232,6 +232,7 @@ cdef class ModelObjectWrapper( object ):
     cdef double[::1] _maskData
     cdef double[::1] _psfData
     cdef bool _inputDataLoaded
+    cdef bool _finalSetupDone
     cdef bool _fitted
     cdef object _fitMode
     cdef bool _freed
@@ -246,6 +247,7 @@ cdef class ModelObjectWrapper( object ):
         self._fitResult = NULL
 
         self._inputDataLoaded = False
+        self._finalSetupDone = False   # have we called ModelObject::FinalSetupForFitting
         self._fitted = False
         self._fitMode = None
         self._freed = False
@@ -264,8 +266,6 @@ cdef class ModelObjectWrapper( object ):
             raise MemoryError('Could not allocate ModelObject.')
         self._model.SetDebugLevel(debug_level)
         self._model.SetVerboseLevel(verbose_level)
-        if self._model == NULL:
-            raise MemoryError('Could not allocate ModelObject.')
         # self._addFunctions(self._modelDescr, subsampling=subsampling, verbose=debug_level>0)
         self._addFunctions(self._modelDescr, subsampling=subsampling, verbose=verbose_level)
         self._paramSetup(self._modelDescr)
@@ -280,11 +280,17 @@ cdef class ModelObjectWrapper( object ):
 
 
     def _paramSetup(self, object model_descr):
+        """
+        Sets up parameter-related info: _nParams, _nFreeParams, _paramVect, parameter-limits info
+        """
         cdef mp_par newParamInfo
         self._parameterList = model_descr.parameterList()
         self._nParams = self._nFreeParams = self._model.GetNParams()
         if self._nParams != len(self._parameterList):
-            raise Exception('Number of input parameters (%d) does not equal required number of parameters for specified functions (%d).' % (len(self._parameterList), self._nParams))
+            msg = "Number of input parameters ({0:d}) does not equal ".format(self._parameterList)
+            msg += "required number of parameters for specified functions "
+            msg += "({0:d}).".format(self._nParams)
+            raise Exception(msg)
         self._paramVect = <double *> calloc(self._nParams, sizeof(double))
         if self._paramVect == NULL:
             raise MemoryError('Could not allocate parameter initial values.')
@@ -341,6 +347,76 @@ cdef class ModelObjectWrapper( object ):
                  np.ndarray[np.double_t, ndim=2, mode='c'] error,
                  np.ndarray[np.double_t, ndim=2, mode='c'] mask,
                  **kwargs):
+        """
+        This is where we supply the data image that will be fit. Since the "data model"
+        includes things like error model and masking, this is also where we supply
+        any error and/or mask images, along with any specifications of which fit statistic
+        to use. Finally, this is also where we supply image-description parameter values
+        (gain, read noise, original sky, etc.).
+
+        Parameters
+        ----------
+        image : 2-D ndarray of double
+            Image to be fitted.
+
+        error : 2-D ndarray of double, optional
+            error/weight image, same shape as ``image``. If not set,
+            errors are generated from ``image``. See also the keyword args
+            ``use_poisson_mlr``, ``use_cash_statistics``, and ``use_model_for_errors``.
+
+        mask : 2-D ndarray of double, optional
+            Array containing the masked pixels; must have the same shape as ``image``.
+
+        Keyword arguments
+        -----------------
+        n_combined : integer
+            Number of images which were averaged to make final image (if counts are average
+            or median).
+            Default: 1
+
+        exp_time : float
+            Exposure time in seconds (only if image is in ADU/sec).
+            Default: 1.0
+
+        gain : float
+            Image gain (e-/ADU).
+            Default: 1.0
+
+        read_noise : float
+            Image read noise (Gaussian sigma, in e-).
+            Default: 0.0
+
+        original_sky : float
+            Original sky background (ADUs) which has already been subtracted from image.
+            Default: 0.0
+
+        error_type : string
+            Values in ``error`` image should be interpreted as:
+                * ``'sigma'`` (default).
+                * ``'weight'``.
+                * ``'variance'``.
+
+        mask_format : string
+            Values in ``mask`` should be interpreted as:
+                * ``'zero_is_good'`` (default).
+                * ``'zero_is_bad'``.
+
+        use_poisson_mlr : boolean
+            Use Poisson MLR (maximum-likelihood-ratio) statistic instead of
+            chi^2. Takes precedence over ``error``, ``use_model_for_errors`,
+            and ``use_cash_statistics``.
+            Default: ``False``
+
+        use_cash_statistics : boolean
+            Use Cash statistic instead of chi^2 or Poisson MLR. Takes precedence
+            over ``error`` and ``use_model_for_errors``.
+            Default: ``False``
+
+        use_model_for_errors : boolean
+            Use model values (instead of data) to estimate errors for
+            chi^2 computation. Takes precedence over ``error``.
+            Default: ``False``
+        """
 
         cdef int n_rows, n_cols, n_rows_err, n_cols_err
         cdef int n_pixels
@@ -458,6 +534,8 @@ cdef class ModelObjectWrapper( object ):
                 raise Exception('Error adding mask vector, unknown mask format.')
 
         self._inputDataLoaded = True
+        self.doFinalSetup()
+        self._finalSetupDone = True
 
 
     def setupModelImage(self, shape):
@@ -476,24 +554,66 @@ cdef class ModelObjectWrapper( object ):
             self._model.CreateModelImage(self._paramVect)
 
 
-    def fit( self, double ftol=1e-8, int verbose=-1, mode='LM', seed=0 ):
-        cdef int solverID
-        cdef string solverName
+    def doFinalSetup(self):
+        cdef int status
         status = self._model.FinalSetupForFitting()
         if status < 0:
             raise Exception('Failure in ModelObject::FinalSetupForFitting().')
+        self._finalSetupDone = True
 
+
+    def computeFitStatistic(self, np.ndarray[np.double_t, ndim=1, mode='c'] newParameters ):
+        """
+        Computes and returns the fit statistic corresponding to the input parameter vector.
+
+        Parameters
+        ----------
+        newParameters : Numpy ndarray of float64
+            the vector of parameter values
+        """
+        if len(newParameters) != self._nParams:
+            msg = "Length of newParameters ({0:d}) is not ".format(len(newParameters))
+            msg += "equal to number of parameters in model ({0:d})!".format(self._nParams)
+            raise ValueError(msg)
+        return self._model.GetFitStatistic(&newParameters[0])
+
+
+    def fit( self, double ftol=1e-8, int verbose=-1, mode='LM', seed=0 ):
+        cdef int solverID
+        cdef string nloptSolverName
+        # status = self._model.FinalSetupForFitting()
+        # if status < 0:
+        #     raise Exception('Failure in ModelObject::FinalSetupForFitting().')
+
+        if not self._finalSetupDone:
+            self.doFinalSetup()
         solverID = solverID_dict[mode]
-        solverName = ""
+        nloptSolverName = ""
         self._fitStatus = DispatchToSolver(solverID, self._nParams, self._nFreeParams,
                                             self._nPixels, self._paramVect, self._paramInfo,
                                             self._model, ftol, self._paramLimitsExist,
-                                            verbose, self._solverResults, solverName, seed)
+                                            verbose, self._solverResults, nloptSolverName, seed)
         if mode == 'LM':
             self._fitResult = self._solverResults.GetMPResults()
 
         self._fitMode = mode
         self._fitted = True
+
+
+ # int BootstrapErrorsArrayOnly( const double *bestfitParams, vector<mp_par> parameterLimits,
+	# 				const bool paramLimitsExist, ModelObject *theModel, const double ftol,
+	# 				const int nIterations, const int nFreeParams, const int whichStatistic,
+	# 				double **outputParamArray, unsigned long rngSeed=0 );
+
+    # def doBootstrapIterations( self, int nIters, seed=0 ):
+    #     pass
+    #     # define outputParams array [double **]
+    #     # outputParamArray[i][nSuccessfulIters] = paramsVect[i];
+    #     cdef double **outputParams
+    #     nSucessfulIterations = BootstrapErrorsArrayOnly(self._paramVect, self._paramInfo,
+    #                                 self._paramLimitsExist, self._model, ftol,
+    #                                 nIters, self._nFreeParams, solverID, outputParams, seed)
+    #     # FIXME: Finish this!
 
 
     def getModelDescription(self):

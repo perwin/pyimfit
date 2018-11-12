@@ -173,7 +173,6 @@ imfit_fitter.fit(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
  	self._setupModel()
  		self._modelObject = ModelObjectWrapper(self._modelDescr, self._debugLevel,
                                                self._verboseLevel, self._subsampling)
-            BUT somehow ModelObjectWrapper.__init__ is NOT being called!
  	self._modelObject.loadData(image, error, mask, **kwargs)
  	self._modelObject.fit(verbose=self._verboseLevel, mode=mode)
  	                

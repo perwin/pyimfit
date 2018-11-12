@@ -3,6 +3,7 @@ Modification of Andre's "model.py" (originally created Sep 2013).
 """
 
 from copy import copy, deepcopy
+import numpy as np
 
 
 
@@ -585,6 +586,18 @@ class ModelDescription(object):
         for function_set in self._functionSets:
             params.extend(function_set.parameterList())
         return params
+
+
+    def getRawParameters(self):
+        """
+        Returns a Numpy array of the ModelDescription's current parameter values
+
+        Returns
+        -------
+        paramValues : ndarray of float
+        """
+        paramsList = self.parameterList()
+        return np.array([p.value for p in paramsList])
 
 
     def __eq__(self, rhs):

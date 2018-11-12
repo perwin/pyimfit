@@ -102,8 +102,7 @@ cdef extern from "add_functions.h":
 	int GetFunctionParameterNames( string &functionName, vector[string] &parameterNameList );
 	void GetFunctionNames( vector[string] &functionNameList )
 	# Tricky thing: handling possible optional parameters for AddFunctions; these have 
-	# default values in .h file
-	# We need separate definitions for the three cases
+	# default values in .h file. so we need separate definitions for the three cases
 	int AddFunctions( ModelObject *theModel, const vector[string] &functionNameList,
                   vector[int] &functionBlockIndices, const bool subamplingFlag,
                   const int verboseFlag, vector[map[string, string]] &extraParams )
@@ -164,4 +163,10 @@ cdef extern from "convolver.h":
 		int DoFullSetup( )
 		void ConvolveImage( double *pixelVector )
 
+
+cdef extern from "bootstrap.h":
+	int BootstrapErrorsArrayOnly( const double *bestfitParams, vector[mp_par] parameterLimits,
+					const bool paramLimitsExist, ModelObject *theModel, const double ftol,
+					const int nIterations, const int nFreeParams, const int whichStatistic,
+					double **outputParamArray, unsigned long rngSeed )
 
