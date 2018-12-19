@@ -2,7 +2,7 @@
 Modification of Andre's "config.py" (originally created 19 Sep 2013).
 """
 
-from .model import ParameterDescription, FunctionDescription, FunctionSetDescription, ModelDescription
+from .descriptions import ParameterDescription, FunctionDescription, FunctionSetDescription, ModelDescription
 
 __all__ = ['parse_config_file', 'parse_config']
 

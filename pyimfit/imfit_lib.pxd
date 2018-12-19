@@ -1,4 +1,5 @@
 # Cython header file for Imfit, by PE
+# Copyright Peter Erwin, 2018.
 
 from libcpp.map cimport map
 from libcpp.string cimport string
@@ -51,6 +52,11 @@ cdef extern from "param_struct.h":
 
 
 # see get_images.cpp for how this object gets populated
+# PsfOversamplingInfo::PsfOversamplingInfo( double *inputPixels, int nCols, int nRows,
+# 										int scale, string inputRegionString,
+# 										int xOffset, int yOffset, bool isUnique,
+# 										bool normalize )
+
 cdef extern from "psf_oversampling_info.h":
 	cdef cppclass PsfOversamplingInfo:
 		void AddPsfPixels( double *inputPixels, int nCols, int nRows, bool isUnique )
@@ -164,7 +170,7 @@ cdef extern from "convolver.h":
 		void ConvolveImage( double *pixelVector )
 
 
-cdef extern from "bootstrap.h":
+cdef extern from "bootstrap_errors.h":
 	int BootstrapErrorsArrayOnly( const double *bestfitParams, vector[mp_par] parameterLimits,
 					const bool paramLimitsExist, ModelObject *theModel, const double ftol,
 					const int nIterations, const int nFreeParams, const int whichStatistic,

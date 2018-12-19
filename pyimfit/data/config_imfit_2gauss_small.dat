@@ -1,0 +1,22 @@
+# config file for imfit: simple image with 2 (PSF-convolved) Gaussians +
+# constant sky background
+
+GAIN			1000
+
+X0              40		35,45
+Y0              40		35,45
+FUNCTION Gaussian
+PA                0		fixed
+ell               0		fixed
+I_0             105		20,150
+sigma           1.5		0.5,2.5
+
+X0              15		10,20
+Y0              10		 5,15
+FUNCTION Gaussian
+PA                0		fixed
+ell               0		fixed
+I_0             95		20,150
+sigma           1.5		0.5,2.5
+FUNCTION FlatSky
+I_0				100.0	fixed

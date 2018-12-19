@@ -2,7 +2,8 @@
 # (pyimfit) is imported
 from .pyimfit_lib import FunctionNames, convolve_image, function_description, ModelObjectWrapper
 from .pyimfit_lib import FixImage
-from .model import *
+from .pyimfit_lib import PsfOversampling
+from .descriptions import *
 from .config import *
 from .fitting import *
 from .psf import *

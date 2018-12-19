@@ -554,7 +554,8 @@ class ModelDescription(object):
         """
         indices = [0]
         for i in range(len(self._functionSets) - 1):
-            indices.append(len(self._functionSets[i].functions))
+            functionsThisSet = self._functionSets[i].functionList()
+            indices.append(len(functionsThisSet))
         return indices
 
 
@@ -598,6 +599,19 @@ class ModelDescription(object):
         """
         paramsList = self.parameterList()
         return np.array([p.value for p in paramsList])
+
+
+    def getParameterLimits(self):
+        """
+        Returns a list containing lower and upper limits for all parameters in the model.
+
+        Returns
+        -------
+        parameterLimits : list of 2-element tuples of float
+            [(lower_limit, upper_limit)_1, (lower_limit, upper_limit)_2, ...]
+        """
+        paramsList = self.parameterList()
+        return [p.limits for p in paramsList]
 
 
     def __eq__(self, rhs):

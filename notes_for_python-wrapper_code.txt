@@ -148,6 +148,9 @@ cdef extern from 'imfit/statistics.h':
 				-- can be used for fitting
 		
 		1. Combined DataObject and ModelObject
+		
+		1. Run GetFitStatistic multiple times, each time with a different
+		parameter vector
 
 
 import pyimfit                                                                                                                                                                                          

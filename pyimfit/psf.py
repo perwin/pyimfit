@@ -8,7 +8,7 @@ Modified version of code originally created on Sep 25, 2013 by Andre
 import numpy as np
 
 from .fitting import Imfit
-from .model import SimpleModelDescription
+from .descriptions import SimpleModelDescription
 from .pyimfit_lib import function_description
 
 

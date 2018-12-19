@@ -1,5 +1,7 @@
 # Cython implementation file for wrapping Imfit code, by PE; based on code
 # by Andre Luis de Amorim.
+# Copyright André Luiz de Amorim, 2013.
+# Modifications copyright Peter Erwin, 2018.
 
 # Note that we are using "typed memoryviews" to translate numpy arrays into
 # C-style double * arrays; this apparently the preferred (newer, more flexible)
@@ -17,12 +19,13 @@ from .imfit_lib cimport AIC_corrected, BIC
 from .imfit_lib cimport AddFunctions, GetFunctionNames, mp_par, mp_result
 from .imfit_lib cimport Convolver, ModelObject, SolverResults, DispatchToSolver
 from .imfit_lib cimport GetFunctionParameterNames, BootstrapErrorsArrayOnly
+from .imfit_lib cimport PsfOversamplingInfo
 from .imfit_lib cimport MASK_ZERO_IS_GOOD, MASK_ZERO_IS_BAD
 from .imfit_lib cimport WEIGHTS_ARE_SIGMAS, WEIGHTS_ARE_VARIANCES, WEIGHTS_ARE_WEIGHTS
 from .imfit_lib cimport NO_FITTING, MPFIT_SOLVER, DIFF_EVOLN_SOLVER, NMSIMPLEX_SOLVER
 
 # from local pure-Python module
-from .model import ModelDescription, FunctionDescription, ParameterDescription
+from .descriptions import ModelDescription, FunctionDescription, ParameterDescription
 
 import sys
 import numpy as np
@@ -51,6 +54,14 @@ def FixImage( array ):
     """Checks an input numpy array; if necessary, converts array to
     double-precision floating point, little-endian byte order, and
     contiguous layout.
+
+    Parameters
+    ----------
+    array : numpy ndarray
+
+    Returns
+    -------
+
     """
     if (array.dtype != np.float64):
         array = array.astype(np.float64)
@@ -212,6 +223,33 @@ def convolve_image( np.ndarray[np.double_t, ndim=2] image not None,
 
 
 
+# cdef class to hold PSF oversampling info, mainly by storing it in a locally
+# instantiated PsfOversamplingInfo object.
+cdef class PsfOversampling( object ):
+    cdef PsfOversamplingInfo * _psfOversamplingInfo_ptr
+    cdef double[::1] _imageData
+    cdef int _nRows, _nCols
+
+    # __cinit__ so we can allocate memory for the pointer to PsfOversamplingInfo
+    def __cinit__(self, np.ndarray[np.double_t, ndim=2, mode='c'] psfImage not None,
+                 int scale, str regionString, int xOffset, int yOffset,
+                 bool isUnique, bool doNormalization ):
+        self._imageData = psfImage.flatten()
+        self._nRows = psfImage.shape[0]
+        self._nCols = psfImage.shape[1]
+        self._psfOversamplingInfo_ptr = new PsfOversamplingInfo()
+        self._psfOversamplingInfo_ptr.AddPsfPixels(&self._imageData[0], self._nCols,
+                                               self._nRows, isUnique)
+        self._psfOversamplingInfo_ptr.AddRegionString(regionString.encode())
+        self._psfOversamplingInfo_ptr.AddOversamplingScale(scale)
+        self._psfOversamplingInfo_ptr.AddImageOffset(xOffset, yOffset)
+
+    def __dealloc__(self):
+        del self._psfOversamplingInfo_ptr
+
+
+
+
 cdef class ModelObjectWrapper( object ):
 
     cdef ModelObject *_model
@@ -342,11 +380,16 @@ cdef class ModelObjectWrapper( object ):
         self._model.AddPSFVector(n_cols_psf * n_rows_psf, n_cols_psf, n_rows_psf, &self._psfData[0])
 
 
-    def loadData(self,
-                 np.ndarray[np.double_t, ndim=2, mode='c'] image not None,
+    # The following needs to be cdef so we can directly access the C++ pointer
+    # inside the PsfOversamplingInfo object, even if it's just to pass it on to
+    # the ModelObject pointer
+    cdef addOversamplingInfo(self, PsfOversampling oversamplingInfo ):
+        self._model.AddOversampledPsfInfo(oversamplingInfo._psfOversamplingInfo_ptr)
+
+
+    def loadData(self, np.ndarray[np.double_t, ndim=2, mode='c'] image not None,
                  np.ndarray[np.double_t, ndim=2, mode='c'] error,
-                 np.ndarray[np.double_t, ndim=2, mode='c'] mask,
-                 **kwargs):
+                 np.ndarray[np.double_t, ndim=2, mode='c'] mask, **kwargs):
         """
         This is where we supply the data image that will be fit. Since the "data model"
         includes things like error model and masking, this is also where we supply
@@ -401,6 +444,10 @@ cdef class ModelObjectWrapper( object ):
                 * ``'zero_is_good'`` (default).
                 * ``'zero_is_bad'``.
 
+        psf_oversampling_list : list of PsfOversampling
+            List of PsfOversampling objects, describing oversampling regions, PSFs,
+            and oversampling scales.
+
         use_poisson_mlr : boolean
             Use Poisson MLR (maximum-likelihood-ratio) statistic instead of
             chi^2. Takes precedence over ``error``, ``use_model_for_errors`,
@@ -438,6 +485,7 @@ cdef class ModelObjectWrapper( object ):
         cdef bool use_cash_statistics
         cdef bool use_poisson_MLR
         cdef bool use_model_for_errors
+        cdef int i, n
 
         if 'n_combined' in kwargs:
             n_combined = kwargs['n_combined']
@@ -511,6 +559,12 @@ cdef class ModelObjectWrapper( object ):
 
         self._model.AddImageDataVector(&self._imageData[0], self._nCols, self._nRows)
         self._model.AddImageCharacteristics(gain, read_noise, exp_time, n_combined, original_sky)
+
+        if 'psf_oversampling_list' in kwargs:
+            psfOversamplingInfoList = kwargs['psf_oversampling_list']
+            n = len(psfOversamplingInfoList)
+            for i in range(n):
+                self.addOversamplingInfo(psfOversamplingInfoList[i])
 
         if use_poisson_MLR:
             self._model.UsePoissonMLR()

@@ -17,16 +17,22 @@ if not sys.version_info[0] >= 3:
 os.environ["CC"] = "g++-8" 
 os.environ["CXX"] = "g++-8"
 
+# Stuff for finding imfit headers and static library
+IMFIT_HEADER_PATH = "imfit_lib/include"
+IMFIT_LIBRARY_PATH = "imfit_lib/lib"
 
 NAME = "pyimfit-working"   # Name for whole project and for "distribution package"
                            # = how it will be listed on PyPI
 SRC_DIR = "pyimfit"        # This will be package ("import package") name (e.g., >>> import pyimfit)
 PACKAGES = [SRC_DIR]
 
-libPath = ["/Users/erwin/coding/imfit"]
-headerPath = ["/Users/erwin/coding/imfit", "/Users/erwin/coding/imfit/core",
-                "/Users/erwin/coding/imfit/solvers", "/Users/erwin/coding/imfit/function_objects",
-                ".", np.get_include()]
+# libPath = ["/Users/erwin/coding/imfit"]
+# headerPath = ["/Users/erwin/coding/imfit", "/Users/erwin/coding/imfit/core",
+#                 "/Users/erwin/coding/imfit/solvers", "/Users/erwin/coding/imfit/function_objects",
+#                 ".", np.get_include()]
+# libraryList = ["imfit", "cfitsio", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
+libPath = [IMFIT_LIBRARY_PATH]
+headerPath = [IMFIT_HEADER_PATH, ".", np.get_include()]
 libraryList = ["imfit", "cfitsio", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
 
 # note that to link the libimfit.a library, we have to
@@ -59,7 +65,7 @@ with open("README.md", "r") as f:
 
 setup(
     name=NAME,   # name for distribution package (aka "distribution"), as listed on PyPI
-    version="0.0.1",
+    version="0.1.0",
     author="Peter Erwin",
     author_email="erwin@sigmaxi.net",
     description="Python wrapper for astronomical image-fitting program Imfit",

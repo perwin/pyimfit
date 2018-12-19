@@ -58,7 +58,13 @@ def test_fitting():
     fitted_params = get_model_param_array(model_fitted)
 
     assert_allclose(orig_params, fitted_params, rtol=noise_level)
-    
+
+
+def test_setparameters():
+    psf = gaussian_psf(2.5, size=9)
+    model_orig = create_model()
+    imfit = Imfit(model_orig, psf=psf, quiet=False)
+
 
 if __name__ == '__main__':
     test_fitting()

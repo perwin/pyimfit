@@ -1,6 +1,6 @@
-# Test code for model.py module of pyimfit
+# Test code for descriptions.py module of pyimfit
 # Execute via
-#    $ pytest test_model.py
+#    $ pytest test_descriptions.py
 
 import pytest
 from pytest import approx
@@ -11,6 +11,7 @@ from ..model import ParameterDescription, FunctionDescription, FunctionSetDescri
 from ..model import ModelDescription, SimpleModelDescription
 
 CONFIG_EXAMPLE_EXPONENTIAL = "../data/config_exponential_ic3478_256.dat"
+CONFIG_EXAMPLE_2BLOCKS = "../data/config_imfit_2gauss_small.dat"
 
 
 
@@ -34,6 +35,7 @@ class TestParameterDescription(object):
         pdesc2 = ParameterDescription('X0', 100.0, fixed=True)
         assert pdesc2.name == "X0"
         assert pdesc2.value == 100.0
+        assert pdesc2.limits is None
         assert pdesc2.fixed == True
 
 
@@ -158,6 +160,12 @@ class TestModelDescription(object):
         assert modeldesc1.functionList() == ['Gaussian']
         assert modeldesc1.parameterList() == self.fullParamDescList
 
+    def test_ModelDescription_getParamLimits( self ):
+        modeldesc1 = ModelDescription(self.fsetList)
+        pLimits = modeldesc1.getParameterLimits()
+        assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
+
+
     def test_ModelDescription_load_from_file( self ):
         x0_p = ParameterDescription("X0", 129.0, 125,135)
         y0_p = ParameterDescription("Y0", 129.0, 125,135)
@@ -176,6 +184,10 @@ class TestModelDescription(object):
 
         input_params_correct = np.array([129.0,129.0, 18.0,0.2,100.0,25.0])
         assert_allclose(modeldesc2.getRawParameters(), input_params_correct)
+
+    def test_ModelDescription_load_from_file_2blocks( self ):
+
+        modeldesc2blocks = ModelDescription.load(CONFIG_EXAMPLE_2BLOCKS)
 
 
 

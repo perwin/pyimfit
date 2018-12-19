@@ -5,8 +5,8 @@
 import copy
 import pytest
 
-from ..model import ParameterDescription, FunctionDescription, FunctionSetDescription
-from ..model import ModelDescription
+from ..descriptions import ParameterDescription, FunctionDescription, FunctionSetDescription
+from ..descriptions import ModelDescription
 from ..config import read_parameter, read_function, read_function_set, read_options
 from ..config import parse_config
 

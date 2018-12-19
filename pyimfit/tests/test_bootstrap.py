@@ -9,7 +9,7 @@ from astropy.io import fits
 
 from ..utils import GetBootstrapOutput
 from ..fitting import Imfit
-from ..model import ModelDescription
+from ..descriptions import ModelDescription
 from ..pyimfit_lib import FixImage, function_description
 
 TOLERANCE = 1.0e-6

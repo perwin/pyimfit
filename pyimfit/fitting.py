@@ -3,7 +3,7 @@ Created on Sep 20, 2013
 
 @author: andre
 """
-from .model import ModelDescription
+from .descriptions import ModelDescription
 from .pyimfit_lib import ModelObjectWrapper
 import numpy as np
 from copy import deepcopy
@@ -116,6 +116,18 @@ class Imfit(object):
             A 1D array containing all the model parameter values.
         """
         return np.array(self._modelObjectWrapper.getRawParameters())
+
+
+    def getParameterLimits(self):
+        """
+        Returns a list containing lower and upper limits for all parameters in the model.
+
+        Returns
+        -------
+        parameterLimits : list of 2-element tuples of float
+            [(lower_limit, upper_limit)_1, (lower_limit, upper_limit)_2, ...]
+         """
+        return self._modelDescr.getParameterLimits()
 
 
     def _setupModel(self):
