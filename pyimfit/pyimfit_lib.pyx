@@ -364,7 +364,7 @@ cdef class ModelObjectWrapper( object ):
             raise RuntimeError('Failed to add the functions.')
 
 
-    def setPSF(self, np.ndarray[np.double_t, ndim=2, mode='c'] psf):
+    def setPSF(self, np.ndarray[np.double_t, ndim=2, mode='c'] psf, bool normalizePSF=True):
         cdef int n_rows_psf, n_cols_psf
 
         # FIXME: check that PSF data has correct type, byteorder
@@ -377,13 +377,13 @@ cdef class ModelObjectWrapper( object ):
 
         n_rows_psf = psf.shape[0]
         n_cols_psf = psf.shape[1]
-        self._model.AddPSFVector(n_cols_psf * n_rows_psf, n_cols_psf, n_rows_psf, &self._psfData[0])
+        self._model.AddPSFVector(n_cols_psf * n_rows_psf, n_cols_psf, n_rows_psf, &self._psfData[0],
+                                 normalizePSF)
 
 
-    # The following needs to be cdef so we can directly access the C++ pointer
-    # inside the PsfOversamplingInfo object, even if it's just to pass it on to
-    # the ModelObject pointer
-    cdef addOversamplingInfo(self, PsfOversampling oversamplingInfo ):
+    # The following needs to be cdef so we can directly access the C++ pointer inside the
+    # PsfOversamplingInfo object, even if it's just to pass it on to the ModelObject pointer
+    cdef addOversamplingInfo(self, PsfOversampling oversamplingInfo):
         self._model.AddOversampledPsfInfo(oversamplingInfo._psfOversamplingInfo_ptr)
 
 
@@ -560,6 +560,7 @@ cdef class ModelObjectWrapper( object ):
         self._model.AddImageDataVector(&self._imageData[0], self._nCols, self._nRows)
         self._model.AddImageCharacteristics(gain, read_noise, exp_time, n_combined, original_sky)
 
+        # reminder: PsfOversamplingInfo objects must be added *after* data image!
         if 'psf_oversampling_list' in kwargs:
             psfOversamplingInfoList = kwargs['psf_oversampling_list']
             n = len(psfOversamplingInfoList)

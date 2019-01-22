@@ -1,4 +1,4 @@
-# Test code for descriptions.py module of pyimfit
+# Code for testing descriptions.py module of pyimfit
 # Execute via
 #    $ pytest test_descriptions.py
 
@@ -7,8 +7,8 @@ from pytest import approx
 import numpy as np
 from numpy.testing import assert_allclose
 
-from ..model import ParameterDescription, FunctionDescription, FunctionSetDescription
-from ..model import ModelDescription, SimpleModelDescription
+from ..descriptions import ParameterDescription, FunctionDescription, FunctionSetDescription
+from ..descriptions import ModelDescription, SimpleModelDescription
 
 CONFIG_EXAMPLE_EXPONENTIAL = "../data/config_exponential_ic3478_256.dat"
 CONFIG_EXAMPLE_2BLOCKS = "../data/config_imfit_2gauss_small.dat"

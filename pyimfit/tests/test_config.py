@@ -1,4 +1,4 @@
-# Test code for config.py module of pyimfit
+# Code for testing config.py module of pyimfit
 # Execute via
 #    $ pytest test_config.py
 

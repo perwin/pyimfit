@@ -69,11 +69,13 @@ class Imfit(object):
     parse_config_file, fit
     """
 
-    def __init__( self, model_descr, psf=None, quiet=True, nproc=0, chunk_size=8, subsampling=True):
+    def __init__( self, model_descr, psf=None, psfNormalization=True, quiet=True, nproc=0, chunk_size=8,
+                  subsampling=True):
         if not isinstance(model_descr, ModelDescription ):
             raise ValueError('model_descr must be a ModelDescription object.')
         self._modelDescr = model_descr
         self._psf = psf
+        self._normalizePSF = psfNormalization
         self._mask = None
         self._modelObjectWrapper = None
         self._nproc = nproc
@@ -137,7 +139,7 @@ class Imfit(object):
         self._modelObjectWrapper = ModelObjectWrapper(self._modelDescr, self._debugLevel,
                                                       self._verboseLevel, self._subsampling)
         if self._psf is not None:
-            self._modelObjectWrapper.setPSF(np.asarray(self._psf))
+            self._modelObjectWrapper.setPSF(np.asarray(self._psf), self._normalizePSF)
         if self._nproc > 0:
             self._modelObjectWrapper.setMaxThreads(self._nproc)
         if self._chunkSize > 0:
@@ -215,8 +217,8 @@ class Imfit(object):
             Use model values (instead of data) to estimate errors for
             chi^2 computation. Takes precedence over ``error``.
             Default: ``False``
-
         """
+
         all_kw = ['n_combined', 'exp_time', 'gain', 'read_noise', 'original_sky',
                   'error_type', 'mask_format', 'use_poisson_mlr', 'use_cash_statistics',
                   'use_model_for_errors']

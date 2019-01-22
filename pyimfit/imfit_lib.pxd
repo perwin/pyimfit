@@ -79,7 +79,7 @@ cdef extern from "model_object.h":
 		int AddMaskVector( long nDataValues, int nImageColumns, int nImageRows,
 							double *pixelVector, int inputType )
 		int AddPSFVector( long nPixels_psf, int nColumns_psf, int nRows_psf,
-							double *psfPixels, bool normalizePSF=true )
+							double *psfPixels, bool normalizePSF )
 		int AddOversampledPsfInfo( PsfOversamplingInfo *oversampledPsfInfo )
 		int UseModelErrors( )
 		int UseCashStatistic( )

@@ -1,4 +1,5 @@
 # Code for testing bootstrap mode of pyimfit
+#  ** INCOMPLETE **
 
 # $ imfit ic3478rss_256.fits -c config_exponential_ic3478_256.dat --gain=4.725 --readnoise=4.3 --sky=130.14 --seed=10 --bootstrap=10 --save-bootstrap=bootstrap_out.txt
 
