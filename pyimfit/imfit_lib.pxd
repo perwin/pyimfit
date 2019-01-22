@@ -63,6 +63,9 @@ cdef extern from "psf_oversampling_info.h":
 		void AddRegionString( string inputRegionString )
 		void AddOversamplingScale( int scale )
 		void AddImageOffset( int X0, int Y0 )
+		void SetNormalizationFlag( bool normalize )
+		int GetNColumns( )
+		int GetNRows( )
 
 
 cdef extern from "model_object.h":

@@ -152,7 +152,7 @@ PLAN:
 	[X] Run unit & regression tests
 
 
-*[ ] Test use of PSF convolution in computation of fit statistics and fitting
+[x] Test use of PSF convolution in computation of fit statistics and fitting
     PSF convolution in test_fitting_and_fitstatistic.py is currently not working!
     -- Problem is: PSF image is *not* being normalized?
     Normalization w/in C++ imfit (setup_model_object.cpp):
@@ -167,7 +167,7 @@ PLAN:
            if self._psf is not None:
             self._modelObjectWrapper.setPSF(np.asarray(self._psf))
 
-    [ ] Add normalize option/keyword to Imfit class
+    [x] Add normalize option/keyword to Imfit class
         [x] Add as property with default value = True
 
         [x] Modify Imfit._setupModel to include normalize flag value as input to setPSF
@@ -177,7 +177,7 @@ PLAN:
 
         [x] Run tests in test_fitting_and_fitstatistic.py
 
-        [ ] Add option for specifying *no* PSF normalization
+        [x] Add option for specifying *no* PSF normalization
             -- should be sample place we pass in the PSF image!
 
 
@@ -314,7 +314,14 @@ to them
     just the oversampling info?
 
 
+ModelObjectWrapper:
+    cdef addOversamplingInfo(self, PsfOversampling oversamplingInfo):
 
+
+    keyword in loadData:
+       psf_oversampling_list : list of PsfOversampling
+            List of PsfOversampling objects, describing oversampling regions, PSFs,
+            and oversampling scales.
 
 
 

@@ -202,6 +202,10 @@ class Imfit(object):
                 * ``'zero_is_good'`` (default).
                 * ``'zero_is_bad'``.
 
+        psf_oversampling_list : list of PsfOversampling
+            List of PsfOversampling objects, describing oversampling regions, PSFs,
+            and oversampling scales.
+
         use_poisson_mlr : boolean
             Use Poisson MLR (maximum-likelihood-ratio) statistic instead of
             chi^2. Takes precedence over ``error``, ``use_model_for_errors`,
@@ -220,8 +224,8 @@ class Imfit(object):
         """
 
         all_kw = ['n_combined', 'exp_time', 'gain', 'read_noise', 'original_sky',
-                  'error_type', 'mask_format', 'use_poisson_mlr', 'use_cash_statistics',
-                  'use_model_for_errors']
+                  'error_type', 'mask_format', 'psf_oversampling_list', 'use_poisson_mlr',
+                  'use_cash_statistics', 'use_model_for_errors']
         for kw in list(kwargs.keys()):
             if kw not in all_kw:
                 raise Exception('Unknown kwarg: %s' % kw)

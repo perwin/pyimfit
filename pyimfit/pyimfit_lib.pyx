@@ -233,19 +233,28 @@ cdef class PsfOversampling( object ):
     # __cinit__ so we can allocate memory for the pointer to PsfOversamplingInfo
     def __cinit__(self, np.ndarray[np.double_t, ndim=2, mode='c'] psfImage not None,
                  int scale, str regionString, int xOffset, int yOffset,
-                 bool isUnique, bool doNormalization ):
+                 bool doNormalization ):
+        print("PsfOversampling: starting initialization...", flush=True)
         self._imageData = psfImage.flatten()
         self._nRows = psfImage.shape[0]
         self._nCols = psfImage.shape[1]
         self._psfOversamplingInfo_ptr = new PsfOversamplingInfo()
+        # Note a difference from the C++ implementation: we always specify isUnique = False,
+        # to avoid problems de-allocating the Numpy PSF image array
         self._psfOversamplingInfo_ptr.AddPsfPixels(&self._imageData[0], self._nCols,
-                                               self._nRows, isUnique)
+                                               self._nRows, False)
         self._psfOversamplingInfo_ptr.AddRegionString(regionString.encode())
         self._psfOversamplingInfo_ptr.AddOversamplingScale(scale)
         self._psfOversamplingInfo_ptr.AddImageOffset(xOffset, yOffset)
 
+        print(self._psfOversamplingInfo_ptr.GetNColumns())
+        print("PsfOversampling: done.", flush=True)
+
     def __dealloc__(self):
-        del self._psfOversamplingInfo_ptr
+        print("PsfOversampling: starting __dealloc__.", flush=True)
+        if self._psfOversamplingInfo_ptr != NULL:
+            del self._psfOversamplingInfo_ptr
+        print("PsfOversampling: done with __dealloc__.", flush=True)
 
 
 
