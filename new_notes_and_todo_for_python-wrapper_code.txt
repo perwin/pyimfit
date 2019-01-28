@@ -1,11 +1,234 @@
-NEW REFACTORING FOR PYIMFIT:
+PLAN:
+
+** GENERAL/FUTURE TO-DO
+
+    * Packaging:
+        * Make Python package (ignore Imfit library compilation for now)
+            [ ] Make text file summarizing how to compile/build package in current form
+
+            [ ] Look up how to do Sphinx setup/quickstart (e.g., how to generate setup.py file)
+            [ ] Do Sphinx setup/quickstart
+
+        * Include compilation of Imfit library
+
+    * Documentation:
+        [ ] Check how to set up doc input files for readthedocs
+
+        [ ] Make basic how-to/summary file (useful for me)
+
+    * Rework package to make it astropy-compatible
 
 
-[X] We need to be able to add the data and do all the setup, but *not* actually run 
-the fit!
-	-- this is so we can then call getFitStatistic w/o needing to run the fit first,
-	or pass an Imfit object to external MCMC code like emcee
-# imfit_fitter.fit(image_faintstar, gain=4.72, read_noise=1.15, original_sky=124.94)
+
+
+[X] We need the following internal flag variables in Imfit:
+	has-FinalSetupForFitting-been-called?
+		_finalSetupDone
+	has-fit-been-done? (converged *or* terminated)
+		_fitDone
+	has-fit-statistic-been-computed?
+		_fitStatComputed
+
+	Currently, Imfit has the following *properties*:
+		.fitConverged = return self._modelObjectWrapper.fitConverged
+			= [ModelObjectWrapper] return (self._fitStatus > 0) and (self._fitStatus < 5)
+		.fitTerminated = return self._modelObjectWrapper.fitTerminated
+			= [ModelObjectWrapper] return self._fitStatus >= 5
+
+	In ModelObjectWrapper
+		_fitStatus = int, initially 0; then = return value from DispatchToSolver
+
+[X] Imfit.doFit method
+	-- specifies which solver to use
+	-- initiates the fit
+
+	[X] doFit method
+    def doFit( self, solver='LM' ):
+        if solver not in ['LM', 'NM', 'DE']:
+            raise Exception('Invalid solver name: {0}'.format(solver))
+        self._modelObjectWrapper.fit(verbose=self._verboseLevel, mode=solver)
+        if not self.fitError:
+            self._fitDone = True
+            self._fitStatComputed = True
+
+	[X] Modify ModelObjectWrapper.fit
+		-- *remove* self._model.FinalSetupForFitting() call
+
+	[X] ModelObjectWrapper.doFinalSetup method
+		-- if NOT _finalSetupDone: calls ModelObject::FinalSetupForFitting
+
+[X] Imfit.loadData method
+	-- optional PSF data
+		-- set this first!
+	-- loads data and image-description parameters and fit-statistic selection
+	-- calls FinalSetupForFitting
+	[X] Main refactoring (don't include PSF option)
+
+	[X] Modify ModelObjectWrapper.loadData
+		-- status = self._model.FinalSetupForFitting() right at the end
+		-- set internal _finalSetupDone flag
+
+	[X] Add PSF option
+
+[X] Refactor existing Imfit.fit method to call .loadData and then .doFit
+	[X] Refactor
+	[X] Run unit & regression tests
+
+
+[x] Test use of PSF convolution in computation of fit statistics and fitting
+    PSF convolution in test_fitting_and_fitstatistic.py is currently not working!
+    -- Problem is: PSF image is *not* being normalized?
+    Normalization w/in C++ imfit (setup_model_object.cpp):
+    status = newModelObj->AddPSFVector(nPixels_psf, nColumns_psf, nRows_psf, psfPixels,
+    									options->normalizePSF);
+
+    Normalization in pyimfit
+       def setPSF(self, np.ndarray[np.double_t, ndim=2, mode='c'] psf):
+        self._model.AddPSFVector(n_cols_psf * n_rows_psf, n_cols_psf, n_rows_psf, &self._psfData[0])
+
+    def _setupModel(self):
+           if self._psf is not None:
+            self._modelObjectWrapper.setPSF(np.asarray(self._psf))
+
+    [x] Add normalize option/keyword to Imfit class
+        [x] Add as property with default value = True
+
+        [x] Modify Imfit._setupModel to include normalize flag value as input to setPSF
+
+        [x] Modify ModelObjectWrapper.setPSF to accept normalization flag and pass it on
+        to ModelObject::AddPSFVector
+
+        [x] Run tests in test_fitting_and_fitstatistic.py
+
+        [x] Add option for specifying *no* PSF normalization
+            -- should be sample place we pass in the PSF image!
+
+
+
+
+[ ] Modify Imfit: add ability to change parameter *values*
+	-- necessary if we want to use Imfit to get fit statistic *without* running
+	a fit
+	-- useful if user wants to re-run a fit with different starting parameters
+	-- for now: we want to be able to supply a list/ndarray of parameter *values*,
+	without touching the parameter limits
+	-- Two modes:
+		1. Pass parameter values to ModelObject::GetFitStatistic
+		2. Update the parameter values in Imfit object (for future fits)
+
+	Current ModelObjectWrapper.getFitStatistic(mode) does this:
+    def getFitStatistic( self, mode='none' ):
+        cdef double fitstat
+        if self.fittedLM: -- i.e., if there was a successful fit with LM
+            fitstat = self._fitResult.bestnorm
+        else:
+            fitstat = self._model.GetFitStatistic(self._paramVect)
+
+	[and then returns a modified value -- e.g., reduced, AIC, BIC -- depending
+	on value of "mode"]
+
+	[X] New method in ModelObjectWrapper
+	computeFitStatistic( self, parameterVector=None ):
+		[ type for parameterVector = np.ndarray[np.double_t, ndim=1, mode='c'] ?]
+		if parameterVictor is None:
+			fitstat = self._model.GetFitStatistic(self._paramsVect)
+		else:
+			# possibly convert parameterVector to double *
+			fitstat = self._model.GetFitStatistic(parameterVector)
+
+	[X] Corresponding method for Imfit
+
+	[X] Add extra unit tests
+
+
+	Basically, we need to update ModelObjectWrapper._paramVect
+
+	[ ] Updating of current parameter vector in ModelObjectWrapper:
+		[ ] Quick and dirty modification:
+			[ ] Add .updateParameterValues method to ModelObjectWrapper
+				-- should update ModelObjectWrapper._paramVect
+			[ ] Add .updateParameterValues method to Imfit
+				-- should call ModelObjectWrapper._paramVect on self._modelObjectWrapper
+
+
+	MAYBE LATER:
+	[ ] Check to see if there's a way to modify parameter values in an existing
+	ModelDescription instance
+
+	[ ] Modify ParameterDescription
+		[ ] Change "value" property so we can set it as well as read it
+
+	[ ] Modify ModelDescription
+		[ ] ModelDesription.updateParameterValues
+
+	[ ] Modify Imfit to allow updating of parameter values
+		-- i.e., call
+
+[X] Test whether we can call Imfit.fitStatistic w/o running fit
+
+
+
+** ADD OVERSAMPLED-PSF SUPPORT TO PYIMFIT
+
+In current imfit/makeimage code, this is done in SetupModelObject
+
+  [[ *after* PSF vector is added, if any ]]
+
+  [[ *after* adding data image [or specifying model image size in makeimage mode] ]]
+    -- this also makes sense from the standpoint of wanting to have the data/model
+    image dimensions so we can tell if the oversampling regions are within the image
+
+  if (options->psfOversampling) {
+    for (int i = 0; i < (int)psfOversampleInfoVect.size(); i++) {
+      status = newModelObj->AddOversampledPsfInfo(psfOversampleInfoVect[i]);
+      if (status < 0) {
+        fprintf(stderr, "*** ERROR: Failure in ModelObject::AddOversampledPsfInfo!\n\n");
+  	    exit(-1);
+      }
+    }
+  }
+
+
+So we need a way of creating PsfOversamplingInfo objects, and passing pointers
+to them
+    We need to add PsfOversamplingInfo to ModelObjectWrapper, via Imfit
+    -- PsfOversamplingInfo can only be added to ModelObject
+        1. *After* data image added (or model image setup):
+            nDataColumns and nDataRows must already be set
+        2. *After* PSF image (if any) has been added
+
+    Current way to do this is via keyword in call to ModelObjectWrapper.loadData()
+        psf_oversampling_list
+
+    [X] Add declaration of PsfOversamplingInfo to imfit_lib.pxd
+
+    [X] Figure out when we need to or can add psf oversampling info to ModelObject
+        *After* data image added (or model image setup):
+            nDataColumns and nDataRows must already be set
+        *After* PSF image (if any) has been added
+
+    [X] Add keyword parameter for oversampling-info objects to ModelObjectWrapper.
+
+    [X] Add wrapper method around ModelObject::AddOversampledPsfInfo to ModelObjectWrapper
+
+    [X] Make unit/regression test for use of PSF oversampling
+
+    [ ] Later: add separate method to Imfit class allowing user to pass in
+    just the oversampling info?
+
+
+ModelObjectWrapper:
+    cdef addOversamplingInfo(self, PsfOversampling oversamplingInfo):
+
+
+    keyword in loadData:
+       psf_oversampling_list : list of PsfOversampling
+            List of PsfOversampling objects, describing oversampling regions, PSFs,
+            and oversampling scales.
+
+
+
+
 
 
 * As a reminder, imfit does the following, in this order
@@ -94,235 +317,6 @@ Why we might want to supply PSF *first*, separate from data image, etc.
 
 2. Modify ModelObjectWrapper.fit so that it checks to see if ModelObject::FinalSetupForFitting
 has already been called; if not, 
-
-
-PLAN:
-
-[X] We need the following internal flag variables in Imfit:
-	has-FinalSetupForFitting-been-called?
-		_finalSetupDone
-	has-fit-been-done? (converged *or* terminated)	
-		_fitDone
-	has-fit-statistic-been-computed?
-		_fitStatComputed
-	
-	Currently, Imfit has the following *properties*:
-		.fitConverged = return self._modelObjectWrapper.fitConverged
-			= [ModelObjectWrapper] return (self._fitStatus > 0) and (self._fitStatus < 5)
-		.fitTerminated = return self._modelObjectWrapper.fitTerminated
-			= [ModelObjectWrapper] return self._fitStatus >= 5
-	
-	In ModelObjectWrapper
-		_fitStatus = int, initially 0; then = return value from DispatchToSolver
-
-[X] Imfit.doFit method
-	-- specifies which solver to use
-	-- initiates the fit
-
-	[X] doFit method
-    def doFit( self, solver='LM' ):
-        if solver not in ['LM', 'NM', 'DE']:
-            raise Exception('Invalid solver name: {0}'.format(solver))
-        self._modelObjectWrapper.fit(verbose=self._verboseLevel, mode=solver)
-        if not self.fitError:
-            self._fitDone = True
-            self._fitStatComputed = True
-    
-	[X] Modify ModelObjectWrapper.fit
-		-- *remove* self._model.FinalSetupForFitting() call
-		
-	[X] ModelObjectWrapper.doFinalSetup method
-		-- if NOT _finalSetupDone: calls ModelObject::FinalSetupForFitting
-
-[X] Imfit.loadData method
-	-- optional PSF data
-		-- set this first!
-	-- loads data and image-description parameters and fit-statistic selection
-	-- calls FinalSetupForFitting
-	[X] Main refactoring (don't include PSF option)
-	
-	[X] Modify ModelObjectWrapper.loadData
-		-- status = self._model.FinalSetupForFitting() right at the end
-		-- set internal _finalSetupDone flag
-		
-	[X] Add PSF option
-
-[X] Refactor existing Imfit.fit method to call .loadData and then .doFit
-	[X] Refactor
-	[X] Run unit & regression tests
-
-
-[x] Test use of PSF convolution in computation of fit statistics and fitting
-    PSF convolution in test_fitting_and_fitstatistic.py is currently not working!
-    -- Problem is: PSF image is *not* being normalized?
-    Normalization w/in C++ imfit (setup_model_object.cpp):
-    status = newModelObj->AddPSFVector(nPixels_psf, nColumns_psf, nRows_psf, psfPixels,
-    									options->normalizePSF);
-
-    Normalization in pyimfit
-       def setPSF(self, np.ndarray[np.double_t, ndim=2, mode='c'] psf):
-        self._model.AddPSFVector(n_cols_psf * n_rows_psf, n_cols_psf, n_rows_psf, &self._psfData[0])
-
-    def _setupModel(self):
-           if self._psf is not None:
-            self._modelObjectWrapper.setPSF(np.asarray(self._psf))
-
-    [x] Add normalize option/keyword to Imfit class
-        [x] Add as property with default value = True
-
-        [x] Modify Imfit._setupModel to include normalize flag value as input to setPSF
-
-        [x] Modify ModelObjectWrapper.setPSF to accept normalization flag and pass it on
-        to ModelObject::AddPSFVector
-
-        [x] Run tests in test_fitting_and_fitstatistic.py
-
-        [x] Add option for specifying *no* PSF normalization
-            -- should be sample place we pass in the PSF image!
-
-
-
-
-[ ] Modify Imfit: add ability to change parameter *values*
-	-- necessary if we want to use Imfit to get fit statistic *without* running
-	a fit
-	-- useful if user wants to re-run a fit with different starting parameters
-	-- for now: we want to be able to supply a list/ndarray of parameter *values*,
-	without touching the parameter limits
-	-- Two modes:
-		1. Pass parameter values to ModelObject::GetFitStatistic
-		2. Update the parameter values in Imfit object (for future fits)
-		
-	Current ModelObjectWrapper.getFitStatistic(mode) does this:
-    def getFitStatistic( self, mode='none' ):
-        cdef double fitstat
-        if self.fittedLM: -- i.e., if there was a successful fit with LM
-            fitstat = self._fitResult.bestnorm
-        else:
-            fitstat = self._model.GetFitStatistic(self._paramVect)
-
-	[and then returns a modified value -- e.g., reduced, AIC, BIC -- depending
-	on value of "mode"]
-	
-	[X] New method in ModelObjectWrapper
-	computeFitStatistic( self, parameterVector=None ):
-		[ type for parameterVector = np.ndarray[np.double_t, ndim=1, mode='c'] ?]
-		if parameterVictor is None:
-			fitstat = self._model.GetFitStatistic(self._paramsVect)
-		else:
-			# possibly convert parameterVector to double *
-			fitstat = self._model.GetFitStatistic(parameterVector)
-	
-	[X] Corresponding method for Imfit
-	
-	[X] Add extra unit tests
-	
-	
-	Basically, we need to update ModelObjectWrapper._paramVect
-
-	[ ] Updating of current parameter vector in ModelObjectWrapper:
-		[ ] Quick and dirty modification:
-			[ ] Add .updateParameterValues method to ModelObjectWrapper
-				-- should update ModelObjectWrapper._paramVect
-			[ ] Add .updateParameterValues method to Imfit
-				-- should call ModelObjectWrapper._paramVect on self._modelObjectWrapper
-	
-	
-	MAYBE LATER:
-	[ ] Check to see if there's a way to modify parameter values in an existing
-	ModelDescription instance
-	
-	[ ] Modify ParameterDescription
-		[ ] Change "value" property so we can set it as well as read it
-		
-	[ ] Modify ModelDescription
-		[ ] ModelDesription.updateParameterValues
-	
-	[ ] Modify Imfit to allow updating of parameter values
-		-- i.e., call 
-	
-[X] Test whether we can call Imfit.fitStatistic w/o running fit
-
-
-
-** ADD OVERSAMPLED-PSF SUPPORT TO PYIMFIT
-
-In current imfit/makeimage code, this is done in SetupModelObject
-
-  [[ *after* PSF vector is added, if any ]]
-
-  [[ *after* adding data image [or specifying model image size in makeimage mode] ]]
-    -- this also makes sense from the standpoint of wanting to have the data/model
-    image dimensions so we can tell if the oversampling regions are within the image
-
-  if (options->psfOversampling) {
-    for (int i = 0; i < (int)psfOversampleInfoVect.size(); i++) {
-      status = newModelObj->AddOversampledPsfInfo(psfOversampleInfoVect[i]);
-      if (status < 0) {
-        fprintf(stderr, "*** ERROR: Failure in ModelObject::AddOversampledPsfInfo!\n\n");
-  	    exit(-1);
-      }
-    }
-  }
-
-
-int ModelObject::AddOversampledPsfInfo( PsfOversamplingInfo *oversampledPsfInfo )
-{
-  long  nPixels;
-  int  nColumns_psf, nRows_psf, oversampleScale;
-  int  x1, x2, y1, y2;
-  double  *psfPixels_osamp;
-  int  deltaX, deltaY, nCols_osamp, nRows_osamp;
-  int  status = 0;
-
-  nColumns_psf = oversampledPsfInfo->GetNColumns();
-  nRows_psf = oversampledPsfInfo->GetNRows();
-  nPixels = (long)nColumns_psf * (long)nRows_psf;
-  oversampleScale = oversampledPsfInfo->GetOversamplingScale();
-  std::tie(x1, x2, y1, y2) = oversampledPsfInfo->GetCorrectedRegionCoords();
-  psfPixels_osamp = oversampledPsfInfo->GetPsfPixels();
-...
-  oversampledRegion->AddPSFVector(psfPixels_osamp, nPSFColumns_osamp, nPSFRows_osamp,
-  									oversampledPsfInfo->GetNormalizationFlag());
-
-
-So we need a way of creating PsfOversamplingInfo objects, and passing pointers
-to them
-    We need to add PsfOversamplingInfo to ModelObjectWrapper, via Imfit
-    -- PsfOversamplingInfo can only be added to ModelObject
-        1. *After* data image added (or model image setup):
-            nDataColumns and nDataRows must already be set
-        2. *After* PSF image (if any) has been added
-
-    Current way to do this is via keyword in call to ModelObjectWrapper.loadData()
-        psf_oversampling_list
-
-    [X] Add declaration of PsfOversamplingInfo to imfit_lib.pxd
-
-    [X] Figure out when we need to or can add psf oversampling info to ModelObject
-        *After* data image added (or model image setup):
-            nDataColumns and nDataRows must already be set
-        *After* PSF image (if any) has been added
-
-    [X] Add keyword parameter for oversampling-info objects to ModelObjectWrapper.
-
-    [X] Add wrapper method around ModelObject::AddOversampledPsfInfo to ModelObjectWrapper
-
-    [ ] Make unit/regression test for use of PSF oversampling
-
-    [ ] Later: add separate method to Imfit class allowing user to pass in
-    just the oversampling info?
-
-
-ModelObjectWrapper:
-    cdef addOversamplingInfo(self, PsfOversampling oversamplingInfo):
-
-
-    keyword in loadData:
-       psf_oversampling_list : list of PsfOversampling
-            List of PsfOversampling objects, describing oversampling regions, PSFs,
-            and oversampling scales.
-
 
 
 

@@ -1,0 +1,27 @@
+WARNING: This is primarily intended for personal use by PE within my local
+copy of the repository; it is *not* a general guideline for building the
+docs.
+
+The general logic of our current approach is as follows:
+
+A. We use Sphinx to generate pretty HTML files for the online documentation
+(including auto-generation of same on readthedocs.org).
+
+
+
+GENERAL WORKFLOW OUTLINE:
+
+1. Update Markdown files; use BBEdit Markup->Preview to check on how it looks
+while editing them.
+
+2. Update rST files if needed: index.rst; api_ref/api_index.rst, other
+api-related .rst files in that directory.
+
+3. Generate rST versions of the Markdown files (by running convert_md_to_rst.sh
+script) and test the Sphinx HTML generation by running Sphinx via the
+Makefile
+
+	$ ./convert_md_to_rst.sh && make html
+
+View the resulting docs in a web browser pointed at
+	file:///Users/erwin/coding/imfit/docs/_build/html/index.html
