@@ -18,8 +18,10 @@ os.environ["CC"] = "g++-8"
 os.environ["CXX"] = "g++-8"
 
 # Stuff for finding imfit headers and static library
-IMFIT_HEADER_PATH = "imfit_lib/include"
-IMFIT_LIBRARY_PATH = "imfit_lib/lib"
+#IMFIT_HEADER_PATH = "imfit_lib/include"
+#IMFIT_LIBRARY_PATH = "imfit_lib/lib"
+IMFIT_HEADER_PATH = "imfit"
+IMFIT_LIBRARY_PATH = "imfit"
 
 NAME = "pyimfit-working"   # Name for whole project and for "distribution package"
                            # = how it will be listed on PyPI
@@ -32,7 +34,8 @@ PACKAGES = [SRC_DIR]
 #                 ".", np.get_include()]
 # libraryList = ["imfit", "cfitsio", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
 libPath = [IMFIT_LIBRARY_PATH]
-headerPath = [IMFIT_HEADER_PATH, ".", np.get_include()]
+headerPath = [IMFIT_HEADER_PATH, IMFIT_HEADER_PATH+"/function_objects", IMFIT_HEADER_PATH+"/core",
+              ".", np.get_include()]
 libraryList = ["imfit", "cfitsio", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
 
 # note that to link the libimfit.a library, we have to

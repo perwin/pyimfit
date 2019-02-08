@@ -1,7 +1,8 @@
 """
 Created on Sep 20, 2013
 
-@author: andre
+[original author: Andre de Luiz Amorim; modifications by Peter Erwin]
+
 """
 from .descriptions import ModelDescription
 from .pyimfit_lib import ModelObjectWrapper

@@ -24,4 +24,4 @@ Makefile
 	$ ./convert_md_to_rst.sh && make html
 
 View the resulting docs in a web browser pointed at
-	file:///Users/erwin/coding/imfit/docs/_build/html/index.html
+	file:///Users/erwin/coding/pyimfit_working/docs/_build/html/index.html

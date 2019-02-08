@@ -6,15 +6,26 @@ PLAN:
         * Make Python package (ignore Imfit library compilation for now)
             [ ] Make text file summarizing how to compile/build package in current form
 
-            [ ] Look up how to do Sphinx setup/quickstart (e.g., how to generate setup.py file)
-            [ ] Do Sphinx setup/quickstart
-
         * Include compilation of Imfit library
+            [ ] Look up notes on how to include Cython compilation in a package build
+
+            http://martinsosic.com/development/2016/02/08/wrapping-c-library-as-python-module.html#summary
 
     * Documentation:
         [ ] Check how to set up doc input files for readthedocs
 
-        [ ] Make basic how-to/summary file (useful for me)
+            [x] Look up how to do Sphinx setup/quickstart (e.g., how to generate setup.py file)
+            [x] Do Sphinx setup/quickstart
+
+            [x] Test Sphinx documentation generation
+
+       [ ] Make basic how-to/summary file (useful for me)
+
+       [ ] Add API documentation
+            [ ] Add documentation file for config.py
+            [ ] Add documentation file for descriptions.py
+            [ ] Add documentation file for imfit_funcs.py
+            [ ] Add documentation file for utils.py
 
     * Rework package to make it astropy-compatible
 
