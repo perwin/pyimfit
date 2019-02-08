@@ -4,7 +4,12 @@ PLAN:
 
     * Packaging:
         * Make Python package (ignore Imfit library compilation for now)
-            [ ] Make text file summarizing how to compile/build package in current form
+            [x] Make text file summarizing how to compile/build package in current form
+
+        * Test upload to TestPyPI and installation
+            [ ] Make virtualenv
+            [ ] Trial upload of wheel
+            [ ] Trial installation in virtualenv
 
         * Include compilation of Imfit library
             [ ] Look up notes on how to include Cython compilation in a package build

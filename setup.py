@@ -68,13 +68,13 @@ with open("README.md", "r") as f:
 
 setup(
     name=NAME,   # name for distribution package (aka "distribution"), as listed on PyPI
-    version="0.1.0",
+    version="0.1.1",
     author="Peter Erwin",
     author_email="erwin@sigmaxi.net",
     description="Python wrapper for astronomical image-fitting program Imfit",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/perwin/imfit",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
