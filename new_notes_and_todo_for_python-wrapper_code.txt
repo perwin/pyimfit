@@ -7,9 +7,15 @@ PLAN:
             [x] Make text file summarizing how to compile/build package in current form
 
         * Test upload to TestPyPI and installation
-            [ ] Make virtualenv
-            [ ] Trial upload of wheel
-            [ ] Trial installation in virtualenv
+            [x] Make virtualenv
+            [x] Trial upload of wheel
+            [x] Trial installation in virtualenv
+
+        * Update README.md
+            -- Will be seen on Github
+
+        * Update/flesh out README_pyimfit.md
+            -- Will be seen on PyPI
 
         * Include compilation of Imfit library
             [ ] Look up notes on how to include Cython compilation in a package build

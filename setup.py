@@ -18,8 +18,6 @@ os.environ["CC"] = "g++-8"
 os.environ["CXX"] = "g++-8"
 
 # Stuff for finding imfit headers and static library
-#IMFIT_HEADER_PATH = "imfit_lib/include"
-#IMFIT_LIBRARY_PATH = "imfit_lib/lib"
 IMFIT_HEADER_PATH = "imfit"
 IMFIT_LIBRARY_PATH = "imfit"
 
@@ -28,11 +26,6 @@ NAME = "pyimfit-working"   # Name for whole project and for "distribution packag
 SRC_DIR = "pyimfit"        # This will be package ("import package") name (e.g., >>> import pyimfit)
 PACKAGES = [SRC_DIR]
 
-# libPath = ["/Users/erwin/coding/imfit"]
-# headerPath = ["/Users/erwin/coding/imfit", "/Users/erwin/coding/imfit/core",
-#                 "/Users/erwin/coding/imfit/solvers", "/Users/erwin/coding/imfit/function_objects",
-#                 ".", np.get_include()]
-# libraryList = ["imfit", "cfitsio", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
 libPath = [IMFIT_LIBRARY_PATH]
 headerPath = [IMFIT_HEADER_PATH, IMFIT_HEADER_PATH+"/function_objects", IMFIT_HEADER_PATH+"/core",
               ".", np.get_include()]
@@ -63,18 +56,18 @@ extensions = [
 
 
 # Define package metadata
-with open("README.md", "r") as f:
+with open("README_pyimfit.md", "r") as f:
     long_description = f.read()
 
 setup(
     name=NAME,   # name for distribution package (aka "distribution"), as listed on PyPI
-    version="0.1.1",
+    version="0.1.2",
     author="Peter Erwin",
     author_email="erwin@sigmaxi.net",
     description="Python wrapper for astronomical image-fitting program Imfit",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/perwin/imfit",
+    url="https://github.com/perwin/pyimfit",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -85,6 +78,7 @@ setup(
         "Intended Audience :: Science/Research",
     ],
     python_requires='>=3',
+    install_requires=['numpy', 'scipy', 'astropy'],
 
     # the include_path specification is necessary for Cython to find the *.pxd files
     # which are included via "cimport" in the *.pyx files
