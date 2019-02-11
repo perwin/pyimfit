@@ -21,7 +21,7 @@ os.environ["CXX"] = "g++-8"
 IMFIT_HEADER_PATH = "imfit"
 IMFIT_LIBRARY_PATH = "imfit"
 
-NAME = "pyimfit-working"   # Name for whole project and for "distribution package"
+NAME = "pyimfit"           # Name for whole project and for "distribution package"
                            # = how it will be listed on PyPI
 SRC_DIR = "pyimfit"        # This will be package ("import package") name (e.g., >>> import pyimfit)
 PACKAGES = [SRC_DIR]

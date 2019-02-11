@@ -45,7 +45,8 @@ an example of using PyImfit with the Markov Chain Monte Carlo code [`emcee`](htt
 
 ## Requirements and Installation
 
-PyImfit is designed to work with modern versions of Python 3; no support for Python 2.7 is planned.
+PyImfit is designed to work with modern versions of Python 3 (nominally 3.5 or later); no support for 
+Python 2.7 is planned.
 
 ### Standard Installation
 
@@ -64,7 +65,10 @@ by pip if they are not already present):
 
 To build PyImfit from source, you will need the following:
 
-1. This Github repository
+1. This Github repository (use `--recurse-submodules` to ensure the Imfit repo is also downloaded)
+
+       $ git clone --recurse-submodules git://github.com/perwin/pyimfit.git
+
 
 2. [SCons](http://scons.org)
 
@@ -75,12 +79,13 @@ any C++-11-aware version of Clang++/LLVM that includes OpenMP support
 (note that this does *not* include the Apple-built version of Clang++
 that comes with Xcode for macOS, since that does not include OpenMP support).
 
+
 Steps for building PyImfit from source:
 
 1. Build the static-library version of Imfit
 
         $ cd imfit
-        $ cons libimfit.a
+        $ scons libimfit.a
 
 
 2. Build the Python package
