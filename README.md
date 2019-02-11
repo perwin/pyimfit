@@ -1,6 +1,6 @@
 # PyImfit
 
-PyImfit is a Python wrapper for [Imfit](), a C++-based astronomical image-fitting 
+PyImfit is a Python wrapper for [Imfit](https://github.com/perwin/imfit), a C++-based astronomical image-fitting 
 program.
 
 **WARNING: This is currently a work in progress, and is not yet ready for general use!**
@@ -50,7 +50,7 @@ Python 2.7 is planned.
 
 ### Standard Installation
 
-Precompiled binary versions of PyImfit for Linux and macOS can be **[not yet, but soon!]** installed via PyPI:
+A precompiled binary version ("wheel") of PyImfit for macOS can be **[not yet, but soon!]** installed via PyPI:
 
     $ pip install pyimfit
 
@@ -80,7 +80,7 @@ any C++-11-aware version of Clang++/LLVM that includes OpenMP support
 that comes with Xcode for macOS, since that does not include OpenMP support).
 
 
-Steps for building PyImfit from source:
+#### Steps for building PyImfit from source:
 
 1. Build the static-library version of Imfit
 
@@ -90,8 +90,15 @@ Steps for building PyImfit from source:
 
 2. Build the Python package
 
-        $ cd ..
-        $ python3 setup.py XXX
+   * For testing purposes (installs a link to current directory in your usual package-install location)
+
+         $ cd ..
+         $ python3 setup.py develop
+
+   * For general installation (i.e., actually installs the package in your usual package-install location)
+
+         $ cd ..
+         $ python3 setup.py install
 
 
 ## Credits

@@ -36,9 +36,9 @@ This is for other people; also for future testing purposes
 
 Update version number in setup.py
 
-Build a binary distribution:
+Build source and binary distributions:
 
-   $ python setup.py bdist_wheel
+   $ python3 setup.py sdist bdist_wheel
 
 Test uploading to TestPyPI:
 
