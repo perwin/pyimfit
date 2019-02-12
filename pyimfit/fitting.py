@@ -12,9 +12,21 @@ from copy import deepcopy
 __all__ = ['Imfit']
 
 
-def _composemask(arr, mask, mask_zero_is_bad):
+def _composemask( arr, mask, mask_zero_is_bad ):
     """
     Helper function to properly compose masks.
+
+    image : 2-D numpy array
+        Image to be fitted. Can be a masked array.
+
+     mask : 2-D numpy array, optional
+        Array containing the masked pixels; must have the same shape as ``image``.
+        Pixels set to ``True`` are bad by default (see the kwarg ``mask_format``
+        for other options). If not set and ``image`` is a masked array, then its
+        mask is used. If both masks are present, the final mask is composed by masking
+        any pixel that is masked in either of the input masks.
+
+    mask_zero_is_bad : bool
     """
     if isinstance(arr, np.ma.MaskedArray):
         if mask is None:
@@ -42,36 +54,42 @@ class Imfit(object):
     On the other hand, one instance can be used to fit the same model
     to any number of images, or to fit and then create the model image.
 
-    Parameters
-    ----------
-    model_descr : :class:`ModelDescription`
-        Template model to be fitted, an instance of :class:`ModelDescription`.
-        It will be the template model to every subsequent fitting in this instance.
-
-    psf : 2-D array
-        Point Spread Function image to be convolved to the images.
-        Default: ``None`` (no convolution).
-
-    quiet : bool, optional
-        Suppress output, only error messages will be printed.
-        Default: ``True``.
-
-    nproc : int, optional
-        Number of processors to use when fitting. If `0``,
-        use all available processors.
-        Default: ``0`` (use all processors).
-
-    subsampling : bool, optional
-        Use pixel subsampling near center.
-        Default: ``True``.
-
     See also
     --------
     parse_config_file, fit
     """
 
-    def __init__( self, model_descr, psf=None, psfNormalization=True, quiet=True, nproc=0, chunk_size=8,
+    def __init__( self, model_descr, psf=None, psfNormalization=True, quiet=True, nproc=0, chunk_size=10,
                   subsampling=True):
+        """
+        Parameters
+        ----------
+        model_descr : :class:`ModelDescription`
+            Model to be fitted to the data; an instance of :class:`ModelDescription`.
+
+        psf : 2-D Numpy array, optional
+            Point Spread Function image to be convolved to the images.
+            Default: ``None`` (no convolution).
+
+        psfNormalization : bool, optional
+            Normalize the PSF image before using.
+            Default: ``True``.
+
+        quiet : bool, optional
+            Suppress output, only error messages will be printed.
+            Default: ``True``.
+
+        nproc : int, optional
+            Number of processor cores to use when fitting. If `0``, use all available cores.
+            Default: ``0`` (use all processors).
+
+        chunk_size : int, optional
+            Chunk size for OpenMP processing
+
+        subsampling : bool, optional
+            Use pixel subsampling near centers of image functions.
+            Default: ``True``.
+        """
         if not isinstance(model_descr, ModelDescription ):
             raise ValueError('model_descr must be a ModelDescription object.')
         self._modelDescr = model_descr
@@ -109,7 +127,31 @@ class Imfit(object):
             return deepcopy(self._modelDescr)
 
 
+    def saveCurrentModelToFile( self, filename, includeImageOptions=False ):
+        # use getModelDescription to get the current (e.g., updated with best-fit parameters)
+        # ModelDescription object from self._modelObjectWrapper
+        modelDesc = self.getModelDescription()
+        # self.parameterErrors will be None if the fit hasn't been performed yet,
+        # or if the fit did not produce parameter uncertainty estimates
+        outputLines = modelDesc.getStringDescription(errors=self.parameterErrors, saveOptions=includeImageOptions)
+        with open(filename, 'w') as outf:
+            for line in outputLines:
+                outf.write(line)
+
+
     def getRawParameters(self):
+        """
+        Model parameters for debugging purposes.
+
+        Returns
+        -------
+        raw_params : numpy ndarray of floats
+            A 1D array containing all the model parameter values.
+        """
+        return np.array(self._modelObjectWrapper.getRawParameters())
+
+
+    def getParameterErrors(self):
         """
         Model parameters for debugging purposes.
 
@@ -118,7 +160,7 @@ class Imfit(object):
         raw_params : array of floats
             A 1D array containing all the model parameter values.
         """
-        return np.array(self._modelObjectWrapper.getRawParameters())
+        return np.array(self._modelObjectWrapper.getParameterErrors())
 
 
     def getParameterLimits(self):
@@ -458,6 +500,15 @@ class Imfit(object):
     @property
     def nIter(self):
         return self._modelObjectWrapper.nIter
+
+
+    @property
+    def parameterErrors(self):
+        if self.fitConverged and self._modelObjectWrapper._fitMode == "LM":
+            return self.getParameterErrors()
+        else:
+            return None
+
 
     @property
     def nPegged(self):

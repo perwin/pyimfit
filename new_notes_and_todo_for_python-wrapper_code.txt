@@ -69,17 +69,20 @@ PLAN:
         [x] Add code to FunctionSetDescription to output list of formatted strings
             [x] Add code to unit test (test_description.py)
             [x] Write code to pass test
-        [ ] Add code to FunctionSetDescription to output list of formatted strings w/ optional errors (no limit info)
-            [ ] Add code to unit test (test_description.py) -- no errors
-            [ ] Add code to unit test (test_description.py) -- with errors (or noLimits=True)
-            [ ] Write code to pass test
-        [ ] Add code to save ModelDescription as imfit config file (GAIN, parameter limits, etc.)
-            [ ] Add code to unit test (test_description.py)
-            [ ] Write code to pass test
-        [ ] Add code to save ModelDescription as imfit output file (no GAIN, etc.; should include
+        [x] Add code to FunctionSetDescription to output list of formatted strings w/ optional errors (no limit info)
+            [x] Add code to unit test (test_description.py) -- no errors
+            [x] Add code to unit test (test_description.py) -- with errors (or noLimits=True)
+            [x] Write code to pass test
+        [x] Add code to save ModelDescription as imfit config file (GAIN, parameter limits, etc.)
+            [x] Add code to unit test (test_description.py)
+            [x] Write code to pass test
+        [x] Add code to save ModelDescription as imfit output file (no GAIN, etc.; should include
             parameter errors, if they exist)
     [ ] Add code to Imfit to do same (should call method on internal
         e.g., use getModelDescription(), then pass parameters to the resulting ModelDescription object
+            [ ] Test Imfit.saveCurrentModelToFile()
+                [ ] Run fit with NM (no parameter errors)
+                [ ] Run fit with LM (parameter errors)
 
 
 [ ] Experiment with building using shared libraries

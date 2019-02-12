@@ -759,7 +759,7 @@ class ModelDescription(object):
         return [p.limits for p in paramsList]
 
 
-    def getStringDescription( self, noLimits=False, errors=None ):
+    def getStringDescription( self, noLimits=False, errors=None, saveOptions=False ):
         """
         Returns a list of strings suitable for inclusion in an imfit/makeimage config file.
 
@@ -767,8 +767,12 @@ class ModelDescription(object):
         ----------
         noLimits : bool, optional
             if True, then only parameter values (no limits or "fixed" indicators) are output
+
         errors : sequence float, optional
             errors on parameter values (e.g., from Levenberg-Marquardt minimization)
+
+        saveOptions : bool, optional
+            if False, then image-description options (GAIN, READNOISE, etc.) are *not* output
 
         Returns
         -------
@@ -778,7 +782,7 @@ class ModelDescription(object):
         """
         outputLines = []
         # image-description parameters
-        if len(self.options) > 0:
+        if saveOptions and len(self.options) > 0:
             for key,value in self.options.items():
                 newLine = "{0}\t\t{1}\n".format(key, value)
                 outputLines.append(newLine)

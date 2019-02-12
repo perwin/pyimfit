@@ -340,7 +340,25 @@ class TestModelDescription(object):
                         "ell\t\t0.2\t\t0.0,1.0\n",
                         "I_0\t\t100.0\t\t0.0,500.0\n",
                         "h\t\t25.0\t\t0.0,100.0\n"]
-        outputLines = modeldesc.getStringDescription()
+        outputLines = modeldesc.getStringDescription(saveOptions=True)
+        print(outputLines)
+        assert outputLines == lines_correct
+
+    def test_ModelDescription_getStrings_without_options(self):
+        # get strings without options, even though model *has* options
+        modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
+        optionsDict = {"GAIN": 4.5, "READNOISE": 0.9}
+        modeldesc.updateOptions(optionsDict)
+
+        lines_correct = ["\n",
+                         "X0\t\t129.0\t\t125.0,135.0\n",
+                        "Y0\t\t129.0\t\t125.0,135.0\n",
+                        "FUNCTION Exponential\n",
+                        "PA\t\t18.0\t\t0.0,90.0\n",
+                        "ell\t\t0.2\t\t0.0,1.0\n",
+                        "I_0\t\t100.0\t\t0.0,500.0\n",
+                        "h\t\t25.0\t\t0.0,100.0\n"]
+        outputLines = modeldesc.getStringDescription(saveOptions=False)
         print(outputLines)
         assert outputLines == lines_correct
 

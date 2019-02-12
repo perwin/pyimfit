@@ -264,6 +264,7 @@ cdef class ModelObjectWrapper( object ):
     cdef ModelObject *_model
     cdef vector[mp_par] _paramInfo
     cdef double *_paramVect
+    cdef double *_fitErrorsVect
     cdef bool _paramLimitsExist
     cdef int _nParams
     cdef int _nFreeParams
@@ -289,6 +290,7 @@ cdef class ModelObjectWrapper( object ):
                     bool subsampling=True ):
         self._paramLimitsExist = False
         self._paramVect = NULL
+        self._fitErrorsVect = NULL
         self._solverResults = NULL
         self._model = NULL
         self._fitResult = NULL
@@ -341,6 +343,9 @@ cdef class ModelObjectWrapper( object ):
         self._paramVect = <double *> calloc(self._nParams, sizeof(double))
         if self._paramVect == NULL:
             raise MemoryError('Could not allocate parameter initial values.')
+        self._fitErrorsVect = <double *> calloc(self._nParams, sizeof(double))
+        if self._fitErrorsVect == NULL:
+            raise MemoryError('Could not allocate space for best-fit parameter errors.')
 
         # Fill parameter info and initial value.
         for i, param in enumerate(self._parameterList):
@@ -659,6 +664,8 @@ cdef class ModelObjectWrapper( object ):
                                             verbose, self._solverResults, nloptSolverName, seed)
         if mode == 'LM':
             self._fitResult = self._solverResults.GetMPResults()
+            if self._solverResults.ErrorsPresent():
+                self._solverResults.GetErrors(self._fitErrorsVect)
 
         self._fitMode = mode
         self._fitted = True
@@ -692,6 +699,13 @@ cdef class ModelObjectWrapper( object ):
         for i in range(self._nParams):
             vals.append(self._paramVect[i])
         return vals
+
+
+    def getParameterErrors(self):
+        errorVals = []
+        for i in range(self._nParams):
+            errorVals.append(self._fitErrorsVect[i])
+        return errorVals
 
 
     # FIXME: possibly change this to use typed memoryview?
@@ -800,6 +814,8 @@ cdef class ModelObjectWrapper( object ):
             del self._model
         if self._paramVect != NULL:
             free(self._paramVect)
+        if self._fitErrorsVect != NULL:
+            free(self._fitErrorsVect)
         if self._solverResults != NULL:
             free(self._solverResults)
             # note that this should automatically free self._fitResult, if that
