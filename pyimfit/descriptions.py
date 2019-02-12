@@ -184,6 +184,36 @@ class ParameterDescription(object):
         self._limits = (v1, v2)
 
 
+    def getStringDescription( self, noLimits=False, error=None ):
+        """
+        Returns a string with parameter name, value, limits, suitable for inclusion in
+        an imfit/makeimage config file.
+
+        Parameters
+        ----------
+        noLimits : bool, optional
+            if True, then only parameter values (no limits or "fixed" indicators) are output
+        error : float, optional
+            error on parameter value (e.g., from Levenberg-Marquardt minimization); if supplied
+            then no limit info is output, but "# +/- <error>" is appended
+
+        Returns
+        -------
+        outputString : string
+        """
+        outputString = "{0}\t\t{1}".format(self.name, self.value)
+        if error is not None:
+            outputString += "\t\t# +/- {0}".format(error)
+        elif noLimits:
+            pass
+        else:
+            if self.fixed:
+                outputString += "\t\tfixed"
+            elif self.limits is not None:
+                outputString += "\t\t{0},{1}".format(self.limits[0], self.limits[1])
+        return outputString
+
+
     def __eq__(self, rhs):
         if ((self._name == rhs._name) and (self._value == rhs._value)
                     and (self._limits == rhs._limits)):
@@ -218,12 +248,15 @@ class FunctionDescription(object):
         funcType : str
             name of the image function (e.g., "Gaussian", "EdgeOnDisk")
 
-        name : str
+        _name : str
             unique label for this function (e.g., "disk", "nuclear ring")
 
         _parameters : list of `ParameterDescription`
             the list of `ParameterDescription` objects for the image-function
             parameters
+
+        nParameters : int
+            number of parameters for this function
 
     Methods
     -------
@@ -241,6 +274,7 @@ class FunctionDescription(object):
         self.funcType = func_type
         self._name = name
         self._parameters = []
+        self.nParameters = 0
         if parameters is not None:
             for p in parameters:
                 self.addParameter(p)
@@ -261,9 +295,10 @@ class FunctionDescription(object):
         # add parameter names as attributes, so we can do things like
         # function_instance.<param_name>
         setattr(self, p.name, p)
+        self.nParameters += 1
 
 
-    def parameterList(self):
+    def parameterList( self ):
         """
         A list of the parameters of this function.
 
@@ -273,6 +308,36 @@ class FunctionDescription(object):
             List of the parameters.
         """
         return [p for p in self._parameters]
+
+
+    def getStringDescription( self, noLimits=False, errors=None ):
+        """
+        Returns a list of strings suitable for inclusion in an imfit/makeimage config file.
+
+        Parameters
+        ----------
+        noLimits : bool, optional
+            if True, then only parameter values (no limits or "fixed" indicators) are output
+        errors : sequence float, optional
+            errors on parameter values (e.g., from Levenberg-Marquardt minimization)
+
+        Returns
+        -------
+        outputStrings : list of string
+            list of newline-terminated strings, starting with function name and followed
+            by one string for each parameter, as output by ParameterDescription.getStringDescription
+            If errors is supplied, then parameter strings will contain "# +/- <error>" at end
+        """
+        outputLines = ["FUNCTION {0}\n".format(self.funcType)]
+
+        for i in range(self.nParameters):
+            p = self._parameters[i]
+            if errors is None:
+                newString = p.getStringDescription(noLimits=noLimits)
+            else:
+                newString = p.getStringDescription(error=errors[i])
+            outputLines.append(newString + "\n")
+        return outputLines
 
 
     def __eq__( self, rhs ):
@@ -310,7 +375,7 @@ class FunctionSetDescription(object):
     ----------
 
         name : str
-            label of the parameter (e.g., "X0", "sigma")
+            name for the function block
 
         x0 : float
             x-coordinate of the function block/set's center
@@ -321,8 +386,8 @@ class FunctionSetDescription(object):
         _functions : list of `FunctionDescription`
             the FunctionDescription objects, one for each image function
 
-        name : str
-            label of the parameter (e.g., "X0", "sigma")
+        nFunctions : int
+            number of functions in the function block
 
     Methods
     -------
@@ -349,9 +414,11 @@ class FunctionSetDescription(object):
         else:
             self.y0 = y0param
         self._functions = []
+        self.nFunctions = 0
         if functions is not None:
             for f in functions:
                 self.addFunction(f)
+            self.nFunctions = len(functions)
 
 
     @property
@@ -379,6 +446,7 @@ class FunctionSetDescription(object):
         # add parameter names as attributes, so we can do things like
         # function_set_instance.<func_name>
         setattr(self, f.name, f)
+        self.nFunctions += 1
 
 
     def _contains(self, name):
@@ -416,6 +484,41 @@ class FunctionSetDescription(object):
         for f in self._functions:
             params.extend(f.parameterList())
         return params
+
+
+    def getStringDescription( self, noLimits=False, errors=None ):
+        """
+        Returns a list of strings suitable for inclusion in an imfit/makeimage config file.
+
+        Parameters
+        ----------
+        noLimits : bool, optional
+            if True, then only parameter values (no limits or "fixed" indicators) are output
+        errors : sequence float, optional
+            errors on parameter values (e.g., from Levenberg-Marquardt minimization)
+
+        Returns
+        -------
+        outputStrings : list of string
+            list of newline-terminated strings describing the function block.
+            If errors is supplied, then parameter strings will contain "# +/- <error>" at end
+        """
+        # x0,y0
+        if errors is not None:
+            x0Line = self.x0.getStringDescription(error=errors[0])
+            y0Line = self.y0.getStringDescription(error=errors[1])
+        else:
+            x0Line = self.x0.getStringDescription(noLimits=noLimits)
+            y0Line = self.y0.getStringDescription(noLimits=noLimits)
+        outputLines = [x0Line + "\n", y0Line + "\n"]
+        for i in range(self.nFunctions):
+            if errors is not None:
+                functionLines = self._functions[i].getStringDescription(errors=errors[2:])
+            else:
+                functionLines = self._functions[i].getStringDescription(noLimits=noLimits)
+            outputLines.extend(functionLines)
+
+        return outputLines
 
 
     def __eq__(self, rhs):
@@ -461,6 +564,8 @@ class ModelDescription(object):
         _functionSets : list of `FunctionSetDescription`
             the individual image-function blocks/sets making up the model
 
+        nFunctionSets : int
+
     Class methods
     -------
         load(fname)
@@ -471,6 +576,9 @@ class ModelDescription(object):
     -------
         addFunctionSet(fs)
             Add a function block/set to the model description
+
+        addOptions(optionDict)
+            Add image-description options via a dict
 
         functionSetIndices()
             Returns a list of ``int`` specifying the function-block start
@@ -490,8 +598,11 @@ class ModelDescription(object):
         self.options = {}
         self.options.update(options)
         self._functionSets = []
+        self.nFunctionSets = 0
         if function_sets is not None:
             for fs in function_sets:
+                # note that addFunctionSet will increment nFunctionSets, so we don't need to
+                # do that here
                 self.addFunctionSet(fs)
 
 
@@ -523,6 +634,15 @@ class ModelDescription(object):
         return parse_config_file(fname)
 
 
+    @property
+    def optionsDict(self):
+        """
+        Image-description options, as a dict
+        E.g., {"GAIN": 2.75, "READNOISE": 103.43}
+        """
+        return self.options
+
+
     def addFunctionSet(self, fs):
         """
         Add a function set to the model description.
@@ -538,6 +658,31 @@ class ModelDescription(object):
             raise KeyError('FunctionSet named %s already exists.' % fs.name)
         self._functionSets.append(fs)
         setattr(self, fs.name, fs)
+        self.nFunctionSets += 1
+
+
+    def updateOptions( self, optionsDict ):
+        """
+        Updates the internal image-descriptions dict, replacing current values for keys
+        already in the dict and added key-value pairs for keys not already present.
+
+        Parameters
+        ----------
+        optionDict : dict
+        """
+        self.options.update(optionsDict)
+
+
+    def replaceOptions( self, optionsDict ):
+        """
+        Replaces the current image-descriptions dict.
+
+
+        Parameters
+        ----------
+        optionDict : dict
+        """
+        self.options = optionsDict
 
 
     def _contains(self, name):
@@ -553,7 +698,7 @@ class ModelDescription(object):
         to the starts of individual function sets/blocks.
         """
         indices = [0]
-        for i in range(len(self._functionSets) - 1):
+        for i in range(self.nFunctionSets - 1):
             functionsThisSet = self._functionSets[i].functionList()
             indices.append(len(functionsThisSet))
         return indices
@@ -614,6 +759,44 @@ class ModelDescription(object):
         return [p.limits for p in paramsList]
 
 
+    def getStringDescription( self, noLimits=False, errors=None ):
+        """
+        Returns a list of strings suitable for inclusion in an imfit/makeimage config file.
+
+        Parameters
+        ----------
+        noLimits : bool, optional
+            if True, then only parameter values (no limits or "fixed" indicators) are output
+        errors : sequence float, optional
+            errors on parameter values (e.g., from Levenberg-Marquardt minimization)
+
+        Returns
+        -------
+        outputStrings : list of string
+            list of newline-terminated strings describing the model.
+            If errors is supplied, then parameter strings will contain "# +/- <error>" at end
+        """
+        outputLines = []
+        # image-description parameters
+        if len(self.options) > 0:
+            for key,value in self.options.items():
+                newLine = "{0}\t\t{1}\n".format(key, value)
+                outputLines.append(newLine)
+
+        # function blocks
+        fblockIndices = self.functionSetIndices()
+        for i in range(self.nFunctionSets):
+            outputLines.extend("\n")
+            fblock = self._functionSets[i]
+            fblockStartIndex = fblockIndices[i]
+            if errors is not None:
+                newLines = fblock.getStringDescription(noLimits=noLimits, errors=errors[fblockStartIndex:])
+            else:
+                newLines = fblock.getStringDescription(noLimits=noLimits)
+            outputLines.extend(newLines)
+        return outputLines
+
+
     def __eq__(self, rhs):
         if ((self.options == rhs.options) and (self._functionSets == rhs._functionSets)):
             return True
@@ -627,19 +810,6 @@ class ModelDescription(object):
             lines.append('%s	%f' % (k, v))
         lines.extend(str(fs) for fs in self._functionSets)
         return '\n'.join(lines)
-
-
-# 	def __getattr__(self, attr):
-# 		return self[attr]
-# 	
-# 	
-# 	def __getitem__(self, key):
-# 		if not isinstance(key, str):
-# 			raise KeyError('FunctionSet must be a string.')
-# 		for fs in self._functionSets:
-# 			if key == fs.name:
-# 				return fs
-# 		raise KeyError('FunctionSet %s not found.' % key)
 
 
     def __deepcopy__(self, memo):

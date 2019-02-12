@@ -76,6 +76,33 @@ class TestParameterDescription(object):
         assert pdesc.limits == approx((95.0, 125.0))
 
 
+    def test_ParameterDescription_getString(self):
+        pdesc1 = ParameterDescription('X0', 100.0)
+        outString1_correct = "X0\t\t100.0"
+        pdesc2 = ParameterDescription('X0', 100.0, fixed=True)
+        outString2_correct = "X0\t\t100.0\t\tfixed"
+        pdesc3 = ParameterDescription('X0', 100.0, 50.0, 150.0)
+        outString3_correct = "X0\t\t100.0\t\t50.0,150.0"
+        # user requested no limits be printed
+        outString3b_correct = "X0\t\t100.0"
+        # user supplied error value
+        outString3c_correct = "X0\t\t100.0\t\t# +/- 0.501"
+
+        outString1 = pdesc1.getStringDescription()
+        assert outString1 == outString1_correct
+        outString2 = pdesc2.getStringDescription()
+        assert outString2 == outString2_correct
+        outString3 = pdesc3.getStringDescription()
+        assert outString3 == outString3_correct
+
+        # user requested no limits be printed
+        outString3b = pdesc3.getStringDescription(noLimits=True)
+        assert outString3b == outString3b_correct
+        # user supplied error value
+        outString3c = pdesc3.getStringDescription(error=0.501)
+        assert outString3c == outString3c_correct
+
+
 
 class TestFunctionDescription(object):
 
@@ -96,6 +123,40 @@ class TestFunctionDescription(object):
         assert fdesc1.sigma == self.p4
         plist = fdesc1.parameterList()
         assert plist == self.paramDescList
+
+    def test_FunctionDescription_getStrings(self):
+        fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
+
+        lines_correct = ["FUNCTION Gaussian\n",
+                         "PA\t\t0.0\t\tfixed\n",
+                         "ell\t\t0.5\t\t0.1,0.8\n",
+                         "I_0\t\t100.0\t\t10.0,1000.0\n",
+                         "sigma\t\t10.0\t\t5.0,20.0\n"]
+        outputLines = fdesc1.getStringDescription()
+        assert outputLines == lines_correct
+
+    def test_FunctionDescription_getStrings_bestfit(self):
+        fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
+
+        lines_correct = ["FUNCTION Gaussian\n",
+                         "PA\t\t0.0\n",
+                         "ell\t\t0.5\n",
+                         "I_0\t\t100.0\n",
+                         "sigma\t\t10.0\n"]
+        outputLines = fdesc1.getStringDescription(noLimits=True)
+        assert outputLines == lines_correct
+
+    def test_FunctionDescription_getStrings_bestfit_with_errors(self):
+        fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
+        errorValues = np.array([0.0, 0.001073, 3.4567, 0.333])
+
+        lines_correct = ["FUNCTION Gaussian\n",
+                         "PA\t\t0.0\t\t# +/- 0.0\n",
+                         "ell\t\t0.5\t\t# +/- 0.001073\n",
+                         "I_0\t\t100.0\t\t# +/- 3.4567\n",
+                         "sigma\t\t10.0\t\t# +/- 0.333\n"]
+        outputLines = fdesc1.getStringDescription(errors=errorValues)
+        assert outputLines == lines_correct
 
 
 
@@ -136,6 +197,47 @@ class TestFunctionSetDescription(object):
         with pytest.raises(KeyError):
             fsetdesc1.addFunction(self.fdesc1)
 
+    def test_FunctionSetDescription_getStrings(self):
+        fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
+
+        lines_correct = ["X0\t\t100.0\t\tfixed\n",
+                         "Y0\t\t200.0\t\t180.0,220.0\n",
+                        "FUNCTION Gaussian\n",
+                         "PA\t\t0.0\t\tfixed\n",
+                         "ell\t\t0.5\t\t0.1,0.8\n",
+                         "I_0\t\t100.0\t\t10.0,1000.0\n",
+                         "sigma\t\t10.0\t\t5.0,20.0\n"]
+        outputLines = fsetdesc1.getStringDescription()
+        assert outputLines == lines_correct
+
+    def test_FunctionSetDescription_getStrings_no_limits(self):
+        fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
+
+        lines_correct = ["X0\t\t100.0\n",
+                         "Y0\t\t200.0\n",
+                        "FUNCTION Gaussian\n",
+                         "PA\t\t0.0\n",
+                         "ell\t\t0.5\n",
+                         "I_0\t\t100.0\n",
+                         "sigma\t\t10.0\n"]
+        outputLines = fsetdesc1.getStringDescription(noLimits=True)
+        assert outputLines == lines_correct
+
+    def test_FunctionSetDescription_getStrings_with_errors(self):
+        fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
+
+        errorValues = np.array([0.0, 2.456, 0.0, 0.001073, 3.4567, 0.333])
+
+        lines_correct = ["X0\t\t100.0\t\t# +/- 0.0\n",
+                         "Y0\t\t200.0\t\t# +/- 2.456\n",
+                         "FUNCTION Gaussian\n",
+                         "PA\t\t0.0\t\t# +/- 0.0\n",
+                         "ell\t\t0.5\t\t# +/- 0.001073\n",
+                         "I_0\t\t100.0\t\t# +/- 3.4567\n",
+                         "sigma\t\t10.0\t\t# +/- 0.333\n"]
+        outputLines = fsetdesc1.getStringDescription(errors=errorValues)
+        assert outputLines == lines_correct
+
 
 
 class TestModelDescription(object):
@@ -165,6 +267,15 @@ class TestModelDescription(object):
         pLimits = modeldesc1.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
 
+    def testModelDescription_get_and_set_options( self ):
+        modeldesc1 = ModelDescription(self.fsetList)
+        assert {} == modeldesc1.optionsDict
+        optionsDict = {"GAIN": 4.5, "READNOISE": 0.9}
+        modeldesc1.updateOptions(optionsDict)
+        assert optionsDict == modeldesc1.optionsDict
+        optionsDict2 = {"GAIN": 10.5, "READNOISE": 0.9, "ORIGINAL_SKY": 45.01}
+        modeldesc1.updateOptions(optionsDict2)
+        assert optionsDict2 == modeldesc1.optionsDict
 
     def test_ModelDescription_load_from_file( self ):
         x0_p = ParameterDescription("X0", 129.0, 125,135)
@@ -188,6 +299,65 @@ class TestModelDescription(object):
     def test_ModelDescription_load_from_file_2blocks( self ):
 
         modeldesc2blocks = ModelDescription.load(CONFIG_EXAMPLE_2BLOCKS)
+
+    def test_ModelDescription_getStrings(self):
+        modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
+
+        x0_p = ParameterDescription("X0", 129.0, 125,135)
+        y0_p = ParameterDescription("Y0", 129.0, 125,135)
+        p1 = ParameterDescription("PA", 18.0, 0,90)
+        p2 = ParameterDescription("ell", 0.2, 0.0,1)
+        p3 = ParameterDescription("I_0", 100.0, 0, 500)
+        p4 = ParameterDescription("h", 25, 0,100)
+        paramDescList = [p1, p2, p3, p4]
+        fullParamDescList = [x0_p, y0_p, p1, p2, p3, p4]
+
+        assert modeldesc.functionSetIndices() == [0]
+        assert modeldesc.functionList() == ['Exponential']
+        assert modeldesc.parameterList() == fullParamDescList
+
+        lines_correct = ["\n", "X0\t\t129.0\t\t125.0,135.0\n",
+                        "Y0\t\t129.0\t\t125.0,135.0\n",
+                        "FUNCTION Exponential\n",
+                        "PA\t\t18.0\t\t0.0,90.0\n",
+                        "ell\t\t0.2\t\t0.0,1.0\n",
+                        "I_0\t\t100.0\t\t0.0,500.0\n",
+                        "h\t\t25.0\t\t0.0,100.0\n"]
+        outputLines = modeldesc.getStringDescription()
+        print(outputLines)
+        assert outputLines == lines_correct
+
+    def test_ModelDescription_getStrings_with_options(self):
+        modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
+        optionsDict = {"GAIN": 4.5, "READNOISE": 0.9}
+        modeldesc.updateOptions(optionsDict)
+
+        lines_correct = ["GAIN\t\t4.5\n", "READNOISE\t\t0.9\n", "\n",
+                         "X0\t\t129.0\t\t125.0,135.0\n",
+                        "Y0\t\t129.0\t\t125.0,135.0\n",
+                        "FUNCTION Exponential\n",
+                        "PA\t\t18.0\t\t0.0,90.0\n",
+                        "ell\t\t0.2\t\t0.0,1.0\n",
+                        "I_0\t\t100.0\t\t0.0,500.0\n",
+                        "h\t\t25.0\t\t0.0,100.0\n"]
+        outputLines = modeldesc.getStringDescription()
+        print(outputLines)
+        assert outputLines == lines_correct
+
+    def test_ModelDescription_getStrings_with_errors(self):
+        modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
+        errorValues = np.array([1.45, 0.72, 1.01, 0.00456, 12.345, 3.0024])
+
+        lines_correct = ["\n", "X0\t\t129.0\t\t# +/- 1.45\n",
+                        "Y0\t\t129.0\t\t# +/- 0.72\n",
+                        "FUNCTION Exponential\n",
+                        "PA\t\t18.0\t\t# +/- 1.01\n",
+                        "ell\t\t0.2\t\t# +/- 0.00456\n",
+                        "I_0\t\t100.0\t\t# +/- 12.345\n",
+                        "h\t\t25.0\t\t# +/- 3.0024\n"]
+        outputLines = modeldesc.getStringDescription(errors=errorValues)
+        print(outputLines)
+        assert outputLines == lines_correct
 
 
 

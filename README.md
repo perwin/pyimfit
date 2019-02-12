@@ -65,16 +65,16 @@ by pip if they are not already present):
 
 To build PyImfit from source, you will need the following:
 
-1. This Github repository (use `--recurse-submodules` to ensure the Imfit repo is also downloaded)
+   * This Github repository (use `--recurse-submodules` to ensure the Imfit repo is also downloaded)
+           
+           $ git clone --recurse-submodules git://github.com/perwin/pyimfit.git
 
-       $ git clone --recurse-submodules git://github.com/perwin/pyimfit.git
 
+   * [SCons](http://scons.org)
 
-2. [SCons](http://scons.org)
+   * Cython (can be installed via pip)
 
-3. Cython (can be installed via pip)
-
-4. A reasonably modern C++ compiler -- e.g., GCC 4.8.1 or later, or 
+   * A reasonably modern C++ compiler -- e.g., GCC 4.8.1 or later, or 
 any C++-11-aware version of Clang++/LLVM that includes OpenMP support 
 (note that this does *not* include the Apple-built version of Clang++
 that comes with Xcode for macOS, since that does not include OpenMP support).
