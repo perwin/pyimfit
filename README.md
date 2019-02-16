@@ -1,13 +1,14 @@
 # PyImfit
 
-PyImfit is a Python wrapper for [Imfit](https://github.com/perwin/imfit), a C++-based astronomical image-fitting 
-program.
+PyImfit is a Python wrapper for [Imfit](https://github.com/perwin/imfit), a C++-based program for fitting
+2D models to scientific images. It is specialized for fitting astronomical images of galaxies, but can in 
+principle be used to fit any 2D Numpy array of data. 
 
 **WARNING: This is currently a work in progress, and is not yet ready for general use!**
 
 ## A Simple Example of Use
 
-Assuming you want to fit an image named `galaxy.fits` using a model defined
+Assuming you want to fit an astronomical image named `galaxy.fits` using a model defined
 in an Imfit configuration file named `config_galaxy.dat`:
 
     from astropy.io import fits
@@ -20,7 +21,7 @@ in an Imfit configuration file named `config_galaxy.dat`:
     image_data = pyimfit.FixImage(fits.getdata(imageFile))
 
     # construct model from config file; construct new Imfit fitter based on model
-    model_desc = pyimfit.ModelDescription.load(configFile)
+    model_desc = pyimfit.ModelDescription.load(imfitConfigFile)
 
     # create an Imfit object, using the previously loaded model configuration
     imfit_fitter = pyimfit.Imfit(model_desc)
@@ -59,7 +60,8 @@ by pip if they are not already present):
 
 * Numpy
 * Scipy
-* Astropy
+* Astropy -- not strictly required except for the tests; mainly useful for reading in FITS files as
+numpy arrays
 
 ### Building from Source
 

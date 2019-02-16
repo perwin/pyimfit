@@ -504,7 +504,8 @@ class Imfit(object):
 
     @property
     def parameterErrors(self):
-        if self.fitConverged and self._modelObjectWrapper._fitMode == "LM":
+        if (self._modelObjectWrapper is not None and self.fitConverged and
+                self._modelObjectWrapper.fittedLM):
             return self.getParameterErrors()
         else:
             return None

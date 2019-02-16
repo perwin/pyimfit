@@ -35,7 +35,6 @@ from copy import deepcopy
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 from libcpp cimport bool
-#from libcpp cimport map
 
 from libc.stdlib cimport calloc, free
 from libc.string cimport memcpy

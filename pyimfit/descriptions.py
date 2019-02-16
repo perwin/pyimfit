@@ -24,16 +24,17 @@ class ParameterDescription(object):
 
     Attributes
     ----------
-        name : str
+        name
+        value
+        limits
+        fixed
+        _name : str
             label of the parameter (e.g., "X0", "sigma")
-
-        value : float
+        _value : float
             current value of the parameter
-
-        limits : tuple of float
+        _limits : 2-element tuple of float
             lower and upper limits for parameter when fitting
-
-        fixed : bool
+        _fixed : bool
             whether a parameter should be held fixed during fitting
 
     Methods
@@ -48,7 +49,11 @@ class ParameterDescription(object):
             Set the limits as -i1,+i2 relative to parameter value
 
         setLimits(v1, v2)
-            Set the limits directory
+            Set the limits directly
+
+        getStringDescription(noLimits=False, error=none)
+            Returns a string containing parameter name and value (and optionally limits or
+            1-sigma uncertainty)
 
     """
     def __init__( self, name, value, vmin=None, vmax=None, fixed=False ):
@@ -60,7 +65,7 @@ class ParameterDescription(object):
     @property
     def name(self):
         """
-        The label of the parameter. Example: "x0", "I_e".
+        The label of the parameter. Examples: "x0", "I_e".
         """
         return self._name
 
@@ -76,15 +81,22 @@ class ParameterDescription(object):
     @property
     def limits(self):
         """
-        The limits of the parameter, as a tuple.
+        The low and upper limits for the parameter, as a tuple.
         """
         return self._limits
+
+
+    @property
+    def fixed(self):
+        """
+        Whether or not this parameter is to be held fixed, as a bool.
+        """
+        return self._fixed
 
 
     def setValue( self, value, vmin=None, vmax=None, fixed=False ):
         """
         Set the value and constraints to the parameter.
-        Note: both limits must be present at the same time.
 
         Parameters
         ----------
@@ -124,15 +136,15 @@ class ParameterDescription(object):
             self._limits = (lower_limit, upper_limit)
 
         self._value = value
-        self.fixed = fixed
+        self._fixed = fixed
 
 
     def setTolerance( self, tol ):
         """
         Set the limits using a fractional "tolerance" value, so that the
         lower limit = (1 - `tol`)*value and the upper limit = (1 + `tol`)*value.
-        For example, a tolerance of 0.2 for a property of value 1.0
-        sets the limits to [0.8, 1.2].
+        For example, a tolerance of 0.2 for a property of value 1.0 sets the
+        limits to [0.8, 1.2].
 
         Parameters
         ----------
@@ -193,6 +205,7 @@ class ParameterDescription(object):
         ----------
         noLimits : bool, optional
             if True, then only parameter values (no limits or "fixed" indicators) are output
+
         error : float, optional
             error on parameter value (e.g., from Levenberg-Marquardt minimization); if supplied
             then no limit info is output, but "# +/- <error>" is appended
@@ -207,7 +220,7 @@ class ParameterDescription(object):
         elif noLimits:
             pass
         else:
-            if self.fixed:
+            if self._fixed:
                 outputString += "\t\tfixed"
             elif self.limits is not None:
                 outputString += "\t\t{0},{1}".format(self.limits[0], self.limits[1])
@@ -216,14 +229,14 @@ class ParameterDescription(object):
 
     def __eq__(self, rhs):
         if ((self._name == rhs._name) and (self._value == rhs._value)
-                    and (self._limits == rhs._limits)):
+                and (self._limits == rhs._limits) and (self._fixed == rhs._fixed)):
             return True
         else:
             return False
 
 
     def __str__(self):
-        if self.fixed:
+        if self._fixed:
             return '{0:s}      {1:f}    fixed'.format(self._name, self._value)
         elif self.limits is not None:
             return '{0:s}      {1:f}    {2:f},{3:f}'.format(self._name, self._value, self._limits[0], self._limits[1])
@@ -237,7 +250,7 @@ class FunctionDescription(object):
     Holds information describing a single Imfit image function and its
     associated parameters, including their values and limits.
 
-    It holds the official Imfit image-function name (e.g., "Gaussian",
+    This contains the official Imfit image-function name (e.g., "Gaussian",
     "EdgeOnDisk"), an optional label (e.g., "disk", "outer ring"), and a
     list of ParameterDescription objects which describe the parameter names,
     values, and limits (or fixed status) for each of the image function's
@@ -245,16 +258,14 @@ class FunctionDescription(object):
 
     Attributes
     ----------
-        funcType : str
+        label
+        _funcName : str
             name of the image function (e.g., "Gaussian", "EdgeOnDisk")
-
-        _name : str
-            unique label for this function (e.g., "disk", "nuclear ring")
-
+        _label : str
+            unique (optional) label for this function (e.g., "disk", "nuclear ring")
         _parameters : list of `ParameterDescription`
             the list of `ParameterDescription` objects for the image-function
             parameters
-
         nParameters : int
             number of parameters for this function
 
@@ -268,11 +279,9 @@ class FunctionDescription(object):
             Returns a list of the ParameterDescription objects
 
     """
-    def __init__(self, func_type, name=None, parameters=None):
-        if name is None:
-            name = func_type
-        self.funcType = func_type
-        self._name = name
+    def __init__(self, func_name, label=None, parameters=None):
+        self._funcName = func_name
+        self._label = label
         self._parameters = []
         self.nParameters = 0
         if parameters is not None:
@@ -281,18 +290,18 @@ class FunctionDescription(object):
 
 
     @property
-    def name(self):
+    def label(self):
         """
         Custom name/label for the function (e.g., "disk", "nuclear ring").
         """
-        return self._name
+        return self._label
 
 
     def addParameter( self, p ):
         if not isinstance(p, ParameterDescription):
             raise ValueError('p is not a ParameterDescription object.')
         self._parameters.append(p)
-        # add parameter names as attributes, so we can do things like
+        # add parameter name as an attribute, so we can do things like
         # function_instance.<param_name>
         setattr(self, p.name, p)
         self.nParameters += 1
@@ -318,6 +327,7 @@ class FunctionDescription(object):
         ----------
         noLimits : bool, optional
             if True, then only parameter values (no limits or "fixed" indicators) are output
+
         errors : sequence float, optional
             errors on parameter values (e.g., from Levenberg-Marquardt minimization)
 
@@ -328,7 +338,10 @@ class FunctionDescription(object):
             by one string for each parameter, as output by ParameterDescription.getStringDescription
             If errors is supplied, then parameter strings will contain "# +/- <error>" at end
         """
-        outputLines = ["FUNCTION {0}\n".format(self.funcType)]
+        funcLine = "FUNCTION {0}".format(self._funcName)
+        if self._label is not None:
+            funcLine += "   # {0}".format(self._label)
+        outputLines = [funcLine + "\n"]
 
         for i in range(self.nParameters):
             p = self._parameters[i]
@@ -341,7 +354,7 @@ class FunctionDescription(object):
 
 
     def __eq__( self, rhs ):
-        if ((self.funcType == rhs.funcType) and (self._name == rhs._name)
+        if ((self._funcName == rhs._funcName) and (self._label == rhs._label)
                     and (self._parameters == rhs._parameters)):
             return True
         else:
@@ -350,14 +363,15 @@ class FunctionDescription(object):
 
     def __str__(self):
         lines = []
-        lines.append('FUNCTION {0}   # {1}'.format(self.funcType, self.name))
+        lines.append('FUNCTION {0}   # {1}'.format(self._funcName, self._label))
         lines.extend(str(p) for p in self._parameters)
         return '\n'.join(lines)
 
 
     def __deepcopy__(self, memo):
-        f = FunctionDescription(self.funcType, self.name)
+        f = FunctionDescription(self._funcName, self._label)
         f._parameters = [copy(p) for p in self._parameters]
+        f.nParameters = self.nParameters
         return f
 
 
@@ -374,18 +388,15 @@ class FunctionSetDescription(object):
     Attributes
     ----------
 
-        name : str
+        name
+        _name : str
             name for the function block
-
         x0 : float
             x-coordinate of the function block/set's center
-
         y0 : float
             y-coordinate of the function block/set's center
-
         _functions : list of `FunctionDescription`
             the FunctionDescription objects, one for each image function
-
         nFunctions : int
             number of functions in the function block
 
@@ -440,18 +451,19 @@ class FunctionSetDescription(object):
         """
         if not isinstance(f, FunctionDescription):
             raise ValueError('func is not a Function object.')
-        if self._contains(f.name):
-            raise KeyError('Function named %s already exists.' % f.name)
+        if f.label is not None and self._contains(f.label):
+            raise KeyError('Function with label \"%s\" already exists.' % f.label)
         self._functions.append(f)
-        # add parameter names as attributes, so we can do things like
+        # add function labels as attributes, so we can do things like
         # function_set_instance.<func_name>
-        setattr(self, f.name, f)
+        if f._label is not None:
+            setattr(self, f._label, f)
         self.nFunctions += 1
 
 
-    def _contains(self, name):
+    def _contains(self, label):
         for f in self._functions:
-            if f.name == name:
+            if f.label == label:
                 return True
         return False
 
@@ -465,7 +477,7 @@ class FunctionSetDescription(object):
         function_list : list of strings
             List of the function types.
         """
-        return [f.funcType for f in self._functions]
+        return [f._funcName for f in self._functions]
 
 
     def parameterList(self):
@@ -494,6 +506,7 @@ class FunctionSetDescription(object):
         ----------
         noLimits : bool, optional
             if True, then only parameter values (no limits or "fixed" indicators) are output
+
         errors : sequence float, optional
             errors on parameter values (e.g., from Levenberg-Marquardt minimization)
 
@@ -542,6 +555,7 @@ class FunctionSetDescription(object):
         fs.x0 = copy(self.x0)
         fs.y0 = copy(self.y0)
         fs._functions = deepcopy(self._functions, memo)
+        fs.nFunctions = self.nFunctions
         return fs
 
 
@@ -557,13 +571,12 @@ class ModelDescription(object):
 
     Attributes
     ----------
+        optionsDict
         options : dict of {str: float}
             dict mapping image-description parameters (e.g., "GAIN") to
-            their corresponding values
-
+            their corresponding values\
         _functionSets : list of `FunctionSetDescription`
             the individual image-function blocks/sets making up the model
-
         nFunctionSets : int
 
     Class methods
@@ -819,6 +832,8 @@ class ModelDescription(object):
     def __deepcopy__(self, memo):
         model = type(self)()
         model._functionSets = deepcopy(self._functionSets, memo)
+        model.options = copy(self.options)
+        model.nFunctionSets = self.nFunctionSets
         return model
 
 
