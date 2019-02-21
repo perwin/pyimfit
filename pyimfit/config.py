@@ -1,4 +1,6 @@
 """
+Functions for parsing Imfit configuration files.
+
 Modification of Andre's "config.py" (originally created 19 Sep 2013).
 """
 
@@ -72,18 +74,18 @@ def parse_config( lines ):
     model = ModelDescription()
 
     block_start = 0
-    id_fs = 0   # number of current function block ("function set")
+    functionBlock_id = 0   # number of current function block ("function set")
     for i in range(block_start, len(lines)):
         if lines[i].startswith(x0_str):
             if block_start == 0:
                 options = read_options(lines[block_start:i])
                 model.options.update(options)
             else:
-                funcSetName = "fs{0:d}".format(id_fs)
+                funcSetName = "fs{0:d}".format(functionBlock_id)
                 model.addFunctionSet(read_function_set(funcSetName, lines[block_start:i]))
-                id_fs += 1
+                functionBlock_id += 1
             block_start = i
-    funcSetName = "fs{0:d}".format(id_fs)
+    funcSetName = "fs{0:d}".format(functionBlock_id)
     model.addFunctionSet(read_function_set(funcSetName, lines[block_start:i + 1]))
     return model
 
@@ -91,6 +93,11 @@ def parse_config( lines ):
 
 
 def clean_lines( lines ):
+    """
+    Returns a list of lines = input list of lines, with comments and empty lines
+    stripped out (blank lines and lines beginning with '#' are removed; lines
+    ending in comments have the comments removed).
+    """
     clean = []
     for line in lines:
         # Clean the comments.
@@ -261,4 +268,3 @@ def read_parameter( line ):
             raise ValueError("Malformed limits on parameter line.")
 
     return ParameterDescription(name, value, llimit, ulimit, fixed)
-

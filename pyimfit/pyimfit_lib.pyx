@@ -1,7 +1,6 @@
 # Cython implementation file for wrapping Imfit code, by PE; based on code
 # by Andre Luis de Amorim.
-# Copyright André Luiz de Amorim, 2013.
-# Modifications copyright Peter Erwin, 2018.
+# Copyright André Luiz de Amorim, 2013; Peter Erwin, 2018-2019.
 
 # Note that we are using "typed memoryviews" to translate numpy arrays into
 # C-style double * arrays; this apparently the preferred (newer, more flexible)
@@ -45,12 +44,26 @@ sys_byteorder = ('>', '<')[sys.byteorder == 'little']
 
 # convert an ndarray to local system byte order, if it's not already
 def FixByteOrder( array ):
+    """
+    Converts an ndarray to local system byte order, if it's not already
+
+    Parameeters
+    -----------
+    array : numpy ndarray
+        Input numpy array
+
+    Returns
+    -------
+    array : numpy ndarray
+        The input array, with bytes in system byte order
+    """
     if array.dtype.byteorder not in ('=', sys_byteorder):
         array = array.byteswap().newbyteorder(sys_byteorder)
     return array
 
 def FixImage( array ):
-    """Checks an input numpy array; if necessary, converts array to
+    """
+    Checks an input numpy array; if necessary, converts array to
     double-precision floating point, little-endian byte order, and
     contiguous layout.
 
@@ -60,7 +73,8 @@ def FixImage( array ):
 
     Returns
     -------
-
+    array : numpy ndarray
+        The input array, suitably converted
     """
     if (array.dtype != np.float64):
         array = array.astype(np.float64)
@@ -320,10 +334,25 @@ cdef class ModelObjectWrapper( object ):
 
 
     def setMaxThreads(self, int nproc):
+        """
+        Specifies maximum number of OpenMP threads to use in image computation.
+
+        Parameters
+        ----------
+        nproc : int
+        """
         self._model.SetMaxThreads(nproc)
 
 
     def setChunkSize(self, int chunk_size):
+        """
+        Specifies the chunk size for OpenMP parallel computations (mainly useful for tests).
+
+        Parameters
+        ----------
+        chunk_size : int
+            8 or 10 is probably good value (default internal value is 10)
+        """
         self._model.SetOMPChunkSize(chunk_size)
 
 

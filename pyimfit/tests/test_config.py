@@ -138,8 +138,7 @@ def test_read_function_attributes( ):
 	"""Test that FunctionDescription attributes (ParameterDescription objects) 
 	get set correctly."""
 	fdesc2 = read_function(testFunctionLines_good2)
-	assert fdesc2.name == "Exponential"
-	assert fdesc2.funcType == "Exponential"
+	assert fdesc2._funcName == "Exponential"
 	assert fdesc2.PA == ParameterDescription("PA", 20.0, fixed=True)
 	assert fdesc2.ell == ParameterDescription("ell", 0.2, 0.1, 0.4)
 	assert fdesc2.I_0 == ParameterDescription("I_0", 100.0, 0.0, 1.0e6)

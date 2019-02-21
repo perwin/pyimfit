@@ -82,7 +82,7 @@ PLAN:
         e.g., use getModelDescription(), then pass parameters to the resulting ModelDescription object
             [ ] Test Imfit.saveCurrentModelToFile()
                 [x] Test saving model prior to fit
-                [x] Run fit with NM (no parameter errors)
+                [ ] Run fit with NM (no parameter errors)
                 [ ] Run fit with LM (parameter errors)
 
 
@@ -241,7 +241,7 @@ PLAN:
 
 
 
-** ADD OVERSAMPLED-PSF SUPPORT TO PYIMFIT
+** [X] ADD OVERSAMPLED-PSF SUPPORT TO PYIMFIT
 
 In current imfit/makeimage code, this is done in SetupModelObject
 
