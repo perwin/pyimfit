@@ -43,6 +43,8 @@ in an Imfit configuration file named `config_galaxy.dat`:
 See the Jupyter notebook `pyfit_emcee.ipynb` in the `docs` subdirectory for
 an example of using PyImfit with the Markov Chain Monte Carlo code [`emcee`](http://dfm.io/emcee/current/).
 
+Online documentation: [https://pyimfit.readthedocs.io/en/latest/](https://pyimfit.readthedocs.io/en/latest/).
+
 
 ## Requirements and Installation
 
@@ -67,7 +69,7 @@ numpy arrays
 
 To build PyImfit from source, you will need the following:
 
-   * The same external libraries that Imfit requires: FFTW3, GNU Scientific Library, NLopt
+   * The same external (C/C++) libraries that Imfit requires: FFTW3, GNU Scientific Library, NLopt
    
    * This Github repository (use `--recurse-submodules` to ensure the Imfit repo is also downloaded)
            

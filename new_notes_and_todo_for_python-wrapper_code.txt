@@ -44,8 +44,16 @@ PLAN:
 
 
 
+[ ] Computation of total and individual-function fluxes, magnitudes
+    -- e.g., equivalent of makeimage --print-fluxes
+    -- option/method: total flux only (with zero point as optional parameter)
+    -- option/method: fluxes for individual functions (with zero point as optional parameter)
+    [ ] Create unit-test file
+    [ ] Create preliminary unit tests
+    [ ] Write code to pass unit tests
 
-[ ] Method to save best-fit parameters (e.g., in Imfit object) to imfit/makeimage-compatible output
+
+[x] Method to save best-fit parameters (e.g., in Imfit object) to imfit/makeimage-compatible output
     file
     -- We should actually be able to do two things
         1. Save best-fit parameters to something like a standard imfit best-fit output file
@@ -98,17 +106,6 @@ PLAN:
             [x] Write unit test for Imfit._updateModelDescription
             [x] Write code to pass test
         [x] Test to see if Imfit.saveCurrentModelToFile() correctly saves user-supplied image options
-
-
-[ ] Update/rename function_description (currently in pyimfit_lib.pyx)
-    -- confusion of function_description vs FunctionDescription
-    -- make_function?
-    -- function to take an Imfit function-object name (string) and generate the correct, ordered set
-    of ParameterDescription objects
-    [ ] Function to validate Imfit function-object name and return list of parameter names if valid
-    [ ] Function which calls previous function and (if valid) generates of ParameterDescription objects [?]
-    [ ] Function which calls previous and (if valid) returns properly set up FunctionDescription object
-    -- later: possibly implement last as part of FunctionDescripion __init__
 
 
 [ ] Experiment with building using shared libraries

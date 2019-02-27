@@ -365,128 +365,6 @@ class Imfit(object):
         self.doFit(solver=mode)
 
 
-    def oldfit( self, image, error=None, mask=None, mode='LM', **kwargs ):
-        """
-        Fit the model to ``image``, optionally specifying that Gaussian per-pixel errors
-        should be derived from the ``error`` image (by default, this treats the pixel
-        values in ``error`` as Gaussian sigmas) and also optionally masking some pixels.
-
-        Parameters
-        ----------
-        image : 2-D array
-            Image to be fitted. Can be a masked array.
-
-        error : 2-D array, optional
-            error/weight image, same shape as ``image``. If not set,
-            errors are generated from ``image``. See also the keyword args
-            ``use_poisson_mlr``, ``use_cash_statistics``, and ``use_model_for_errors``.
-
-        mask : 2-D array, optional
-            Array containing the masked pixels; must have the same shape as ``image``.
-            Pixels set to ``True`` are bad by default (see the kwarg ``mask_format``
-            for other options). If not set and ``image`` is a masked array, then its
-            mask is used. If both masks are present, the final mask is composed by masking
-            any pixel that is masked in either of the input masks.
-
-        mode : string
-            One of the following optimization algorithms to be used for the fit:
-                * ``'LM'`` : Levenberg-Marquardt.
-                * ``'NM'`` : Nelder-Mead Simplex.
-                * ``'DE'`` : Differential Evolution.
-
-        Keyword arguments
-        -----------------
-        n_combined : integer
-            Number of images which were averaged to make final image (if counts are average
-            or median).
-            Default: 1
-
-        exp_time : float
-            Exposure time in seconds (only if image is in ADU/sec).
-            Default: 1.0
-
-        gain : float
-            Image gain (e-/ADU).
-            Default: 1.0
-
-        read_noise : float
-            Image read noise (Gaussian sigma, in e-).
-            Default: 0.0
-
-        original_sky : float
-            Original sky background (ADUs) which has already been subtracted from image.
-            Default: 0.0
-
-        error_type : string
-            Values in ``error`` should be interpreted as:
-                * ``'sigma'`` (default).
-                * ``'weight'``.
-                * ``'variance'``.
-
-        mask_format : string
-            Values in ``mask`` should be interpreted as:
-                * ``'zero_is_good'`` (default).
-                * ``'zero_is_bad'``.
-
-        use_poisson_mlr : boolean
-            Use Poisson MLR (maximum-likelihood-ratio) statistic instead of
-            chi^2. Takes precedence over ``error``, ``use_model_for_errors`,
-            and ``use_cash_statistics``.
-            Default: ``False``
-
-        use_cash_statistics : boolean
-            Use Cash statistic instead of chi^2 or Poisson MLR. Takes precedence
-            over ``error`` and ``use_model_for_errors``.
-            Default: ``False``
-
-        use_model_for_errors : boolean
-            Use model values (instead of data) to estimate errors for
-            chi^2 computation. Takes precedence over ``error``.
-            Default: ``False``
-
-        Examples
-        --------
-        TODO: Examples of fit().
-
-        """
-        if mode not in ['LM', 'NM', 'DE']:
-            raise Exception('Invalid fit mode: %s' % mode)
-        all_kw = ['n_combined', 'exp_time', 'gain', 'read_noise', 'original_sky',
-                  'error_type', 'mask_format', 'use_poisson_mlr', 'use_cash_statistics',
-                  'use_model_for_errors']
-        for kw in list(kwargs.keys()):
-            if kw not in all_kw:
-                raise Exception('Unknown kwarg: %s' % kw)
-        mask_zero_is_bad = 'mask_format' in kwargs and kwargs['mask_format'] == 'zero_is_bad'
-
-        self._setupModel()
-
-        mask = _composemask(image, mask, mask_zero_is_bad)
-        if isinstance(image, np.ma.MaskedArray):
-            image = image.filled(fill_value=0.0)
-        image = image.astype('float64')
-
-        if error is not None:
-            if image.shape != error.shape:
-                raise Exception('Error and image shapes do not match.')
-            mask = _composemask(image, mask, mask_zero_is_bad)
-            if isinstance(error, np.ma.MaskedArray):
-                error = error.filled(fill_value=error.max())
-            error = error.astype('float64')
-
-        if mask is not None:
-            if image.shape != mask.shape:
-                raise Exception('Mask and image shapes do not match.')
-            mask = mask.astype('float64')
-
-        self._modelObjectWrapper.loadData(image, error, mask, **kwargs)
-        self._dataSet = True
-        self._modelObjectWrapper.fit(verbose=self._verboseLevel, mode=mode)
-        if not self.fitError:
-            self._fitDone = True
-            self._fitStatComputed = True
-
-
     def computeFitStatistic( self, newParameters ):
         if not isinstance(newParameters, np.ndarray):
             newParams = np.array(newParameters).astype(np.float64)
@@ -582,20 +460,26 @@ class Imfit(object):
         return self._modelObjectWrapper.getFitStatistic(mode='BIC')
 
 
-    def getModelImage(self, shape=None):
+    def getModelImage( self, shape=None, includeMask=False ):
         """
         Computes and returns the image described by the currently fitted model.
         If not fitted, use the template model.
 
         Parameters
         ----------
-        shape : tuple
+        shape : tuple, optional
             Shape of the image in (Y, X) format.
+
+        includeMask : bool, optional
+            Specifies whether output should be numpy masked array, if there
+            is a mask image associated with the data image.
 
         Returns
         -------
         image : 2-D array
-            Image computed from the current model.
+            Image computed from the current model. If a mask is associated
+            with the original data image, then the returned image is a
+            numpy masked array
         """
         if self._modelObjectWrapper is None:
             self._setupModel()
@@ -603,10 +487,10 @@ class Imfit(object):
             self._modelObjectWrapper.setupModelImage(shape)
 
         image = self._modelObjectWrapper.getModelImage()
-        if self._mask is None:
-            return image
-        else:
+        if self._mask is not None and includeMask:
             return np.ma.array(image, mask=self._mask)
+        else:
+            return image
 
 
     def __del__(self):
