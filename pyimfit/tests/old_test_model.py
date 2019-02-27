@@ -4,7 +4,7 @@ Created on Sep 23, 2013
 @author: andre
 """
 from pyimfit import FunctionSetDescription, ModelDescription
-from pyimfit import function_description
+from pyimfit import make_imfit_function
 
 
 def example_model_description():
@@ -12,14 +12,14 @@ def example_model_description():
     fs.x0.setValue(36.0, [25, 45])
     fs.y0.setValue(32.0, [25, 45])
     
-    sersic = function_description('Sersic')
+    sersic = make_imfit_function('Sersic')
     sersic.PA.setValue(93.0217, [0, 180])
     sersic.ell.setValue(0.37666, [0, 1])
     sersic.n.setValue(4, fixed=True)
     sersic.I_e.setValue(1, [0, 10])
     sersic.r_e.setValue(25, [0, 100])
     
-    exponential = function_description('Exponential')
+    exponential = make_imfit_function('Exponential')
     exponential.PA.setValue(93.0217, [0, 180])
     exponential.ell.setValue(0.37666, [0, 1])
     exponential.I_0.setValue(1, [0, 10])

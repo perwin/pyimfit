@@ -63,8 +63,8 @@ def FixByteOrder( array ):
 
 def FixImage( array ):
     """
-    Checks an input numpy array; if necessary, converts array to
-    double-precision floating point, little-endian byte order, and
+    Checks an input numpy array and, if necessary, converts it to
+    double-precision floating point, little-endian byte order, with
     contiguous layout.
 
     Parameters
@@ -104,28 +104,12 @@ def NewParamInfo( ):
 
 
 
-def FunctionNames():
-    """
-    List the available Imfit image functions.
 
-    Returns
-    -------
-    func_names : list of string
-        list containing the image-function names
-    """
-    cdef vector[string] function_names
-    GetFunctionNames(function_names)
-    # return function names as Unicode strings
-    return [func_name.decode('UTF-8') for func_name in function_names]
-
-
-
-
-def function_description( func_type, name=None ):
+def make_imfit_function(func_type, label=None):
     """
     Given a string specifying the name of an Imfit image function,
     returns an instance of FunctionDescription describing the function
-    and its parameters.
+    and its parameters (with values all set to 0).
 
     Parameters
     ----------
@@ -134,8 +118,8 @@ def function_description( func_type, name=None ):
         (E.g., "Sersic", "BrokenExponential", etc. Use "imfit --list-functions" on
         the command line to get the full list, or FunctionNames in this module.)
 
-    name : string, optional
-        Custom identifying name for this instance of this function.
+    label : string, optional
+        Custom identifying label for this instance of this function.
         Example: "disk", "bulge".
         Default: None.
 
@@ -152,14 +136,12 @@ def function_description( func_type, name=None ):
     if status < 0:
         msg = 'Function name \"{0}\" is not a recognized Imfit image function.'.format(func_type)
         raise ValueError(msg)
-    func_desc = FunctionDescription(func_type, name)
+    func_desc = FunctionDescription(func_type, label)
     for paramName in parameters:
         # convert parameter names to Unicode strings
         param_desc = ParameterDescription(paramName.decode('UTF-8'), value=0.0)
         func_desc.addParameter(param_desc)
     return func_desc
-
-
 
 
 def convolve_image( np.ndarray[np.double_t, ndim=2] image not None,

@@ -12,6 +12,10 @@ from copy import deepcopy
 __all__ = ['Imfit']
 
 
+imageOptionNameDict = {'n_combined': "NCOMBINED", 'exptime': "EXPTIME", 'gain': "GAIN",
+                  'read_noise': "READNOISE", 'original_sky': "ORIGINAL_SKY"}
+
+
 def _composemask( arr, mask, mask_zero_is_bad ):
     """
     Helper function to properly compose masks.
@@ -125,6 +129,26 @@ class Imfit(object):
         else:
             # FIXME: get rid of deepcopy
             return deepcopy(self._modelDescr)
+
+
+    def _updateModelDescription( self, kwargs ):
+        """Updates the internal options dict in self._modelDesc
+
+        Parameters
+        ----------
+        kwargs : dict
+            dictionary of keyword arguments (e.g., input parameters for loadData)
+        """
+        if len(kwargs) > 0:
+            options = {}
+            # add key-value pairs to options, but only for valid image-option keys
+            for kw in kwargs.keys():
+                try:
+                    optionName = imageOptionNameDict[kw]
+                    options[optionName] = kwargs[kw]
+                except KeyError:
+                    pass
+            self._modelDescr.updateOptions(options)
 
 
     def saveCurrentModelToFile( self, filename, includeImageOptions=False ):
@@ -269,12 +293,16 @@ class Imfit(object):
         all_kw = ['n_combined', 'exp_time', 'gain', 'read_noise', 'original_sky',
                   'error_type', 'mask_format', 'psf_oversampling_list', 'use_poisson_mlr',
                   'use_cash_statistics', 'use_model_for_errors']
+        optionsDict = {}
         for kw in list(kwargs.keys()):
             if kw not in all_kw:
                 raise Exception('Unknown kwarg: %s' % kw)
         mask_zero_is_bad = 'mask_format' in kwargs and kwargs['mask_format'] == 'zero_is_bad'
 
+        # create the ModelObjectWrapper instance
         self._setupModel()
+        # update the ModelDescription instance with keyword values
+        self._updateModelDescription(kwargs)
 
         mask = _composemask(image, mask, mask_zero_is_bad)
         if isinstance(image, np.ma.MaskedArray):
@@ -309,6 +337,7 @@ class Imfit(object):
                 * ``'LM'`` : Levenberg-Marquardt.
                 * ``'NM'`` : Nelder-Mead Simplex.
                 * ``'DE'`` : Differential Evolution.
+
         Examples
         --------
         TODO: Examples of doFit().

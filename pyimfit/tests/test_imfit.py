@@ -4,7 +4,7 @@ Created on 13/03/2014
 @author: andre
 """
 
-from pyimfit import Imfit, SimpleModelDescription, function_description, gaussian_psf
+from pyimfit import Imfit, SimpleModelDescription, make_imfit_function, gaussian_psf
 import numpy as np
 from numpy.testing import assert_allclose
 
@@ -14,14 +14,14 @@ def create_model():
     model.x0.setValue(50, vmin=40, vmax=60)
     model.y0.setValue(50, vmin=40, vmax=60)
     
-    bulge = function_description('Sersic', name='bulge')
+    bulge = make_imfit_function('Sersic', label='bulge')
     bulge.I_e.setValue(1.0, vmin=0.5, vmax=1.5)
     bulge.r_e.setValue(10, vmin=5, vmax=15)
     bulge.n.setValue(4, vmin=3, vmax=5)
     bulge.PA.setValue(45, vmin=30, vmax=60)
     bulge.ell.setValue(0.5, vmin=0, vmax=1)
     
-    disk = function_description('Exponential', name='disk')
+    disk = make_imfit_function('Exponential', label='disk')
     disk.I_0.setValue(0.7, vmin=0.4, vmax=0.9)
     disk.h.setValue(15, vmin=10, vmax=20)
     disk.PA.setValue(60, vmin=45, vmax=90)

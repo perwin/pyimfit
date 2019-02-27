@@ -9,7 +9,7 @@ import numpy as np
 
 from .fitting import Imfit
 from .descriptions import SimpleModelDescription
-from .pyimfit_lib import function_description
+from .pyimfit_lib import make_imfit_function
 
 
 __all__ = ['gaussian_psf', 'moffat_psf']
@@ -62,7 +62,7 @@ def gaussian_psf(width, width_type='fwhm', PA=0.0, ell=0.0, size=31):
     model = SimpleModelDescription()
     model.x0.setValue(center)
     model.y0.setValue(center)
-    gaussian = function_description('Gaussian')
+    gaussian = make_imfit_function('Gaussian')
     gaussian.I_0.setValue(1.0)
     gaussian.sigma.setValue(sigma)
     gaussian.PA.setValue(PA)
@@ -109,7 +109,7 @@ def moffat_psf(fwhm, beta=3.1, PA=0.0, ell=0.0, size=31):
     model = SimpleModelDescription()
     model.x0.setValue(center)
     model.y0.setValue(center)
-    moffat = function_description('Moffat')
+    moffat = make_imfit_function('Moffat')
     moffat.I_0.setValue(1.0)
     moffat.fwhm.setValue(fwhm)
     moffat.beta.setValue(beta)

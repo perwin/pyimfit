@@ -1,4 +1,4 @@
-# Code for reading in and analyzing output of imfit
+# Code for reading in and analyzing outputs of imfit
 
 import glob
 import numpy as np
@@ -25,6 +25,7 @@ except:
 #    "nSkip" = the number of 2D-related  parameters to skip (e.g., PA, ellipticity), 
 #    "ell" = index for ellipticity parameter, if it exists, 
 #    "a" = index or indices for semi-major-axis parameters (r_e, h, sigma, etc.)
+# THIS IS NOT MEANT TO BE A COMPLETE LIST
 imfitFunctionMap = {"Exponential": {"function": imfuncs.Exponential, "nSkip": 2, "ell": 1, "a": [3]}, 
 				"Exponential_GenEllipse": {"function": imfuncs.Exponential, "nSkip": 3, "ell": 1, "a": [4]},
 				"Sersic":  {"function": imfuncs.Sersic, "nSkip": 2, "ell": 1, "a": [4]},
@@ -44,6 +45,19 @@ def ChopComments( theLine ):
 def GetFunctionImageNames( baseName, funcNameList ):
 	"""Generate a list of FITS filenames as would be created by makeimage in "--output-functions"
 	mode.
+
+	Parameters
+	----------
+	baseName : str
+		root name of output files
+
+	funcNameList : list of str
+		list containing function names (e.g., ["Exponential", "Sersic", "Sersic"]
+
+	Returns
+	-------
+	imageNameList : list of str
+		list of output filenames
 	"""
 	
 	nImages = len(funcNameList)
@@ -52,9 +66,8 @@ def GetFunctionImageNames( baseName, funcNameList ):
 
 
 def ReadImfitConfigFile( fileName, minorAxis=False, pix=1.0, getNames=False, X0=0.0 ):
-	"""Function to read and parse an imfit-generated parameter file
-	(or input config file) and return a tuple consisting of:
-	(list of 1-D imfit_funcs functions, list of lists of parameters).
+	"""Function to read and parse an imfit-generated parameter file (or input config file)
+	and return a tuple consisting of: (list of 1-D imfit_funcs functions, list of lists of parameters).
 	
 	pix = scale in arcsec/pixel, if desired for plotting vs radii in arcsec.
 	
@@ -64,6 +77,26 @@ def ReadImfitConfigFile( fileName, minorAxis=False, pix=1.0, getNames=False, X0=
 	Returns tuple of (functionList, trimmedParameterList)
 	If getNames == True:
 		Returns tuple of (functionNameList, functionList, trimmedParameterList)
+
+	Parameters
+	----------
+	fileName : str
+		Imfit configuration or best-fit parameter file
+
+	minorAxis : bool, optional
+
+	pix : float, optional
+		scale in arcsec/pixel, if desired for plotting radii in arcsec
+
+	getNames : bool, optional
+		if True, output is tuple of (functionNameList, functionList, trimmedParameterList)
+
+	X0 : float, optional
+		value for function centers
+
+	Returns
+	-------
+	(functionList, trimmedParameterList) : (list of image-functions, list of float)
 	"""
 	
 	dlines = [ line for line in open(fileName) if len(line.strip()) > 0 and line[0] != "#" ]

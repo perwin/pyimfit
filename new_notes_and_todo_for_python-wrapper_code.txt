@@ -40,6 +40,8 @@ PLAN:
 
     * Rework package to make it astropy-compatible
 
+    * Decide on consistent use of "function set" vs "function block"
+
 
 
 
@@ -51,7 +53,7 @@ PLAN:
             -- e.g., if we construct a model in Python, and then want to save it to a file
 
     [x] Check to see if code for this already exists [no]
-    [ ] Add code to ModelDescription to save model description to file
+    [x] Add code to ModelDescription to save model description to file
         [x] Add code to ParameterDescription to output formatted string
             [x] Add code to unit test (test_description.py)
             [x] Write code to pass test
@@ -78,13 +80,35 @@ PLAN:
             [x] Write code to pass test
         [x] Add code to save ModelDescription as imfit output file (no GAIN, etc.; should include
             parameter errors, if they exist)
-    [ ] Add code to Imfit to do same (should call method on internal
+    [x] Add code to Imfit to do same (should call method on internal
         e.g., use getModelDescription(), then pass parameters to the resulting ModelDescription object
-            [ ] Test Imfit.saveCurrentModelToFile()
+            [x] Test Imfit.saveCurrentModelToFile()
                 [x] Test saving model prior to fit
-                [ ] Run fit with NM (no parameter errors)
-                [ ] Run fit with LM (parameter errors)
+                [x] Run fit with NM (no parameter errors)
+                [x] Run fit with LM (parameter errors)
+            [x] includeImageOptions=True doesn't actually save image options if they're provided
+            in the Imfit.fit method
+            -- OK, the problem is:
+                1. How do we save keyword values passed in when .fit() or .loadData() [called by fit]
+                are called (currently, these are passed on to _modelObjectWrapper.loadData)
+                2. ModelDescription.getStringDescription needs to be able to
+    [x] Add code for updating ModelDescription option within Imfit
+        -- use ModelDescription.updateOptions()
+        [x] Write _updateModelDescription
+            [x] Write unit test for Imfit._updateModelDescription
+            [x] Write code to pass test
+        [x] Test to see if Imfit.saveCurrentModelToFile() correctly saves user-supplied image options
 
+
+[ ] Update/rename function_description (currently in pyimfit_lib.pyx)
+    -- confusion of function_description vs FunctionDescription
+    -- make_function?
+    -- function to take an Imfit function-object name (string) and generate the correct, ordered set
+    of ParameterDescription objects
+    [ ] Function to validate Imfit function-object name and return list of parameter names if valid
+    [ ] Function which calls previous function and (if valid) generates of ParameterDescription objects [?]
+    [ ] Function which calls previous and (if valid) returns properly set up FunctionDescription object
+    -- later: possibly implement last as part of FunctionDescripion __init__
 
 
 [ ] Experiment with building using shared libraries

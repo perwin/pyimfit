@@ -46,10 +46,20 @@ a4_m03 = 13.43
 
 def b_n( n ):
 	"""Calculate the b_n parameter of a Sersic function for the given
-	value of the Sersic index n.  Uses the approximation formula of
-	Ciotti & Bertin (1999), which is (according to MacArthur+2003)
-	accurate to better than 10^-4 down to n = 0.36; for n < 0.36, we
-	use the approximation of MacArthur+2003.
+	value of the Sersic index n.
+
+	Parameters
+	----------
+	n : float
+
+	Returns
+	-------
+	b_n : float
+
+
+	Uses the approximation formula of Ciotti & Bertin (1999), which is (according to
+	MacArthur, Courteau, & Holtzman 2003 [ApJ, 582, 689]) accurate to better than 10^-4
+	down to n = 0.36; for n < 0.36, we use the approximation of MacArthur et al.
 		NOTE: currently, the n <= 0.36 approximation (at least as I have
 		coded it) give very wrong answers!
 	"""

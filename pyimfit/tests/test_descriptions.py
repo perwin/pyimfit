@@ -1,4 +1,4 @@
-# Code for testing descriptions.py module of pyimfit
+# Unit tests for descriptions.py module of pyimfit
 # Execute via
 #    $ pytest test_descriptions.py
 

@@ -12,7 +12,7 @@ from astropy.io import fits
 
 from ..fitting import Imfit
 from ..descriptions import ModelDescription
-from ..pyimfit_lib import FixImage, function_description, PsfOversampling
+from ..pyimfit_lib import FixImage, make_imfit_function, PsfOversampling
 
 TOLERANCE = 1.0e-6
 

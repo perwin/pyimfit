@@ -20,7 +20,7 @@ in an Imfit configuration file named `config_galaxy.dat`:
     # read in image data, convert to proper double-precisions, little-endian format
     image_data = pyimfit.FixImage(fits.getdata(imageFile))
 
-    # construct model from config file; construct new Imfit fitter based on model
+    # construct model from config file
     model_desc = pyimfit.ModelDescription.load(imfitConfigFile)
 
     # create an Imfit object, using the previously loaded model configuration
@@ -67,39 +67,33 @@ numpy arrays
 
 To build PyImfit from source, you will need the following:
 
+   * The same external libraries that Imfit requires: FFTW3, GNU Scientific Library, NLopt
+   
    * This Github repository (use `--recurse-submodules` to ensure the Imfit repo is also downloaded)
            
            $ git clone --recurse-submodules git://github.com/perwin/pyimfit.git
 
+   * A reasonably modern C++ compiler -- e.g., GCC 4.8.1 or later, or any C++-11-aware version of 
+   Clang++/LLVM that includes support for OpenMP (note that this does *not* include the Apple-built 
+   version of Clang++ that comes with Xcode for macOS, since that does not include OpenMP).
 
-   * [SCons](http://scons.org)
-
-   * Cython (can be installed via pip)
-
-   * A reasonably modern C++ compiler -- e.g., GCC 4.8.1 or later, or 
-any C++-11-aware version of Clang++/LLVM that includes OpenMP support 
-(note that this does *not* include the Apple-built version of Clang++
-that comes with Xcode for macOS, since that does not include OpenMP support).
+   * PyImfit also requires SCons and Cython for installation, but these should be automatically
+   installed (if not already present) when running the setup.py script.
 
 
 #### Steps for building PyImfit from source:
 
-1. Build the static-library version of Imfit
-
-        $ cd imfit
-        $ scons libimfit.a
+1. Install necessary external libraries (FFTW3, GSL, NLopt)
 
 
 2. Build the Python package
 
    * For testing purposes (installs a link to current directory in your usual package-install location)
 
-         $ cd ..
          $ python3 setup.py develop
 
    * For general installation (i.e., actually installs the package in your usual package-install location)
 
-         $ cd ..
          $ python3 setup.py install
 
 

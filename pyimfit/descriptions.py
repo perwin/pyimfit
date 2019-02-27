@@ -6,7 +6,6 @@ from copy import copy, deepcopy
 import numpy as np
 
 
-
 __all__ = ['SimpleModelDescription', 'ModelDescription',
            'ParameterDescription', 'FunctionDescription', 'FunctionSetDescription']
 
