@@ -64,7 +64,7 @@ class Imfit(object):
     """
 
     def __init__( self, model_descr, psf=None, psfNormalization=True, quiet=True, nproc=0, chunk_size=10,
-                  subsampling=True):
+                  subsampling=True, zeroPoint=None ):
         """
         Parameters
         ----------
@@ -93,6 +93,10 @@ class Imfit(object):
         subsampling : bool, optional
             Use pixel subsampling near centers of image functions.
             Default: ``True``.
+
+        zeroPoint : float, optional
+            photometric zero point for data image (used only for outputting
+            model and component magnitudes) via getModelMagnitudes
         """
         if not isinstance(model_descr, ModelDescription ):
             raise ValueError('model_descr must be a ModelDescription object.')
@@ -114,6 +118,7 @@ class Imfit(object):
         self._finalSetupDone = False
         self._fitDone = False
         self._fitStatComputed = False
+        self._zeroPoint = zeroPoint
 
 
     def getModelDescription(self):
@@ -390,6 +395,15 @@ class Imfit(object):
 
 
     @property
+    def zeroPoint(self):
+        return self._zeroPoint
+
+    @zeroPoint.setter
+    def zeroPoint(self, value):
+        self._zeroPoint = value
+
+
+    @property
     def fitConverged(self):
         return self._modelObjectWrapper.fitConverged
 
@@ -493,7 +507,7 @@ class Imfit(object):
             return image
 
 
-    def getModelFluxes( self ):
+    def getModelFluxes( self, zeroPoint=None ):
         """
         Computes and returns total and individual-function fluxes for the current model
         and current parameter values.
@@ -501,12 +515,38 @@ class Imfit(object):
         Returns
         -------
         (totalFlux, individualFluxes) : tuple of (float, ndarray of float)
-            totalFlux = total flux of model
-            individualFluxes = numpy ndarray of fluxes for each image-function in the
+            totalFlux = total flux (or magnitude) of model
+            individualFluxes = numpy ndarray of fluxes/magnitudes for each image-function in the
             model
         """
         totalFlux, functionFluxes = self._modelObjectWrapper.getModelFluxes()
         return(totalFlux, functionFluxes)
+
+
+    def getModelMagnitudes( self, zeroPoint=None ):
+        """
+        Computes and returns total and individual-function magnitudes for the current model
+        and current parameter values.
+
+        Parameters
+        ----------
+        zeroPoint : float, optional
+            If present, returned values are magnitudes, computed as
+                zeroPoint - 2.5*log10(flux)
+
+        Returns
+        -------
+        (totalMag, individualMags) : tuple of (float, ndarray of float)
+            totalFlux = total flux (or magnitude) of model
+            individualFluxes = numpy ndarray of fluxes/magnitudes for each image-function in the
+            model
+        """
+        totalFlux, functionFluxes = self._modelObjectWrapper.getModelFluxes()
+        if zeroPoint is not None:
+            ZP = zeroPoint
+        else:
+            ZP = self.zeroPoint
+        return (ZP - 2.5*np.log10(totalFlux), ZP - 2.5*np.log10(functionFluxes))
 
 
     def __del__(self):

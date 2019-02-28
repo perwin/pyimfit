@@ -3,6 +3,7 @@
 #    $ pytest test_fitting.py
 
 import os
+import math
 import pytest
 from pytest import approx
 import numpy as np
@@ -72,3 +73,25 @@ class TestImfit(object):
         fluxArray_correct = np.array([totalFlux_correct])
         assert totalFlux == totalFlux_correct
         assert fluxArray == fluxArray_correct
+
+    def test_Imfit_get_mags( self ):
+        # Fitting Exponential to 256x256-pixel SDSS r-band image of IC 3478 (no PSF convolution)
+        imfit_fitter = Imfit(self.modelDesc)
+        imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+        # fit with defautl LM solver
+        imfit_fitter.doFit()
+
+        # get magnitudes -- first, use built-in zeroPoint property
+        imfit_fitter.zeroPoint = 30.0
+        (totalMag, magsArray) = imfit_fitter.getModelMagnitudes()
+        totalMag_correct = 30 - 2.5*math.log10(643232.3971123401)
+        magsArray_correct = np.array([totalMag_correct])
+        assert totalMag == totalMag_correct
+        assert magsArray == magsArray_correct
+
+        # get magnitudes -- now, use parameter zero point
+        (totalMag, magsArray) = imfit_fitter.getModelMagnitudes(zeroPoint=20)
+        totalMag_correct = 20 - 2.5*math.log10(643232.3971123401)
+        magsArray_correct = np.array([totalMag_correct])
+        assert totalMag == totalMag_correct
+        assert magsArray == magsArray_correct
