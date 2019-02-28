@@ -260,6 +260,7 @@ cdef class ModelObjectWrapper( object ):
     cdef vector[mp_par] _paramInfo
     cdef double *_paramVect
     cdef double *_fitErrorsVect
+    cdef double * _modelFluxes
     cdef bool _paramLimitsExist
     cdef int _nParams
     cdef int _nFreeParams
@@ -286,6 +287,7 @@ cdef class ModelObjectWrapper( object ):
         self._paramLimitsExist = False
         self._paramVect = NULL
         self._fitErrorsVect = NULL
+        self._modelFluxes = NULL
         self._solverResults = NULL
         self._model = NULL
         self._fitResult = NULL
@@ -682,9 +684,9 @@ cdef class ModelObjectWrapper( object ):
 
 
  # int BootstrapErrorsArrayOnly( const double *bestfitParams, vector<mp_par> parameterLimits,
-	# 				const bool paramLimitsExist, ModelObject *theModel, const double ftol,
-	# 				const int nIterations, const int nFreeParams, const int whichStatistic,
-	# 				double **outputParamArray, unsigned long rngSeed=0 );
+    # 				const bool paramLimitsExist, ModelObject *theModel, const double ftol,
+    # 				const int nIterations, const int nFreeParams, const int whichStatistic,
+    # 				double **outputParamArray, unsigned long rngSeed=0 );
 
     # def doBootstrapIterations( self, int nIters, seed=0 ):
     #     pass
@@ -718,25 +720,6 @@ cdef class ModelObjectWrapper( object ):
         return errorVals
 
 
-    # FIXME: possibly change this to use typed memoryview?
-    # note that we *do* need to *copy* the data pointed to by model_image,
-    # since we want to return a self-contained numpy array, and we want it to
-    # survive beyond the point where the ModelObject's destructor is called
-    # (which will delete the original data pointed to by model_image)
-    def getModelImage( self ):
-        cdef double *model_image
-        cdef np.ndarray[np.double_t, ndim=2, mode='c'] output_array
-        cdef int imsize = self._nPixels * sizeof(double)
-
-        model_image = self._model.GetModelImageVector()
-        if model_image is NULL:
-            raise Exception('Error: model image has not yet been computed.')
-        output_array = np.empty((self._nRows, self._nCols), dtype='float64')
-        memcpy(&output_array[0,0], model_image, imsize)
-
-        return output_array
-
-
     def getFitStatistic( self, mode='none' ):
         cdef double fitstat
         if self.fittedLM:
@@ -756,6 +739,56 @@ cdef class ModelObjectWrapper( object ):
             return BIC(fitstat, self._nFreeParams, n_valid_pix, 1)
         else:
             raise Exception('Unknown statistic mode: %s' % mode)
+
+
+    # FIXME: possibly change this to use typed memoryview?
+    # note that we *do* need to *copy* the data pointed to by model_image,
+    # since we want to return a self-contained numpy array, and we want it to
+    # survive beyond the point where the ModelObject's destructor is called
+    # (which will delete the original data pointed to by model_image)
+    def getModelImage( self ):
+        cdef double *model_image
+        cdef np.ndarray[np.double_t, ndim=2, mode='c'] output_array
+        cdef int imsize = self._nPixels * sizeof(double)
+
+        model_image = self._model.GetModelImageVector()
+        if model_image is NULL:
+            raise Exception('Error: model image has not yet been computed.')
+        output_array = np.empty((self._nRows, self._nCols), dtype='float64')
+        memcpy(&output_array[0,0], model_image, imsize)
+
+        return output_array
+
+
+    def getModelFluxes( self, estimationImageSize=5000 ):
+        """
+        Computes and returns total and individual-function fluxes for the current model
+        and current parameter values.
+
+        Parameters
+        ----------
+        estimationImageSize : int, optional
+            width and height of model image for flux estimation
+
+        Returns
+        -------
+        (totalFlux, individualFluxes) : tuple of (float, ndarray of float)
+            totalFlux = total flux of model
+            individualFluxes = numpy ndarray of fluxes for each image-function in the
+            model
+        """
+        cdef double totalFlux
+        cdef int nFunctions = self._model.GetNFunctions()
+        self._modelFluxes = <double *> calloc(nFunctions, sizeof(double))
+        if self._modelFluxes is NULL:
+            raise Exception('Error: unable to allocate memory for modelFluxes in getModelFluxes')
+        totalFlux = self._model.FindTotalFluxes(self._paramVect, estimationImageSize,
+                                                estimationImageSize, self._modelFluxes)
+        functionFluxes = [self._modelFluxes[i] for i in range(nFunctions)]
+        if self._modelFluxes != NULL:
+            free(self._modelFluxes)
+        return (totalFlux, np.array(functionFluxes))
+
 
 
     @property

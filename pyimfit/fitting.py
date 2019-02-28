@@ -493,8 +493,23 @@ class Imfit(object):
             return image
 
 
+    def getModelFluxes( self ):
+        """
+        Computes and returns total and individual-function fluxes for the current model
+        and current parameter values.
+
+        Returns
+        -------
+        (totalFlux, individualFluxes) : tuple of (float, ndarray of float)
+            totalFlux = total flux of model
+            individualFluxes = numpy ndarray of fluxes for each image-function in the
+            model
+        """
+        totalFlux, functionFluxes = self._modelObjectWrapper.getModelFluxes()
+        return(totalFlux, functionFluxes)
+
+
     def __del__(self):
         if self._modelObjectWrapper is not None:
             # FIXME: Find a better way to free Cython resources.
             self._modelObjectWrapper.close()
-################################################################################
