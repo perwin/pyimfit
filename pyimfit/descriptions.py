@@ -579,7 +579,7 @@ class ModelDescription(object):
         nFunctionSets : int
 
     Class methods
-    -------
+    -------------
         load(fname)
             Returns a new instance of this class based on a standard Imfit
             configuration file (`fname`).

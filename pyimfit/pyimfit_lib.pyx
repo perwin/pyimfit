@@ -65,7 +65,7 @@ def FixImage( array ):
     """
     Checks an input numpy array and, if necessary, converts it to
     double-precision floating point, little-endian byte order, with
-    contiguous layout.
+    contiguous layout, to enable use with Imfit.
 
     Parameters
     ----------
@@ -107,8 +107,9 @@ def NewParamInfo( ):
 
 def make_imfit_function(func_type, label=None):
     """
-    Given a string specifying the name of an Imfit image function,
-    returns an instance of FunctionDescription describing the function
+    Given a string specifying the official name of an Imfit image function
+    (e.g., "Sersic", "Sersic_GenEllipse", "ExponentialDisk3D"), this
+    returns an instance of FunctionDescription describing that function
     and its parameters (with values all set to 0).
 
     Parameters

@@ -1,9 +1,10 @@
 """
-Created on Sep 20, 2013
-
-[original author: Andre de Luiz Amorim; modifications by Peter Erwin]
 
 """
+# Created on Sep 20, 2013
+#
+# [original author: Andre de Luiz Amorim; modifications by Peter Erwin]
+
 from .descriptions import ModelDescription
 from .pyimfit_lib import ModelObjectWrapper
 import numpy as np
@@ -60,7 +61,7 @@ class Imfit(object):
 
     See also
     --------
-    parse_config_file, fit
+    parse_config_file
     """
 
     def __init__( self, model_descr, psf=None, psfNormalization=True, quiet=True, nproc=0, chunk_size=10,
