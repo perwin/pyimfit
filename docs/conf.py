@@ -86,15 +86,15 @@ pygments_style = 'sphinx'
 #     'github_repo': 'pyimfit',
 # }
 
-# html_theme = 'bootstrap-astropy'
-# # Theme options for bootstrap-astropy
-# html_theme_options = {
-#     'logotext1': 'Py',  # white,  semi-bold
-#     'logotext2': 'Imfit',  # orange, light
-#     'logotext3': ':docs'   # white,  light
-#     }
+html_theme = 'bootstrap-astropy'
+# Theme options for bootstrap-astropy
+html_theme_options = {
+    'logotext1': '',  # white,  semi-bold
+    'logotext2': 'PyImfit',  # orange, light
+    'logotext3': ':docs'   # white,  light
+    }
 
-html_theme = 'sphinx_rtd_theme'
+#html_theme = 'sphinx_rtd_theme'
 # Theme options for sphinx_rtd_theme
 
 # Theme options are theme-specific and customize the look and feel of a theme

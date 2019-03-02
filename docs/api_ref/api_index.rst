@@ -7,6 +7,6 @@ PyImfit API
 
    descriptions
    fitting
-   utilities
+   useful
 
 

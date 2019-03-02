@@ -25,3 +25,26 @@ Makefile
 
 View the resulting docs in a web browser pointed at
 	file:///Users/erwin/coding/pyimfit_working/docs/_build/html/index.html
+
+
+GETTING THIS TO WORK ON READTHEDOCS
+
+Currently, this only partly works -- specifically, the autodoc functions fail to
+bring in any of the docstring-based stuff. This is, according to the "raw" version
+of the readthedocs build log (look for "v:latest" pop-up menu near bottom of
+sidebar --> "On Read the Docs" --> Build; click on latest build, then click
+on "View raw"), because the various import statements fail with messages like
+
+WARNING: autodoc: failed to import module 'pyimfit.descriptions'; the following exception was raised:
+No module named 'pyimfit.pyimfit_lib'
+
+Apparently the problem is that we need to build the extension module...
+
+We may have to generate static autodoc-equivalent .rst files instead of trying
+to use the autodoc commands (the idea being that we can save these somewhere, reference
+them in the *index.rst files, and let readthedocs process the .rst files)
+    https://pythonhosted.org/sphinxcontrib-restbuilder/
+    https://github.com/sphinx-contrib/restbuilder
+    https://pypi.org/project/sphinxcontrib-restbuilder/
+
+(Or maybe there's some way to create alternate modules that don't import pyimfit_lib?)

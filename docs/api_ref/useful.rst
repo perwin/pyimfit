@@ -1,5 +1,5 @@
-Utilities and Useful Functions
-==============================
+Useful Functions
+================
 
 .. autofunction:: pyimfit.FixImage
 

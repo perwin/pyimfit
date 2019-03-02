@@ -1,6 +1,7 @@
 """
-Modification of Andre's "model.py" (originally created Sep 2013).
 """
+
+#Modification of Andre's "model.py" (originally created Sep 2013).
 
 from copy import copy, deepcopy
 import numpy as np
@@ -13,7 +14,8 @@ __all__ = ['SimpleModelDescription', 'ModelDescription',
 
 class ParameterDescription(object):
     """
-    Holds information for a single parameter of an Imfit image function
+    Holds information for a single parameter of an Imfit image function,
+    or the X0 or Y0 parameter of a function block/set
     (corresponding to what is encoded in a single parameter line of an
     Imfit configuration file).
 
@@ -23,10 +25,15 @@ class ParameterDescription(object):
 
     Attributes
     ----------
-        name
-        value
-        limits
-        fixed
+        name : str
+            label of the parameter (e.g., "X0", "sigma")
+        value : float
+            current value of the parameter
+        limits : 2-element tuple of float
+            lower and upper limits for parameter when fitting
+        fixed : bool
+            whether a parameter should be held fixed during fitting
+
         _name : str
             label of the parameter (e.g., "X0", "sigma")
         _value : float
@@ -95,7 +102,7 @@ class ParameterDescription(object):
 
     def setValue( self, value, vmin=None, vmax=None, fixed=False ):
         """
-        Set the value and constraints to the parameter.
+        Set the value and (optionally) constraints of the parameter.
 
         Parameters
         ----------
@@ -140,7 +147,7 @@ class ParameterDescription(object):
 
     def setTolerance( self, tol ):
         """
-        Set the limits using a fractional "tolerance" value, so that the
+        Set the parameter limits using a fractional "tolerance" value, so that the
         lower limit = (1 - `tol`)*value and the upper limit = (1 + `tol`)*value.
         For example, a tolerance of 0.2 for a property of value 1.0 sets the
         limits to [0.8, 1.2].
@@ -158,7 +165,7 @@ class ParameterDescription(object):
 
     def setLimitsRel( self, i1, i2 ):
         """
-        Set the limits using relative intervals. The limits
+        Set the parameter limits using relative intervals. The limits
         will be [value - i1, value + i2]
 
         Parameters
@@ -176,7 +183,7 @@ class ParameterDescription(object):
 
     def setLimits( self, v1, v2 ):
         """
-        Set the limits using absolute values: [v1, v2]
+        Set the parameter limits using specified values: [v1, v2]
 
         Parameters
         ----------
@@ -257,7 +264,9 @@ class FunctionDescription(object):
 
     Attributes
     ----------
-        label
+        label : str
+            name of the image function (e.g., "Gaussian", "EdgeOnDisk")
+
         _funcName : str
             name of the image function (e.g., "Gaussian", "EdgeOnDisk")
         _label : str
@@ -308,7 +317,7 @@ class FunctionDescription(object):
 
     def parameterList( self ):
         """
-        A list of the parameters of this function.
+        A list of the parameters of this image function.
 
         Returns
         -------
@@ -380,14 +389,16 @@ class FunctionSetDescription(object):
     Holds information describing an image-function block or set: one or more
     Imfit image functions sharing a common (X0,Y0) position on the image.
 
-    It holds the X0 and Y0 coordinates, a list of FunctionDescription
+    This contains the X0 and Y0 coordinates, a list of FunctionDescription
     objects, and name or label for the function set (e.g., "fs0", "star 1",
     "galaxy 5", "offset nucleus", etc.)
 
     Attributes
     ----------
 
-        name
+        name : str
+            name for the function block
+
         _name : str
             name for the function block
         x0 : float
@@ -441,7 +452,7 @@ class FunctionSetDescription(object):
 
     def addFunction(self, f):
         """
-        Add an Imfit image function created using :func:`function_description`.
+        Add an Imfit image function created using :func:`make_image_function`.
 
         Parameters
         ----------
@@ -561,7 +572,8 @@ class FunctionSetDescription(object):
 
 class ModelDescription(object):
     """
-    Holds information describing an Imfit model for a particular image.
+    Holds information describing an Imfit model, including image-description
+    data.
 
     The main components are a dict containing image-descriptions parameters
     and their values (e.g., {"GAIN": 4.5, "ORIGINAL_SKY": 325.39} and a list
@@ -570,7 +582,10 @@ class ModelDescription(object):
 
     Attributes
     ----------
-        optionsDict
+        optionsDict : dict of {str: float}
+            dict mapping image-description parameters (e.g., "GAIN") to
+            their corresponding values\
+
         options : dict of {str: float}
             dict mapping image-description parameters (e.g., "GAIN") to
             their corresponding values\
@@ -840,20 +855,15 @@ class ModelDescription(object):
 
 class SimpleModelDescription(ModelDescription):
     """
-    Simple model with only one function set.
+    Simple version of ModelDescription with only one function set.
 
-    Returns
-    -------
-    model : :class:`SimpleModelDescription`
-        Empty model description.
+    Attributes
+    ----------
+        x0 : ParameterDescription
+            ParameterDescription object for the x-coordinate of the model center
 
-    Examples
-    --------
-    TODO: Add example of SimpleModelDescription.
-
-    See also
-    --------
-    ModelDescription
+        y0 : ParameterDescription
+            ParameterDescription object for the y-coordinate of the model center
     """
 
     def __init__(self, inst=None):
@@ -896,8 +906,6 @@ class SimpleModelDescription(ModelDescription):
             Function description to be added to the model.
         """
         self._functionSets[0].addFunction(f)
-# 		for p in f.parameterList():
-# 			setattr(self, p.name, p)
 
 
     def addFunctionSet(self, fs):

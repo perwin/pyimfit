@@ -1,9 +1,9 @@
 """
 Functions to generate simple PSF images, using either Gaussian or Moffat profiles.
 
-Modified version of code originally created on Sep 25, 2013 by Andre
-
 """
+
+#Modified version of code originally created on Sep 25, 2013 by Andre
 
 import numpy as np
 

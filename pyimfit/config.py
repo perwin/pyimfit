@@ -1,8 +1,12 @@
 """
-Functions for parsing Imfit configuration files.
+Functions for parsing Imfit configuration files, returning instances of the classes
+in descriptions.py
 
-Modification of Andre's "config.py" (originally created 19 Sep 2013).
+The main useful function is parse_config_file, which returns an instance of the
+ModelDescription class.
 """
+
+#Modification of Andre's "config.py" (originally created 19 Sep 2013).
 
 from .descriptions import ParameterDescription, FunctionDescription, FunctionSetDescription, ModelDescription
 
@@ -27,13 +31,13 @@ recognizedOptionNames = list(recognizedOptions.keys())
 #FIXME: (PE) Need to handle case of optional image-function parameters
 
 
-def parse_config_file( fname ):
+def parse_config_file( fileName ):
     """
-    Read an Imfit model configuration file.
+    Read an Imfit model-configuration file.
 
     Parameters
     ----------
-    fname : string
+    fileName : str
         Path to the model configuration file.
 
     Returns
@@ -41,11 +45,9 @@ def parse_config_file( fname ):
     model : :class:`~imfit.ModelDescription`
         A model description object.
 
-    See also
-    --------
-    parse_config
+    See Imfit documentation for details on the format of configuration files.
     """
-    with open(fname) as fd:
+    with open(fileName) as fd:
         return parse_config(fd.readlines())
 
 
@@ -57,7 +59,7 @@ def parse_config( lines ):
 
     Parameters
     ----------
-    lines : list of strings
+    lines : list of str
         String representantion of Imfit model configuration.
 
     Returns
@@ -97,6 +99,10 @@ def clean_lines( lines ):
     Returns a list of lines = input list of lines, with comments and empty lines
     stripped out (blank lines and lines beginning with '#' are removed; lines
     ending in comments have the comments removed).
+
+    Parameters
+    ----------
+    lines : list of str
     """
     clean = []
     for line in lines:
@@ -120,12 +126,13 @@ def read_options( lines ):
 
     Parameters
     ----------
-    lines : list of strings
+    lines : list of str
         String representantion of Imfit model configuration.
 
     Returns
     -------
-    config : dict mapping parameter names to numerical values
+    config : dict
+        maps parameter names to numerical values
         e.g, {"GAIN": 4.56, "ORIGINAL_SKY": 233.87}
     """
     config = {}
@@ -157,14 +164,14 @@ def read_function_set( name, lines ):
 
     Parameters
     ----------
-    name : string
+    name : str
     
-    lines : list of string
+    lines : list of str
         lines from configuration file
     
     Returns
     -------
-    fs : FunctionSetDescription
+    fs : :class:`~imfit.`FunctionSetDescription`
         Contains extracted information about function block, functions, and their parameters
     """
     # A function set starts with X0 and Y0 parameters.
@@ -196,14 +203,14 @@ def read_function( lines ):
 
     Parameters
     ----------
-    lines : list of string
+    lines : list of str
         lines from configuration file; initial line is of form 'FUNCTION <func-name>'
         with subsequent lines (assumed to be in correct order) describing
         parameter values and (optionally) 'fixed' or lower,upper limits
     
     Returns
     -------
-    func : FunctionDescription
+    func : :class:`~imfit.`FunctionDescription`
         Contains extracted information about function and its parameters
     """
     # First line contains the function name.
@@ -232,14 +239,15 @@ def read_parameter( line ):
 
     Parameters
     ----------
-    line : string
+    line : str
         line from configuration file specifying parameter name, initial value,
         and (optionally) 'fixed' or lower,upper limits
     
     Returns
     -------
-    ParameterDescription instance
+    :class:`~imfit.ParameterDescription` instance
         Contains extracted information about parameter
+        (name, value, possible limits or fixed state)
     """
     llimit = None
     ulimit = None
