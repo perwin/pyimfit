@@ -341,9 +341,10 @@ cdef class ModelObjectWrapper( object ):
         self._model.SetOMPChunkSize(chunk_size)
 
 
-    def _paramSetup(self, object model_descr):
+    def _paramSetup( self, object model_descr ):
         """
-        Sets up parameter-related info: _nParams, _nFreeParams, _paramVect, parameter-limits info
+        Sets up parameter-related info: _nParams, _nFreeParams, _paramVect, parameter-limits info,
+        populating them with values from model_descr
         """
         cdef mp_par newParamInfo
         self._parameterList = model_descr.parameterList()

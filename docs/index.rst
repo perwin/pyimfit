@@ -12,6 +12,7 @@ Documentation for PyImfit
    :caption: USER DOCUMENTATION:
 
    basics
+   overview
 
 
 .. toctree::

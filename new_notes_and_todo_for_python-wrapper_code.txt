@@ -30,7 +30,12 @@ PLAN:
 
             [x] Test Sphinx documentation generation
 
-       [ ] Make basic how-to/summary file (useful for me)
+       [ ] Make basic how-to/summary files (useful for me)
+        [ ] Basic summary .rst file
+            -- the main pieces
+            -- how to assemble a model
+            -- how to do a fit
+            -- how to look at the results
 
        [ ] Add API documentation
             [ ] Add documentation file for config.py
@@ -42,6 +47,38 @@ PLAN:
 
     * Decide on consistent use of "function set" vs "function block"
 
+
+
+[ ] Improvements/fixes to Imfit class
+    [ ] getModelImage -- allow user to specify new parameter vector
+        [ ] Add ability to specify optional/new parameter vector to ModelObjectWrapper
+            -- Note that computeFitStatistic already allows this
+            -- do we want to permanently update the internal parameter vector,
+            or just temporarily?
+            [ ] Add ModelObjectWrapper method to update parameter vector
+                -- include error handlings if internal parameter vector hasn't been set up?
+    [ ] getModelFluxes and getModelMagnitudes -- ditto
+        [ ] Modify ModelObjectWrapper.getModelFluxes to allow optional parameter vector
+
+    [ ] Catch possible error where user specifies alternate shape for model image
+    via get ModelImage when Imfit object already has that specified (e.g., via loadData)
+
+
+[ ] Processing of makeimage config files
+    -- We would like to be able to tell PyImfit to read a makeimage config file and set
+    up the model accordingly, *including* the image dimensions (if supplied)
+
+
+[ ] Later: handle resizing of model image and/or new
+    -- This will require changing Imfit to allow resizing, new data, etc.
+    Alternately (and probably simpler), this will require allowing Imfit to
+    discard the old ModelObjectWrapper and properly initialize a new one
+    -- Note that self._dataSet records if we have called loadData, and thus whether or
+    not a data image, etc. (including image size) has been added
+    [ ] Resizing of model image
+    [ ] Changing image-description parameters
+    [ ] Changing PSF image(s)
+    [ ] Changing data image (can include resizing of model image)
 
 
 [x] Computation of total and individual-function fluxes, magnitudes

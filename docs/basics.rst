@@ -1,7 +1,7 @@
-Basic Notes on Pyimfit
+Basic Notes on PyImfit
 ======================
 
-Pyimfit is a Python wrapper around the Imfit C++ image-fitting program.
+PyImfit is a Python wrapper around the Imfit C++ image-fitting program.
 
 Sample Usage
 ------------
@@ -38,6 +38,7 @@ Imfit-format text file, and the fit the model to the data:
         print("Fit converged: chi^2 = {0}, reduced chi^2 = {1}".format(imfit_fitter.fitStatistic,
             imfit_fitter.reducedFitStatistic))
         print("Best-fit parameter values:")
+        print(imfit_fitter.getRawParameters())
         
 
 You can also programmatically construct a model within Python (rather
