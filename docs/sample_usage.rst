@@ -1,16 +1,11 @@
-Basic Notes on PyImfit
-======================
-
-PyImfit is a Python wrapper around the Imfit C++ image-fitting program.
-
 Sample Usage
-------------
+============
 
 The following assumes an interactive Python session (such as an iPython
 session or Jupyter notebook).
 
 Read an image from a FITS file, read a model description from an
-Imfit-format text file, and the fit the model to the data:
+Imfit-format text file, and then fit the model to the data:
 
 ::
 

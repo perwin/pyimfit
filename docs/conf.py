@@ -19,12 +19,12 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Pyimfit'
+project = 'PyImfit'
 copyright = '2019, Peter Erwin'
 author = 'Peter Erwin'
 
 # The short X.Y version
-version = ''
+version = '0.6'
 # The full version, including alpha/beta/rc tags
 release = '0.6'
 
@@ -78,21 +78,21 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-#html_theme = 'alabaster'
-# Theme options for alabaster
-# html_theme_options = {
-#     #'logo': 'logo.png',
-#     'github_user': 'perwin',
-#     'github_repo': 'pyimfit',
-# }
-
-html_theme = 'bootstrap-astropy'
-# Theme options for bootstrap-astropy
+html_theme = 'alabaster'
+Theme options for alabaster
 html_theme_options = {
-    'logotext1': '',  # white,  semi-bold
-    'logotext2': 'PyImfit',  # orange, light
-    'logotext3': ':docs'   # white,  light
-    }
+    #'logo': 'logo.png',
+    'github_user': 'perwin',
+    'github_repo': 'pyimfit',
+}
+
+# html_theme = 'bootstrap-astropy'
+# # Theme options for bootstrap-astropy
+# html_theme_options = {
+#     'logotext1': '',  # white,  semi-bold
+#     'logotext2': 'PyImfit',  # orange, light
+#     'logotext3': ':docs'   # white,  light
+#     }
 
 #html_theme = 'sphinx_rtd_theme'
 # Theme options for sphinx_rtd_theme

@@ -1,8 +1,45 @@
-# PyImfit: Overview
+# Overview of PyImfit
 
-PyImfit is a Python wrapper around the (C++-based) image-fitting program **Imfit** (ref).
+PyImfit is a Python wrapper around the (C++-based) image-fitting program 
+[Imfit](https://www.mpe.mpg.de/~erwin/code/imfit) 
+([Github site](https://github.com/perwin/imfit)).
 
-This document will refer somewhat interchangeably to "Imfit" and "PyImfit" ...
+**Terminology:**
+
+**Imfit** (boldface) refers to the C++ program (and the C++-based library that PyImfit is
+built upon).
+
+PyImfit is the general name for this Python package; `pyimfit` is the official Python
+name (e.g., `import pyimfit`).
+
+Finally, `Imfit` refers to the `pyimfit.Imfit` class, which does most of the work.
+
+
+
+## For Those Already Familiar with Imfit
+
+If you've already used the command-line version of **Imfit**, here are the essential things to know:
+
+   * PyImfit operates on 2D numpy arrays instead of FITS files; to use a FITS file, read it into
+   Python via, e.g., [astropy.io.fits](http://docs.astropy.org/en/stable/io/fits/).
+   
+   * Models (and initial parameter values and parameter limits for a fit) are specified via the 
+   ModelDescription class. The utility function `parse_config_file` 
+   will read a standard **Imfit** configuration file and return an instance of that class with the
+   model specification. (Or you can build up a ModelDescription instance by programmatically
+   specifying components from within Python.)
+   
+   * Fitting is done by instantiating an `Imfit` object with a ModelDescription object as
+   input, then adding a 2D numpy array as the data to be fit (along with, optionally, mask
+   and error images, image A/D gain, etc.) with the `loadData` method, and then calling the `doFit` method 
+   (along with the minimization algorithm to use). Or just call the `fit` method and supply the data image, etc., 
+   as part of its input.
+   
+   * Once the fit is finished, information about the fit (final chi^2 value, best-fit paremeter
+   values, etc.) and the best-fitting model image can be obtained by querying properties and methods 
+   of the `Imfit` object.
+
+See [Sample Usage](./sample_usage.html) for a simple example of how this works.
 
 
 ## The Basics
@@ -13,8 +50,8 @@ There are two basic things you can do with PyImfit:
    
    2. Fit models to a pre-existing (data) image
 
-In Imfit, a "model" consists of one or more *image functions* from a library built into
-Imfit, sharing one or more common locations within an image and added together to form a
+In **Imfit** (and PyImfit), a "model" consists of one or more *image functions* from a library built into
+**Imfit**, sharing one or more common locations within an image and added together to form a
 summed model image. Optionally, the summed model image can then be convolved with a user-supplied
 Point-Spread Function (PSF) image to simulate the effects of seeing and telescope optics. (For greater accuracy,
 subsections of the image can be oversampled on a finer pixel scale and convolved with a
@@ -36,7 +73,7 @@ If you have a configuration file, you can load it via the convenience function `
 where `configFilePath` is a string specifying the path to the config file.
 
 Once you have a ModelDescription object describing the model, you can create an instance of
-the Imfit class based on the model; optionally, if you want the model to be convolved
+the `Imfit` class based on the model; optionally, if you want the model to be convolved
 with a PSF, you can also supply the PSF image:
 
     imfitter = pyimfit.Imfit(model_desc)
@@ -59,7 +96,7 @@ image is in the right format:
     fits_data_im = fits.getdata(pathToImage)
     data_im = pyimfit.FixImage(fits_data_im)
 
-You then pass in the data image to the previously generated Imfit object (`imfitter'), along
+You then pass in the data image to the previously generated `Imfit` object (`imfitter'), along
 with an (optional) mask image:
 
     imfitter.loadData(data_im)
@@ -72,11 +109,11 @@ You can also specify a mask image, which should be a numpy integer or float arra
 
 #### Image-description parameters, statistical models and fit statistics
 
-When calling the `loadData` method, you can tell the Imfit object useful things about the data image:
+When calling the `loadData` method, you can tell the `Imfit` object useful things about the data image:
 A/D gain, read noise, any constant background value that was previously subtracted from the
 data image, etc.
 
-When calling the `loadData` method, you can tell the Imfit object about the statistical model you want to use: 
+When calling the `loadData` method, you can tell the `Imfit` object about the statistical model you want to use: 
 what the assumed uncertainties are for the data values, and what "fit statistic" is to be minimized during 
 the fitting process.
 
@@ -95,7 +132,7 @@ the square root of the *model* values (these are automatically recomputed for ev
    a true Poisson model (rather than the Gaussian approximation to Poisson statistics that's used
    in the chi^2 approaches). This is particularly apt when individual data values are low.
 
-You can also tell the Imfit object useful things about the data values: what A/D gain conversion
+You can also tell the `Imfit` object useful things about the data values: what A/D gain conversion
 was applied, any Gaussian read noise, any constant background value that was previously subtracted from the
 data image, etc.
 
@@ -116,7 +153,7 @@ Whatever you chose, you can specify this as part of the call to `loadData`, e.g.
 
 #### Performing the Fit
 
-To actually perform the fit, you call the `doFit` method on the Imfit object. You can specify which
+To actually perform the fit, you call the `doFit` method on the `Imfit` object. You can specify which
 of the three different minimization algorithms you want to use with the `solver` keyword; the
 default is "LM" for the Levenberg-Marquardt minimizer.
 
@@ -129,7 +166,7 @@ default is "LM" for the Levenberg-Marquardt minimizer.
 
 #### Shortcut: Load data and do the fit in one step
 
-A shortcut is to call the `fit` method on the Imfit object. This lets you supply the data image
+A shortcut is to call the `fit` method on the `Imfit` object. This lets you supply the data image
 (along with the optional mask), specify the statistical model (chi^2, etc.) and the minimization
 algorithm, and start the fit all in one go
 
@@ -145,7 +182,7 @@ There are three or four basic things you might want to look at when the fit fini
             imfitter.fitConverged
             
    2. See the value of the final fit statistic, and related values (these are all properties
-   of the Imfit object)
+   of the `Imfit` object)
    
             imfitter.fitStatistic   # final chi^2 or PMLR value
             imfitter.reducedFitStatistic   # reduced version of same
@@ -171,13 +208,13 @@ the output best-fit model image are both numpy arrays, this is simple enough:
 ### Generate a model image
 
 Sometimes you may just want to generate model images without fitting any data. In this case, 
-you can call the `getModelImage` method on the Imfit object without running the fit.
+you can call the `getModelImage` method on the `Imfit` object without running the fit.
 
     model_im = imfitter.getModelImage(shape=image_shape)
 
 where `image_shape` is a 2-element integer tuple defining the image shape in the usual
 numpy fashion (i.e., an image with n_rows and n_colums has shape=(n_columns,n_rows)).
 
-If the Imfit object (`imfitter`) already has a data image assigned to it, then the default
+If the `Imfit` object (`imfitter`) already has a data image assigned to it, then the default
 output image will have the same dimensions as the data image, and you do not need to
 specify the shape.

@@ -11,7 +11,7 @@ Documentation for PyImfit
    :maxdepth: 2
    :caption: USER DOCUMENTATION:
 
-   basics
+   sample_usage
    overview
 
 
