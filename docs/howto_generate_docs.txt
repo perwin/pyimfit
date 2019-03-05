@@ -17,7 +17,11 @@ while editing them.
 2. Update rST files if needed: index.rst; api_ref/api_index.rst, other
 api-related .rst files in that directory.
 
-3. Generate rST versions of the Markdown files (by running convert_md_to_rst.sh
+3. IF the Jupyter notebook file has been updated, generate a markdown version
+with
+   $ jupyter nbconvert pyimfit_emcee.ipynb --to markdown
+
+4. Generate rST versions of the Markdown files (by running convert_md_to_rst.sh
 script) and test the Sphinx HTML generation by running Sphinx via the
 Makefile
 
@@ -48,3 +52,16 @@ them in the *index.rst files, and let readthedocs process the .rst files)
     https://pypi.org/project/sphinxcontrib-restbuilder/
 
 (Or maybe there's some way to create alternate modules that don't import pyimfit_lib?)
+
+
+JUPYTER NOTEBOOK
+
+For some reason, tools like xxx and even "jupyter nbconvert --to rst" produced rst (and then
+HTML) with all subheads at level 1, resulting in all subheads appearing in the index.html
+file at the top level.
+
+What *does* work:
+1. Convert notebook to markdown
+   $ jupyter nbconvert --to markdown
+2. Convert the markdown version of the notebook to rst using our standard "convert_md_to_rst.sh"
+script

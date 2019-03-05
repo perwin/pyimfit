@@ -41,7 +41,7 @@ release = '0.6'
 # PE: napoleon processes Numpy-style docstrings
 extensions = [
     'sphinx.ext.mathjax', 'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon', 'nbsphinx',
+    'sphinx.ext.napoleon',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -80,21 +80,21 @@ pygments_style = 'sphinx'
 #
 
 # PE: possible themes: alabaster, classic, bootstrap-astropy
-html_theme = 'alabaster'
-# Theme options for alabaster
-html_theme_options = {
-    #'logo': 'logo.png',
-    'github_user': 'perwin',
-    'github_repo': 'pyimfit',
-}
-
-# html_theme = 'bootstrap-astropy'
-# # Theme options for bootstrap-astropy
+# html_theme = 'alabaster'
+# # Theme options for alabaster
 # html_theme_options = {
-#     'logotext1': '',  # white,  semi-bold
-#     'logotext2': 'PyImfit',  # orange, light
-#     'logotext3': ':docs'   # white,  light
-#     }
+#     #'logo': 'logo.png',
+#     'github_user': 'perwin',
+#     'github_repo': 'pyimfit',
+# }
+
+html_theme = 'bootstrap-astropy'
+# Theme options for bootstrap-astropy
+html_theme_options = {
+    'logotext1': '',  # white,  semi-bold
+    'logotext2': 'PyImfit',  # orange, light
+    'logotext3': ':docs'   # white,  light
+    }
 
 #html_theme = 'sphinx_rtd_theme'
 # Theme options for sphinx_rtd_theme
