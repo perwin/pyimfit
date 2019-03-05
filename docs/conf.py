@@ -79,7 +79,7 @@ pygments_style = 'sphinx'
 # a list of builtin themes.
 #
 html_theme = 'alabaster'
-Theme options for alabaster
+# Theme options for alabaster
 html_theme_options = {
     #'logo': 'logo.png',
     'github_user': 'perwin',
