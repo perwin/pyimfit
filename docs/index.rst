@@ -13,6 +13,7 @@ Documentation for PyImfit
 
    sample_usage
    overview
+   pyimfit_emcee
 
 
 .. toctree::

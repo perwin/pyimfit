@@ -41,7 +41,7 @@ release = '0.6'
 # PE: napoleon processes Numpy-style docstrings
 extensions = [
     'sphinx.ext.mathjax', 'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
+    'sphinx.ext.napoleon', 'nbsphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -66,7 +66,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -78,6 +78,8 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
+
+# PE: possible themes: alabaster, classic, bootstrap-astropy
 html_theme = 'alabaster'
 # Theme options for alabaster
 html_theme_options = {

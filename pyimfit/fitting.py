@@ -363,7 +363,7 @@ class Imfit(object):
             self._fitStatComputed = True
 
 
-    def fit( self, image, error=None, mask=None, mode='LM', **kwargs ):
+    def fit( self, image, error=None, mask=None, solver='LM', **kwargs ):
         """
         This is the refactored version of oldfit, which was originally called "fit".
         """

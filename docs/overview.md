@@ -35,7 +35,7 @@ If you've already used the command-line version of **Imfit**, here are the essen
    (along with the minimization algorithm to use). Or just call the `fit` method and supply the data image, etc., 
    as part of its input.
    
-   * Once the fit is finished, information about the fit (final chi^2 value, best-fit paremeter
+   * Once the fit is finished, information about the fit (final &chi;<sup>2</sup> value, best-fit paremeter
    values, etc.) and the best-fitting model image can be obtained by querying properties and methods 
    of the `Imfit` object.
 
@@ -44,11 +44,14 @@ See [Sample Usage](./sample_usage.html) for a simple example of how this works.
 
 ## The Basics
 
-There are two basic things you can do with PyImfit:
+There are three basic things you can do with PyImfit:
 
    1. Generate model images
    
    2. Fit models to a pre-existing (data) image
+   
+   3. Generate &chi;<sup>2</sup> or likelihood values from a comparison of model and data (e.g., for use
+   with an alternate fitting approach, MCMC analysis, etc.)
 
 In **Imfit** (and PyImfit), a "model" consists of one or more *image functions* from a library built into
 **Imfit**, sharing one or more common locations within an image and added together to form a
@@ -64,17 +67,21 @@ the native image pixel scale.)
 The model is specified by an instance of the ModelDescription class.
 
 For the command-line program, this is done via a "configuration" text file, which has a
-specific format.
+specific format described in [the Imfit manual (PDF)](http://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf),
+or in [this page of the online docs](https://imfit.readthedocs.io/en/latest/config_file_format.html).
 
 If you have a configuration file, you can load it via the convenience function `parse_config_file`
 
     model_desc = pyimfit.parse_config_file(configFilePath)
 
-where `configFilePath` is a string specifying the path to the config file.
+where `configFilePath` is a string specifying the path to the configuration file.
+
+You can also construct a ModelDescription instance programmatically from within Python; see
+[Sample Usage](./sample_usage.html) for a simpe example.
 
 Once you have a ModelDescription object describing the model, you can create an instance of
 the `Imfit` class based on the model; optionally, if you want the model to be convolved
-with a PSF, you can also supply the PSF image:
+with a PSF, you can also supply the PSF image (in the form of a 2D numpy array):
 
     imfitter = pyimfit.Imfit(model_desc)
     imfitter = pyimfit.Imfit(model_desc, psfImage)
@@ -90,7 +97,7 @@ with a PSF, you can also supply the PSF image:
 The data image is a 2D numpy array; it should be in double-precision floating point with
 native byte order. Any image you create programmatically within Python will almost
 certainly be in this format already; if you load an image from a FITS file, then it's
-a good idea to run it through the convenience function FixImage, which will ensure the
+a good idea to run it through the convenience function `FixImage`, which will ensure the
 image is in the right format:
 
     fits_data_im = fits.getdata(pathToImage)
@@ -109,28 +116,25 @@ You can also specify a mask image, which should be a numpy integer or float arra
 
 #### Image-description parameters, statistical models and fit statistics
 
-When calling the `loadData` method, you can tell the `Imfit` object useful things about the data image:
-A/D gain, read noise, any constant background value that was previously subtracted from the
-data image, etc.
-
 When calling the `loadData` method, you can tell the `Imfit` object about the statistical model you want to use: 
 what the assumed uncertainties are for the data values, and what "fit statistic" is to be minimized during 
 the fitting process.
 
-   * Chi^2 with data-based errors (default): the default is a standard chi^2 approach
+   * &chi;<sup>2</sup> with data-based errors (default): the default is a standard &chi;<sup>2</sup> approach
 using per-pixel Gaussian errors, with the assumption that the errors (sigma values) are the square root
 of the data values.
 
-   * Chi^2 with model-based errors: Alternately, you can specify *model-based* errors, where the sigma values are
+   * &chi;<sup>2</sup> with model-based errors: Alternately, you can specify *model-based* errors, where the sigma values are
 the square root of the *model* values (these are automatically recomputed for every iteration of the fitting process).
 
-   * Chi^2 with user-supplied errors: You can also supply a noise/error array which is the same
-   size as the data array and holds per-pixel sigma values precomputed in some fashion (e.g., from
+   * &chi;<sup>2</sup> with user-supplied errors: You can also supply a noise/error array which is the same
+   size as the data array and holds per-pixel sigma or variance values precomputed in some fashion (e.g., from
    an image-reduction pipeline).
    
-   * Poisson-based: Finally, you can specify that individual pixel errors come from the model using
-   a true Poisson model (rather than the Gaussian approximation to Poisson statistics that's used
-   in the chi^2 approaches). This is particularly apt when individual data values are low.
+   * Poisson-based ("Poisson Maximum-Likelihood-Ratio"): Finally, you can specify that individual pixel 
+   errors come from the model using a true Poisson model (rather than the Gaussian approximation to Poisson 
+   statistics that's used in the &chi;<sup>2</sup> approaches). This is particularly apt when individual data 
+   pixel values are low.
 
 You can also tell the `Imfit` object useful things about the data values: what A/D gain conversion
 was applied, any Gaussian read noise, any constant background value that was previously subtracted from the
@@ -167,17 +171,17 @@ default is "LM" for the Levenberg-Marquardt minimizer.
 #### Shortcut: Load data and do the fit in one step
 
 A shortcut is to call the `fit` method on the `Imfit` object. This lets you supply the data image
-(along with the optional mask), specify the statistical model (chi^2, etc.) and the minimization
+(along with the optional mask), specify the statistical model (&chi;<sup>2</sup>, etc.) and the minimization
 algorithm, and start the fit all in one go
 
-    imfitter.fit(data_im, gain=4.5, use_poisson_mlr=True, mode="NM")
+    imfitter.fit(data_im, gain=4.5, use_poisson_mlr=True, solver="NM")
 
 
 #### Inspecting the results of a fit
 
 There are three or four basic things you might want to look at when the fit finishes:
 
-   1. See if the fit actually converged:
+   1. See if the fit actually converged (this is a property of the `Imfit` object):
    
             imfitter.fitConverged
             
@@ -189,12 +193,12 @@ There are three or four basic things you might want to look at when the fit fini
             imfitter.AIC   # corresponding Akaike Information Criterion value
             imfitter.BIC   # corresponding Bayesian Information Criterion value
 
-   3. See the best-fit parameter values
+   3. Get the best-fit parameter values
    
             # get the best-fit parameter values in the form of a 1D numpy array
             bestfit_parameters = imfit_fitter.getRawParameters()
    
-   4. See the best-fitting model image
+   4. Get the best-fitting model image
 
              # get the best-fit model image as a 2D numpy array
              bestfit_model_im = imfitter.getModelImage()
@@ -205,7 +209,7 @@ the output best-fit model image are both numpy arrays, this is simple enough:
     residual_im = data_im - bestfit_model_im
 
 
-### Generate a model image
+### Generate a model image (without fitting)
 
 Sometimes you may just want to generate model images without fitting any data. In this case, 
 you can call the `getModelImage` method on the `Imfit` object without running the fit.
@@ -215,6 +219,6 @@ you can call the `getModelImage` method on the `Imfit` object without running th
 where `image_shape` is a 2-element integer tuple defining the image shape in the usual
 numpy fashion (i.e., an image with n_rows and n_colums has shape=(n_columns,n_rows)).
 
-If the `Imfit` object (`imfitter`) already has a data image assigned to it, then the default
+If the `Imfit` object (`imfitter`) already has a data image assigned to it, then the 
 output image will have the same dimensions as the data image, and you do not need to
 specify the shape.
