@@ -17,7 +17,7 @@ in an Imfit configuration file named `config_galaxy.dat`:
     imageFile = "<path-to-FITS-file-directory>/galaxy.fits"
     imfitConfigFile = "<path-to-config-file-directory>/config_galaxy.dat"
 
-    # read in image data, convert to proper double-precisions, little-endian format
+    # read in image data, convert to proper double-precision, little-endian format
     image_data = pyimfit.FixImage(fits.getdata(imageFile))
 
     # construct model from config file
@@ -69,7 +69,9 @@ numpy arrays
 
 To build PyImfit from source, you will need the following:
 
-   * The same external (C/C++) libraries that Imfit requires: FFTW3, GNU Scientific Library, NLopt
+   * Most of the same external (C/C++) libraries that Imfit requires: specifically 
+   [FFTW3](https://www.fftw.org) [version 3], [GNU Scientific Library](https://www.gnu.org/software/gsl/) [version 2.0
+   or later!], and [NLopt](https://nlopt.readthedocs.io/en/latest/)
    
    * This Github repository (use `--recurse-submodules` to ensure the Imfit repo is also downloaded)
            
@@ -79,17 +81,33 @@ To build PyImfit from source, you will need the following:
    Clang++/LLVM that includes support for OpenMP (note that this does *not* include the Apple-built 
    version of Clang++ that comes with Xcode for macOS, since that does not include OpenMP).
 
-   * PyImfit also requires SCons and Cython for installation, but these should be automatically
-   installed (if not already present) when running the setup.py script.
+   * PyImfit uses SCons to build the base Imfit library that the Python module is built on top of;
+   this can be installed with `pip` (see below).
+   
+   * PyImfit also requires Cython for installation, but thjis should be automatically
+   installed (if not already present) when running the `setup.py` script.
 
 
 #### Steps for building PyImfit from source:
 
 1. Install necessary external libraries (FFTW3, GSL, NLopt)
 
+    * These can be installed from source, or via package managers (e.g., Homebrew on macOS)
+    
+    * Note that version 2.0 or later of GSL is required!
 
-2. Build the Python package
+2. Install SCons, e.g.
 
+       $ pip install scons
+
+3. Clone the PyImfit repository
+
+       $ git clone --recurse-submodules git://github.com/perwin/pyimfit.git
+
+4. Build the Python package
+
+   * **[TBA: stuff about specifying compiler on macOS; paths to libraries]**
+   
    * For testing purposes (installs a link to current directory in your usual package-install location)
 
          $ python3 setup.py develop
