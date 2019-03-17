@@ -188,6 +188,11 @@ class TestFunctionSetDescription(object):
         plist_correct = [self.x0_p, self.y0_p, self.p1, self.p2, self.p3, self.p4]
         assert fsetdesc1.parameterList() == plist_correct
 
+    def test_FunctionSetDescription_parameterList_badInput( self ):
+        # x0 and y0 should be ParameterDescription values, not floats
+        with pytest.raises(ValueError):
+            fsetdesc1 = FunctionSetDescription('fs0', 100.0, 200.0, self.functionList)
+
     def test_FunctionSetDescription_catchErrors( self ):
         fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
         # do we catch the case of trying to add a non-FunctionDescription object?

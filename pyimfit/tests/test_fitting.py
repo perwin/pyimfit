@@ -12,7 +12,7 @@ from numpy.testing import assert_allclose
 from astropy.io import fits
 
 from ..fitting import Imfit
-from ..descriptions import ModelDescription
+from ..descriptions import FunctionSetDescription, ModelDescription, ParameterDescription
 from ..pyimfit_lib import FixImage, make_imfit_function
 
 
@@ -26,6 +26,11 @@ image_ic3478 = FixImage(fits.getdata(imageFile))
 
 # ModelDescription object for fitting Exponential function to image of IC 3478
 model_desc = ModelDescription.load(configFile)
+
+# Simple FlatSky (constant-value) image
+flatSkyFunc = make_imfit_function("FlatSky")
+funcSet = FunctionSetDescription("sky", ParameterDescription('X0', 1.0), ParameterDescription('Y0', 1.0), [flatSkyFunc])
+model_desc_flatsky = ModelDescription([funcSet])
 
 
 
@@ -95,3 +100,35 @@ class TestImfit(object):
         magsArray_correct = np.array([totalMag_correct])
         assert totalMag == totalMag_correct
         assert magsArray == magsArray_correct
+
+
+class TestImfit_ImageGeneration(object):
+
+    def setup_method( self ):
+        self.modelDesc = model_desc_flatsky
+
+    def test_Imfit_getImage( self ):
+        output_correct = np.zeros(4).reshape((2,2))
+        imfit_fitter = Imfit(self.modelDesc)
+        outputImage = imfit_fitter.getModelImage((2,2))
+        assert_allclose(outputImage, output_correct)
+
+    def test_Imfit_getImage_catchImageSizeChange( self ):
+        imfit_fitter = Imfit(self.modelDesc)
+        outputImage = imfit_fitter.getModelImage((2,2))
+        with pytest.raises(ValueError):
+            outputImage = imfit_fitter.getModelImage((4,4))
+
+    def test_Imfit_getImage_newParameters( self ):
+        imfit_fitter = Imfit(self.modelDesc)
+
+        output_correct1 = np.zeros(4).reshape((2,2)) + 5.0
+        newParams1 = np.array([1.0, 1.0, 5.0])
+        outputImage1 = imfit_fitter.getModelImage((2,2), newParameters=newParams1)
+        assert_allclose(outputImage1, output_correct1)
+
+        output_correct2 = np.zeros(4).reshape((2,2)) - 15.0
+        newParams2 = np.array([1.0, 1.0, -15.0])
+        outputImage2 = imfit_fitter.getModelImage(newParameters=newParams2)
+        assert_allclose(outputImage2, output_correct2)
+

@@ -401,9 +401,9 @@ class FunctionSetDescription(object):
 
         _name : str
             name for the function block
-        x0 : float
+        x0 : ParameterDescription
             x-coordinate of the function block/set's center
-        y0 : float
+        y0 : ParameterDescription
             y-coordinate of the function block/set's center
         _functions : list of `FunctionDescription`
             the FunctionDescription objects, one for each image function
@@ -424,22 +424,28 @@ class FunctionSetDescription(object):
             the function block/set (including X0,Y0)
 
     """
-    def __init__( self, name, x0param=None, y0param=None, functions=None ):
+    def __init__( self, name, x0param=None, y0param=None, functionList=None ):
         self._name = name
         if x0param is None:
             self.x0 = ParameterDescription('X0', 0.0)
         else:
+            if not isinstance(x0param, ParameterDescription):
+                msg = "x0param should be instance of ParameterDescription"
+                raise ValueError(msg)
             self.x0 = x0param
         if y0param is None:
             self.y0 = ParameterDescription('Y0', 0.0)
         else:
+            if not isinstance(y0param, ParameterDescription):
+                msg = "y0param should be instance of ParameterDescription"
+                raise ValueError(msg)
             self.y0 = y0param
         self._functions = []
         self.nFunctions = 0
-        if functions is not None:
-            for f in functions:
+        if functionList is not None:
+            for f in functionList:
                 self.addFunction(f)
-            self.nFunctions = len(functions)
+            self.nFunctions = len(functionList)
 
 
     @property
@@ -621,13 +627,13 @@ class ModelDescription(object):
 
     """
 
-    def __init__( self, function_sets=None, options={} ):
+    def __init__( self, functionSetsList=None, options={} ):
         self.options = {}
         self.options.update(options)
         self._functionSets = []
         self.nFunctionSets = 0
-        if function_sets is not None:
-            for fs in function_sets:
+        if functionSetsList is not None:
+            for fs in functionSetsList:
                 # note that addFunctionSet will increment nFunctionSets, so we don't need to
                 # do that here
                 self.addFunctionSet(fs)

@@ -368,7 +368,7 @@ class Imfit(object):
         This is the refactored version of oldfit, which was originally called "fit".
         """
         self.loadData(image, error, mask, **kwargs)
-        self.doFit(solver=mode)
+        self.doFit(solver=solver)
 
 
     def computeFitStatistic( self, newParameters ):
@@ -475,13 +475,16 @@ class Imfit(object):
         return self._modelObjectWrapper.getFitStatistic(mode='BIC')
 
 
-    def getModelImage( self, shape=None, includeMask=False ):
+    def getModelImage( self, shape=None, newParameters=None, includeMask=False ):
         """
         Computes and returns the image described by the currently fitted model.
         If not fitted, use the template model.
 
         Parameters
         ----------
+        newParameters : 1-D numpy array of float, optional
+            vector of parameter values to use in computing model
+
         shape : tuple, optional
             Shape of the image in (Y, X) format.
 
@@ -491,7 +494,7 @@ class Imfit(object):
 
         Returns
         -------
-        image : 2-D array
+        image : 2-D numpy array
             Image computed from the current model. If a mask is associated
             with the original data image, then the returned image is a
             numpy masked array
@@ -499,9 +502,12 @@ class Imfit(object):
         if self._modelObjectWrapper is None:
             self._setupModel()
         if shape is not None:
+            if self._modelObjectWrapper.imageSizeSet:
+                msg = "Model image size has already been set!"
+                raise ValueError(msg)
             self._modelObjectWrapper.setupModelImage(shape)
 
-        image = self._modelObjectWrapper.getModelImage()
+        image = self._modelObjectWrapper.getModelImage(newParameters=newParameters)
         if self._mask is not None and includeMask:
             return np.ma.array(image, mask=self._mask)
         else:

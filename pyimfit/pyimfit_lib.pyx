@@ -8,6 +8,8 @@
 # Andre's code uses).
 # http://docs.cython.org/en/latest/src/userguide/memoryviews.html
 
+# cython: language_level=3
+
 from __future__ import print_function
 
 # the following is so we can use Cython decorators
@@ -278,6 +280,7 @@ cdef class ModelObjectWrapper( object ):
     cdef double[::1] _psfData
     cdef bool _inputDataLoaded
     cdef bool _finalSetupDone
+    cdef bool _modelImageComputed
     cdef bool _fitted
     cdef object _fitMode
     cdef bool _freed
@@ -294,8 +297,10 @@ cdef class ModelObjectWrapper( object ):
         self._fitResult = NULL
 
         self._inputDataLoaded = False
+        self._nRows = self._nCols = self._nPixels = 0
         self._finalSetupDone = False   # have we called ModelObject::FinalSetupForFitting
         self._fitted = False
+        self._modelImageComputed = False
         self._fitMode = None
         self._freed = False
         self._fitStatus = 0
@@ -635,6 +640,7 @@ cdef class ModelObjectWrapper( object ):
     def _testCreateModelImage(self, int count=1):
         for _ from 0 <= _ < count:
             self._model.CreateModelImage(self._paramVect)
+        self._modelImageComputed = True
 
 
     def doFinalSetup(self):
@@ -671,7 +677,7 @@ cdef class ModelObjectWrapper( object ):
         if not self._finalSetupDone:
             self.doFinalSetup()
         solverID = solverID_dict[mode]
-        nloptSolverName = ""
+        nloptSolverName = b""
         self._fitStatus = DispatchToSolver(solverID, self._nParams, self._nFreeParams,
                                             self._nPixels, self._paramVect, self._paramInfo,
                                             self._model, ftol, self._paramLimitsExist,
@@ -683,6 +689,7 @@ cdef class ModelObjectWrapper( object ):
 
         self._fitMode = mode
         self._fitted = True
+        self._modelImageComputed = True
 
 
  # int BootstrapErrorsArrayOnly( const double *bestfitParams, vector<mp_par> parameterLimits,
@@ -728,6 +735,7 @@ cdef class ModelObjectWrapper( object ):
             fitstat = self._fitResult.bestnorm
         else:
             fitstat = self._model.GetFitStatistic(self._paramVect)
+            self._modelImageComputed = True
         cdef int n_valid_pix = self._model.GetNValidPixels()
         cdef int deg_free = n_valid_pix - self._nFreeParams
 
@@ -748,11 +756,19 @@ cdef class ModelObjectWrapper( object ):
     # since we want to return a self-contained numpy array, and we want it to
     # survive beyond the point where the ModelObject's destructor is called
     # (which will delete the original data pointed to by model_image)
-    def getModelImage( self ):
+    def getModelImage( self, newParameters=None ):
         cdef double *model_image
         cdef np.ndarray[np.double_t, ndim=2, mode='c'] output_array
         cdef int imsize = self._nPixels * sizeof(double)
+        cdef double *parameterArray
 
+        # FIXME: if newParameters is None -- can we be sure ModelObject has parameter values if fit hasn't been done?
+        if newParameters is not None:
+            parameterArray = <double *> calloc(self._nParams, sizeof(double))
+            for i in range(self._nParams):
+                parameterArray[i] = newParameters[i]
+            self._model.CreateModelImage(parameterArray)
+            free(parameterArray)
         model_image = self._model.GetModelImageVector()
         if model_image is NULL:
             raise Exception('Error: model image has not yet been computed.')
@@ -791,6 +807,11 @@ cdef class ModelObjectWrapper( object ):
             free(self._modelFluxes)
         return (totalFlux, np.array(functionFluxes))
 
+
+
+    @property
+    def imageSizeSet(self):
+        return self._nPixels > 0
 
 
     @property
