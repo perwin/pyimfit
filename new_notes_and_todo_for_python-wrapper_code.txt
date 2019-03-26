@@ -90,7 +90,7 @@ PLAN:
         [ ] Write test(s) modifying x0, y0
 
 
-[ ] Improvements/fixes to Imfit class
+[x] Improvements/fixes to Imfit class
     [x] getModelImage -- allow user to specify new parameter vector
         makeimage_main.cpp:
             theModel->CreateModelImage(paramsVect);
@@ -104,8 +104,10 @@ PLAN:
     [x] Set up testing of Imfit.getModelImage(newParameters)
         [x] Write test code for FlatSky component, varying I_0 value
 
-    [ ] getModelFluxes and getModelMagnitudes -- ditto
-        [ ] Modify ModelObjectWrapper.getModelFluxes to allow optional parameter vector
+    [x] getModelFluxes and getModelMagnitudes -- ditto
+        [x] Write unit tests
+        [x] Modify ModelObjectWrapper.getModelFluxes to allow optional parameter vector
+        [x] Modify ModelObjectWrapper.getModelMagnitudes to allow optional parameter vector
 
     [x] Catch possible error where user specifies alternate shape for model image
     via getModelImage when Imfit object already has that specified (e.g., via loadData)

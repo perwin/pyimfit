@@ -79,6 +79,18 @@ class TestImfit(object):
         assert totalFlux == totalFlux_correct
         assert fluxArray == fluxArray_correct
 
+    def test_Imfit_get_fluxes_newParameters( self ):
+        # Exponential model
+        imfit_fitter = Imfit(self.modelDesc)
+        imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+        # get fluxes using user-specified parameter vector
+        userParams = np.array([129.0,129.0, 20.0, 0.25, 50.0, 20.0])
+        (totalFlux, fluxArray) = imfit_fitter.getModelFluxes(userParams)
+        totalFlux_correct = 94247.7796076937
+        fluxArray_correct = np.array([totalFlux_correct])
+        assert totalFlux == totalFlux_correct
+        assert fluxArray == fluxArray_correct
+
     def test_Imfit_get_mags( self ):
         # Fitting Exponential to 256x256-pixel SDSS r-band image of IC 3478 (no PSF convolution)
         imfit_fitter = Imfit(self.modelDesc)
@@ -97,6 +109,27 @@ class TestImfit(object):
         # get magnitudes -- now, use parameter zero point
         (totalMag, magsArray) = imfit_fitter.getModelMagnitudes(zeroPoint=20)
         totalMag_correct = 20 - 2.5*math.log10(643232.3971123401)
+        magsArray_correct = np.array([totalMag_correct])
+        assert totalMag == totalMag_correct
+        assert magsArray == magsArray_correct
+
+    def test_Imfit_get_mags_newParameters(self):
+        # Exponential model
+        imfit_fitter = Imfit(self.modelDesc)
+        imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+
+        # get magnitudes -- first, use built-in zeroPoint property
+        imfit_fitter.zeroPoint = 30.0
+        userParams = np.array([129.0,129.0, 20.0, 0.25, 50.0, 20.0])
+        (totalMag, magsArray) = imfit_fitter.getModelMagnitudes(userParams)
+        totalMag_correct = 30 - 2.5 * math.log10(94247.7796076937)
+        magsArray_correct = np.array([totalMag_correct])
+        assert totalMag == totalMag_correct
+        assert magsArray == magsArray_correct
+
+        # get magnitudes -- now, use parameter zero point
+        (totalMag, magsArray) = imfit_fitter.getModelMagnitudes(userParams, zeroPoint=20)
+        totalMag_correct = 20 - 2.5*math.log10(94247.7796076937)
         magsArray_correct = np.array([totalMag_correct])
         assert totalMag == totalMag_correct
         assert magsArray == magsArray_correct

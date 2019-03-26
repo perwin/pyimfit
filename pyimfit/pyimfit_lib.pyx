@@ -778,7 +778,7 @@ cdef class ModelObjectWrapper( object ):
         return output_array
 
 
-    def getModelFluxes( self, estimationImageSize=5000 ):
+    def getModelFluxes( self, newParameters=None, estimationImageSize=5000 ):
         """
         Computes and returns total and individual-function fluxes for the current model
         and current parameter values.
@@ -797,12 +797,22 @@ cdef class ModelObjectWrapper( object ):
         """
         cdef double totalFlux
         cdef int nFunctions = self._model.GetNFunctions()
+        cdef double *parameterArray
+
         self._modelFluxes = <double *> calloc(nFunctions, sizeof(double))
         if self._modelFluxes is NULL:
             raise Exception('Error: unable to allocate memory for modelFluxes in getModelFluxes')
-        totalFlux = self._model.FindTotalFluxes(self._paramVect, estimationImageSize,
+        if newParameters is not None:
+            parameterArray = <double *> calloc(self._nParams, sizeof(double))
+            for i in range(self._nParams):
+                parameterArray[i] = newParameters[i]
+        else:
+            parameterArray = self._paramVect
+        totalFlux = self._model.FindTotalFluxes(parameterArray, estimationImageSize,
                                                 estimationImageSize, self._modelFluxes)
         functionFluxes = [self._modelFluxes[i] for i in range(nFunctions)]
+        if newParameters is not None:
+            free(parameterArray)
         if self._modelFluxes != NULL:
             free(self._modelFluxes)
         return (totalFlux, np.array(functionFluxes))

@@ -484,6 +484,7 @@ class Imfit(object):
         ----------
         newParameters : 1-D numpy array of float, optional
             vector of parameter values to use in computing model
+            (default is to use current parameter values, e.g., from fit)
 
         shape : tuple, optional
             Shape of the image in (Y, X) format.
@@ -514,10 +515,16 @@ class Imfit(object):
             return image
 
 
-    def getModelFluxes( self, zeroPoint=None ):
+    def getModelFluxes( self, newParameters=None ):
         """
         Computes and returns total and individual-function fluxes for the current model
         and current parameter values.
+
+        Parameters
+        ----------
+        newParameters : 1-D numpy array of float, optional
+            vector of parameter values to use in computing model
+            (default is to use current parameter values, e.g., from fit)
 
         Returns
         -------
@@ -526,20 +533,25 @@ class Imfit(object):
             individualFluxes = numpy ndarray of fluxes/magnitudes for each image-function in the
             model
         """
-        totalFlux, functionFluxes = self._modelObjectWrapper.getModelFluxes()
+        totalFlux, functionFluxes = self._modelObjectWrapper.getModelFluxes(newParameters=newParameters)
         return(totalFlux, functionFluxes)
 
 
-    def getModelMagnitudes( self, zeroPoint=None ):
+    def getModelMagnitudes( self, newParameters=None, zeroPoint=None ):
         """
         Computes and returns total and individual-function magnitudes for the current model
         and current parameter values.
 
         Parameters
         ----------
+        newParameters : 1-D numpy array of float, optional
+            vector of parameter values to use in computing model
+            (default is to use current parameter values, e.g., from fit)
+
         zeroPoint : float, optional
             If present, returned values are magnitudes, computed as
                 zeroPoint - 2.5*log10(flux)
+            (default is to use value of object's zeroPoint property)
 
         Returns
         -------
@@ -548,7 +560,7 @@ class Imfit(object):
             individualFluxes = numpy ndarray of fluxes/magnitudes for each image-function in the
             model
         """
-        totalFlux, functionFluxes = self._modelObjectWrapper.getModelFluxes()
+        totalFlux, functionFluxes = self._modelObjectWrapper.getModelFluxes(newParameters=newParameters)
         if zeroPoint is not None:
             ZP = zeroPoint
         else:
