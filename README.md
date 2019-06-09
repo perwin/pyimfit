@@ -82,10 +82,8 @@ To build PyImfit from source, you will need the following:
    version of Clang++ that comes with Xcode for macOS, since that does not include OpenMP).
 
    * PyImfit uses SCons to build the base Imfit library that the Python module is built on top of;
-   this can be installed with `pip` (see below).
-   
-   * PyImfit also requires Cython for installation, but thjis should be automatically
-   installed (if not already present) when running the `setup.py` script.
+   this *should* be installed when you execute the setup.py file, if it's not already on your
+   system.
 
 
 #### Steps for building PyImfit from source:
@@ -96,25 +94,28 @@ To build PyImfit from source, you will need the following:
     
     * Note that version 2.0 or later of GSL is required!
 
-2. Install SCons, e.g.
-
-       $ pip install scons
-
-3. Clone the PyImfit repository
+2. Clone the PyImfit repository
 
        $ git clone --recurse-submodules git://github.com/perwin/pyimfit.git
 
-4. Build the Python package
+3. Build the Python package
 
-   * **[TBA: stuff about specifying compiler on macOS; paths to libraries]**
+   * **[macOS only:] First, specify a valid, OpenMP-compatible C++ compiler**
    
-   * For testing purposes (installs a link to current directory in your usual package-install location)
+         $ export CC=<c++-compiler-name>; export CXX=<c++-compiler-name>
+        
+    (You need to point CC and CXX to the *same*, C++ compiler!
+    This should not be necessary on a Linux system, assuming the default compiler is standard GCC.)
+   
+   * Build and install PyImfit!
+   
+      * For testing purposes (installs a link to current directory in your usual package-install location)
 
-         $ python3 setup.py develop
+            $ python3 setup.py develop
 
-   * For general installation (i.e., actually installs the package in your usual package-install location)
+      * For general installation (i.e., actually installs the package in your usual package-install location)
 
-         $ python3 setup.py install
+            $ python3 setup.py install
 
 
 ## Credits

@@ -36,15 +36,17 @@ PLAN:
                 CURRENTLY INSOLUBLE -- BEST SOLUTION IS TO REQUIRE "pip install scons" FIRST
 
         * Test compilation in virtualenv with different compilers
-            [ ] Write notes/script to set up new virtualenv with bare essentials
-            [ ] Write notes/script for making clean setup of pyimfit
+            [x] Write notes/script to set up new virtualenv with bare essentials
+            [x] Write notes/script for making clean setup of pyimfit
                 -- scons -c on imfit subdir
                 -- rm build/*, etc.
-            [ ] Write notes/script
+            [x] Write notes/script
 
             [x] Test with GCC-9
 
-            [ ] Test with Homebrew llvm
+            [-] Test with Homebrew llvm
+
+            [ ] Write code to pass in user-specified CXX, CC to scons for building libimfit.a
 
 
     * Documentation:
