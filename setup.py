@@ -188,13 +188,15 @@ with open("README_pyimfit.md", "r") as f:
 
 setup(
     name=NAME,   # name for distribution package (aka "distribution"), as listed on PyPI
-    version="0.6",
+    version="0.7.1",
     author="Peter Erwin",
     author_email="erwin@sigmaxi.net",
     description="Python wrapper for astronomical image-fitting program Imfit",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/perwin/pyimfit",
+    project_urls={"Documentation": "https://pyimfit.readthedocs.io/en/latest/",
+                  "Source": "https://github.com/perwin/pyimfit"},
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -205,7 +207,10 @@ setup(
         "Intended Audience :: Science/Research",
     ],
     python_requires='>=3',
-    install_requires=['numpy', 'scipy', 'scons'],
+    # setup_requires = temporary local installation in order to run this script
+    # install_requires = standard pip installation for general future use
+    setup_requires=['scons'],
+    install_requires=['numpy', 'scipy'],
     cmdclass={'build_ext': my_build_ext, 'clean': CleanCommand},
     ext_modules=extensions
 )

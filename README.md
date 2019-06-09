@@ -4,7 +4,7 @@ PyImfit is a Python wrapper for [Imfit](https://github.com/perwin/imfit), a C++-
 2D models to scientific images. It is specialized for fitting astronomical images of galaxies, but can in 
 principle be used to fit any 2D Numpy array of data. 
 
-**WARNING: This is currently a work in progress, and is not yet ready for general use!**
+**WARNING: This is currently a work in progress; use at your own risk!**
 
 ## A Simple Example of Use
 
@@ -53,7 +53,7 @@ Python 2 is planned.
 
 ### Standard Installation
 
-A precompiled binary version ("wheel") of PyImfit for macOS can be **[not yet, but soon!]** installed via PyPI:
+A precompiled binary version ("wheel") of PyImfit for macOS can be installed from PyPI via `pip`:
 
     $ pip install pyimfit
 
@@ -81,10 +81,6 @@ To build PyImfit from source, you will need the following:
    Clang++/LLVM that includes support for OpenMP (note that this does *not* include the Apple-built 
    version of Clang++ that comes with Xcode for macOS, since that does not include OpenMP).
 
-   * PyImfit uses SCons to build the base Imfit library that the Python module is built on top of;
-   this *should* be installed when you execute the setup.py file, if it's not already on your
-   system.
-
 
 #### Steps for building PyImfit from source:
 
@@ -104,7 +100,7 @@ To build PyImfit from source, you will need the following:
    
          $ export CC=<c++-compiler-name>; export CXX=<c++-compiler-name>
         
-    (You need to point CC and CXX to the *same*, C++ compiler!
+    (Note that you need to point CC and CXX to the *same*, Open-MP-compatible C++ compiler!
     This should not be necessary on a Linux system, assuming the default compiler is standard GCC.)
    
    * Build and install PyImfit!

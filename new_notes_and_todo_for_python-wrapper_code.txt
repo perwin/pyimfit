@@ -29,11 +29,13 @@ PLAN:
                 -- needed for cythonize in setup.py and for actual processing of .pyx into .cpp
                 (possibly later we could relax this, by generating the .cpp files and making
                 them part of the repo/distribution)
-            [-] scons
+            [x] scons
                 Need to locally/temporarily install scons as a Python package *and* have
                 access to the "scons" binary
-                    [ ] Figure out where scons binary would be installed
-                CURRENTLY INSOLUBLE -- BEST SOLUTION IS TO REQUIRE "pip install scons" FIRST
+            [x] Figure out how to *remove* general SCons installation
+                -- right now, if we download the precompiled binary version from test.pypi.org,
+                it installs scons (in addition to pyimfit)
+
 
         * Test compilation in virtualenv with different compilers
             [x] Write notes/script to set up new virtualenv with bare essentials
@@ -46,7 +48,16 @@ PLAN:
 
             [-] Test with Homebrew llvm
 
-            [ ] Write code to pass in user-specified CXX, CC to scons for building libimfit.a
+            [x] Write code to pass in user-specified CXX, CC to scons for building libimfit.a
+
+        * Test installation on Linux
+            [x] Test installation on Ubuntu 16 VM
+
+        * See if Andre can test pip installation?
+            [ ] Email Andre about testing Mac installation via pip; Linux build from source
+
+        * Modify setup.py to allow user to specify alternate library path for SCons build
+        of libimfit.a
 
 
     * Documentation:

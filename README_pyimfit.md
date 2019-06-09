@@ -2,6 +2,9 @@
 
 This is a Python wrapper around the astronomical image-fitting program Imfit.
 
+Online documentation: [https://pyimfit.readthedocs.io/en/latest/](https://pyimfit.readthedocs.io/en/latest/).
+
+
 ## Sample Usage
 
 The following assumes an interactive Python session (such as an iPython session
