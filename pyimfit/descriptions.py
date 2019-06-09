@@ -659,8 +659,8 @@ class ModelDescription(object):
         --------
         parse_config_file
         """
-        # note that we need to put this here, rather than at the top of
-        # the module, to prevent circular-import errors (since config.py
+        # note that we need to put the "import parse_config_file" here, rather than
+        # at the top of the module, to prevent circular-import errors (since config.py
         # depends on definitions in *this* file)
         from .config import parse_config_file
 

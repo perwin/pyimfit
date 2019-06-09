@@ -17,8 +17,8 @@ if not sys.version_info[0] >= 3:
 
 # Stuff for compiling Cython and linking libimfit.a (and other libraries)
 # FIXME: need a more portable solution for this!
-os.environ["CC"] = "g++-8" 
-os.environ["CXX"] = "g++-8"
+os.environ["CC"] = "g++-9"
+os.environ["CXX"] = "g++-9"
 
 NAME = "pyimfit"           # Name for whole project and for "distribution package"
                            # = how it will be listed on PyPI

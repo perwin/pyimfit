@@ -42,7 +42,7 @@ PLAN:
                 -- rm build/*, etc.
             [ ] Write notes/script
 
-            [ ] Test with GCC-8
+            [x] Test with GCC-9
 
             [ ] Test with Homebrew llvm
 
@@ -288,13 +288,13 @@ PLAN:
 
 
 [ ] Modify Imfit: add ability to change parameter *values*
-	-- necessary if we want to use Imfit to get fit statistic *without* running
+	[x]-- necessary if we want to use Imfit to get fit statistic *without* running
 	a fit
 	-- useful if user wants to re-run a fit with different starting parameters
 	-- for now: we want to be able to supply a list/ndarray of parameter *values*,
 	without touching the parameter limits
 	-- Two modes:
-		1. Pass parameter values to ModelObject::GetFitStatistic
+		[x]1. Pass parameter values to ModelObject::GetFitStatistic
 		2. Update the parameter values in Imfit object (for future fits)
 
 	Current ModelObjectWrapper.getFitStatistic(mode) does this:
