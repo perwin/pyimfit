@@ -188,7 +188,7 @@ with open("README_pyimfit.md", "r") as f:
 
 setup(
     name=NAME,   # name for distribution package (aka "distribution"), as listed on PyPI
-    version="0.7.1",
+    version="0.7.2",
     author="Peter Erwin",
     author_email="erwin@sigmaxi.net",
     description="Python wrapper for astronomical image-fitting program Imfit",

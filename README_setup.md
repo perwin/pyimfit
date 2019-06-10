@@ -6,7 +6,7 @@
 
    1. $ cd pyimfit_working
    
-   2. $ rm -rf build/* ; python3 setup.py develop
+   2. $ python3 setup.py uninstall; python3 setup.py clean; python3 setup.py develop
   
 
 
@@ -14,25 +14,32 @@
 
 This is for other people; also for future testing purposes
 
-1. Download pyimfit package
+1. Install necessary libraries: FFTW3, GNU Scientific Library (GSL), NLopt
 
-   1. Compile the imfit library
-
-      $ cd imfit; scons libimfit.a
-
-   2. Run Python package build
+   1. Linux: install libraries using preferred package manager (**Note:** Be sure GSL is
+   at least version 2.0!)
    
-   LOCAL VERSION:
+   2. macOS: install libraries using preferred package manager. With Homebrew:
    
-      $ rm -rf build/* ; python3 setup.py develop
+          brew install fftw
+          brew install gsl
+          brew install nlopt
+          
+      If you will be using the default Apple/Xcode compilers, you also need to install the
+      OpenMP library. With Homebrew:
    
-   GENERAL VERSION:
-   
-      $ python3 setup.py build
+          brew install libomp
+
+2. Install using pip (since PyImfit is Python-3-only, use `pip3` unless the only version
+of Python you have is Python 3)
+
+          pip3 install pyimfit
 
 
 
-## Possible notes for building locally and then uploading to PyPI
+
+
+## Notes for building locally and then uploading to PyPI
 
 Update version number in setup.py
 

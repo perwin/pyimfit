@@ -54,10 +54,12 @@ PLAN:
             [x] Test installation on Ubuntu 16 VM
 
         * See if Andre can test pip installation?
-            [ ] Email Andre about testing Mac installation via pip; Linux build from source
+            [x] Email Andre about testing Mac installation via pip; Linux build from source
 
         * Modify setup.py to allow user to specify alternate library path for SCons build
         of libimfit.a
+            [ ] Figure out how to add command-line option to setup.py for specifying
+            lib-path
 
 
     * Documentation:

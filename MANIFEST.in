@@ -1,0 +1,5 @@
+# Specification of additional files to include in sdist build.
+# By default, the standard set of files are automatically included; here, we specify
+# additional things
+include pyimfit/*.pyx
+include pyimfit/*.pxd
