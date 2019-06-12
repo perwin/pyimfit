@@ -7,6 +7,7 @@ import sys
 import tempfile
 import subprocess
 import shutil
+import re, io
 import numpy as np
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
@@ -23,9 +24,19 @@ except ImportError:
 if not sys.version_info[0] >= 3:
     sys.exit("setup.py: Python 3 required for pyimfit!")
 
+baseDir = os.getcwd() + "/"
+if sys.platform == 'darwin':
+    MACOS_COMPILATION = True
+    PREBUILT_PATH = baseDir + "prebuilt/macos/"
+else:
+    MACOS_COMPILATION = False
+    PREBUILT_PATH = baseDir + "prebuilt/linux/"
 
-# the following is probably OK for Linux, but probably *not* for macOS
-DEFAULT_CPP = "g++"
+
+if MACOS_COMPILATION:
+    DEFAULT_CPP = "clang++"
+else:
+    DEFAULT_CPP = "g++"
 
 # We assume that *if* CXX is defined, then both it and CC are pointing
 # to the user-defined C++ compiler, which is what we should use.
@@ -33,12 +44,12 @@ DEFAULT_CPP = "g++"
 # otherwise the standard setuptools extension-building code will try to
 # compile pyimfit_lib.cpp with "g++"
 try:
-    defaultCPP = os.environ["CXX"]
+    compilerName = os.environ["CXX"]
 except KeyError:
     # This should be OK for Linux (but probably not for macOS)
     os.environ["CXX"] = DEFAULT_CPP
     os.environ["CC"] = DEFAULT_CPP
-    defaultCPP = DEFAULT_CPP
+    compilerName = DEFAULT_CPP
 
 
 # Code to make sure the C++ compiler can handle OpenMP
@@ -52,7 +63,7 @@ printf("Hello from thread %d, nthreads %d\n", omp_get_thread_num(), omp_get_num_
 }
 """
 
-def check_for_openmp( compilerName=defaultCPP ):
+def check_for_openmp(compilerName=compilerName):
     """Returns True if C++ compiler specified by compilerName can handle OpenMP,
     False if not.
     """
@@ -64,14 +75,17 @@ def check_for_openmp( compilerName=defaultCPP ):
     with open(filename, 'w') as file:
         file.write(OPENMP_TEST_CODE)
     with open(os.devnull, 'w') as fnull:
-        result = subprocess.call([compilerName, '-fopenmp', filename],
-                                 stdout=fnull, stderr=fnull)
+        if MACOS_COMPILATION and (compilerName == "clang++"):
+            args = [compilerName, '-Xpreprocessor', '-fopenmp', '-lomp', filename]
+        else:
+            args = [compilerName, '-fopenmp', filename]
+        result = subprocess.call(args, stdout=fnull, stderr=fnull)
     os.chdir(curdir)
     #clean up
     shutil.rmtree(tmpdir)
     return (result == 0)
 
-NON_OPENMP_MESSAGE = """setup.py: ERROR: The C++ compiler is not OpenMP compatible!"
+NON_OPENMP_MESSAGE = """setup.py: ERROR: The C++ compiler does not appear to be OpenMP compatible!"
    Try defining the environment variables CC *and* CXX with the name of a C++ compiler
    which *does* handle OpenMP. E.g.,
       $ CC=<c++-compiler-command> CXX=<c++-compiler-command> python setup.py ...
@@ -83,17 +97,21 @@ NON_OPENMP_MESSAGE = """setup.py: ERROR: The C++ compiler is not OpenMP compatib
 NAME = "pyimfit"           # Name for whole project and for "distribution package"
                            # = how it will be listed on PyPI
 SRC_DIR = "pyimfit"        # This will be package ("import package") name (e.g., >>> import pyimfit)
-IMFITLIB_DIR = "imfit"
+IMFIT_SOURCE_DIR = "imfit"
 PACKAGES = [SRC_DIR]
+
 
 # Stuff for finding imfit headers and static library
 IMFIT_HEADER_PATH = "imfit"
-IMFIT_LIBRARY_PATH = "imfit"
+IMFIT_LIBRARY_PATH = baseDir + "libimfit/"
 
 libPath = [IMFIT_LIBRARY_PATH]
-headerPath = [IMFIT_HEADER_PATH, IMFIT_HEADER_PATH+"/function_objects", IMFIT_HEADER_PATH+"/core",
-              ".", np.get_include()]
+#headerPath = [IMFIT_HEADER_PATH, IMFIT_HEADER_PATH+"/function_objects", IMFIT_HEADER_PATH+"/core",
+#              ".", np.get_include()]
+headerPath = [IMFIT_LIBRARY_PATH + "include", ".", np.get_include()]
 libraryList = ["imfit", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
+if MACOS_COMPILATION and (compilerName == "clang++"):
+	libraryList.append("omp")
 
 # note that to link the libimfit.a library, we have to
 #    A. Refer to it using the usual truncated form ("imfit" for filename "libimfit.a")
@@ -104,16 +122,22 @@ libraryList = ["imfit", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
 # Special code to ensure we compile libimfit.a using SCons *before* attempting to do any
 # other builds
 SCONS_CMD = "scons {0} libimfit.a"
+SCONS_CLANG_CMD = "scons --clang-openmp libimfit.a"
 SCONS_ERR = "*** Unable to build initial static library (libimfit.a)!\nTerminating build...."
-EXTRA_SCONS_FLAGS = "--cpp={0}".format(defaultCPP)
+EXTRA_SCONS_FLAGS = "--cpp={0}".format(compilerName)
 
 def build_library_with_scons( extraFlags=EXTRA_SCONS_FLAGS ):
-    """Simple command to call SCons in order to build libimfit.a"""
+    """Simple command to call SCons in order to build libimfit.a in the Imfit
+    source directory.
+    """
     print("\n** Building static Imfit library (libimfit.a) with SCons ...")
     cwd = os.getcwd()
-    os.chdir(IMFITLIB_DIR)
+    os.chdir(IMFIT_SOURCE_DIR)
     # Insert check for existing libraries (fftw3, GSL, etc.) here?
-    sconsCommand = SCONS_CMD.format(extraFlags)
+    if MACOS_COMPILATION and (compilerName == "clang++"):
+        sconsCommand = SCONS_CLANG_CMD
+    else:
+        sconsCommand = SCONS_CMD.format(extraFlags)
     out = subprocess.run(sconsCommand, shell=True, stdout=subprocess.PIPE)
     txt = out.stdout.decode()
     print(txt)
@@ -121,23 +145,33 @@ def build_library_with_scons( extraFlags=EXTRA_SCONS_FLAGS ):
     if out.returncode != 0:
         return False
     else:
+        shutil.copy(IMFIT_SOURCE_DIR + "libimfit.a", IMFIT_LIBRARY_PATH + "libimfit.a")
         return True
 
 class my_build_ext( build_ext ):
-    """Subclass of build_ext which inserts a call to build_library_with_cons *before*
-    any of the Python extensions are built."""
+    """Subclass of build_ext which ensures that libimfit.a exists prior to trying build
+    any of the Python extensions (if a prebuilt version is found, it is copied to
+    IMFIT_LIBRARY_PATH; if no prebuilt version is found, then build_library_with_scons
+    is called."""
     def run(self):
-        # Figure out whether C++ compiler can handle OpenMP:
-        if not check_for_openmp():
-            sys.exit(NON_OPENMP_MESSAGE)
-        # first, build the static C++ library with SCons
-        success = build_library_with_scons()
-        if not success:
-            print(SCONS_ERR)
-            sys.exit(1)
+        # Check to see if libimfit.a already exists
+        if not os.path.exists(PREBUILT_PATH + "libimfit.a"):
+            # Figure out whether C++ compiler can handle OpenMP:
+            if not check_for_openmp():
+                sys.exit(NON_OPENMP_MESSAGE)
+            # first, build the static C++ library with SCons and copy it to IMFIT_LIBRARY_PATH
+            success = build_library_with_scons()
+            if not success:
+                print(SCONS_ERR)
+                sys.exit(1)
+        else:
+            shutil.copy(PREBUILT_PATH + "libimfit.a", IMFIT_LIBRARY_PATH + "libimfit.a")
+
         # now call the parent class's run() method, which will use *this* instance's list of
         # extensions (e.g., the cythonized extensions) and do standard build_ext things with them.
         super().run()
+
+
 
 
 # http://docs.cython.org/en/latest/src/userguide/source_files_and_compilation.html#distributing-cython-modules
@@ -146,6 +180,13 @@ ext = '.pyx' if CYTHON_PRESENT else '.cpp'
 # Defining one or more "extensions modules" (single-file C/C++-based modules, usually
 # with a .so file suffix. This includes Cython-based modules, since those are
 # are translated to C/C++ before being compiled.)
+if MACOS_COMPILATION and compilerName == "clang++":
+    # the first pair is magic stuff to get Apple's clang++ to work with OpenMP;
+    # the second turns off linker warnings (to avoid getting pages of
+    # "could not create compact unwind" and other unhelpful warnings)
+    extraLinkerArgs = ["-Xpreprocessor", "-fopenmp", "-Xlinker", "-w"]
+else:
+    extraLinkerArgs = ["-fopenmp"]
 extensions = [
     # specify how to create the Cython-based extension module pyimfit_lib.so
     Extension(SRC_DIR + ".pyimfit_lib",     # [= pyimfit.pyimfit_lib] = base name for .so file
@@ -154,8 +195,8 @@ extensions = [
                 libraries=libraryList,
                 include_dirs=headerPath,
                 library_dirs=libPath,
-                extra_compile_args=['-std=c++11', '-fopenmp'],
-                extra_link_args=["-fopenmp"],
+                extra_compile_args=['-std=c++11'],
+                extra_link_args=extraLinkerArgs,
                 #define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")],
                 language="c++")
 ]
@@ -186,9 +227,15 @@ class CleanCommand(Command):
 with open("README_pyimfit.md", "r") as f:
     long_description = f.read()
 
+# Get the version string from pyimfit/__init__.py
+__version__ = re.search(
+    r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]',  # It excludes inline comment too
+    io.open('pyimfit/__init__.py', encoding='utf_8_sig').read()
+    ).group(1)
+
 setup(
     name=NAME,   # name for distribution package (aka "distribution"), as listed on PyPI
-    version="0.7.2",
+    version=__version__,
     author="Peter Erwin",
     author_email="erwin@sigmaxi.net",
     description="Python wrapper for astronomical image-fitting program Imfit",

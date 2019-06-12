@@ -8,3 +8,5 @@ from .config import *
 from .fitting import *
 from .psf import *
 from . import utils
+
+__version__ = "0.7.5"

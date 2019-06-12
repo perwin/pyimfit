@@ -3,3 +3,7 @@
 # additional things
 include pyimfit/*.pyx
 include pyimfit/*.pxd
+recursive-include prebuilt *
+recursive-include libimfit *.h
+exclude libimfit/libimfit.a
+include README_pyimfit.md

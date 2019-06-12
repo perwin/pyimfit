@@ -7,7 +7,7 @@ from libcpp.vector cimport vector
 from libcpp cimport bool
 
 
-cdef extern from "core/definitions.h":
+cdef extern from "definitions.h":
     const int FITSTAT_CHISQUARE       =       1   # standard chi^2
     const int FITSTAT_CASH            =       2   # standard (minimal) Cash statistic
     const int FITSTAT_POISSON_MLR     =       3   # Poisson Maximum Likelihood Ratio statistic
@@ -27,14 +27,14 @@ cdef extern from "core/definitions.h":
     const int GENERIC_NLOPT_SOLVER =     5
 
 
-cdef extern from "core/statistics.h":
+cdef extern from "statistics.h":
     double Mean( double *vector, int nVals )
     double StandardDeviation( double *vector, int nVals )
     double AIC_corrected( double logLikelihood, int nParams, long nData, int chiSquareUsed )
     double BIC( double logLikelihood, int nParams, long nData, int chiSquareUsed )
 
 
-cdef extern from "core/param_struct.h":
+cdef extern from "param_struct.h":
     ctypedef struct mp_par:
         bint fixed          # 1 = fixed; 0 = free
         bint limited[2]     # 1 = low/upper limit; 0 = no limit
@@ -57,7 +57,7 @@ cdef extern from "core/param_struct.h":
 # 										int xOffset, int yOffset, bool isUnique,
 # 										bool normalize )
 
-cdef extern from "core/psf_oversampling_info.h":
+cdef extern from "psf_oversampling_info.h":
     cdef cppclass PsfOversamplingInfo:
         void AddPsfPixels( double *inputPixels, int nCols, int nRows, bool isUnique )
         void AddRegionString( string inputRegionString )
@@ -68,7 +68,7 @@ cdef extern from "core/psf_oversampling_info.h":
         int GetNRows( )
 
 
-cdef extern from "core/model_object.h":
+cdef extern from "model_object.h":
     cdef cppclass ModelObject:
         # WARNING: calling SetupModelImage and AddImageDataVector in the
         # same ModelObject instance (or any of them more than once) will
@@ -108,7 +108,7 @@ cdef extern from "core/model_object.h":
 #         void SetVerboseLevel(int level)
 
 
-cdef extern from "core/add_functions.h":
+cdef extern from "add_functions.h":
     int GetFunctionParameterNames( string &functionName, vector[string] &parameterNameList );
     void GetFunctionNames( vector[string] &functionNameList )
     # Tricky thing: handling possible optional parameters for AddFunctions; these have
@@ -123,7 +123,7 @@ cdef extern from "core/add_functions.h":
                   vector[int] &functionBlockIndices, const bool subamplingFlag )
 
 
-cdef extern from "solvers/mpfit.h":
+cdef extern from "mpfit.h":
     ctypedef struct mp_result:
         double bestnorm
         double orignorm
@@ -137,7 +137,7 @@ cdef extern from "solvers/mpfit.h":
         # assuming we don't need the other fields in this struct ...
 
 
-cdef extern from "solvers/solver_results.h":
+cdef extern from "solver_results.h":
     cdef cppclass SolverResults:
         int GetSolverType( )
         double GetBestfitStatisticValue( )
@@ -147,7 +147,7 @@ cdef extern from "solvers/solver_results.h":
         int GetNFunctionEvals
 
 
-cdef extern from "solvers/dispatch_solver.h":
+cdef extern from "dispatch_solver.h":
     # two versions, to account for final optional parameter
     int DispatchToSolver( int solverID, int nParametersTot, int nFreeParameters,
                     int nPixelsTot, double *parameters, vector[mp_par] parameterInfo,
@@ -160,7 +160,7 @@ cdef extern from "solvers/dispatch_solver.h":
                     int verboseLevel, SolverResults *solverResults, string& solverName )
 
 
-cdef extern from "core/convolver.h":
+cdef extern from "convolver.h":
     cdef cppclass Convolver:
         # two versions of SetupPSF, to account for final optional parameter
         void SetupPSF( double *psfPixels_input, int nColumns, int nRows )
@@ -174,7 +174,7 @@ cdef extern from "core/convolver.h":
         void ConvolveImage( double *pixelVector )
 
 
-cdef extern from "core/bootstrap_errors.h":
+cdef extern from "bootstrap_errors.h":
     int BootstrapErrorsArrayOnly( const double *bestfitParams, vector[mp_par] parameterLimits,
                     const bool paramLimitsExist, ModelObject *theModel, const double ftol,
                     const int nIterations, const int nFreeParams, const int whichStatistic,
