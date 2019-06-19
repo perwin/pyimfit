@@ -10,7 +10,7 @@
   
 
 
-## Basic Outline
+## Basic Outline: Building from Source
 
 This is for other people; also for future testing purposes
 
@@ -41,15 +41,20 @@ of Python you have is Python 3)
 
 ## Notes for building locally and then uploading to PyPI
 
-Update version number in setup.py
+1. Update version number in pyimfit/__init__.py
 
-Build source and binary distributions:
+2. Mac: Build source and binary distributions:
 
-   $ python3 setup.py sdist bdist_wheel
+       $ python3 setup.py sdist bdist_wheel
 
-Test uploading to TestPyPI:
+3. Mac: Edit wheel to include dynamic libraries
 
-   $ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+       $ cd dist
+       $ delocate-wheel -w fixed_wheels -v pyimfit-<VERSION>-cp37-cp37m-macosx_10_9_x86_64.whl
+      
+Test uploading to TestPyPI (upload source-dist and modified wheel)
+
+   $ twine upload --repository-url https://test.pypi.org/legacy/ dist/pyimfit-<VERSION>.tar.gz dist/fixed_wheels/*
 
 (To upload an updated version, specify the latest wheel file explicitly instead
 of "dist/*".)
@@ -62,4 +67,7 @@ Create a new virtualenv (see Installing Packages for detailed instructions) and 
  
 If things work OK, upload to regular PyPI:
 
-   python3 -m twine upload dist/*
+   python3 -m twine upload dist/pyimfit-<VERSION>.tar.gz dist/fixed_wheels/*
+
+**Note:** Currently we do *not* attempt to build a binary wheel for Linux, since that's
+sort of a confusing nightmare.

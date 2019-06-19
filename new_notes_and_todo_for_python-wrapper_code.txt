@@ -56,11 +56,6 @@ PLAN:
         * See if Andre can test pip installation?
             [x] Email Andre about testing Mac installation via pip; Linux build from source
 
-        * Modify setup.py to allow user to specify alternate library path for SCons build
-        of libimfit.a
-            [ ] Figure out how to add command-line option to setup.py for specifying
-            lib-path
-
 
     * Documentation:
         [x] Check how to set up doc input files for readthedocs
@@ -211,10 +206,16 @@ PLAN:
 
 
 [ ] Experiment with building using shared libraries
-    -- Build shared Imfit library (possibly using shared fftw3, etc. libraries)
-    -- Install shared Imfit library
-        -- Also need to install header files
-    -- Build pyimfit using shared Imfit library
+    -- See notes in notes_on_packaging.txt [delocate for macOS, auditwheel for Linux]
+            https://stackoverflow.com/questions/47042483/how-to-build-and-distribute-a-python-cython-package-that-depends-on-third-party
+    [ ] Experiment with inserting shared libraries into Linux wheel
+        [ ] Build wheel under Linux
+            [ ] Download distribution onto Linux VM
+                $ git clone --recurse-submodules https://github.com/perwin/pyimfit.git pyimfit
+                $ cd pyimfit
+            [ ] Build binary wheel
+                $ python3 setup.py bdist_wheel
+            [ ] Use auditwheel to copy shared libraries into wheel
 
 
 [X] We need the following internal flag variables in Imfit:

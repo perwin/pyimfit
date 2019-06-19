@@ -145,7 +145,7 @@ def build_library_with_scons( extraFlags=EXTRA_SCONS_FLAGS ):
     if out.returncode != 0:
         return False
     else:
-        shutil.copy(IMFIT_SOURCE_DIR + "libimfit.a", IMFIT_LIBRARY_PATH + "libimfit.a")
+        shutil.copy(IMFIT_SOURCE_DIR + "/" + "libimfit.a", IMFIT_LIBRARY_PATH + "libimfit.a")
         return True
 
 class my_build_ext( build_ext ):
