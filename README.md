@@ -20,10 +20,10 @@ in an Imfit configuration file named `config_galaxy.dat`:
     # read in image data, convert to proper double-precision, little-endian format
     image_data = pyimfit.FixImage(fits.getdata(imageFile))
 
-    # construct model from config file
+    # construct model from config file (this can also be done programmatically within Python)
     model_desc = pyimfit.ModelDescription.load(imfitConfigFile)
 
-    # create an Imfit object, using the previously loaded model configuration
+    # create an Imfit object, using the previously created model configuration
     imfit_fitter = pyimfit.Imfit(model_desc)
 
     # load the image data and image characteristics (the specific values are
@@ -51,23 +51,43 @@ Online documentation: [https://pyimfit.readthedocs.io/en/latest/](https://pyimfi
 PyImfit is designed to work with modern versions of Python 3 (nominally 3.5 or later); no support for 
 Python 2 is planned.
 
-### Standard Installation
+### Standard Installation: macOS
 
 A precompiled binary version ("wheel") of PyImfit for macOS can be installed from PyPI via `pip`:
 
-    $ pip install pyimfit
+    $ pip3 install pyimfit
 
 PyImfit requires the following Python libraries/packages (which will automatically be installed
-by pip if they are not already present):
+by `pip` if they are not already present):
 
 * Numpy
 * Scipy
-* Astropy -- not strictly required except for the tests; mainly useful for reading in FITS files as
-numpy arrays
+* Astropy -- not strictly required; mainly useful for reading in FITS files as numpy arrays
 
-### Building from Source
 
-To build PyImfit from source, you will need the following:
+### Standard Installation: Linux
+
+PyImfit can also be installed on Linux using `pip`. Since this involves building from source,
+you will need to have a working C++-11-compatible compiler (e.g., GCC version 4.8.1 or later),
+and you will also need to have the libraries for [FFTW3](https://www.fftw.org), 
+[GNU Scientific Library](https://www.gnu.org/software/gsl/), and [NLopt](https://nlopt.readthedocs.io/en/latest/)
+installed. The version of GNU Scientific Library (GSL) needs to be 2.0 or later; if you have
+an older version of Linux, you may need to install this library from source rather than from
+the default package manager.
+
+E.g., on Ubuntu 16.04 or later:
+
+    $ sudo apt-get install libfftw3-dev libgsl-dev libnlopt-dev 
+
+And then
+
+    $ pip3 install pyimfit   [or "pip3 install --user pyimfit", if installing for your own use]
+
+
+
+### Building the Whole Thing from Source
+
+To build PyImfit from the Github source, you will need the following:
 
    * Most of the same external (C/C++) libraries that Imfit requires: specifically 
    [FFTW3](https://www.fftw.org) [version 3], [GNU Scientific Library](https://www.gnu.org/software/gsl/) [version 2.0
@@ -78,8 +98,9 @@ To build PyImfit from source, you will need the following:
            $ git clone --recurse-submodules git://github.com/perwin/pyimfit.git
 
    * A reasonably modern C++ compiler -- e.g., GCC 4.8.1 or later, or any C++-11-aware version of 
-   Clang++/LLVM that includes support for OpenMP (note that this does *not* include the Apple-built 
-   version of Clang++ that comes with Xcode for macOS, since that does not include OpenMP).
+   Clang++/LLVM that includes support for OpenMP. See below for special notes about using
+   the Apple-built 
+   version of Clang++ that comes with Xcode for macOS.
 
 
 #### Steps for building PyImfit from source:
@@ -87,8 +108,9 @@ To build PyImfit from source, you will need the following:
 1. Install necessary external libraries (FFTW3, GSL, NLopt)
 
     * These can be installed from source, or via package managers (e.g., Homebrew on macOS)
-    
-    * Note that version 2.0 or later of GSL is required!
+        
+    * Note that version 2.0 or later of GSL is required! (For Ubuntu, this means
+    the `libgsl-dev` package for Ubuntu 16.04 or later.)
 
 2. Clone the PyImfit repository
 
@@ -102,6 +124,10 @@ To build PyImfit from source, you will need the following:
         
     (Note that you need to point CC and CXX to the *same*, Open-MP-compatible C++ compiler!
     This should not be necessary on a Linux system, assuming the default compiler is standard GCC.)
+    
+      * Versions of Apple's Clang compiler from Xcode 9 or later *can* compile OpenMP code, but you
+      will need to also install the OpenMP library (e.g., `brew install libomp` if using Homebrew).
+      See [here](https://iscinumpy.gitlab.io/post/omp-on-high-sierra/) for more details.
    
    * Build and install PyImfit!
    

@@ -54,7 +54,7 @@ PLAN:
             [x] Test installation on Ubuntu 16 VM
 
         * See if Andre can test pip installation?
-            [x] Email Andre about testing Mac installation via pip; Linux build from source
+            [ ] Email Andre (again) about testing Mac installation via pip; Linux build from source
 
 
     * Documentation:
