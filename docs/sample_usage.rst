@@ -78,4 +78,7 @@ than having to read it from a text file):
 You can get a list of PyImfit's image functions ("Sersic",
 "Exponential", etc.) from the package-level variable
 ``pyimfit.imageFunctionList``, and you can get a list of the parameter
-names for each image function from ``pyimfit.imageFunctionDict``.
+names for each image function from ``pyimfit.imageFunctionDict``. Full
+descriptions of the individual image functions and their parameters can
+be found in `the Imfit manual
+(PDF) <http://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf>`__
