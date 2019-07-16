@@ -80,21 +80,22 @@ pygments_style = 'sphinx'
 #
 
 # PE: possible themes: alabaster, classic, bootstrap-astropy
-# html_theme = 'alabaster'
-# # Theme options for alabaster
-# html_theme_options = {
-#     #'logo': 'logo.png',
-#     'github_user': 'perwin',
-#     'github_repo': 'pyimfit',
-# }
-
-html_theme = 'bootstrap-astropy'
-# Theme options for bootstrap-astropy
+# NOTE that bootstrap-astropy is not a default on readthedocs
+html_theme = 'alabaster'
+# Theme options for alabaster
 html_theme_options = {
-    'logotext1': '',  # white,  semi-bold
-    'logotext2': 'PyImfit',  # orange, light
-    'logotext3': ':docs'   # white,  light
-    }
+    #'logo': 'logo.png',
+    'github_user': 'perwin',
+    'github_repo': 'pyimfit',
+}
+
+# html_theme = 'bootstrap-astropy'
+# # Theme options for bootstrap-astropy
+# html_theme_options = {
+#     'logotext1': '',  # white,  semi-bold
+#     'logotext2': 'PyImfit',  # orange, light
+#     'logotext3': ':docs'   # white,  light
+#     }
 
 #html_theme = 'sphinx_rtd_theme'
 # Theme options for sphinx_rtd_theme

@@ -6,6 +6,8 @@ principle be used to fit any 2D Numpy array of data.
 
 **WARNING: This is currently a work in progress; use at your own risk!**
 
+[![Documentation Status](https://readthedocs.org/projects/pyimfit/badge/?version=latest)](http://pyimfit.readthedocs.io/en/latest/?badge=latest)
+
 ## A Simple Example of Use
 
 Assuming you want to fit an astronomical image named `galaxy.fits` using a model defined
