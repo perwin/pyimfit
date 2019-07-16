@@ -111,7 +111,7 @@ libPath = [IMFIT_LIBRARY_PATH]
 headerPath = [IMFIT_LIBRARY_PATH + "include", ".", np.get_include()]
 # Note two versions of NLopt library ("nlopt_cxx" is for case of version with extra C++
 # interfaces (e.g., CentOS package)
-libraryList = ["imfit", "gsl", "gslcblas", "nlopt", "nlopt_cxx", "fftw3", "fftw3_threads"]
+libraryList = ["imfit", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
 if MACOS_COMPILATION and (compilerName == "clang++"):
 	libraryList.append("omp")
 

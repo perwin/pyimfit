@@ -47,6 +47,8 @@ class FunctionObject
     virtual void AddPsfInterpolator( PsfInterpolator *theInterpolator ) { ; };
     /// Returns string with name of interpolation type (point-source classes only)
     virtual string GetInterpolationType( ) { return string(""); };
+    /// Sets internal oversamplingScale to specified value (for use in oversampled regions)
+    virtual void SetOversamplingScale( int oversampleScale ) { ; };
 
     // probably no need to modify this:
     virtual void SetSubsampling( bool subsampleFlag );

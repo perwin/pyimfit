@@ -36,7 +36,8 @@ and then fit the model to the data:
 You can also programmatically construct a model within Python (rather than having
 to read it from a text file):
 
-    # define a function for a simple bulge+disk model
+    # define a function for a simple bulge+disk model, where both components share the same
+    # central coordinate (SimpleModelDescription class)
     def galaxy_model(x0, y0, PA, ell, I_e, r_e, n, I_0, h):
         model = pyimfit.SimpleModelDescription()
         # define the limits on X0 and Y0 as +/-10 pixels relative to initial values
@@ -68,3 +69,7 @@ to read it from a text file):
     imfit_fitter = pyimfit.Imfit(model_desc)
 
     # etc.
+
+You can get a list of PyImfit's image functions ("Sersic", "Exponential", etc.) from the package-level 
+variable `pyimfit.imageFunctionList`, and you can get a list of the parameter names for each image 
+function from `pyimfit.imageFunctionDict`.

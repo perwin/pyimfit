@@ -3,10 +3,15 @@
 from .pyimfit_lib import convolve_image, make_imfit_function, ModelObjectWrapper
 from .pyimfit_lib import FixImage
 from .pyimfit_lib import PsfOversampling
+from .pyimfit_lib import get_function_list, get_function_dict
 from .descriptions import *
 from .config import *
 from .fitting import *
 from .psf import *
 from . import utils
 
-__version__ = "0.7.6"
+# useful package-level variables
+imageFunctionList = get_function_list()
+imageFunctionDict = get_function_dict()
+
+__version__ = "0.7.7"

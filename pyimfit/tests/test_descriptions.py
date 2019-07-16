@@ -274,6 +274,7 @@ class TestModelDescription(object):
 
     def testModelDescription_get_and_set_options( self ):
         modeldesc1 = ModelDescription(self.fsetList)
+
         assert {} == modeldesc1.optionsDict
         optionsDict = {"GAIN": 4.5, "READNOISE": 0.9}
         modeldesc1.updateOptions(optionsDict)
@@ -302,7 +303,6 @@ class TestModelDescription(object):
         assert_allclose(modeldesc2.getRawParameters(), input_params_correct)
 
     def test_ModelDescription_load_from_file_2blocks( self ):
-
         modeldesc2blocks = ModelDescription.load(CONFIG_EXAMPLE_2BLOCKS)
 
     def test_ModelDescription_getStrings(self):
@@ -399,8 +399,18 @@ class TestSimpleModelDescription(object):
         self.functionList = [self.fdesc1]
         self.fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
         self.fsetList = [self.fsetdesc1]
+        # bad example: 2 function sets
+        self.fsetdesc2 = FunctionSetDescription('fs1', self.x0_p, self.y0_p, self.functionList)
+        self.fsetList_bad = [self.fsetdesc1, self.fsetdesc2]
 
-    def test_ModelSimpleDescription_simple( self ):
+    def test_SimpleModelDescription_bad( self ):
+        # this attempts to instantiate a SimpleModelDescription instance with *two*
+        # function sets, which is one more the SimpleModelDescription can handle
+        modeldesc_bad = ModelDescription(self.fsetList_bad)
+        with pytest.raises(ValueError):
+            simplemodeldesc = SimpleModelDescription(modeldesc_bad)
+
+    def test_SimpleModelDescription_simple( self ):
         modeldesc1 = ModelDescription(self.fsetList)
         simplemodeldesc = SimpleModelDescription(modeldesc1)
         print(dir(simplemodeldesc))
@@ -409,8 +419,24 @@ class TestSimpleModelDescription(object):
         # properties of SimpleModelDescription
         assert simplemodeldesc.x0 == self.x0_p
         assert simplemodeldesc.y0 == self.y0_p
-        # other things
-# 		assert simplemodeldesc.PA == self.p1
+
+        assert simplemodeldesc.functionSetIndices() == [0]
+        assert simplemodeldesc.functionList() == ['Gaussian']
+
+        pLimits = simplemodeldesc.getParameterLimits()
+        assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
+
+    def testSimpleModelDescription_get_and_set_options(self):
+        modeldesc1 = ModelDescription(self.fsetList)
+        simplemodeldesc = SimpleModelDescription(modeldesc1)
+
+        assert {} == simplemodeldesc.optionsDict
+        optionsDict = {"GAIN": 4.5, "READNOISE": 0.9}
+        simplemodeldesc.updateOptions(optionsDict)
+        assert optionsDict == simplemodeldesc.optionsDict
+        optionsDict2 = {"GAIN": 10.5, "READNOISE": 0.9, "ORIGINAL_SKY": 45.01}
+        simplemodeldesc.updateOptions(optionsDict2)
+        assert optionsDict2 == simplemodeldesc.optionsDict
 
 
 

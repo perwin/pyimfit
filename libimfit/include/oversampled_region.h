@@ -64,6 +64,7 @@ class OversampledRegion
     bool  doConvolution, setupComplete, modelVectorAllocated;
     double  *modelVector;
     string  debugImageName;
+    string  regionLabel;
     PsfInterpolator *psfInterpolator;
     bool  psfInterpolator_allocated;
 

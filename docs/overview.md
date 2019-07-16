@@ -31,9 +31,9 @@ If you've already used the command-line version of **Imfit**, here are the essen
    
    * Fitting is done by instantiating an `Imfit` object with a ModelDescription object as
    input, then adding a 2D numpy array as the data to be fit (along with, optionally, mask
-   and error images, image A/D gain, etc.) with the `loadData` method, and then calling the `doFit` method 
-   (along with the minimization algorithm to use). Or just call the `fit` method and supply the data image, etc., 
-   as part of its input.
+   and error images, the image A/D gain value, etc.) with the `loadData` method, and then calling 
+   the `doFit` method (along with the minimization algorithm to use). Or just call the `fit` method 
+   and supply the data image, etc., as part of its input.
    
    * Once the fit is finished, information about the fit (final &chi;<sup>2</sup> value, best-fit paremeter
    values, etc.) and the best-fitting model image can be obtained by querying properties and methods 
@@ -51,7 +51,7 @@ There are three basic things you can do with PyImfit:
    2. Fit models to a pre-existing (data) image
    
    3. Generate &chi;<sup>2</sup> or likelihood values from a comparison of model and data (e.g., for use
-   with an alternate fitting approach, MCMC analysis, etc.)
+   with other fitting software, MCMC analysis, etc.)
 
 In **Imfit** (and PyImfit), a "model" consists of one or more *image functions* from a library built into
 **Imfit**, sharing one or more common locations within an image and added together to form a
@@ -77,7 +77,12 @@ If you have a configuration file, you can load it via the convenience function `
 where `configFilePath` is a string specifying the path to the configuration file.
 
 You can also construct a ModelDescription instance programmatically from within Python; see
-[Sample Usage](./sample_usage.html) for a simpe example.
+[Sample Usage](./sample_usage.html) for a simple example.
+
+(You can get a list of the available image functions -- "Sersic", "Exponential", etc. -- from the package-level 
+variable `pyimfit.imageFunctionList`, and you can get a list of the parameter names for each 
+function from `pyimfit.imageFunctionDict`. These functions are described in detail in
+[the Imfit manual (PDF)](http://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf).)
 
 Once you have a ModelDescription object describing the model, you can create an instance of
 the `Imfit` class based on the model; optionally, if you want the model to be convolved

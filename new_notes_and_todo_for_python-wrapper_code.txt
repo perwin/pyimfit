@@ -94,10 +94,18 @@ PLAN:
     [ ] Create some tests in test_descriptions.py for how SimpleModelDescription should act
         [ ] Write test(s) instantiating from existing ModelDescription
             [x] Basic test
-            [ ] Test that we raise exception for case of input ModelDescription with 2+ function sets
+            [x] Test that we raise exception for case of input ModelDescription with 2+ function sets
         [ ] Write test(s) instantiating from existing FunctionSetDescription
         [ ] Write test(s) instantiating from existing FunctionDescription
         [ ] Write test(s) modifying x0, y0
+
+
+[ ] Add ability to get list of image-function names
+    -- instantiate a list of string when module is imported?
+    [ ] Decide which module to put this in
+    [ ]
+
+[ ] Add ability to get list of image-function parameters
 
 
 [x] Improvements/fixes to Imfit class

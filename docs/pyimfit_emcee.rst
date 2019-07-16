@@ -1,5 +1,5 @@
 Example: Using PyImfit with Markov-Chain Monte Carlo code "emcee"
-===================================================================
+=================================================================
 
 This is a Jupyter notebook demonstrating how to use PyImfit with the
 MCMC code emcee.

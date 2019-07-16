@@ -1,6 +1,6 @@
-WARNING: This is primarily intended for personal use by PE within my local
-copy of the repository; it is *not* a general guideline for building the
-docs.
+WARNING: This is primarily intended for personal use by PE within my local copy
+of the repository; it is *not* a general guideline for building the docs.
+
 
 The general logic of our current approach is as follows:
 
@@ -22,13 +22,12 @@ with
    $ jupyter nbconvert pyimfit_emcee.ipynb --to markdown
 
 4. Generate rST versions of the Markdown files (by running convert_md_to_rst.sh
-script) and test the Sphinx HTML generation by running Sphinx via the
-Makefile
+script) and test the Sphinx HTML generation by running Sphinx via the Makefile
 
 	$ ./convert_md_to_rst.sh && make html
 
 View the resulting docs in a web browser pointed at
-	file:///Users/erwin/coding/pyimfit_working/docs/_build/html/index.html
+	file:///Users/erwin/coding/pyimfit/docs/_build/html/index.html
 
 
 GETTING THIS TO WORK ON READTHEDOCS

@@ -1,6 +1,6 @@
 # Pyimfit
 
-This is a Python wrapper around the astronomical image-fitting program Imfit.
+This is a Python wrapper for the astronomical image-fitting program Imfit.
 
 Online documentation: [https://pyimfit.readthedocs.io/en/latest/](https://pyimfit.readthedocs.io/en/latest/).
 

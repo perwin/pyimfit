@@ -106,6 +106,37 @@ def NewParamInfo( ):
 
 
 
+def get_function_list( ):
+    """
+    Returns
+    -------
+    function_list : list of str
+        list of Imfit image-function names
+    """
+    cdef vector[string] funcNameVect
+    GetFunctionNames(funcNameVect)
+    return [funcName.decode() for funcName in funcNameVect]
+
+
+def get_function_dict( ):
+    """
+    Returns
+    -------
+    function_dict : dict
+        dict where image-function names are keys and items are list of function
+        parameter names
+    """
+    cdef int status
+    cdef vector[string] parameters
+    funcNameList = get_function_list()
+    theDict = {}
+    for funcName in funcNameList:
+        parameters.clear()
+        status = GetFunctionParameterNames(funcName.encode(), parameters)
+        theDict[funcName] = [paramName.decode() for paramName in parameters]
+    return theDict
+
+
 
 def make_imfit_function(func_type, label=None):
     """
