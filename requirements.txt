@@ -1,0 +1,3 @@
+# Pip requirements.txt file for PyImfit
+numpy
+scipy

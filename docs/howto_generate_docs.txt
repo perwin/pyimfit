@@ -34,7 +34,8 @@ View the resulting docs in a web browser pointed at
     $ git commit -a -m "Updated documentation"      [or something like that]
     $ git push
 
-    This *should* automatically trigger a new build on readthedocs
+    This *should* automatically trigger a new build on readthedocs; check the
+    readthedocs status badge (on the PyImfit README page) to see if it worked.
 
 
 
@@ -54,11 +55,25 @@ Apparently the problem is that we need to build the extension module...
 We may have to generate static autodoc-equivalent .rst files instead of trying
 to use the autodoc commands (the idea being that we can save these somewhere, reference
 them in the *index.rst files, and let readthedocs process the .rst files)
-    https://pythonhosted.org/sphinxcontrib-restbuilder/
+    https://pythonhosted.org/sphinxcontrib-restbuilder/  [not updated since 2018]
     https://github.com/sphinx-contrib/restbuilder
     https://pypi.org/project/sphinxcontrib-restbuilder/
 
+    (This crashed with some mysterious error related to a bad key for a docutils dict;
+    evidently,
+
 (Or maybe there's some way to create alternate modules that don't import pyimfit_lib?)
+
+Basically, there seems to be NO WAY of doing this, other than perhaps getting Linux-binary
+installation via pip working [which I currently cannot do]. There is no way to get
+readthedocs to install pyimfit (since readthedocs runs things inside of Ubuntu Docker
+images), and no way to get Sphinx to pre-generate suitable .rst output, and no way
+to get Sphinx to include HTML files in toctrees.
+
+POSSIBLE APPROACH -- use the monkey-patching idea (see pyimfit/docs/extract_rst.py) to generate
+preliminary API .rst files, then run them through a script to prep them for Sphinx
+processing.
+
 
 
 JUPYTER NOTEBOOK

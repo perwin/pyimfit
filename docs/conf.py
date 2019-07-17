@@ -41,7 +41,7 @@ release = '0.7.7'
 # PE: napoleon processes Numpy-style docstrings
 extensions = [
     'sphinx.ext.mathjax', 'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
+    'sphinx.ext.napoleon', 'sphinxcontrib.restbuilder',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
