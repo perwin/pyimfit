@@ -16,4 +16,6 @@ install:
 
 # command to run tests
 script:
-  - python setup.py build
+  - python setup.py
+  - python setup.py install
+  - cd pyimfit/tests ; pytest
