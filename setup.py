@@ -41,7 +41,8 @@ if sys.platform == 'darwin':
 else:
     MACOS_COMPILATION = False
     PREBUILT_PATH = baseDir + "prebuilt/linux64/"
-    EXTRA_LIBS_PATH = baseDir + "extra_libs/lib_linux64/"
+    EXTRA_PATH = baseDir + "extra_libs/"
+    EXTRA_LIBS_PATH = EXTRA_PATH + "lib_linux64/"
 
 
 if MACOS_COMPILATION:
@@ -121,8 +122,8 @@ libPath = [IMFIT_LIBRARY_PATH]
 #              ".", np.get_include()]
 headerPath = [IMFIT_LIBRARY_PATH + "include", ".", np.get_include()]
 if not MACOS_COMPILATION:
-    headerPath.append(EXTRA_LIBS_PATH + "include")
-    libPath.append(EXTRA_LIBS_PATH + "lib_linux64")
+    headerPath.append(EXTRA_PATH + "include")
+    libPath.append(EXTRA_LIBS_PATH)
 # Note two versions of NLopt library ("nlopt_cxx" is for case of version with extra C++
 # interfaces (e.g., CentOS package)
 libraryList = ["imfit", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]

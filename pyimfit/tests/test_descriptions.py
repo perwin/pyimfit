@@ -4,6 +4,7 @@
 
 import pytest
 from pytest import approx
+from collections import OrderedDict
 import numpy as np
 from numpy.testing import assert_allclose
 
@@ -334,7 +335,11 @@ class TestModelDescription(object):
 
     def test_ModelDescription_getStrings_with_options(self):
         modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
-        optionsDict = {"GAIN": 4.5, "READNOISE": 0.9}
+        # use OrderedDict to ensure options are entered in same order on Mac and Linux
+        optionsDict = OrderedDict()
+        optionsDict["GAIN"] = 4.5
+        optionsDict["READNOISE"] = 0.9
+#        optionsDict = {"GAIN": 4.5, "READNOISE": 0.9}
         modeldesc.updateOptions(optionsDict)
 
         lines_correct = ["GAIN\t\t4.5\n", "READNOISE\t\t0.9\n", "\n",
