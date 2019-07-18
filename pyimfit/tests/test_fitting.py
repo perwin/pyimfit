@@ -77,7 +77,7 @@ class TestImfit(object):
         (totalFlux, fluxArray) = imfit_fitter.getModelFluxes()
         totalFlux_correct = 643232.3971123401
         fluxArray_correct = np.array([totalFlux_correct])
-        assert totalFlux == totalFlux_correct
+        assert_allclose(totalFlux, totalFlux_correct, rtol=1.0e-10)
         assert fluxArray == fluxArray_correct
 
     def test_Imfit_get_fluxes_newParameters( self ):
@@ -104,7 +104,7 @@ class TestImfit(object):
         (totalMag, magsArray) = imfit_fitter.getModelMagnitudes()
         totalMag_correct = 30 - 2.5*math.log10(643232.3971123401)
         magsArray_correct = np.array([totalMag_correct])
-        assert totalMag == totalMag_correct
+        assert_allclose(totalMag, totalMag_correct, rtol=1.0e-10)
         assert magsArray == magsArray_correct
 
         # get magnitudes -- now, use parameter zero point

@@ -17,7 +17,8 @@ install:
 
 # command to run tests
 script:
-#  install in develop mode, otherwise imports will not work
+#  install in develop mode, otherwise imports will not work!
   - pip install -e .
   - python -c "import pyimfit"
+  # note that the tests require astropy be installed
   - cd pyimfit/tests ; pytest
