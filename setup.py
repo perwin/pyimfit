@@ -1,6 +1,16 @@
 # For development work, execute this via:
 # $ python3 setup.py develop
 #
+# To generate source distribution
+# $ python3 setup.py sdist
+#
+# To generate pre-compiled binary wheel
+# $ python3 setup.py bdist_wheel
+
+# Alternate binary builds:
+#   macOS: build "normally", with shared libs for fftw3, gsl, nlopt;
+#       then use delocate-wheel to copy shared libs into wheel
+#   Linux: build on user's machine using static libs for fftw3, gsl, nlopt
 
 import os
 import sys
@@ -30,7 +40,7 @@ if sys.platform == 'darwin':
     PREBUILT_PATH = baseDir + "prebuilt/macos/"
 else:
     MACOS_COMPILATION = False
-    PREBUILT_PATH = baseDir + "prebuilt/linux/"
+    PREBUILT_PATH = baseDir + "prebuilt/linux64/"
 
 
 if MACOS_COMPILATION:

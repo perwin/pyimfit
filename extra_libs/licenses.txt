@@ -1,0 +1,10 @@
+PyImfit includes library code from the following open-source projects:
+
+   - FFTW3, licensed under version 2 of the GNU Public License;
+   source code avaliable at http://www.fftw3.org
+
+   - GSL (GNU Scientific Library), licensed under version 3 of the GNU Public License;
+   source code available at http://www.gnu.org/software/gsl
+
+   - NLopt, licensed under the GNU Lesser General Public License;
+   source code available at https://github.com/stevengj/nlopt
