@@ -78,7 +78,7 @@ class TestImfit(object):
         totalFlux_correct = 643232.3971123401
         fluxArray_correct = np.array([totalFlux_correct])
         assert_allclose(totalFlux, totalFlux_correct, rtol=1.0e-10)
-        assert fluxArray == fluxArray_correct
+        assert_allclose(fluxArray, fluxArray_correct, rtol=1.0e-10)
 
     def test_Imfit_get_fluxes_newParameters( self ):
         # Exponential model
@@ -105,14 +105,14 @@ class TestImfit(object):
         totalMag_correct = 30 - 2.5*math.log10(643232.3971123401)
         magsArray_correct = np.array([totalMag_correct])
         assert_allclose(totalMag, totalMag_correct, rtol=1.0e-10)
-        assert magsArray == magsArray_correct
+        assert_allclose(magsArray, magsArray_correct, rtol=1.0e-10)
 
         # get magnitudes -- now, use parameter zero point
         (totalMag, magsArray) = imfit_fitter.getModelMagnitudes(zeroPoint=20)
         totalMag_correct = 20 - 2.5*math.log10(643232.3971123401)
         magsArray_correct = np.array([totalMag_correct])
-        assert totalMag == totalMag_correct
-        assert magsArray == magsArray_correct
+        assert_allclose(totalMag, totalMag_correct, rtol=1.0e-10)
+        assert_allclose(magsArray, magsArray_correct, rtol=1.0e-10)
 
     def test_Imfit_get_mags_newParameters(self):
         # Exponential model
