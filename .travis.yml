@@ -16,6 +16,7 @@ install:
 
 # command to run tests
 script:
-#  - python setup.py install
+#  install in develop mode, otherwise imports will not work
   - pip install -e .
   - python -c "import pyimfit"
+  - cd pyimfit/tests ; pytest
