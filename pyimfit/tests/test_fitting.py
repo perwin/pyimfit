@@ -17,8 +17,9 @@ from ..pyimfit_lib import FixImage, make_imfit_function
 
 
 
-baseDir = "/Users/erwin/coding/pyimfit/pyimfit/tests/"
-testDataDir = baseDir + "../data/"
+#baseDir = "/Users/erwin/coding/pyimfit/pyimfit/tests/"
+#testDataDir = baseDir + "../data/"
+testDataDir = "../data/"
 imageFile = testDataDir + "ic3478rss_256.fits"
 configFile = testDataDir + "config_exponential_ic3478_256.dat"
 

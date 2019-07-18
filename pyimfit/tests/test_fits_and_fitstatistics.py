@@ -52,11 +52,14 @@ bic_correct = 136536.941458
 
 # model with 2 function blocks
 imfitTestDir = '/Users/erwin/coding/imfit/tests/'
-configFile2 = imfitTestDir + 'imfit_reference/config_imfit_2gauss_small.dat'
+#configFile2 = imfitTestDir + 'imfit_reference/config_imfit_2gauss_small.dat'
+configFile2 = testDataDir + "config_imfit_2gauss_small.dat"
 model_desc2 = ModelDescription.load(configFile2)
 
-imdata2 = FixImage(fits.getdata(imfitTestDir + 'twogaussian_psf+2osamp_noisy.fits'))
-psfImage = FixImage(fits.getdata(imfitTestDir + 'psf_moffat_35.fits'))
+# imdata2 = FixImage(fits.getdata(imfitTestDir + 'twogaussian_psf+2osamp_noisy.fits'))
+# psfImage = FixImage(fits.getdata(imfitTestDir + 'psf_moffat_35.fits'))
+imdata2 = FixImage(fits.getdata(testDataDir + 'twogaussian_psf+2osamp_noisy.fits'))
+psfImage = FixImage(fits.getdata(testDataDir + 'psf_moffat_35.fits'))
 
 # before fit
 initial_params2 = np.array([40.0,40.0,0,0,105,1.5, 15,10,0,0,95,1.5,100])
