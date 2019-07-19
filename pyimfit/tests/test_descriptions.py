@@ -335,11 +335,10 @@ class TestModelDescription(object):
 
     def test_ModelDescription_getStrings_with_options(self):
         modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
-        # use OrderedDict to ensure options are entered in same order on Mac and Linux
+        # use OrderedDict to ensure options are entered in same order across different versions of Python
         optionsDict = OrderedDict()
         optionsDict["GAIN"] = 4.5
         optionsDict["READNOISE"] = 0.9
-#        optionsDict = {"GAIN": 4.5, "READNOISE": 0.9}
         modeldesc.updateOptions(optionsDict)
 
         lines_correct = ["GAIN\t\t4.5\n", "READNOISE\t\t0.9\n", "\n",
