@@ -8,6 +8,7 @@ ModelDescription class.
 
 #Modification of Andre's "config.py" (originally created 19 Sep 2013).
 
+from collections import OrderedDict
 from .descriptions import ParameterDescription, FunctionDescription, FunctionSetDescription, ModelDescription
 
 __all__ = ['parse_config_file', 'parse_config']
@@ -135,7 +136,7 @@ def read_options( lines ):
         maps parameter names to numerical values
         e.g, {"GAIN": 4.56, "ORIGINAL_SKY": 233.87}
     """
-    config = {}
+    config = OrderedDict()
     for line in lines:
         # Options are key-value pairs.
         pieces = line.split()

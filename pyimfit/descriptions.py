@@ -4,6 +4,7 @@
 #Modification of Andre's "model.py" (originally created Sep 2013).
 
 from copy import copy, deepcopy
+from collections import OrderedDict
 import numpy as np
 
 
@@ -590,11 +591,12 @@ class ModelDescription(object):
     ----------
         optionsDict : dict of {str: float}
             dict mapping image-description parameters (e.g., "GAIN") to
-            their corresponding values\
+            their corresponding values
 
         options : dict of {str: float}
             dict mapping image-description parameters (e.g., "GAIN") to
-            their corresponding values\
+            their corresponding values [this is the internal name for the
+            property optionsDict]
         _functionSets : list of `FunctionSetDescription`
             the individual image-function blocks/sets making up the model
         nFunctionSets : int
