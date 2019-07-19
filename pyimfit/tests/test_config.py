@@ -2,6 +2,13 @@
 # Execute via
 #    $ pytest test_config.py
 
+# NOTE: we run into problems comparing dictionaries, because Python 3.5 has old-style
+# dictionaries with random ordering, while Python 3.6 and 3.7 have new-style dicts with
+# insertion-ordering. Thus, we have to be careful any time we're going to compare
+# objects with built-in dicts or OrderedDicts, and any time we compare output based
+# on internal dicts or OrderedDicts.
+
+from collections import OrderedDict
 import copy
 import pytest
 
@@ -82,14 +89,20 @@ testConfigLines_good2 = ["GAIN 4.5", "READNOISE\t0.5", "X0  100\tfixed", "Y0  20
                          "FUNCTION Exponential",  "PA  20\tfixed", "ell  0.2 0.1,0.4",
                          "I_0  100  0,1e6", "h  100   1,400"]
 
+# use an OrderedDict for the input to ensure proper ordering of the internal
+# OrderedDicts, especially under Python 3.5.
+optionsDict_ord = OrderedDict()
+optionsDict_ord["GAIN"] = 4.5
+optionsDict_ord["READNOISE"] = 0.5
+
 fsetdesc_correct1b = copy.copy(fsetdesc_correct1)
 fsetdesc_correct1b._name = "fs0"
 modeldesc_correct1 = ModelDescription([fsetdesc_correct1b],
-                                      options={"GAIN": 4.5, "READNOISE": 0.5})
+                                      options=optionsDict_ord)
 fsetdesc_correct2b = copy.copy(fsetdesc_correct2)
 fsetdesc_correct2b._name = "fs0"
 modeldesc_correct2 = ModelDescription([fsetdesc_correct2b],
-                                      options={"GAIN": 4.5, "READNOISE": 0.5})
+                                      options=optionsDict_ord)
 
 
 
@@ -168,7 +181,9 @@ def test_read_options_good( ):
     """Test that we correctly parse line containing image-description parameters."""
     inputLines = ["GAIN\t\t4.5", "READNOISE   10.0"]
     configDict = read_options(inputLines)
-    correctDict = {"GAIN": 4.5, "READNOISE": 10.0}
+    correctDict = OrderedDict()
+    correctDict["GAIN"] = 4.5
+    correctDict["READNOISE"] = 10.0
     assert configDict == correctDict
 
 
