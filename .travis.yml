@@ -1,3 +1,6 @@
+# NOTE: As of July 2019, Python builds are *not* available for macOS!
+# https://docs.travis-ci.com/user/languages/python/
+
 dist: xenial
 
 language: cpp
@@ -5,15 +8,14 @@ compiler: gcc
 
 os:
   - linux
-  - osx
 
 language: python
 # we want to run the build & unit tests (as specified under "script" below)
 # for each of Python 3.5, 3.6, and 3.7
 python:
-#  - "3.5"
-#  - "3.6"
+  - "3.5"
   - "3.6"
+  - "3.7"
 
 
 # command to install dependencies
