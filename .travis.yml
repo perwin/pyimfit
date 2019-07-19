@@ -4,7 +4,8 @@ language: cpp
 compiler: gcc
 
 os:
-- linux
+  - linux
+  - osx
 
 language: python
 # we want to run the build & unit tests (as specified under "script" below)
