@@ -2,22 +2,25 @@ dist: xenial
 
 language: cpp
 compiler: gcc
+
 os:
 - linux
 
 language: python
 python:
+  - "3.6"
   - "3.7"
 
 
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+  # install astropy so we can run tests
   - pip install astropy
 
 # command to run tests
 script:
-#  install in develop mode, otherwise imports will not work!
+  #  Travis CI peculiarity: install in develop mode, otherwise imports will not work!
   - pip install -e .
   - python -c "import pyimfit"
   # note that the tests require astropy be installed
