@@ -8,5 +8,4 @@ PyImfit API
    descriptions
    fitting
    useful
-   useful2
 
