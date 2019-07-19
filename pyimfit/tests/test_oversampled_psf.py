@@ -14,6 +14,8 @@ from ..fitting import Imfit
 from ..descriptions import ModelDescription
 from ..pyimfit_lib import FixImage, make_imfit_function, PsfOversampling
 
+# Note that we use looser tolerances in cases where running on Linux doesn't agree
+# with results from running on macOS
 TOLERANCE = 1.0e-6
 
 testDataDir = "../data/"
@@ -71,7 +73,7 @@ def test_no_psf():
 
     assert imfit_fitter.fitConverged == True
     pvals = np.array(imfit_fitter.getRawParameters())
-    assert_allclose(pvals, parameter_vals_correct1, rtol=TOLERANCE)
+    assert_allclose(pvals, parameter_vals_correct1, rtol=1.0e-5)
 
 
 def test_single_psf():
@@ -82,7 +84,7 @@ def test_single_psf():
 
     assert imfit_fitter.fitConverged == True
     pvals = np.array(imfit_fitter.getRawParameters())
-    assert_allclose(pvals, parameter_vals_correct2, rtol=TOLERANCE)
+    assert_allclose(pvals, parameter_vals_correct2, rtol=1.0e-4)
 
 
 def test_oversampled_psf():
@@ -99,4 +101,4 @@ def test_oversampled_psf():
     imfit_fitter.doFit()
     assert imfit_fitter.fitConverged == True
     pvals = np.array(imfit_fitter.getRawParameters())
-    assert_allclose(pvals, parameter_vals_correct3, rtol=TOLERANCE)
+    assert_allclose(pvals, parameter_vals_correct3, rtol=1.0e-3)
