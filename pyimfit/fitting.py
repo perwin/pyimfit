@@ -379,7 +379,7 @@ class Imfit(object):
         return self._modelObjectWrapper.computeFitStatistic(newParameters)
 
 
-    def runBootstrap( self, nIterations, ftol=1e-8, verbose=-1, mode='LM', seed=0 ):
+    def runBootstrap( self, nIterations, ftol=1e-8, verbose=-1, seed=0 ):
         """
         Do bootstrap resampling for a model.
 
@@ -388,11 +388,18 @@ class Imfit(object):
         nIterations : int
             How many bootstrap samples to generate and fit
 
+        ftol : float, optional
+            fractional tolerance in fit statistic for determining fit convergence
+
+        seed : int, optional
+            random number seed (default is to use system clock)
+
         """
         if not self._dataSet:
             raise Exception('No data supplied for model')
-        self._modelObjectWrapper.doBootstrapIterations(nIterations)
-        # FIXME: Finish this!
+        bootstrapOutput = self._modelObjectWrapper.doBootstrapIterations(nIterations, ftol=ftol,
+                                                                         seed=seed)
+        return bootstrapOutput
 
 
     @property

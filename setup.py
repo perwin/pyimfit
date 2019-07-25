@@ -11,6 +11,10 @@
 #   macOS: build "normally", with shared libs for fftw3, gsl, nlopt;
 #       then use delocate-wheel to copy shared libs into wheel
 #   Linux: build on user's machine using static libs for fftw3, gsl, nlopt
+#
+# To restart process from scratch (compile libimfit.a, then run Cython, then
+# compile binary library:
+# $ python setup.py
 
 import os
 import sys
@@ -236,11 +240,32 @@ class CleanCommand(Command):
         self.cwd = os.getcwd()
     def run(self):
         assert os.getcwd() == self.cwd, 'Must be in package root: %s' % self.cwd
-        os.system('rm -rf ./build ./dist')  
+        os.system('rm -rf ./build ./dist')
+
+class CleanAllCommand(Command):
+    description = "custom clean command forcefully removes libimfit.a and Cython-generated files (and dist/build directories)"
+    user_options = []
+
+    def initialize_options(self):
+        self.cwd = None
+
+    def finalize_options(self):
+        self.cwd = os.getcwd()
+
+    def run(self):
+        assert os.getcwd() == self.cwd, 'Must be in package root: %s' % self.cwd
+        os.system('rm -rf ./build ./dist')
+        libimfit0 = "./imfit/libimfit.a"
+        libimfit1 = PREBUILT_PATH + "libimfit.a"
+        libimfit2 = "./libimfit/libimfit.a"
+        cython_generated = "./pyimfit/pyimfit_lib.cpp"
+        cmd = 'rm -f {0} {1} {2} {3}'.format(libimfit0, libimfit1, libimfit2, cython_generated)
+        print(cmd)
+        os.system(cmd)
 
 
 
-# Define package metadata
+        # Define package metadata
 with open("README_pyimfit.md", "r") as f:
     long_description = f.read()
 
@@ -275,6 +300,6 @@ setup(
     # install_requires = standard pip installation for general future use
     setup_requires=['scons'],
     install_requires=['numpy', 'scipy'],
-    cmdclass={'build_ext': my_build_ext, 'clean': CleanCommand},
+    cmdclass={'build_ext': my_build_ext, 'clean': CleanCommand, 'cleanall': CleanAllCommand},
     ext_modules=extensions
 )

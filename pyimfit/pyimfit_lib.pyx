@@ -19,7 +19,8 @@ cimport imfit_lib
 from .imfit_lib cimport AIC_corrected, BIC
 from .imfit_lib cimport AddFunctions, GetFunctionNames, mp_par, mp_result
 from .imfit_lib cimport Convolver, ModelObject, SolverResults, DispatchToSolver
-from .imfit_lib cimport GetFunctionParameterNames, BootstrapErrorsArrayOnly
+from .imfit_lib cimport GetFunctionParameterNames
+from .imfit_lib cimport BootstrapErrorsArrayOnly
 from .imfit_lib cimport PsfOversamplingInfo
 from .imfit_lib cimport MASK_ZERO_IS_GOOD, MASK_ZERO_IS_BAD
 from .imfit_lib cimport WEIGHTS_ARE_SIGMAS, WEIGHTS_ARE_VARIANCES, WEIGHTS_ARE_WEIGHTS
@@ -723,20 +724,32 @@ cdef class ModelObjectWrapper( object ):
         self._modelImageComputed = True
 
 
- # int BootstrapErrorsArrayOnly( const double *bestfitParams, vector<mp_par> parameterLimits,
-    # 				const bool paramLimitsExist, ModelObject *theModel, const double ftol,
-    # 				const int nIterations, const int nFreeParams, const int whichStatistic,
-    # 				double **outputParamArray, unsigned long rngSeed=0 );
+    def doBootstrapIterations( self, int nIters, double ftol=1e-8, int verbose=-1,
+                               unsigned long seed=0 ):
+        # define outputParams array [double **]
+        # outputParamArray[i][nSuccessfulIters] = paramsVect[i];
 
-    # def doBootstrapIterations( self, int nIters, seed=0 ):
-    #     pass
-    #     # define outputParams array [double **]
-    #     # outputParamArray[i][nSuccessfulIters] = paramsVect[i];
-    #     cdef double **outputParams
-    #     nSucessfulIterations = BootstrapErrorsArrayOnly(self._paramVect, self._paramInfo,
-    #                                 self._paramLimitsExist, self._model, ftol,
-    #                                 nIters, self._nFreeParams, solverID, outputParams, seed)
-    #     # FIXME: Finish this!
+        # Note that BootstrapErrorsArrayOnly expects a pre-allocated array for outputParamArray,
+        # so we should pass it a typed memoryview to a numpy array we create here
+
+        cdef int whichFitStatistic
+        cdef bool verboseFlag = False
+        shape = (nIters, self._nParams)
+        bootstrappedParamsArray = np.zeros(shape, dtype='float64')
+        if not bootstrappedParamsArray.flags['C_CONTIGUOUS']:
+            bootstrappedParamsArray = np.ascontiguousarray(bootstrappedParamsArray)
+        # create 1D version
+        bootstrappedParamsArray_1d = bootstrappedParamsArray.flatten()
+        # typed memoryview pointing to bootstrappedParamsArray_1d
+        cdef double[::1] outputParams = bootstrappedParamsArray_1d
+
+        whichFitStatistic = self._model.WhichFitStatistic()
+        nSuccessfulIterations = BootstrapErrorsArrayOnly(self._paramVect, self._paramInfo,
+                                    self._paramLimitsExist, self._model, ftol, nIters,
+                                    self._nFreeParams, whichFitStatistic, &outputParams[0], seed)
+
+        bootstrappedParamsArray = bootstrappedParamsArray_1d.reshape(shape)
+        return bootstrappedParamsArray
 
 
     def getModelDescription(self):

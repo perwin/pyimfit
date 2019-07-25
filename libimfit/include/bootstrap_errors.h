@@ -25,15 +25,16 @@ int BootstrapErrors( const double *bestfitParams, vector<mp_par> parameterLimits
 				const int nIterations, const int nFreeParams, const int whichStatistic, 
 				FILE *outputFile_ptr, unsigned long rngSeed=0 );
 
-/*! \brief Alternate wrapper: returns array of best-fit parameters in outputParamArray;
-           doesn't print any summary statistics (e.g., sigmas, confidence intervals). 
+/*! \brief Alternate interface: returns array of best-fit parameters in outputParamArray,
+           which is 1D contiguous array (not array of pointers to arrays); doesn't
+           print any output at all or save anything to a file.
            
-    Note that outputParamArray will be allocated here; it should be de-allocated by 
-    whatever function is calling this function. */
+    Note that outputParamArray should be nParams*nIterations in size, and MUST BE 
+    CORRECTLY ALLOCATED BY THE CALLER OF THIS FUNCTION! */
 int BootstrapErrorsArrayOnly( const double *bestfitParams, vector<mp_par> parameterLimits, 
 					const bool paramLimitsExist, ModelObject *theModel, const double ftol, 
 					const int nIterations, const int nFreeParams, const int whichStatistic, 
-					double **outputParamArray, unsigned long rngSeed=0 );
+					double *outputParamArray, unsigned long rngSeed );
 
 
 #endif  // _BOOTSTRAP_ERRORS_H_

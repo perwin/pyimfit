@@ -1,7 +1,7 @@
 # Code for testing bootstrap mode of pyimfit
 #  ** INCOMPLETE **
 
-# $ imfit ic3478rss_256.fits -c config_exponential_ic3478_256.dat --gain=4.725 --readnoise=4.3 --sky=130.14 --seed=10 --bootstrap=10 --save-bootstrap=bootstrap_out.txt
+# $ imfit ic3478rss_256.fits -c config_exponential_ic3478_256.dat --gain=4.725 --readnoise=4.3 --sky=130.14 --seed=10 --bootstrap=5 --save-bootstrap=bootstrap_out.txt
 
 import pytest
 import numpy as np
@@ -33,10 +33,26 @@ bic_correct = 136536.941458
 
 (refCols, refData) = GetBootstrapOutput(bootstrapReferenceFile)
 
+# do the fit and the bootstrap resampling
 image_ic3478 = FixImage(fits.getdata(imageFile))
+modeldesc= ModelDescription.load(configFile)
+imfit_fitter = Imfit(modeldesc)
+imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+imfit_fitter.doFit()
+pvals_fit = np.array(imfit_fitter.getRawParameters())
+# bootstrap resampling
+output = imfit_fitter.runBootstrap(nIterations=5, seed=10)
 
+
+
+def test_fit():
+    assert_allclose(pvals_fit, parameter_vals_correct, rtol=TOLERANCE)
 
 def test_readin_ref_bootstrap_data():
     assert len(refCols) == 6
-    assert refData.shape == (10,6)
+    assert refData.shape == (5,6)
+
+def test_new_bootstrap_data():
+    assert output.shape == refData.shape
+    assert_allclose(output, refData)
 

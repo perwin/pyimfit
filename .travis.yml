@@ -1,4 +1,4 @@
-# NOTE: As of July 2019, Python builds are *not* available for macOS!
+# NOTE: As of July 2019, Python builds are *not* available for macOS on Travis CI!
 # https://docs.travis-ci.com/user/languages/python/
 
 dist: xenial
