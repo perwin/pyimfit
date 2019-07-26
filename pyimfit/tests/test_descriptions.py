@@ -414,6 +414,9 @@ class TestSimpleModelDescription(object):
         with pytest.raises(ValueError):
             simplemodeldesc = SimpleModelDescription(modeldesc_bad)
 
+    def testSimpleModelDescription_blank( self ):
+        simplemodeldesc = SimpleModelDescription()
+
     def test_SimpleModelDescription_simple( self ):
         modeldesc1 = ModelDescription(self.fsetList)
         simplemodeldesc = SimpleModelDescription(modeldesc1)
@@ -427,6 +430,40 @@ class TestSimpleModelDescription(object):
         assert simplemodeldesc.functionSetIndices() == [0]
         assert simplemodeldesc.functionList() == ['Gaussian']
 
+        pLimits = simplemodeldesc.getParameterLimits()
+        assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
+
+    def test_SimpleModelDescription_from_functionSet( self ):
+        simplemodeldesc = SimpleModelDescription(self.fsetdesc1)
+        print(dir(simplemodeldesc))
+        assert simplemodeldesc.x0 == self.x0_p
+        assert simplemodeldesc.y0 == self.y0_p
+
+        assert simplemodeldesc.functionSetIndices() == [0]
+        assert simplemodeldesc.functionList() == ['Gaussian']
+
+        pLimits = simplemodeldesc.getParameterLimits()
+        assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
+
+    def test_SimpleModelDescription_from_functionSetList( self ):
+        simplemodeldesc = SimpleModelDescription(self.fsetList)
+        print(dir(simplemodeldesc))
+        assert simplemodeldesc.x0 == self.x0_p
+        assert simplemodeldesc.y0 == self.y0_p
+
+        assert simplemodeldesc.functionSetIndices() == [0]
+        assert simplemodeldesc.functionList() == ['Gaussian']
+
+        pLimits = simplemodeldesc.getParameterLimits()
+        assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
+
+    def testSimpleModelDescription_add_FunctionSet_to_Empty(self):
+        simplemodeldesc = SimpleModelDescription("empty")
+        simplemodeldesc.addFunctionSet(self.fsetdesc1)
+        assert simplemodeldesc.x0 == self.x0_p
+        assert simplemodeldesc.y0 == self.y0_p
+        assert simplemodeldesc.functionSetIndices() == [0]
+        assert simplemodeldesc.functionList() == ['Gaussian']
         pLimits = simplemodeldesc.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
 

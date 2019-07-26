@@ -875,13 +875,37 @@ class SimpleModelDescription(ModelDescription):
     """
 
     def __init__(self, inst=None):
+        """
+        inst can be:
+            ModelDescription instance
+            FunctionSetDescription instance
+            list or tuple containing a single FunctionSetDescription instance
+
+        if inst is None, then a minimal object is returned (with a bare-bones
+        FunctionSetDescription)
+
+        if inst == "empty" then an *empty* object, with no FunctionSetDescription,
+        is returned
+        """
         super(SimpleModelDescription, self).__init__()
         if isinstance(inst, ModelDescription):
             if len(inst._functionSets) != 1:
                 raise ValueError('Original model must have only one function set.')
             self.addFunctionSet(copy(inst._functionSets[0]))
+        elif isinstance(inst, FunctionSetDescription):
+            self.addFunctionSet(copy(inst))
+        elif isinstance(inst, (list,tuple)):
+            if len(inst) == 1:
+                if isinstance(inst[0], FunctionSetDescription):
+                    self.addFunctionSet(copy(inst[0]))
+                else:
+                    raise ValueError('Invalid type: %s' % type(inst[0]))
+            else:
+                raise ValueError('List or tuple argument must have length = 1')
         elif inst is None:
             self.addFunctionSet(FunctionSetDescription('fs'))
+        elif inst == "empty":
+            pass
         else:
             raise ValueError('Invalid type: %s' % type(inst))
 

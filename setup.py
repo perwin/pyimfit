@@ -171,9 +171,9 @@ def build_library_with_scons( extraFlags=EXTRA_SCONS_FLAGS ):
 
 class my_build_ext( build_ext ):
     """Subclass of build_ext which ensures that libimfit.a exists prior to trying build
-    any of the Python extensions (if a prebuilt version is found, it is copied to
+    any of the Python extensions. If a prebuilt version *is* found, it is copied to
     IMFIT_LIBRARY_PATH; if no prebuilt version is found, then build_library_with_scons
-    is called."""
+    is called (which will, after building the library, copy it to IMFIT_LIBRARY_PATH)."""
     def run(self):
         # Check to see if libimfit.a already exists
         if not os.path.exists(PREBUILT_PATH + "libimfit.a"):

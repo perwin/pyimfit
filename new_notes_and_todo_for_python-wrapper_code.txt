@@ -89,16 +89,18 @@ PLAN:
     -- ideally, we should be able to instantiate SimpleModelDescription using
         a) an existing ModelDescription instance (with one function set)
         b) an existing FunctionSetDescription instance
-        c) an existing FunctionDescription
+        b) a single-entry list/tuple of FunctionSetDescription instances
     -- we should also be able to set the x0 and y0 values
     [ ] Create some tests in test_descriptions.py for how SimpleModelDescription should act
-        [ ] Write test(s) instantiating from existing ModelDescription
+        [x] Write test(s) instantiating from existing ModelDescription
             [x] Basic test
             [x] Test that we raise exception for case of input ModelDescription with 2+ function sets
-        [ ] Write test(s) instantiating from existing FunctionSetDescription
-        [ ] Write test(s) instantiating from existing FunctionDescription
+        [x] Write test(s) instantiating from existing FunctionSetDescription
+        [x] Write test(s) instantiating from existing FunctionDescription
         [ ] Write test(s) modifying x0, y0
 
+    [ ] Add test of replaceOptions method (ModelDescription)
+    [ ] Add test of replaceOptions method (SimpleModelDescription)
 
 [ ] Add ability to get list of image-function names
     -- instantiate a list of string when module is imported?
