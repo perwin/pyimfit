@@ -51,8 +51,8 @@ Online documentation: [https://pyimfit.readthedocs.io/en/latest/](https://pyimfi
 
 ## Requirements and Installation
 
-PyImfit is designed to work with modern versions of Python 3 (nominally 3.5 or later); no support for 
-Python 2 is planned.
+PyImfit is designed to work with modern versions of Python 3 (3.5 or later on Linux, 3.6 or later on macOS);
+no support for Python 2 is planned.
 
 ### Standard Installation: macOS
 
@@ -71,18 +71,8 @@ by `pip` if they are not already present):
 ### Standard Installation: Linux
 
 PyImfit can also be installed on Linux using `pip`. Since this involves building from source,
-you will need to have a working C++-11-compatible compiler (e.g., GCC version 4.8.1 or later),
-and you will also need to have the libraries for [FFTW3](https://www.fftw.org), 
-[GNU Scientific Library](https://www.gnu.org/software/gsl/), and [NLopt](https://nlopt.readthedocs.io/en/latest/)
-installed. The version of GNU Scientific Library (GSL) needs to be 2.0 or later; if you have
-an older version of Linux, you may need to install this library from source rather than from
-the default package manager.
-
-E.g., on Ubuntu 16.04 or later:
-
-    $ sudo apt-get install libfftw3-dev libgsl-dev libnlopt-dev 
-
-And then
+you will need to have a working C++-11-compatible compiler (e.g., GCC version 4.8.1 or later);
+this is probably true for any reasonably modern Linux installation.
 
     $ pip3 install pyimfit   [or "pip3 install --user pyimfit", if installing for your own use]
 
@@ -102,8 +92,7 @@ To build PyImfit from the Github source, you will need the following:
 
    * A reasonably modern C++ compiler -- e.g., GCC 4.8.1 or later, or any C++-11-aware version of 
    Clang++/LLVM that includes support for OpenMP. See below for special notes about using
-   the Apple-built 
-   version of Clang++ that comes with Xcode for macOS.
+   the Apple-built version of Clang++ that comes with Xcode for macOS.
 
 
 #### Steps for building PyImfit from source:
