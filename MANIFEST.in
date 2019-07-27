@@ -5,5 +5,6 @@ include pyimfit/*.pyx
 include pyimfit/*.pxd
 recursive-include prebuilt *
 recursive-include libimfit *.h
+recursive-include extra_libs
 exclude libimfit/libimfit.a
 include README_pyimfit.md

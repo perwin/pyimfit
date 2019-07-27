@@ -72,9 +72,11 @@ by `pip` if they are not already present):
 
 PyImfit can also be installed on Linux using `pip`. Since this involves building from source,
 you will need to have a working C++-11-compatible compiler (e.g., GCC version 4.8.1 or later);
-this is probably true for any reasonably modern Linux installation.
+this is probably true for any reasonably modern Linux installation. (**Note:** a 64-bit Linux
+system is required.)
 
     $ pip3 install pyimfit   [or "pip3 install --user pyimfit", if installing for your own use]
+
 
 
 
