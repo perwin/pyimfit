@@ -1,7 +1,7 @@
 
-# Example: Using PyImfit with Markov-Chain Monte Carlo code "emcee"
+# Example of using PyImfit with Markov-Chain Monte Carlo code "emcee"
 
-This is a Jupyter notebook demonstrating how to use PyImfit with the MCMC code emcee.
+This is a Jupyter notebook demonstrating how to use PyImfit with the MCMC code [emcee](https://github.com/dfm/emcee).
 
 If you are seeing this as part of the readthedocs.org HTML documentation, you can retrieve the originaly .ipynb file
 [here](https://github.com/perwin/pyimfit/blob/master/docs/pyimfit_emcee.ipynb).
@@ -61,13 +61,13 @@ model_desc = pyimfit.SimpleModelDescription()
 model_desc.x0.setValue(5.0, [3.0,8.0])
 model_desc.y0.setValue(6.0, [3.0,8.0])
 # create a Gaussian image function for the star and set its parameters
-star = pyimfit.make_imfit_function("Gaussian")
-star.PA.setValue(155, [140,170])
-star.ell.setValue(0.1, [0,0.3])
-star.I_0.setValue(250, [220,320])
-star.sigma.setValue(1.0, [0.1,1.5])
+star_function = pyimfit.make_imfit_function("Gaussian")
+star_function.PA.setValue(155, [140,170])
+star_function.ell.setValue(0.1, [0,0.3])
+star_function.I_0.setValue(250, [220,320])
+star_function.sigma.setValue(1.0, [0.1,1.5])
 # now add the image function to the model
-model_desc.addFunction(star)
+model_desc.addFunction(star_function)
 ```
 
 Create an Imfit instance containing the model, and add the image data and image-description info:
@@ -99,9 +99,9 @@ print("{0:g}\n".format(p_bestfit[-1]))
 
 ### Define log-probability functions for use with emcee
 
-Emcee requires a function to calculate the log of the posterior probability (using the likelihood and the prior probability).
+Emcee requires a function which calculates and returns the log of the posterior probability (using the likelihood and the prior probability).
 
-We'll create a general function for the posterior probability which takes as input the current model parameters, an Imfit instance which computes the fit statistic for those parameters (= $-2 \: \times$ log likelihood) and a user-supplied function for computing the prior; this will return the sum of the log likelihood and the log of the prior:
+We'll create a general function for this which takes as input the current model parameters, an Imfit instance which can compute the fit statistic for those parameters (= $-2 \: \times$ log likelihood) and a user-supplied function for computing the prior; this will return the sum of the log likelihood and the log of the prior:
 
 
 ```python
@@ -126,13 +126,14 @@ def lnPosterior_for_emcee( params, imfitter, lnPrior_func ):
     lnPrior = lnPrior_func(params, imfitter)
     if not np.isfinite(lnPrior):
         return -np.inf
+    # note that Imfit.computeFitStatistic returns -2 log(likelihood)
     lnLikelihood = -0.5 * imfitter.computeFitStatistic(params)
     return lnPrior + lnLikelihood
 ```
 
 Now, we'll create a prior-probability function.
 
-For simplicity, we'll use the case of constant priors within parameter limits, with the parameter limits obtained from a user-supplied Imfit instance.
+For simplicity, we'll use the case of constant priors within parameter limits, with the parameter limits obtained from a user-supplied Imfit instance. (But you can make the prior-probability function as complicated as you like.)
 
 
 ```python
@@ -165,7 +166,7 @@ def lnPrior_limits( params, imfitter ):
 
 ### Set up and run Markov-Chain Monte Carlo using emcee
 
-Import [emcee](http://dfm.io/emcee/current/), and also [corner](https://corner.readthedocs.io/en/latest/) (so we can make a nice plot of the results):
+Import [emcee](https://emcee.readthedocs.io/en/latest/), and also [corner](https://corner.readthedocs.io/en/latest/) (so we can make a nice plot of the results):
 
 
 ```python
@@ -250,11 +251,11 @@ y0_range = (6.09, 6.29)
 pa_range = (138,173)
 ell_range = (0, 0.2)
 i0_range = (240,300)
-sig_range = (0.92, 1.1)
-ranges = [x0_range, y0_range, pa_range, ell_range, i0_range, sig_range]
+sigma_range = (0.92, 1.1)
+ranges = [x0_range, y0_range, pa_range, ell_range, i0_range, sigma_range]
 ```
 
-Make a corner plot; blue lines/points indicate best-fit values from above. [Note that we have to explicitly capture the Figure instance returned by corner.corner, otherwise we'll get a duplicate display of the plot]:
+Make a corner plot; the thin blue lines/points indicate best-fit values from above. [Note that we have to explicitly capture the Figure instance returned by corner.corner, otherwise we'll get a duplicate display of the plot]:
 
 
 ```python
@@ -265,5 +266,4 @@ fig = corner.corner(converged_samples, labels=cornerLabels, range=ranges, truths
 ![png](pyimfit_emcee_files/pyimfit_emcee_40_0.png)
 
 
-Note that the PA values are running up against our (rather narrow) limits for that parameter, so a next step
-might be to re-run this with larger PA limits.
+One thing to notice is that the PA values are running up against our (rather narrow) limits for that parameter, so a next step might be to re-run this with larger PA limits.

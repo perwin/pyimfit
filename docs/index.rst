@@ -13,7 +13,10 @@ Documentation for PyImfit
 
    sample_usage
    overview
+   defining_models
+   fit_statistics_and_solvers
    pyimfit_emcee
+   acknowledgments
 
 
 .. toctree::
@@ -22,4 +25,6 @@ Documentation for PyImfit
 
    api_ref/api_index
 
+
+`Imfit manual (PDF) <https://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf>`_
 

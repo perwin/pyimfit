@@ -887,7 +887,7 @@ class SimpleModelDescription(ModelDescription):
         if inst == "empty" then an *empty* object, with no FunctionSetDescription,
         is returned
         """
-        super(SimpleModelDescription, self).__init__()
+        super().__init__()
         if isinstance(inst, ModelDescription):
             if len(inst._functionSets) != 1:
                 raise ValueError('Original model must have only one function set.')
@@ -943,7 +943,7 @@ class SimpleModelDescription(ModelDescription):
     def addFunctionSet(self, fs):
         if len(self._functionSets) >= 1:
             raise Exception('Only one function set allowed.')
-        super(SimpleModelDescription, self).addFunctionSet(fs)
+        super().addFunctionSet(fs)
 
 # 	return [attr] from the first (only, really) FunctionSetDescription
     #    _name; name

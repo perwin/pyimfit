@@ -1,0 +1,51 @@
+NOTES/CHECKLIST FOR CREATING AND DISTRIBUTION A NEW DISTRIBUTION
+
+
+Working by default in ~/coding/pyimfit on Mac.
+
+[opt]1. Generate updated libimfit.a for macOS, IF NECESSARY
+    A. [mac] cd imfit
+    B. [mac] scons --clang-openmp libimfit.a
+    C. [mac] cp libimfit.a ../prebuilt/macos
+
+[opt]2. Generate updated libimfit.a for Linux [VM: ubuntu64-16_dev], IF NECESSARY
+    A. [vm] cd /home/vagrant/build/pyimfit/imfit
+    B. [vm] scons libimfit.a
+    C. [vm] cp libimfit.a ../prebuilt/linux64
+    D. [vm] cp libimfit.a /vagrant/transfer
+    E. [mac] cp ~/vagrant/ubuntu64-16_dev/transfer/libimfit.a ./prebuilt/linux64
+
+3. Do new "develop" install and run tests on macOS
+    [mac] $ python3 setup.py develop
+    [mac] $ cd pyimfit/tests ; pytest
+
+4. Do new "develop" install and run tests on Linux VM
+    [vm] $ python3 setup.py develop --user
+    [vm] $ cd pyimfit/tests ; pytest
+
+5. Update version number in pyimfit/__init__.py
+
+6. Generate new version of docs [docs/howto_generate_docs.txt]
+    A. cd docs
+    B. Update version number in conf.py
+    C. IF the Jupyter notebook file has been updated, generate a markdown version with
+        $ jupyter nbconvert pyimfit_emcee.ipynb --to markdown
+    D. Generate rST versions of Markdown files and then generate HTML files
+	    $ ./convert_md_to_rst.sh && make html
+	E. View resulting docs in a web browser pointed at
+	    file:///Users/erwin/coding/pyimfit/docs/_build/html/index.html
+    F. Commit the changes, upload to github
+        $ git commit -a -m "Updated documentation"      [or something like that]
+        $ git push
+
+7. Generate source distribution and Mac binary wheels on Mac:
+    A. $ python3.7 setup.py sdist bdist_wheel
+    B. $ python3.6 setup.py bdist_wheel
+    C. Copy shared libs into wheel using delocate
+        $ cd dist
+        $ delocate-wheel -w fixed_wheels -v pyimfit-<VERSION>-cp37-cp37m-macosx_10_9_x86_64.whl
+        $ delocate-wheel -w fixed_wheels -v pyimfit-<VERSION>-cp36-cp36m-macosx_10_9_x86_64.whl
+
+8. Upload sdist and wheels to PyPI
+    $ cd ~/coding/pyimfit
+    $ python3 -m twine upload dist/pyimfit-<VERSION>.tar.gz dist/fixed_wheels/*

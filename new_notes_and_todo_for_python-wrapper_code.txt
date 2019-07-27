@@ -102,10 +102,9 @@ PLAN:
     [ ] Add test of replaceOptions method (ModelDescription)
     [ ] Add test of replaceOptions method (SimpleModelDescription)
 
-[ ] Add ability to get list of image-function names
+[XX] Add ability to get list of image-function names
     -- instantiate a list of string when module is imported?
-    [ ] Decide which module to put this in
-    [ ]
+    [X] Decide which module to put this in
 
 [ ] Add ability to get list of image-function parameters
 

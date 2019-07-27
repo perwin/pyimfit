@@ -67,7 +67,7 @@ the native image pixel scale.)
 The model is specified by an instance of the ModelDescription class.
 
 For the command-line program, this is done via a "configuration" text file, which has a
-specific format described in [the Imfit manual (PDF)](http://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf),
+specific format described in [the Imfit manual (PDF)](https://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf),
 or in [this page of the online docs](https://imfit.readthedocs.io/en/latest/config_file_format.html).
 
 If you have a configuration file, you can load it via the convenience function `parse_config_file`
@@ -82,7 +82,7 @@ You can also construct a ModelDescription instance programmatically from within 
 (You can get a list of the available image functions -- "Sersic", "Exponential", etc. -- from the package-level 
 variable `pyimfit.imageFunctionList`, and you can get a list of the parameter names for each 
 function from `pyimfit.imageFunctionDict`. These functions are described in detail in
-[the Imfit manual (PDF)](http://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf).)
+[the Imfit manual (PDF)](https://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf).)
 
 Once you have a ModelDescription object describing the model, you can create an instance of
 the `Imfit` class based on the model; optionally, if you want the model to be convolved

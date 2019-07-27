@@ -78,7 +78,7 @@ The model is specified by an instance of the ModelDescription class.
 
 For the command-line program, this is done via a "configuration" text
 file, which has a specific format described in `the Imfit manual
-(PDF) <http://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf>`__,
+(PDF) <https://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf>`__,
 or in `this page of the online
 docs <https://imfit.readthedocs.io/en/latest/config_file_format.html>`__.
 
@@ -101,7 +101,7 @@ example.
 ``pyimfit.imageFunctionList``, and you can get a list of the parameter
 names for each function from ``pyimfit.imageFunctionDict``. These
 functions are described in detail in `the Imfit manual
-(PDF) <http://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf>`__.)
+(PDF) <https://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf>`__.)
 
 Once you have a ModelDescription object describing the model, you can
 create an instance of the ``Imfit`` class based on the model;
