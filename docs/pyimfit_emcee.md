@@ -40,7 +40,8 @@ Load data image (in this case, a small cutout of an SDSS image showing a faint s
 
 
 ```python
-imageFile = "/Users/erwin/coding/imfit/tests/faintstar.fits"
+#imageFile = "/Users/erwin/coding/imfit/tests/faintstar.fits"
+imageFile = "./pyimfit_emcee_files/faintstar.fits"
 image_faintstar = pyimfit.FixImage(fits.getdata(imageFile))
 ```
 
@@ -48,7 +49,8 @@ Create a ModelDescription instance based on an imfit configuration file (which s
 
 
 ```python
-configFile = "/Users/erwin/coding/imfit/tests/imfit-mcmc_reference/config_imfit_faintstar.dat"
+#configFile = "/Users/erwin/coding/imfit/tests/imfit-mcmc_reference/config_imfit_faintstar.dat"
+configFile = "./pyimfit_emcee_files/config_imfit_faintstar.dat"
 model_desc = pyimfit.ModelDescription.load(configFile)
 ```
 
@@ -58,9 +60,10 @@ Alternately, you can create the ModelDescription programmatically from within Py
 ```python
 # create a SimpleModelDescription instance (one function block); specify the x0,y0 center for the function block.
 model_desc = pyimfit.SimpleModelDescription()
+# define the X0,Y0 initial guess and limits
 model_desc.x0.setValue(5.0, [3.0,8.0])
 model_desc.y0.setValue(6.0, [3.0,8.0])
-# create a Gaussian image function for the star and set its parameters
+# create a Gaussian image function for the star and set its parameters' initial guesses and limits
 star_function = pyimfit.make_imfit_function("Gaussian")
 star_function.PA.setValue(155, [140,170])
 star_function.ell.setValue(0.1, [0,0.3])
