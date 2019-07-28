@@ -49,3 +49,5 @@ Working by default in ~/coding/pyimfit on Mac.
 8. Upload sdist and wheels to PyPI
     $ cd ~/coding/pyimfit
     $ python3 -m twine upload dist/pyimfit-<VERSION>.tar.gz dist/fixed_wheels/*
+
+9. Test installation via pip

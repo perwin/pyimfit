@@ -1,0 +1,15 @@
+# Imfit configuration file for fitting a Gaussian to a faint star extracted from
+# an SDSS DR7 r-band image (faintstar.fits).
+
+GAIN            4.72   # A/D gain in e-/ADU
+READNOISE       1.15   # read noise in electrons
+ORIGINAL_SKY    124.94   # original background value (ADU/pixel) previously subtracted
+
+
+X0   5.0    3,8
+Y0   6.0    3,8
+FUNCTION Gaussian
+PA		155		140,170
+ell		0.1		0,0.3
+I_0		250		220,320
+sigma	1.0		0.1,1.5

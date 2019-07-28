@@ -127,7 +127,6 @@ libPath = [IMFIT_LIBRARY_PATH]
 headerPath = [IMFIT_LIBRARY_PATH + "include", ".", np.get_include()]
 if not MACOS_COMPILATION:
     headerPath.append(EXTRA_PATH + "include")
-    headerPath.append(EXTRA_PATH + "include/gsl")
     libPath.append(EXTRA_LIBS_PATH)
 # Note two versions of NLopt library ("nlopt_cxx" is for case of version with extra C++
 # interfaces (e.g., CentOS package)
