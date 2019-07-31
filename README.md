@@ -65,7 +65,9 @@ by `pip` if they are not already present):
 
 * Numpy
 * Scipy
-* Astropy -- not strictly required; mainly useful for reading in FITS files as numpy arrays
+
+Astropy is also useful for reading in FITS files as numpy arrays (and is required by the
+unit tests).
 
 
 ### Standard Installation: Linux

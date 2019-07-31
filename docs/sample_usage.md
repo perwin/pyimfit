@@ -9,13 +9,16 @@ and then fit the model to the data:
     from astropy.io import fits
     import pyimfit
     
+    
+    # 1. A simple fit to an image (no PSF or mask)
+    
     imageFile = "<path-to-FITS-file-directory>/ic3478rss_256.fits"
     imfitConfigFile = "<path-to-config-file-directory>/config_exponential_ic3478_256.dat"
 
     # read in image data, convert to proper double-precisions, little-endian format
     image_data = pyimfit.FixImage(fits.getdata(imageFile))
 
-    # construct model from config file; construct new Imfit fitter based on model,;
+    # construct model from config file
     model_desc = pyimfit.ModelDescription.load(configFile)
 
     # create an Imfit object, using the previously loaded model configuration
@@ -31,7 +34,25 @@ and then fit the model to the data:
             imfit_fitter.reducedFitStatistic))
         print("Best-fit parameter values:")
         print(imfit_fitter.getRawParameters())
-        
+    
+    
+    # 2. Same basic model and data, but now with PSF convolution and a mask
+    
+    # Load PSF image from FITS file, then create Imfit fitter with model + PSF
+    psfImageFile = "<path-to-FITS-file-directory>/psf_moffat_35.fits"
+    psf_image_data = pyimfit.FixImage(fits.getdata(psfImageFile))
+    
+    imfit_fitter2 = pyimfit.Imfit(model_desc, psf=psf_image_data)
+    
+    # load the image data and characteristics, and also a mask image, but don't run the fit yet
+    maskImageFile = "<path-to-FITS-file-directory>/mask.fits"
+    mask_image_data = pyimfit.FixImage(fits.getdata(maskImageFile))
+    
+    imfit_fitter2.loadData(image_data, mask=mask_image_data, gain=4.725, read_noise=4.3, original_sky=130.14)
+    
+    # do the fit, using Nelder-Mead simplex (instead of default Levenberg-Marquardt) as the solver
+    imfit_fitter2.doFit(solver="NM")
+
 
 You can also programmatically construct a model within Python (rather than having
 to read it from a text file):
