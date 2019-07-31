@@ -72,6 +72,9 @@ PLAN:
             -- how to do a fit
             -- how to look at the results
 
+       [ ] Add mention/example of how to include/use PSF images and mask images
+       [ ] Add mention/example of how to do bootstrap resampling
+
        [ ] Add API documentation
             [ ] Add documentation file for config.py
             [ ] Add documentation file for descriptions.py
@@ -102,7 +105,7 @@ PLAN:
     [ ] Add test of replaceOptions method (ModelDescription)
     [ ] Add test of replaceOptions method (SimpleModelDescription)
 
-[XX] Add ability to get list of image-function names
+[X] Add ability to get list of image-function names
     -- instantiate a list of string when module is imported?
     [X] Decide which module to put this in
 
@@ -431,6 +434,35 @@ ModelObjectWrapper:
        psf_oversampling_list : list of PsfOversampling
             List of PsfOversampling objects, describing oversampling regions, PSFs,
             and oversampling scales.
+
+
+
+=====================================
+
+HOWTO unit testing, regression testing, etc.:
+
+We can manually run the tests via
+$ cd pyimfit/pyimfit/tests
+$ pytest
+
+Currently, these test must be run from within the test/ subdirectory, since they rely
+on local relative file paths to get at the data in pyimfit/pyimfit/data/ -- so if you
+do something like "cd pyimfit ; pytest" or "cd pymfit ; pytest pyimfit/tests", the
+tests will fail because the paths to the data files in data/ will be wrong....
+
+We can also set up a daemon process that monitors pyimfit/pyimfit/ and its subdirectories
+for any changes to files, and re-runs "pytest" via the "conttest" package
+(https://github.com/eigenhombre/continuous-testing-helper; installable via pip)
+
+$ cd pyimfit/pyimfit
+$ conttest "cd tests ; pytest"
+
+(Ctrl-C will kill the conttest daemon)
+
+(Note that the options of a ".conttest-excludes" file in the same directory which tells
+conttest to ignore a set of subdirectories doesn't seem to work -- but the only subdirectories
+in pyimfit/pyimfit are __pycache__/ and data/, and arguably we *should* monitor those,
+so it's not really a problem.)
 
 
 

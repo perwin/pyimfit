@@ -42,7 +42,7 @@ def get_model_param_array(model):
 def test_fitting():
     psf = gaussian_psf(2.5, size=9)
     model_orig = create_model()
-    imfit = Imfit(model_orig, psf=psf, quiet=False)
+    imfit = Imfit(model_orig, psf=psf, quiet=True)
 
     noise_level = 0.1
     shape = (100, 100)
