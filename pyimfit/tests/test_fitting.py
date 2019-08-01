@@ -22,11 +22,18 @@ from ..pyimfit_lib import FixImage, make_imfit_function
 testDataDir = "../data/"
 imageFile = testDataDir + "ic3478rss_256.fits"
 configFile = testDataDir + "config_exponential_ic3478_256.dat"
+imageFile2 = testDataDir + "n3073rss_small.fits"
+maskFile2 = testDataDir + "n3073rss_small_mask.fits"
+configFile2 = testDataDir + "config_n3073.dat"
 
 image_ic3478 = FixImage(fits.getdata(imageFile))
+image_n3073 = FixImage(fits.getdata(imageFile2))
+mask_n3073 = FixImage(fits.getdata(maskFile2))
 
 # ModelDescription object for fitting Exponential function to image of IC 3478
 model_desc = ModelDescription.load(configFile)
+# ModelDescription object for fitting Sersic + Exponential function to image of NGC 3073
+model_desc2 = ModelDescription.load(configFile2)
 
 # Simple FlatSky (constant-value) image
 flatSkyFunc = make_imfit_function("FlatSky")
@@ -93,6 +100,7 @@ class TestImfit(object):
         assert fluxArray == fluxArray_correct
 
     def test_Imfit_get_mags( self ):
+        print(self.modelDesc)
         # Fitting Exponential to 256x256-pixel SDSS r-band image of IC 3478 (no PSF convolution)
         imfit_fitter = Imfit(self.modelDesc)
         imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
@@ -134,6 +142,36 @@ class TestImfit(object):
         magsArray_correct = np.array([totalMag_correct])
         assert totalMag == totalMag_correct
         assert magsArray == magsArray_correct
+
+
+class TestImfit_MultiComponent(object):
+
+    def setup_method( self ):
+        self.modelDesc2 = model_desc2
+
+    def test_Imfit_setup( self ):
+        imfit_fitter2 = Imfit(self.modelDesc2)
+        model_desc2 = imfit_fitter2.getModelDescription()
+        assert model_desc2 == self.modelDesc2
+
+    def test_Imfit_multiComponent_get_fluxes_and_mags( self ):
+        # Fitting Sersic + Exponential to 150x200-pixel SDSS r-band image of NGC 3073 (no PSF convolution)
+        imfit_fitter2 = Imfit(self.modelDesc2)
+        imfit_fitter2.loadData(image_n3073, mask=mask_n3073)
+        imfit_fitter2.doFit()
+        # get fluxes
+        (totalFlux, fluxArray) = imfit_fitter2.getModelFluxes()
+        totalFlux_correct = 1291846.609307
+        fluxArray_correct = np.array([453777.572255, 838069.037053])
+        assert_allclose(totalFlux, totalFlux_correct, rtol=1.0e-10)
+        assert_allclose(fluxArray, fluxArray_correct, rtol=1.0e-10)
+
+        # get magnitudes -- use parameter zero point
+        (totalMag, magsArray) = imfit_fitter2.getModelMagnitudes(zeroPoint=20)
+        totalMag_correct = 20 - 2.5*math.log10(totalFlux_correct)
+        magsArray_correct = 20 - 2.5*np.log10(fluxArray_correct)
+        assert_allclose(totalMag, totalMag_correct, rtol=1.0e-10)
+        assert_allclose(magsArray, magsArray_correct, rtol=1.0e-10)
 
 
 class TestImfit_ImageGeneration(object):

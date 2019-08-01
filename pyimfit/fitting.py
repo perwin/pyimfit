@@ -5,16 +5,23 @@
 #
 # [original author: Andre de Luiz Amorim; modifications by Peter Erwin]
 
+import copy
+
+import numpy as np
+
 from .descriptions import ModelDescription
 from .pyimfit_lib import ModelObjectWrapper
-import numpy as np
 from copy import deepcopy
 
 __all__ = ['Imfit']
 
 
+# These map PyImfit option names (e.g., "gain", "read_noise") to Imfit config-file option
+# names (e.g., "GAIN", "READNOISE"), or vice-versa
 imageOptionNameDict = {'n_combined': "NCOMBINED", 'exptime': "EXPTIME", 'gain': "GAIN",
                   'read_noise': "READNOISE", 'original_sky': "ORIGINAL_SKY"}
+imageOptionNameDict_reverse = {"NCOMBINED": 'n_combined', "EXPTIME": 'exptime', "GAIN": 'gain',
+                  "READNOISE": 'read_noise', "ORIGINAL_SKY": 'original_sky' }
 
 
 def _composemask( arr, mask, mask_zero_is_bad ):
@@ -101,7 +108,9 @@ class Imfit(object):
         """
         if not isinstance(model_descr, ModelDescription ):
             raise ValueError('model_descr must be a ModelDescription object.')
-        self._modelDescr = model_descr
+        # copy the input ModelDescription (we don't want any links to the input object,
+        # in case the latter gets updated later somewhere else)
+        self._modelDescr = copy.deepcopy(model_descr)
         self._psf = psf
         self._normalizePSF = psfNormalization
         self._mask = None
@@ -133,8 +142,7 @@ class Imfit(object):
         if self._modelObjectWrapper is not None:
             return self._modelObjectWrapper.getModelDescription()
         else:
-            # FIXME: get rid of deepcopy
-            return deepcopy(self._modelDescr)
+            return copy.deepcopy(self._modelDescr)
 
 
     def _updateModelDescription( self, kwargs ):
@@ -299,15 +307,27 @@ class Imfit(object):
         all_kw = ['n_combined', 'exp_time', 'gain', 'read_noise', 'original_sky',
                   'error_type', 'mask_format', 'psf_oversampling_list', 'use_poisson_mlr',
                   'use_cash_statistics', 'use_model_for_errors']
-        for kw in list(kwargs.keys()):
+        supplied_kw = list(kwargs.keys())
+        for kw in supplied_kw:
             if kw not in all_kw:
                 raise Exception('Unknown kwarg: %s' % kw)
         mask_zero_is_bad = 'mask_format' in kwargs and kwargs['mask_format'] == 'zero_is_bad'
 
         # create the ModelObjectWrapper instance
         self._setupModel()
+
+        # check to make sure we don't skip ModelDescription options that were already
+        # set, if they're not overridden by kwargs
+        if len(self._modelDescr.optionsDict) > 0:
+            for key,value in self._modelDescr.optionsDict.items():
+                # convert "GAIN" --> "gain", etc.
+                key = imageOptionNameDict_reverse[key]
+                if key not in supplied_kw:
+                    kwargs[key] = value
+
         # update the ModelDescription instance with keyword values
-        self._updateModelDescription(kwargs)
+        if len(kwargs) > 0:
+            self._updateModelDescription(kwargs)
 
         mask = _composemask(image, mask, mask_zero_is_bad)
         if isinstance(image, np.ma.MaskedArray):
@@ -326,7 +346,6 @@ class Imfit(object):
             if image.shape != mask.shape:
                 raise Exception('Mask and image shapes do not match.')
             mask = mask.astype('float64')
-
         self._modelObjectWrapper.loadData(image, error, mask, **kwargs)
         self._dataSet = True
 

@@ -83,7 +83,8 @@ fsetdesc_correct2.addFunction(fdesc_correct2)
 testConfigLines_good1 = ["GAIN 4.5", "READNOISE\t0.5", "X0  100", "Y0  200",
                          "FUNCTION Gaussian", "PA  10",
                          "ell  0.5", "I_0  100", "sigma  10"]
-testConfigLines_good2 = ["GAIN 4.5", "READNOISE\t0.5", "X0  100\tfixed", "Y0  200\tfixed",
+testConfigLines_good2 = ["GAIN 4.5", "READNOISE\t0.5", "ORIGINAL_SKY\t\t154.33",
+                         "X0  100\tfixed", "Y0  200\tfixed",
                          "FUNCTION Gaussian", "PA  10\tfixed", "ell  0.5 0.1,0.6",
                          "I_0  100  0,1e6", "sigma  10   fixed",
                          "FUNCTION Exponential",  "PA  20\tfixed", "ell  0.2 0.1,0.4",
@@ -94,6 +95,10 @@ testConfigLines_good2 = ["GAIN 4.5", "READNOISE\t0.5", "X0  100\tfixed", "Y0  20
 optionsDict_ord = OrderedDict()
 optionsDict_ord["GAIN"] = 4.5
 optionsDict_ord["READNOISE"] = 0.5
+optionsDict_ord2 = OrderedDict()
+optionsDict_ord2["GAIN"] = 4.5
+optionsDict_ord2["READNOISE"] = 0.5
+optionsDict_ord2["ORIGINAL_SKY"] = 154.33
 
 fsetdesc_correct1b = copy.copy(fsetdesc_correct1)
 fsetdesc_correct1b._name = "fs0"
@@ -102,7 +107,7 @@ modeldesc_correct1 = ModelDescription([fsetdesc_correct1b],
 fsetdesc_correct2b = copy.copy(fsetdesc_correct2)
 fsetdesc_correct2b._name = "fs0"
 modeldesc_correct2 = ModelDescription([fsetdesc_correct2b],
-                                      options=optionsDict_ord)
+                                      options=optionsDict_ord2)
 
 
 
