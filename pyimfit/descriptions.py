@@ -629,9 +629,10 @@ class ModelDescription(object):
 
     """
 
-    def __init__( self, functionSetsList=None, options={} ):
+    def __init__( self, functionSetsList=None, options=None ):
         self.options = OrderedDict()
-        self.options.update(options)
+        if options is not None:
+            self.options.update(options)
         self._functionSets = []
         self.nFunctionSets = 0
         if functionSetsList is not None:

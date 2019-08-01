@@ -1,5 +1,7 @@
 # Code for reading in and analyzing outputs of imfit
 
+from __future__ import division
+
 import glob
 import numpy as np
 
@@ -138,7 +140,7 @@ def ReadImfitConfigFile( fileName, minorAxis=False, pix=1.0, getNames=False, X0=
         nSkipParams = imfitFunctionMap[fname]["nSkip"]
         fullParams = paramMetaList[i]
         # calculate scaling factor for minor-axis values, if needed
-        if minorAxis is True:
+        if minorAxis:
             ellIndex = imfitFunctionMap[fname]["ell"]
             ell = fullParams[ellIndex+1]
             q = 1.0 - ell
@@ -156,7 +158,7 @@ def ReadImfitConfigFile( fileName, minorAxis=False, pix=1.0, getNames=False, X0=
         trimmedParamList.append(trimmedParams)
 
 
-    if getNames is True:
+    if getNames:
         return (funcNameList, funcList, trimmedParamList)
     else:
         return (funcList, trimmedParamList)
@@ -187,7 +189,7 @@ def GetBootstrapOutput( filename ):
     firstLines = []
     with open(filename) as theFile:
         try:
-            for x in range(100):
+            for i in range(100):
                 firstLines.append(next(theFile))
         except StopIteration:
             pass
@@ -319,10 +321,10 @@ def MergeChains( fname_root, maxChains=None, getAllColumns=False, start=10000, l
     nGenerations = dd.shape[0]
 
     # figure out what part of full chain to extract
-    if secondHalf is True:
+    if secondHalf:
         startTime = int(np.floor(nGenerations / 2))
     elif last is not None:
-        startTime = -last
+        startTime = -last   #pylint: disable=invalid-unary-operand-type
     else:
         startTime = start
 

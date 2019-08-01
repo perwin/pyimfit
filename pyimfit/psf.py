@@ -5,6 +5,8 @@ Functions to generate simple PSF images, using either Gaussian or Moffat profile
 
 # Modified version of code originally created on Sep 25, 2013 by Andre
 
+from __future__ import division
+
 import numpy as np
 
 from .fitting import Imfit

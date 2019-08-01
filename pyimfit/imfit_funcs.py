@@ -18,6 +18,8 @@
 # By default, *all* functions take a positional value (x0) as their first
 # parameter, even if they ignore it.
 
+from __future__ import division
+
 import math
 import numpy as np
 try:
