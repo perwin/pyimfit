@@ -170,8 +170,8 @@ class TestImfit_MultiComponent(object):
         (totalMag, magsArray) = imfit_fitter2.getModelMagnitudes(zeroPoint=20)
         totalMag_correct = 20 - 2.5*math.log10(totalFlux_correct)
         magsArray_correct = 20 - 2.5*np.log10(fluxArray_correct)
-        assert_allclose(totalMag, totalMag_correct, rtol=1.0e-8)
-        assert_allclose(magsArray, magsArray_correct, rtol=1.0e-8)
+        assert_allclose(totalMag, totalMag_correct, rtol=1.0e-7)
+        assert_allclose(magsArray, magsArray_correct, rtol=1.0e-7)
 
 
 class TestImfit_ImageGeneration(object):
