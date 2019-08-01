@@ -451,13 +451,18 @@ do something like "cd pyimfit ; pytest" or "cd pymfit ; pytest pyimfit/tests", t
 tests will fail because the paths to the data files in data/ will be wrong....
 
 We can also set up a daemon process that monitors pyimfit/pyimfit/ and its subdirectories
-for any changes to files, and re-runs "pytest" via the "conttest" package
-(https://github.com/eigenhombre/continuous-testing-helper; installable via pip)
+for any changes to files, and re-runs "pytest" via the "conttest" script
+(original at https://github.com/eigenhombre/continuous-testing-helper; modified version
+in ~/python)
 
 $ cd pyimfit/pyimfit
-$ conttest "cd tests ; pytest"
+$ ~/python/conttest.py "cd tests ; pytest"
+OR:
+$ cd pyimfit/pyimfit/tests
+$ ~/python/conttest.py --dir=.. "pytest"
 
-(Ctrl-C will kill the conttest daemon)
+
+(Ctrl-C will kill the conttest process)
 
 (Note that the options of a ".conttest-excludes" file in the same directory which tells
 conttest to ignore a set of subdirectories doesn't seem to work -- but the only subdirectories

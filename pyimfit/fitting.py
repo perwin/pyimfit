@@ -299,7 +299,6 @@ class Imfit(object):
         all_kw = ['n_combined', 'exp_time', 'gain', 'read_noise', 'original_sky',
                   'error_type', 'mask_format', 'psf_oversampling_list', 'use_poisson_mlr',
                   'use_cash_statistics', 'use_model_for_errors']
-        optionsDict = {}
         for kw in list(kwargs.keys()):
             if kw not in all_kw:
                 raise Exception('Unknown kwarg: %s' % kw)
@@ -376,7 +375,7 @@ class Imfit(object):
             newParams = np.array(newParameters).astype(np.float64)
         else:
             newParams = newParameters.astype(np.float64)
-        return self._modelObjectWrapper.computeFitStatistic(newParameters)
+        return self._modelObjectWrapper.computeFitStatistic(newParams)
 
 
     def runBootstrap( self, nIterations, ftol=1e-8, verbose=-1, seed=0 ):
