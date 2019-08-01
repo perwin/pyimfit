@@ -163,15 +163,15 @@ class TestImfit_MultiComponent(object):
         (totalFlux, fluxArray) = imfit_fitter2.getModelFluxes()
         totalFlux_correct = 1291846.609307
         fluxArray_correct = np.array([453777.572255, 838069.037053])
-        assert_allclose(totalFlux, totalFlux_correct, rtol=1.0e-10)
-        assert_allclose(fluxArray, fluxArray_correct, rtol=1.0e-10)
+        assert_allclose(totalFlux, totalFlux_correct, rtol=1.0e-9)
+        assert_allclose(fluxArray, fluxArray_correct, rtol=1.0e-9)
 
         # get magnitudes -- use parameter zero point
         (totalMag, magsArray) = imfit_fitter2.getModelMagnitudes(zeroPoint=20)
         totalMag_correct = 20 - 2.5*math.log10(totalFlux_correct)
         magsArray_correct = 20 - 2.5*np.log10(fluxArray_correct)
-        assert_allclose(totalMag, totalMag_correct, rtol=1.0e-10)
-        assert_allclose(magsArray, magsArray_correct, rtol=1.0e-10)
+        assert_allclose(totalMag, totalMag_correct, rtol=1.0e-9)
+        assert_allclose(magsArray, magsArray_correct, rtol=1.0e-9)
 
 
 class TestImfit_ImageGeneration(object):
