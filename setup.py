@@ -295,7 +295,7 @@ setup(
         "Operating System :: POSIX",
         "Intended Audience :: Science/Research",
     ],
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     # setup_requires = temporary local installation in order to run this script
     # install_requires = standard pip installation for general future use
     setup_requires=['scons'],
