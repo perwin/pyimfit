@@ -21,64 +21,55 @@
 from __future__ import division
 
 import math
-import numpy as np
+import scipy.special   # type: ignore
+import scipy.optimize   # type: ignore
+import numpy as np   # type: ignore
+
+from typing import List
+
+
+# Notes on the different "incomplete gamma functions"
+# http://mpmath.org/doc/current/functions/expintegrals.html?highlight=gammainc#incomplete-gamma-functions
+# https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.gammainc.html
+def gammainc_lower_scipy( z, b ):
+    return scipy.special.gamma(z) * scipy.special.gammainc(z, b)
+
 try:
-    from mpmath import besselk as BesselK
+    from mpmath import besselk as BesselK   # type: ignore
     from mpmath import gamma as Gamma
+    from mpmath import gammainc as GammaInc
+    mpmathPresent = True
 except ImportError:
     from scipy.special import kv as BesselK
     from scipy.special import gamma as Gamma
-
-
-# Parameters for Sersic b_n approximations:
-a0 = 0.3333333333333333
-a1 = 0.009876543209876543
-a2 = 0.0018028610621203215
-a3 = 0.00011409410586365319
-a4 = 7.1510122958919723e-05
-
-a0_m03 = 0.01945
-a1_m03 = -0.8902
-a2_m03 = 10.95
-a3_m03 = -19.67
-a4_m03 = 13.43
+    GammaInc = gammainc_lower_scipy
+    mpmathPresent = False
 
 
 # auxiliary functions used by other functions
 
-def b_n( n ):
-    """Calculate the b_n parameter of a Sersic function for the given
-    value of the Sersic index n.
+def b_n_exact( n ):
+    """Exact calculation of the Sersic derived parameter b_n, via solution
+    of the function
+            Gamma(2n) = 2 gamma_inc(2n, b_n)
+    where Gamma = Gamma function and gamma_inc = lower incomplete gamma function.
 
-    Parameters
-    ----------
-    n : float
-
-    Returns
-    -------
-    b_n : float
-
-
-    Uses the approximation formula of Ciotti & Bertin (1999), which is (according to
-    MacArthur, Courteau, & Holtzman 2003 [ApJ, 582, 689]) accurate to better than 10^-4
-    down to n = 0.36; for n < 0.36, we use the approximation of MacArthur et al.
-        NOTE: currently, the n <= 0.36 approximation (at least as I have
-        coded it) give very wrong answers!
+    If n is a list or Numpy array, the return value is a 1-d Numpy array
     """
-    n2 = n*n
-    if (n >= 0.36):
-        # Ciotti & Bertin 1999 approximation
-        bn = 2*n - a0 + a1/n + a2/n2 + a3/(n2*n) - a4/(n2*n2)
+    def myfunc(bn, n):
+        return abs(float(2*GammaInc(2*n, 0, bn) - Gamma(2*n)))
+    if np.iterable(n):
+        b = [scipy.optimize.brent(myfunc, (nn,)) for nn in n]
+        b = np.array(b)
     else:
-        # MacArthur+03 approximation for small n
-        bn = a0_m03 + a1_m03*n + a2_m03*n2 + a3_m03*n2*n + a4_m03*n2*n2
-    return bn
+        b = scipy.optimize.brent(myfunc, (n,))
+    return b
 
 
 
 # Here begins the main set of imfit-compatible functions
 
-def Moffat( r, params, mag=True, magOutput=True ):
+def Moffat( r: float, params: List[float], mag=True, magOutput=True ):
     """Compute intensity at radius r for a Moffat profile, given the specified
     vector of parameters:
         params[0] = r0 = center of profile
@@ -111,7 +102,7 @@ def Moffat( r, params, mag=True, magOutput=True ):
 
 
 
-def Sersic( r, params, mag=True, magOutput=True ):
+def Sersic( r: float, params: List[float], mag=True, magOutput=True ):
     """Compute intensity at radius r for a Sersic profile, given the specified
     vector of parameters:
         params[0] = r0 = center of (symmetric) profile
@@ -134,14 +125,14 @@ def Sersic( r, params, mag=True, magOutput=True ):
     else:
         I_e = params[2]
     r_e = params[3]
-    I = I_e * np.exp( -b_n(n)*(pow(R/r_e, 1.0/n) - 1.0) )
+    I = I_e * np.exp( -b_n_exact(n)*(pow(R/r_e, 1.0/n) - 1.0) )
     if (mag is True) and (magOutput is True):
         return -2.5 * np.log10(I)
     else:
         return I
 
 
-def Exponential( r, params, mag=True, magOutput=True ):
+def Exponential( r: float, params: List[float], mag=True, magOutput=True ):
     """Compute intensity at radius r for an exponential profile, given the specified
     vector of parameters:
         params[0] = r0 = center of profile
@@ -169,7 +160,7 @@ def Exponential( r, params, mag=True, magOutput=True ):
         return I
 
 
-def BrokenExp( r, params, mag=True, magOutput=True ):
+def BrokenExp( r, params: List[float], mag=True, magOutput=True ):
     """Calculate the value of a broken exponential function at r, given a
     vector of parameters:
         params[0] = r0 = center of profile
@@ -238,7 +229,7 @@ def BrokenExp( r, params, mag=True, magOutput=True ):
         return I
 
 
-def Sech( r, params, mag=True, magOutput=True ):
+def Sech( r: float, params: List[float], mag=True, magOutput=True ):
     """Compute intensity at radius r for a sech profile, given the specified
     vector of parameters:
         params[0] = r0 = center of profile
@@ -267,7 +258,7 @@ def Sech( r, params, mag=True, magOutput=True ):
         return I
 
 
-def Sech2( r, params, mag=True, magOutput=True ):
+def Sech2( r: float, params: List[float], mag=True, magOutput=True ):
     """Compute intensity at radius r for a sech^2 profile, given the specified
     vector of parameters:
         params[0] = r0 = center of profile
@@ -297,7 +288,7 @@ def Sech2( r, params, mag=True, magOutput=True ):
 
 
 
-def vdKSech( r, params, mag=True, magOutput=True ):
+def vdKSech( r: float, params: List[float], mag=True, magOutput=True ):
     """Compute intensity at radius r [= vertical height z in the case of off-plane
     profiles] for a profile following van der Kruit's (1988)
     generalized sech function, given the specified vector of parameters:
@@ -333,7 +324,7 @@ def vdKSech( r, params, mag=True, magOutput=True ):
 
 
 
-def Gauss( x, params, mag=True, magOutput=True ):
+def Gauss( x: float, params: List[float], mag=True, magOutput=True ):
     """Compute surface brightness for a profile consisting of a Gaussian,
     given input parameters in vector params:
         params[0] = x-value of Gaussian center.
@@ -359,7 +350,7 @@ def Gauss( x, params, mag=True, magOutput=True ):
 
 
 
-def GaussRing( x, params, mag=True, magOutput=True ):
+def GaussRing( x: float, params: List[float], mag=True, magOutput=True ):
     """Compute surface brightness for a profile consisting of a Gaussian,
     given input parameters in vector params:
         params[0] = ignored.
@@ -388,7 +379,7 @@ def GaussRing( x, params, mag=True, magOutput=True ):
 
 
 
-def Gauss2Side( x, params, mag=True, magOutput=True ):
+def Gauss2Side( x, params: List[float], mag=True, magOutput=True ):
     """Compute surface brightness for a profile consisting of an asymmetric
     Gaussian, given input parameters in vector params:
         params[0] = x-value of Gaussian center.
@@ -432,7 +423,7 @@ def Gauss2Side( x, params, mag=True, magOutput=True ):
 
 
 
-def GaussRing2Side( x, params, mag=True, magOutput=True ):
+def GaussRing2Side( x, params: List[float], mag=True, magOutput=True ):
     """Compute surface brightness for a profile consisting of an asymmetric
     Gaussian, given input parameters in vector params:
         params[0] = ignored.
@@ -483,7 +474,7 @@ def GaussRing2Side( x, params, mag=True, magOutput=True ):
 # Some alternate functions, which do not necessarily follow the rules for
 # the imfit-compatible functions given above.
 
-def ExpMag( x, params ):
+def ExpMag( x: float, params ):
     """Compute surface brightness for a profile consisting of an exponential,
     given input parameters in vector params:
         params[0] = mu_0
@@ -496,7 +487,7 @@ def ExpMag( x, params ):
     return mu_0 + 1.085736*(x/h)
 
 
-def vdKBessel( r, mu00, h ):
+def vdKBessel( r: float, mu00, h ):
     """Implements the f(r) part of van der Kruit & Searle's (1981) edge-on
     disk function.
     For scalar values only!
@@ -524,7 +515,7 @@ def EdgeOnDisk(rr, p):
 # Total magnitudes, assuming that inputs are in units of
 # counts/pixel and dimensions are in pixels
 
-def TotalMagExp( params, zeroPoint=0, magOut=True, ell=0.0 ):
+def TotalMagExp( params: List[float], zeroPoint=0, magOut=True, ell=0.0 ):
     """Calculate the total magnitude (or flux if magOut=False) for an
     2D exponential with [I_0, h] = params, where I_0 is in counts/pixel
     and h is in pixels.  Optionally, the ellipticity can be specified.
@@ -538,7 +529,7 @@ def TotalMagExp( params, zeroPoint=0, magOut=True, ell=0.0 ):
         return totalFlux
 
 
-def TotalMagSersic( params, zeroPoint=0, magOut=True, ell=0.0 ):
+def TotalMagSersic( params: List[float], zeroPoint=0, magOut=True, ell=0.0 ):
     """Calculate the total magnitude (or flux if magOut=False) for a
     2D Sersic function with [n, I_e, r_e] = params, where I_0 is in counts/pixel
     and h is in pixels.  Optionally, the ellipticity can be specified.

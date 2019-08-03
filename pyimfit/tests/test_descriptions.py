@@ -27,7 +27,7 @@ class TestParameterDescription(object):
 
 
     def test_ParameterDescription_complex( self ):
-        pdesc1 = ParameterDescription('X0', 100.0, 50.0, 150.0)
+        pdesc1 = ParameterDescription('X0', 100.0, [50.0, 150.0])
         assert pdesc1.name == "X0"
         assert pdesc1.value == 100.0
         assert pdesc1.limits == (50.0,150.0)
@@ -50,7 +50,7 @@ class TestParameterDescription(object):
 
     def test_ParameterDescription_setValue( self ):
         pdesc = ParameterDescription('X0', 100.0)
-        pdesc.setValue(150.0, 10.0, 1e5)
+        pdesc.setValue(150.0, [10.0, 1e5])
         assert pdesc.name == "X0"
         assert pdesc.value == 150.0
         assert pdesc.limits == (10.0,1e5)
@@ -58,7 +58,7 @@ class TestParameterDescription(object):
 
 
     def test_ParameterDescription_setThings( self ):
-        pdesc = ParameterDescription('X0', 100.0, 50.0, 150.0)
+        pdesc = ParameterDescription('X0', 100.0, [50.0, 150.0])
         assert pdesc.name == "X0"
         assert pdesc.value == 100.0
         assert pdesc.limits == (50.0,150.0)
@@ -82,7 +82,7 @@ class TestParameterDescription(object):
         outString1_correct = "X0\t\t100.0"
         pdesc2 = ParameterDescription('X0', 100.0, fixed=True)
         outString2_correct = "X0\t\t100.0\t\tfixed"
-        pdesc3 = ParameterDescription('X0', 100.0, 50.0, 150.0)
+        pdesc3 = ParameterDescription('X0', 100.0, [50.0, 150.0])
         outString3_correct = "X0\t\t100.0\t\t50.0,150.0"
         # user requested no limits be printed
         outString3b_correct = "X0\t\t100.0"
@@ -109,9 +109,9 @@ class TestFunctionDescription(object):
 
     def setup_method( self ):
         self.p1 = ParameterDescription("PA", 0.0, fixed=True)
-        self.p2 = ParameterDescription("ell", 0.5, 0.1,0.8)
-        self.p3 = ParameterDescription("I_0", 100.0, 10.0, 1e3)
-        self.p4 = ParameterDescription("sigma", 10.0, 5.0,20.0)
+        self.p2 = ParameterDescription("ell", 0.5, [0.1,0.8])
+        self.p3 = ParameterDescription("I_0", 100.0, [10.0, 1e3])
+        self.p4 = ParameterDescription("sigma", 10.0, [5.0,20.0])
         self.paramDescList = [self.p1, self.p2, self.p3, self.p4]
 
     def test_FunctionDescription_simple( self ):
@@ -165,15 +165,15 @@ class TestFunctionSetDescription(object):
 
     def setup_method( self ):
         self.p1 = ParameterDescription("PA", 0.0, fixed=True)
-        self.p2 = ParameterDescription("ell", 0.5, 0.1,0.8)
-        self.p3 = ParameterDescription("I_0", 100.0, 10.0, 1e3)
-        self.p4 = ParameterDescription("sigma", 10.0, 5.0,20.0)
+        self.p2 = ParameterDescription("ell", 0.5, [0.1,0.8])
+        self.p3 = ParameterDescription("I_0", 100.0, [10.0, 1e3])
+        self.p4 = ParameterDescription("sigma", 10.0, [5.0,20.0])
         self.paramDescList = [self.p1, self.p2, self.p3, self.p4]
         self.fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
         self.functionList = [self.fdesc1]
 
         self.x0_p = ParameterDescription("X0", 100.0, fixed=True)
-        self.y0_p = ParameterDescription("Y0", 200.0, 180.0, 220.0)
+        self.y0_p = ParameterDescription("Y0", 200.0, [180.0, 220.0])
 
 
     def test_FunctionSetDescription_simple( self ):
@@ -250,11 +250,11 @@ class TestModelDescription(object):
 
     def setup_method( self ):
         self.x0_p = ParameterDescription("X0", 100.0, fixed=True)
-        self.y0_p = ParameterDescription("Y0", 200.0, 180.0, 220.0)
+        self.y0_p = ParameterDescription("Y0", 200.0, [180.0, 220.0])
         self.p1 = ParameterDescription("PA", 0.0, fixed=True)
-        self.p2 = ParameterDescription("ell", 0.5, 0.1,0.8)
-        self.p3 = ParameterDescription("I_0", 100.0, 10.0, 1e3)
-        self.p4 = ParameterDescription("sigma", 10.0, 5.0,20.0)
+        self.p2 = ParameterDescription("ell", 0.5, [0.1,0.8])
+        self.p3 = ParameterDescription("I_0", 100.0, [10.0, 1e3])
+        self.p4 = ParameterDescription("sigma", 10.0, [5.0,20.0])
         self.paramDescList = [self.p1, self.p2, self.p3, self.p4]
         self.fullParamDescList = [self.x0_p, self.y0_p, self.p1, self.p2, self.p3, self.p4]
         self.fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
@@ -285,12 +285,12 @@ class TestModelDescription(object):
         assert optionsDict2 == modeldesc1.optionsDict
 
     def test_ModelDescription_load_from_file( self ):
-        x0_p = ParameterDescription("X0", 129.0, 125,135)
-        y0_p = ParameterDescription("Y0", 129.0, 125,135)
-        p1 = ParameterDescription("PA", 18.0, 0,90)
-        p2 = ParameterDescription("ell", 0.2, 0.0,1)
-        p3 = ParameterDescription("I_0", 100.0, 0, 500)
-        p4 = ParameterDescription("h", 25, 0,100)
+        x0_p = ParameterDescription("X0", 129.0, [125,135])
+        y0_p = ParameterDescription("Y0", 129.0, [125,135])
+        p1 = ParameterDescription("PA", 18.0, [0,90])
+        p2 = ParameterDescription("ell", 0.2, [0.0,1])
+        p3 = ParameterDescription("I_0", 100.0, [0, 500])
+        p4 = ParameterDescription("h", 25, [0,100])
         paramDescList = [p1, p2, p3, p4]
         fullParamDescList = [x0_p, y0_p, p1, p2, p3, p4]
         fdesc = FunctionDescription('Exponential', "blob", paramDescList)
@@ -309,12 +309,12 @@ class TestModelDescription(object):
     def test_ModelDescription_getStrings(self):
         modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
 
-        x0_p = ParameterDescription("X0", 129.0, 125,135)
-        y0_p = ParameterDescription("Y0", 129.0, 125,135)
-        p1 = ParameterDescription("PA", 18.0, 0,90)
-        p2 = ParameterDescription("ell", 0.2, 0.0,1)
-        p3 = ParameterDescription("I_0", 100.0, 0, 500)
-        p4 = ParameterDescription("h", 25, 0,100)
+        x0_p = ParameterDescription("X0", 129.0, [125,135])
+        y0_p = ParameterDescription("Y0", 129.0, [125,135])
+        p1 = ParameterDescription("PA", 18.0, [0,90])
+        p2 = ParameterDescription("ell", 0.2, [0.0,1])
+        p3 = ParameterDescription("I_0", 100.0, [0, 500])
+        p4 = ParameterDescription("h", 25, [0,100])
         paramDescList = [p1, p2, p3, p4]
         fullParamDescList = [x0_p, y0_p, p1, p2, p3, p4]
 
@@ -392,11 +392,11 @@ class TestSimpleModelDescription(object):
 
     def setup_method( self ):
         self.x0_p = ParameterDescription("X0", 100.0, fixed=True)
-        self.y0_p = ParameterDescription("Y0", 200.0, 180.0, 220.0)
+        self.y0_p = ParameterDescription("Y0", 200.0, [180.0, 220.0])
         self.p1 = ParameterDescription("PA", 0.0, fixed=True)
-        self.p2 = ParameterDescription("ell", 0.5, 0.1,0.8)
-        self.p3 = ParameterDescription("I_0", 100.0, 10.0, 1e3)
-        self.p4 = ParameterDescription("sigma", 10.0, 5.0,20.0)
+        self.p2 = ParameterDescription("ell", 0.5, [0.1,0.8])
+        self.p3 = ParameterDescription("I_0", 100.0, [10.0, 1e3])
+        self.p4 = ParameterDescription("sigma", 10.0, [5.0,20.0])
         self.paramDescList = [self.p1, self.p2, self.p3, self.p4]
         self.fullParamDescList = [self.x0_p, self.y0_p, self.p1, self.p2, self.p3, self.p4]
         self.fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)

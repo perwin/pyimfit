@@ -11,21 +11,21 @@ from numpy.testing import assert_allclose
 
 def create_model():
     model = SimpleModelDescription()
-    model.x0.setValue(50, vmin=40, vmax=60)
-    model.y0.setValue(50, vmin=40, vmax=60)
+    model.x0.setValue(50, limits=[40,60])
+    model.y0.setValue(50, limits=[40,60])
     
     bulge = make_imfit_function('Sersic', label='bulge')
-    bulge.I_e.setValue(1.0, vmin=0.5, vmax=1.5)
-    bulge.r_e.setValue(10, vmin=5, vmax=15)
-    bulge.n.setValue(4, vmin=3, vmax=5)
-    bulge.PA.setValue(45, vmin=30, vmax=60)
-    bulge.ell.setValue(0.5, vmin=0, vmax=1)
+    bulge.I_e.setValue(1.0, limits=[0.5,1.5])
+    bulge.r_e.setValue(10, limits=[5,15])
+    bulge.n.setValue(4, limits=[3,5])
+    bulge.PA.setValue(45, limits=[30,60])
+    bulge.ell.setValue(0.5, limits=[0,1])
     
     disk = make_imfit_function('Exponential', label='disk')
-    disk.I_0.setValue(0.7, vmin=0.4, vmax=0.9)
-    disk.h.setValue(15, vmin=10, vmax=20)
-    disk.PA.setValue(60, vmin=45, vmax=90)
-    disk.ell.setValue(0.2, vmin=0, vmax=0.5)
+    disk.I_0.setValue(0.7, limits=[0.4,0.9])
+    disk.h.setValue(15, limits=[10,20])
+    disk.PA.setValue(60, limits=[45,90])
+    disk.ell.setValue(0.2, limits=[0,0.5])
     
     model.addFunction(bulge)
     model.addFunction(disk)

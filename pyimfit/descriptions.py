@@ -5,7 +5,10 @@
 
 from copy import copy, deepcopy
 from collections import OrderedDict
-import numpy as np
+
+from typing import List, Dict, Sequence, Optional, Union
+
+import numpy as np   # type: ignore
 
 
 __all__ = ['SimpleModelDescription', 'ModelDescription',
@@ -46,7 +49,7 @@ class ParameterDescription(object):
 
     Methods
     -------
-        setValue(value, vmin=None, vmax=None, fixed=False)
+        setValue(value, limits=None, fixed=False)
             Set the value (and limits, fixed state) of the parameter
 
         setTolerance(tol)
@@ -63,10 +66,10 @@ class ParameterDescription(object):
             1-sigma uncertainty)
 
     """
-    def __init__( self, name, value, vmin=None, vmax=None, fixed=False ):
+    def __init__( self, name: str, value: float, limits: Optional[Sequence[float]]=None, fixed=False ):
         self._name = name
         self._limits = None
-        self.setValue(value, vmin, vmax, fixed)
+        self.setValue(value, limits, fixed)
 
 
     @property
@@ -101,7 +104,7 @@ class ParameterDescription(object):
         return self._fixed
 
 
-    def setValue( self, value, vmin=None, vmax=None, fixed=False ):
+    def setValue( self, value: float, limits: Optional[Sequence[float]]=None, fixed: bool=False ):
         """
         Set the value and (optionally) constraints of the parameter.
 
@@ -110,29 +113,18 @@ class ParameterDescription(object):
         value : float
             Value of the parameter.
 
-        vmin : float OR 2-element sequence of float, optional
-            Lower limit of the parameter.
+        limits : 2-element sequence of float, optional
+            Lower and upper limits of the parameter.
             Default: ``None`` (= no limits).
-
-            Alternately, this can be a two-element list, tuple, or Numpy
-            array containing the lower and upper limits
-
-        vmax : float, optional
-            Upper limit of the parameter.
-            Default: ``None`` ( = no limits).
 
         fixed : bool, optional
             Flag the parameter as fixed. Default: ``False``.
         """
-        if vmin is not None:
-            if vmax is None:
-                try:
-                    lower_limit, upper_limit = vmin
-                except TypeError:
-                    raise ValueError("If vmax is None, vmin must be None or two-element iterable.")
-            else:
-                lower_limit = vmin
-                upper_limit = vmax
+        if limits is not None:
+            try:
+                lower_limit, upper_limit = limits
+            except TypeError:
+                raise ValueError("limits must be None or two-element iterable.")
             # test for valid limits
             if value < lower_limit:
                 lower_limit = value
@@ -146,7 +138,7 @@ class ParameterDescription(object):
         self._fixed = fixed
 
 
-    def setTolerance( self, tol ):
+    def setTolerance( self, tol: float ):
         """
         Set the parameter limits using a fractional "tolerance" value, so that the
         lower limit = (1 - `tol`)*value and the upper limit = (1 + `tol`)*value.
@@ -164,7 +156,7 @@ class ParameterDescription(object):
         self._limits = (self._value * (1 - tol), self._value * (1 + tol))
 
 
-    def setLimitsRel( self, i1, i2 ):
+    def setLimitsRel( self, i1: float, i2: float ):
         """
         Set the parameter limits using relative intervals. The limits
         will be [value - i1, value + i2]
@@ -182,7 +174,7 @@ class ParameterDescription(object):
         self.setLimits(self._value - i1, self._value + i2)
 
 
-    def setLimits( self, v1, v2 ):
+    def setLimits( self, v1: float, v2: float ):
         """
         Set the parameter limits using specified values: [v1, v2]
 
@@ -203,7 +195,7 @@ class ParameterDescription(object):
         self._limits = (v1, v2)
 
 
-    def getStringDescription( self, noLimits=False, error=None ):
+    def getStringDescription( self, noLimits=False, error: Optional[float]=None ):
         """
         Returns a string with parameter name, value, limits, suitable for inclusion in
         an imfit/makeimage config file.
@@ -288,7 +280,7 @@ class FunctionDescription(object):
             Returns a list of the ParameterDescription objects
 
     """
-    def __init__(self, func_name, label=None, parameters=None):
+    def __init__(self, func_name: str, label: Optional[str]=None, parameters=None):
         self._funcName = func_name
         self._label = label
         self._parameters = []
@@ -306,7 +298,7 @@ class FunctionDescription(object):
         return self._label
 
 
-    def addParameter( self, p ):
+    def addParameter( self, p: ParameterDescription ):
         if not isinstance(p, ParameterDescription):
             raise ValueError('p is not a ParameterDescription object.')
         self._parameters.append(p)
@@ -328,7 +320,7 @@ class FunctionDescription(object):
         return [p for p in self._parameters]
 
 
-    def getStringDescription( self, noLimits=False, errors=None ):
+    def getStringDescription( self, noLimits=False, errors: Optional[Sequence[float]]=None ):
         """
         Returns a list of strings suitable for inclusion in an imfit/makeimage config file.
 
@@ -425,7 +417,9 @@ class FunctionSetDescription(object):
             the function block/set (including X0,Y0)
 
     """
-    def __init__( self, name, x0param=None, y0param=None, functionList=None ):
+    def __init__( self, name: str, x0param: Optional[ParameterDescription]=None,
+                  y0param: Optional[ParameterDescription]=None,
+                  functionList: Optional[List[FunctionDescription]]=None ):
         self._name = name
         if x0param is None:
             self.x0 = ParameterDescription('X0', 0.0)
@@ -441,7 +435,7 @@ class FunctionSetDescription(object):
                 msg = "y0param should be instance of ParameterDescription"
                 raise ValueError(msg)
             self.y0 = y0param
-        self._functions = []
+        self._functions: List[FunctionDescription] = []
         self.nFunctions = 0
         if functionList is not None:
             for f in functionList:
@@ -457,7 +451,7 @@ class FunctionSetDescription(object):
         return self._name
 
 
-    def addFunction(self, f):
+    def addFunction(self, f: FunctionDescription):
         """
         Add an Imfit image function created using :func:`make_image_function`.
 
@@ -478,7 +472,7 @@ class FunctionSetDescription(object):
         self.nFunctions += 1
 
 
-    def _contains(self, label):
+    def _contains(self, label: str):
         for f in self._functions:
             if f.label == label:
                 return True
@@ -515,7 +509,7 @@ class FunctionSetDescription(object):
         return params
 
 
-    def getStringDescription( self, noLimits=False, errors=None ):
+    def getStringDescription( self, noLimits=False, errors: Optional[Sequence[float]]=None ):
         """
         Returns a list of strings suitable for inclusion in an imfit/makeimage config file.
 
@@ -629,8 +623,9 @@ class ModelDescription(object):
 
     """
 
-    def __init__( self, functionSetsList=None, options=None ):
-        self.options = OrderedDict()
+    def __init__( self, functionSetsList: Optional[List[FunctionSetDescription]]=None,
+                  options: Optional[Dict[str,float]]=None ):
+        self.options: Dict[str,float] = OrderedDict()
         if options is not None:
             self.options.update(options)
         self._functionSets = []
@@ -643,14 +638,14 @@ class ModelDescription(object):
 
 
     @classmethod
-    def load(cls, fname):
+    def load(cls, fileName: str):
         """
         This is a convenience method to generate a ModelDescription object
         from a standard Imfit configuration file.
 
         Parameters
         ----------
-        fname : string
+        fileName : string
             Path to the Imfit configuration file.
 
         Returns
@@ -667,7 +662,7 @@ class ModelDescription(object):
         # depends on definitions in *this* file)
         from .config import parse_config_file
 
-        return parse_config_file(fname)
+        return parse_config_file(fileName)
 
 
     @property
@@ -679,7 +674,7 @@ class ModelDescription(object):
         return self.options
 
 
-    def addFunctionSet(self, fs):
+    def addFunctionSet(self, fs: FunctionSetDescription):
         """
         Add a function set to the model description.
 
@@ -697,7 +692,7 @@ class ModelDescription(object):
         self.nFunctionSets += 1
 
 
-    def updateOptions( self, optionsDict ):
+    def updateOptions( self, optionsDict: Dict[str,float] ):
         """
         Updates the internal image-descriptions dict, replacing current values for keys
         already in the dict and added key-value pairs for keys not already present.
@@ -709,7 +704,7 @@ class ModelDescription(object):
         self.options.update(optionsDict)
 
 
-    def replaceOptions( self, optionsDict ):
+    def replaceOptions( self, optionsDict: Dict[str,float] ):
         """
         Replaces the current image-descriptions dict.
 
@@ -721,7 +716,7 @@ class ModelDescription(object):
         self.options = optionsDict
 
 
-    def _contains(self, name):
+    def _contains(self, name: str):
         for fs in self._functionSets:
             if fs.name == name:
                 return True
@@ -795,7 +790,7 @@ class ModelDescription(object):
         return [p.limits for p in paramsList]
 
 
-    def getStringDescription( self, noLimits=False, errors=None, saveOptions=False ):
+    def getStringDescription( self, noLimits=False, errors: Optional[Sequence[float]]=None, saveOptions=False ):
         """
         Returns a list of strings suitable for inclusion in an imfit/makeimage config file.
 
@@ -929,7 +924,7 @@ class SimpleModelDescription(ModelDescription):
         return self._functionSets[0].y0
 
 
-    def addFunction(self, f):
+    def addFunction(self, f: FunctionDescription):
         """
         Add a function created using :func:`function_description`.
 
@@ -941,7 +936,7 @@ class SimpleModelDescription(ModelDescription):
         self._functionSets[0].addFunction(f)
 
 
-    def addFunctionSet(self, fs):
+    def addFunctionSet(self, fs: FunctionSetDescription):
         if len(self._functionSets) >= 1:
             raise Exception('Only one function set allowed.')
         super().addFunctionSet(fs)

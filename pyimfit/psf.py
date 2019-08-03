@@ -7,11 +7,11 @@ Functions to generate simple PSF images, using either Gaussian or Moffat profile
 
 from __future__ import division
 
-import numpy as np
+import numpy as np   # type: ignore
 
 from .fitting import Imfit
 from .descriptions import SimpleModelDescription
-from .pyimfit_lib import make_imfit_function
+from .pyimfit_lib import make_imfit_function  # type: ignore
 
 
 __all__ = ['gaussian_psf', 'moffat_psf']
@@ -20,7 +20,7 @@ __all__ = ['gaussian_psf', 'moffat_psf']
 FWHM_to_sigma_factor = 2.0 * np.sqrt(2.0 * np.log(2.0))
 
 
-def gaussian_psf(width, width_type='fwhm', PA=0.0, ell=0.0, size=31):
+def gaussian_psf( width: float, width_type='fwhm', PA=0.0, ell=0.0, size=31 ):
     """
     Creates a 2-D gaussian Point Spread function, to be used
     when creating an :class:`Imfit` object.
@@ -75,7 +75,7 @@ def gaussian_psf(width, width_type='fwhm', PA=0.0, ell=0.0, size=31):
     return psf_image
 
 
-def moffat_psf(fwhm, beta=3.1, PA=0.0, ell=0.0, size=31):
+def moffat_psf( fwhm: float, beta=3.1, PA=0.0, ell=0.0, size=31 ):
     """
     Creates a 2-D Moffat Point Spread function, to be used
     when creating an :class:`Imfit` object.

@@ -3,14 +3,16 @@
 from __future__ import division
 
 import glob
-import numpy as np
+from typing import List, Dict, Optional
+
+import numpy as np   # type: ignore
 
 from . import imfit_funcs as imfuncs
 
 # If pandas is available, use its (much faster) file-reading code
 usingPandas = False
 try:
-    import pandas as pd
+    import pandas as pd   # type: ignore
     usingPandas = True
     def GetDataColumns( filename, usecols=None ):
         df = pd.read_csv(filename, delim_whitespace=True, comment='#', dtype=np.float64,
@@ -28,7 +30,7 @@ except ImportError:
 #    "ell" = index for ellipticity parameter, if it exists,
 #    "a" = index or indices for semi-major-axis parameters (r_e, h, sigma, etc.)
 # THIS IS NOT MEANT TO BE A COMPLETE LIST
-imfitFunctionMap = {"Exponential": {"function": imfuncs.Exponential, "nSkip": 2, "ell": 1, "a": [3]},
+imfitFunctionMap: Dict[str, Dict] = {"Exponential": {"function": imfuncs.Exponential, "nSkip": 2, "ell": 1, "a": [3]},
                     "Exponential_GenEllipse": {"function": imfuncs.Exponential, "nSkip": 3, "ell": 1, "a": [4]},
                     "Sersic": {"function": imfuncs.Sersic, "nSkip": 2, "ell": 1, "a": [4]},
                     "Sersic_GenEllipse": {"function": imfuncs.Sersic, "nSkip": 3, "ell": 1, "a": [5]},
@@ -40,11 +42,11 @@ imfitFunctionMap = {"Exponential": {"function": imfuncs.Exponential, "nSkip": 2,
 
 
 
-def ChopComments( theLine ):
+def ChopComments( theLine: str ) -> str:
     return theLine.split("#")[0]
 
 
-def GetFunctionImageNames( baseName, funcNameList ):
+def GetFunctionImageNames( baseName: str, funcNameList: List[str] ) -> List[str]:
     """Generate a list of FITS filenames as would be created by makeimage in "--output-functions"
     mode.
 
@@ -67,7 +69,7 @@ def GetFunctionImageNames( baseName, funcNameList ):
     return imageNameList
 
 
-def ReadImfitConfigFile( fileName, minorAxis=False, pix=1.0, getNames=False, X0=0.0 ):
+def ReadImfitConfigFile( fileName: str, minorAxis=False, pix=1.0, getNames=False, X0=0.0 ):
     """Function to read and parse an imfit-generated parameter file (or input config file)
     and return a tuple consisting of: (list of 1-D imfit_funcs functions, list of lists of parameters).
 
@@ -105,7 +107,7 @@ def ReadImfitConfigFile( fileName, minorAxis=False, pix=1.0, getNames=False, X0=
 
     funcNameList = []
     paramMetaList = []
-    currentParamList = []
+    currentParamList: List[float] = []
     for line in dlines:
         trimmedLine = ChopComments(line)
         if trimmedLine.find("X0") == 0:
@@ -141,8 +143,8 @@ def ReadImfitConfigFile( fileName, minorAxis=False, pix=1.0, getNames=False, X0=
         fullParams = paramMetaList[i]
         # calculate scaling factor for minor-axis values, if needed
         if minorAxis:
-            ellIndex = imfitFunctionMap[fname]["ell"]
-            ell = fullParams[ellIndex+1]
+            ellIndex: int = imfitFunctionMap[fname]["ell"]
+            ell = fullParams[ellIndex + 1]
             q = 1.0 - ell
         else:
             q = 1.0
@@ -150,11 +152,11 @@ def ReadImfitConfigFile( fileName, minorAxis=False, pix=1.0, getNames=False, X0=
         # convert length values to arcsec and/or minor-axis, if needed,
         for smaIndex in smaIndices:
             # +1 to account for X0 value at beginning of parameter list
-            fullParams[smaIndex+1] = pix*q*fullParams[smaIndex+1]
+            fullParams[smaIndex + 1] = pix*q*fullParams[smaIndex + 1]
         # construct the final 1-D parameter set for this function: X0 value, followed
         # by post-2D-shape parameters
         trimmedParams = [fullParams[0]]
-        trimmedParams.extend(fullParams[nSkipParams+1:])
+        trimmedParams.extend(fullParams[nSkipParams + 1:])
         trimmedParamList.append(trimmedParams)
 
 
@@ -168,7 +170,7 @@ def ReadImfitConfigFile( fileName, minorAxis=False, pix=1.0, getNames=False, X0=
 
 # Code for reading output of bootstrap resampling and MCMC chains
 
-def GetBootstrapOutput( filename ):
+def GetBootstrapOutput( filename: str ):
     """Reads imfit's bootstrap-resampling output when saved using the
     --save-bootstrap command-line option.
 
@@ -211,7 +213,7 @@ def GetBootstrapOutput( filename ):
 
 
 
-def GetSingleChain( filename, getAllColumns=False ):
+def GetSingleChain( filename: str, getAllColumns=False ):
     """Reads a single MCMC chain output file and returns a tuple of column names
     and a numpy array with the data.
 
@@ -264,7 +266,7 @@ def GetSingleChain( filename, getAllColumns=False ):
     return (outputColumnNames, d)
 
 
-def MergeChains( fname_root, maxChains=None, getAllColumns=False, start=10000, last=None,
+def MergeChains( fname_root: str, maxChains=None, getAllColumns=False, start=10000, last=None,
                     secondHalf=False  ):
     """
     Reads and concatenates all MCMC output chains with filenames = fname_root.*.txt,
@@ -339,7 +341,7 @@ def MergeChains( fname_root, maxChains=None, getAllColumns=False, start=10000, l
     dd_final = dd[startTime:,:]
     if getAllColumns is False:
         nParamColumns = len(colNames)
-        whichCols = list(range(nParamColumns))
+        whichCols: Optional[List[int]] = list(range(nParamColumns))
     else:
         whichCols = None
 

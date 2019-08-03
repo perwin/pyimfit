@@ -7,11 +7,10 @@
 
 import copy
 
-import numpy as np
+import numpy as np   # type: ignore
 
 from .descriptions import ModelDescription
-from .pyimfit_lib import ModelObjectWrapper
-from copy import deepcopy
+from .pyimfit_lib import ModelObjectWrapper  # type: ignore
 
 __all__ = ['Imfit']
 
@@ -24,7 +23,7 @@ imageOptionNameDict_reverse = {"NCOMBINED": 'n_combined', "EXPTIME": 'exptime', 
                   "READNOISE": 'read_noise', "ORIGINAL_SKY": 'original_sky' }
 
 
-def _composemask( arr, mask, mask_zero_is_bad ):
+def _composemask( arr, mask, mask_zero_is_bad: bool ):
     """
     Helper function to properly compose masks.
 
@@ -71,8 +70,8 @@ class Imfit(object):
     parse_config_file
     """
 
-    def __init__( self, model_descr, psf=None, psfNormalization=True, quiet=True, nproc=0, chunk_size=10,
-                  subsampling=True, zeroPoint=None ):
+    def __init__( self, model_descr: ModelDescription, psf=None, psfNormalization=True, quiet=True,
+                  nproc=0, chunk_size=10, subsampling=True, zeroPoint=None ):
         """
         Parameters
         ----------
@@ -165,7 +164,7 @@ class Imfit(object):
             self._modelDescr.updateOptions(options)
 
 
-    def saveCurrentModelToFile( self, filename, includeImageOptions=False ):
+    def saveCurrentModelToFile( self, filename: str, includeImageOptions=False ):
         # use getModelDescription to get the current (e.g., updated with best-fit parameters)
         # ModelDescription object from self._modelObjectWrapper
         modelDesc = self.getModelDescription()

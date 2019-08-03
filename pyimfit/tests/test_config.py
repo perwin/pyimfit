@@ -32,7 +32,7 @@ testLine_good5 = "X0\t100.1   1.0,500"
 
 pdesc_ref_correct123 = ParameterDescription("X0", 100.1)
 pdesc_ref_correct4 = ParameterDescription("X0", 100.1, fixed=True)
-pdesc_ref_correct5 = ParameterDescription("X0", 100.1, 1.0, 500.0)
+pdesc_ref_correct5 = ParameterDescription("X0", 100.1, [1.0, 500.0])
 
 
 # inputs and reference outputs for read_function
@@ -158,9 +158,9 @@ def test_read_function_attributes( ):
     fdesc2 = read_function(testFunctionLines_good2)
     assert fdesc2._funcName == "Exponential"
     assert fdesc2.PA == ParameterDescription("PA", 20.0, fixed=True)
-    assert fdesc2.ell == ParameterDescription("ell", 0.2, 0.1, 0.4)
-    assert fdesc2.I_0 == ParameterDescription("I_0", 100.0, 0.0, 1.0e6)
-    assert fdesc2.h == ParameterDescription("h", 100.0, 1.0, 400.0)
+    assert fdesc2.ell == ParameterDescription("ell", 0.2, [0.1, 0.4])
+    assert fdesc2.I_0 == ParameterDescription("I_0", 100.0, [0.0, 1.0e6])
+    assert fdesc2.h == ParameterDescription("h", 100.0, [1.0, 400.0])
 
 
 

@@ -9,6 +9,9 @@ ModelDescription class.
 #Modification of Andre's "config.py" (originally created 19 Sep 2013).
 
 from collections import OrderedDict
+
+from typing import List, Any
+
 from .descriptions import ParameterDescription, FunctionDescription, FunctionSetDescription, ModelDescription
 
 __all__ = ['parse_config_file', 'parse_config']
@@ -32,7 +35,7 @@ recognizedOptionNames = list(recognizedOptions.keys())
 #FIXME: (PE) Need to handle case of optional image-function parameters
 
 
-def parse_config_file( fileName ):
+def parse_config_file( fileName: str ) -> ModelDescription:
     """
     Read an Imfit model-configuration file.
 
@@ -54,7 +57,7 @@ def parse_config_file( fileName ):
 
 
 
-def parse_config( lines ):
+def parse_config( lines: List[str] ) -> ModelDescription:
     """
     Parses an Imfit model configuration from a list of strings.
 
@@ -95,7 +98,7 @@ def parse_config( lines ):
 
 
 
-def clean_lines( lines ):
+def clean_lines( lines: List[str] ) -> List[str]:
     """
     Returns a list of lines = input list of lines, with comments and empty lines
     stripped out (blank lines and lines beginning with '#' are removed; lines
@@ -120,7 +123,7 @@ def clean_lines( lines ):
 
 
 
-def read_options( lines ):
+def read_options( lines: List[str] ) -> OrderedDict:
     """
     Parse the lines from an Imfit configuration file which contain image-description
     parameters (GAIN, READ_NOISE, etc.).
@@ -136,7 +139,7 @@ def read_options( lines ):
         maps parameter names to numerical values
         e.g, {"GAIN": 4.56, "ORIGINAL_SKY": 233.87}
     """
-    config = OrderedDict()
+    config: OrderedDict = OrderedDict()
     for line in lines:
         # Options are key-value pairs.
         pieces = line.split()
@@ -158,7 +161,7 @@ def read_options( lines ):
 
 
 
-def read_function_set( name, lines ):
+def read_function_set( name: str, lines: List[str] ) -> FunctionSetDescription:
     """
     Reads in lines of text corresponding to a function block (or 'set') containing
     X0,Y0 coords and one or more image functions with associated parameter settings.
@@ -197,7 +200,7 @@ def read_function_set( name, lines ):
 
 
 
-def read_function( lines ):
+def read_function( lines: List[str] ) -> FunctionDescription:
     """
     Reads in lines of text corresponding to a function declaration and
     initial values, ranges, etc. for its parameters.
@@ -233,7 +236,7 @@ def read_function( lines ):
 
 
 
-def read_parameter( line ):
+def read_parameter( line: str ) -> ParameterDescription:
     """
     Reads in a single text line containing parameter info, parses it, and
     returns a ParameterDescription object with the parameter info.
@@ -250,8 +253,7 @@ def read_parameter( line ):
         Contains extracted information about parameter
         (name, value, possible limits or fixed state)
     """
-    llimit = None
-    ulimit = None
+    limits = None
     fixed = False
 
     # Format:
@@ -263,7 +265,7 @@ def read_parameter( line ):
     name = pieces[0]
     value = float(pieces[1])
     if len(pieces) > 2:
-        predicate = pieces[2]
+        predicate: str = pieces[2]
         if predicate == fixed_str:
             fixed = True
 
@@ -273,7 +275,8 @@ def read_parameter( line ):
             ulimit = float(ulimit)
             if llimit > ulimit:
                 raise ValueError('lower limit ({0:f}) is larger than upper limit ({1:f})'.format(llimit, ulimit))
+            limits = [llimit, ulimit]
         else:
             raise ValueError("Malformed limits on parameter line.")
 
-    return ParameterDescription(name, value, llimit, ulimit, fixed)
+    return ParameterDescription(name, value, limits, fixed)
