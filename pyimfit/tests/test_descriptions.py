@@ -298,6 +298,7 @@ class TestModelDescription(object):
         modeldesc2 = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
         assert modeldesc2.functionSetIndices() == [0]
         assert modeldesc2.functionList() == ['Exponential']
+        assert modeldesc2.functionSetList() == [['Exponential']]
         assert modeldesc2.parameterList() == fullParamDescList
 
         input_params_correct = np.array([129.0,129.0, 18.0,0.2,100.0,25.0])
@@ -305,6 +306,8 @@ class TestModelDescription(object):
 
     def test_ModelDescription_load_from_file_2blocks( self ):
         modeldesc2blocks = ModelDescription.load(CONFIG_EXAMPLE_2BLOCKS)
+        assert modeldesc2blocks.functionList() == ['Gaussian', 'Gaussian', 'FlatSky']
+        assert modeldesc2blocks.functionSetList() == [['Gaussian'], ['Gaussian', 'FlatSky']]
 
     def test_ModelDescription_getStrings(self):
         modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)

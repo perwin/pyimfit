@@ -260,6 +260,21 @@ fit finishes:
             # get the best-fit model image as a 2D numpy array
             bestfit_model_im = imfitter.getModelImage()
 
+5. Get fluxes and magnitudes for the best-fitting model -- note that
+   what is returned is a tuple of the total flux/magnitude and a numpy
+   array of the fluxes/magnitudes for the individual components of the
+   model (in the order they are listed in the model):
+
+   ::
+
+            # get the total flux (counts or whatever the pixels values are) and the
+            # individual-component fluxes
+            (totalFlux, componentFluxes) = imfitter.getModelFluxes()
+
+            # get total and individual-component magnitudes, if you know the zero point
+            # for your image (25.72 in this example)
+            (totalMag, componentMagnitudes) = imfitter.getModelMagnitudes(zeroPoint=25.72)
+
 Of course, you might also want to inspect the residuals of the fit;
 since your data image and the output best-fit model image are both numpy
 arrays, this is simple enough:

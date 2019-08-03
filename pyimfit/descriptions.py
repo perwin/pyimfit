@@ -750,6 +750,22 @@ class ModelDescription(object):
         return functions
 
 
+    def functionSetList(self):
+        """
+        List of the function sets composing this model, as strings.
+
+        Returns
+        -------
+        func_set_list : list of list of string
+            List of the function sets: [[functions_in_set1], [functions_in_set2], ...]
+        """
+        functionSetList = []
+        for function_set in self._functionSets:
+            thisFunctionList = function_set.functionList()
+            functionSetList.append(thisFunctionList)
+        return functionSetList
+
+
     def parameterList(self):
         """
         A list of the parameters composing this model.
