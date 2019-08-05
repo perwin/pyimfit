@@ -1,12 +1,40 @@
 """
-Created on 13/03/2014
+Created on 13/03/2014 by Andre
 
-@author: andre
+Modified by PE 2019
+
+The primary purpose of this fie is to hold unit tests for the Imfit class
+(in fitting.py), though some of these tests will be effectively duplicated elsewhere.
+
 """
 
-from pyimfit import Imfit, SimpleModelDescription, make_imfit_function, gaussian_psf
+import pytest
+
 import numpy as np
 from numpy.testing import assert_allclose
+from astropy.io import fits
+
+from pyimfit import Imfit, SimpleModelDescription, make_imfit_function, gaussian_psf
+from ..pyimfit_lib import FixImage, make_imfit_function
+
+
+GAIN = 4.725
+READ_NOISE = 4.3
+ORIGINAL_SKY_IC3478 = 130.14
+ORIGINAL_SKY_N3073 = 154.33
+
+testDataDir = "../data/"
+imageFile_ic3478 = testDataDir + "ic3478rss_256.fits"
+configFile = testDataDir + "config_exponential_ic3478_256.dat"
+
+imageFile_n3073 = testDataDir + "n3073rss_small.fits"
+imageFile_n3073_mask = testDataDir + "n3073rss_small_mask.fits"
+
+image_ic3478 = FixImage(fits.getdata(imageFile_ic3478))
+shape_ic3478 = image_ic3478.shape
+image_ic3478_consterror = np.ones(shape_ic3478)
+image_n3073 = FixImage(fits.getdata(imageFile_n3073))
+image_n3073_mask = FixImage(fits.getdata(imageFile_n3073_mask))
 
 
 def create_model():
@@ -39,33 +67,77 @@ def get_model_param_array(model):
     return np.array(params)
 
 
-def test_fitting():
-    psf = gaussian_psf(2.5, size=9)
-    model_orig = create_model()
-    imfit = Imfit(model_orig, psf=psf, quiet=True)
-
-    noise_level = 0.1
-    shape = (100, 100)
-    image = imfit.getModelImage(shape)
-    noise = image * noise_level
-    image += (np.random.random(shape) * noise)
-    mask = np.zeros_like(image, dtype='bool')
-    
-    imfit.fit(image, noise, mask)
-    model_fitted = imfit.getModelDescription()
-
-    orig_params = get_model_param_array(model_orig)
-    fitted_params = get_model_param_array(model_fitted)
-
-    assert_allclose(orig_params, fitted_params, rtol=noise_level)
+model_orig = create_model()
 
 
-def test_setparameters():
-    psf = gaussian_psf(2.5, size=9)
-    model_orig = create_model()
-    imfit = Imfit(model_orig, psf=psf, quiet=False)
+def test_bad_instantiation():
+    with pytest.raises(TypeError):
+        imfit = Imfit()
+    with pytest.raises(ValueError):
+        imfit = Imfit(1.0)
 
 
-if __name__ == '__main__':
-    test_fitting()
-    
+# def test_fitting():
+#     psf = gaussian_psf(2.5, size=9)
+#     this_model = create_model()
+#     imfit = Imfit(this_model, psf=psf, quiet=True)
+#
+#     noise_level = 0.1
+#     shape = (100, 100)
+#     image = imfit.getModelImage(shape)
+#     noise = image * noise_level
+#     image += (np.random.random(shape) * noise)
+#     mask = np.zeros_like(image, dtype='bool')
+#
+#     imfit.fit(image, noise, mask)
+#     model_fitted = imfit.getModelDescription()
+#
+#     orig_params = get_model_param_array(model_orig)
+#     fitted_params = get_model_param_array(model_fitted)
+#
+#     assert_allclose(orig_params, fitted_params, rtol=noise_level)
+
+
+
+# here, we load the data, then test for pre-fit conditions
+def test_loadData_data_only():
+    imfit = Imfit(model_orig, quiet=True)
+    imfit.loadData(image_ic3478, original_sky=ORIGINAL_SKY_IC3478)
+    # no fit performed yet, so...
+    with pytest.raises(Exception) as exceptionInfo:
+        z = imfit.fitConverged
+    assert "Not fitted yet." in str(exceptionInfo.value)
+    with pytest.raises(Exception) as exceptionInfo:
+        z = imfit.fitError
+    assert "Not fitted yet." in str(exceptionInfo.value)
+    with pytest.raises(Exception) as exceptionInfo:
+        z = imfit.fitTerminated
+    assert "Not fitted yet." in str(exceptionInfo.value)
+
+def test_loadData_bad_keyword():
+    imfit = Imfit(model_orig, quiet=True)
+    with pytest.raises(ValueError) as exceptionInfo:
+        imfit.loadData(image_ic3478, original_sky=ORIGINAL_SKY_IC3478, bob=5.0)
+    assert "Unknown kwarg: bob" in str(exceptionInfo.value)
+
+def test_loadData_data_with_errorimage():
+    imfit = Imfit(model_orig, quiet=True)
+    imfit.loadData(image_ic3478, error=image_ic3478_consterror, original_sky=ORIGINAL_SKY_IC3478)
+
+def test_loadData_data_bad_errorimage():
+    imfit = Imfit(model_orig, quiet=True)
+    with pytest.raises(ValueError) as exceptionInfo:
+        imfit.loadData(image_n3073, error=image_ic3478_consterror, original_sky=ORIGINAL_SKY_N3073)
+    assert "Data image (200,150) and error image (256,256) shapes do not match." in str(exceptionInfo.value)
+
+def test_loadData_data_with_mask():
+    imfit = Imfit(model_orig, quiet=True)
+    imfit.loadData(image_n3073, mask=image_n3073_mask, original_sky=ORIGINAL_SKY_N3073)
+
+def test_loadData_data_bad_mask():
+    imfit = Imfit(model_orig, quiet=True)
+    with pytest.raises(ValueError) as exceptionInfo:
+        imfit.loadData(image_n3073, mask=image_ic3478, original_sky=ORIGINAL_SKY_N3073)
+    assert "Data image (200,150) and mask image (256,256) shapes do not match." in str(exceptionInfo.value)
+
+

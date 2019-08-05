@@ -309,7 +309,7 @@ class Imfit(object):
         supplied_kw = list(kwargs.keys())
         for kw in supplied_kw:
             if kw not in all_kw:
-                raise Exception('Unknown kwarg: %s' % kw)
+                raise ValueError('Unknown kwarg: %s' % kw)
         mask_zero_is_bad = 'mask_format' in kwargs and kwargs['mask_format'] == 'zero_is_bad'
 
         # create the ModelObjectWrapper instance
@@ -335,7 +335,9 @@ class Imfit(object):
 
         if error is not None:
             if image.shape != error.shape:
-                raise Exception('Error and image shapes do not match.')
+                msg = "Data image (%d,%d) and " % image.shape
+                msg += "error image (%d,%d) shapes do not match." % error.shape
+                raise ValueError(msg)
             mask = _composemask(image, mask, mask_zero_is_bad)
             if isinstance(error, np.ma.MaskedArray):
                 error = error.filled(fill_value=error.max())
@@ -343,7 +345,9 @@ class Imfit(object):
 
         if mask is not None:
             if image.shape != mask.shape:
-                raise Exception('Mask and image shapes do not match.')
+                msg = "Data image (%d,%d) and " % image.shape
+                msg += "mask image (%d,%d) shapes do not match." % mask.shape
+                raise ValueError(msg)
             mask = mask.astype('float64')
         self._modelObjectWrapper.loadData(image, error, mask, **kwargs)
         self._dataSet = True

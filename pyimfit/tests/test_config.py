@@ -15,7 +15,7 @@ import pytest
 from ..descriptions import ParameterDescription, FunctionDescription, FunctionSetDescription
 from ..descriptions import ModelDescription
 from ..config import read_parameter, read_function, read_function_set, read_options
-from ..config import parse_config
+from ..config import parse_config, parse_config_file
 
 
 # inputs and reference outputs for read_parameter
@@ -61,6 +61,10 @@ testFunctionBlockLines_good2 = ["X0  100\tfixed", "Y0  200\tfixed",
                                 "I_0  100  0,1e6", "sigma  10   fixed",
                                 "FUNCTION Exponential",  "PA  20\tfixed", "ell  0.2 0.1,0.4",
                                 "I_0  100  0,1e6", "h  100   1,400"]
+testFunctionBlockLines_bad1 = ["X0  100", "FUNCTION Gaussian", "PA  10",
+                                "ell  0.5", "I_0  100", "sigma  10"]
+testFunctionBlockLines_bad2 = ["X  100", "Y0 200", "FUNCTION Gaussian", "PA  10",
+                                "ell  0.5", "I_0  100", "sigma  10"]
 
 
 fsetdesc_correct1 = FunctionSetDescription("function_block_1",
@@ -68,14 +72,14 @@ fsetdesc_correct1 = FunctionSetDescription("function_block_1",
                                            y0param=ParameterDescription('Y0', 200.0))
 fsetdesc_correct1.addFunction(fdesc_correct1)
 
-fdesc_fbloc2_correct1 = FunctionDescription("Gaussian")
+fdesc_fblock2_correct1 = FunctionDescription("Gaussian")
 for line in testFunctionBlockLines_good2[3:7]:
     pdesc = read_parameter(line)
-    fdesc_fbloc2_correct1.addParameter(pdesc)
+    fdesc_fblock2_correct1.addParameter(pdesc)
 fsetdesc_correct2 = FunctionSetDescription("function_block_2",
                                            x0param=ParameterDescription('X0', 100.0, fixed=True),
                                            y0param=ParameterDescription('Y0', 200.0, fixed=True))
-fsetdesc_correct2.addFunction(fdesc_fbloc2_correct1)
+fsetdesc_correct2.addFunction(fdesc_fblock2_correct1)
 fsetdesc_correct2.addFunction(fdesc_correct2)
 
 
@@ -89,6 +93,7 @@ testConfigLines_good2 = ["GAIN 4.5", "READNOISE\t0.5", "ORIGINAL_SKY\t\t154.33",
                          "I_0  100  0,1e6", "sigma  10   fixed",
                          "FUNCTION Exponential",  "PA  20\tfixed", "ell  0.2 0.1,0.4",
                          "I_0  100  0,1e6", "h  100   1,400"]
+TEST_CONFIG_FILE = "../data/config_exponential_ic3478_256.dat"
 
 # use an OrderedDict for the input to ensure proper ordering of the internal
 # OrderedDicts, especially under Python 3.5.
@@ -108,6 +113,19 @@ fsetdesc_correct2b = copy.copy(fsetdesc_correct2)
 fsetdesc_correct2b._name = "fs0"
 modeldesc_correct2 = ModelDescription([fsetdesc_correct2b],
                                       options=optionsDict_ord2)
+
+# correct result for reading from file TEST_CONFIG_FILE
+p1 = ParameterDescription("PA", 18.0, [0.0,90.0])
+p2 = ParameterDescription("ell", 0.2, [0, 1])
+p3 = ParameterDescription("I_0", 100.0, [0.0,500.0])
+p4 = ParameterDescription("h", 25.0, [0.0, 100.0])
+paramDescList = [p1, p2, p3, p4]
+function_from_file = FunctionDescription("Exponential", parameters=paramDescList)
+fsetdesc_from_file_correct = FunctionSetDescription("",
+                                           x0param=ParameterDescription('X0', 129.0, [125,135]),
+                                           y0param=ParameterDescription('Y0', 129.0, [125,135]),
+                                           functionList=[function_from_file])
+modeldesc_from_file_correct = ModelDescription([fsetdesc_from_file_correct])
 
 
 
@@ -171,6 +189,13 @@ def test_read_function_set_good( ):
     fsetdesc2 = read_function_set("function_block_2", testFunctionBlockLines_good2)
     assert fsetdesc2 == fsetdesc_correct2
 
+def test_read_function_set_bad( ):
+    """Test that we correctly catch bad function-block lines."""
+    with pytest.raises(ValueError):
+        fsetdesc1 = read_function_set("function_block_1", testFunctionBlockLines_bad1)
+    with pytest.raises(ValueError):
+        fsetdesc2 = read_function_set("function_block_2", testFunctionBlockLines_bad2)
+
 
 
 def test_read_options_bad( ):
@@ -190,6 +215,10 @@ def test_read_options_good( ):
     correctDict["GAIN"] = 4.5
     correctDict["READNOISE"] = 10.0
     assert configDict == correctDict
+    # check to see that we skip unrecognized image-description parameter
+    inputLines2 = ["GAIN\t\t4.5", "READNOISE   10.0", "EVANESCENCE   -2.5"]
+    configDict2 = read_options(inputLines2)
+    assert configDict2 == correctDict
 
 
 
@@ -200,4 +229,8 @@ def test_parse_config( ):
     modeldesc2= parse_config(testConfigLines_good2)
     assert modeldesc2 == modeldesc_correct2
 
-
+def test_parse_config_file( ):
+    """Test that we correctly read and parse a valid configuration file."""
+    modeldesc_from_file = parse_config_file(TEST_CONFIG_FILE)
+    # easiest thing to do is compare string representations
+    assert str(modeldesc_from_file) == str(modeldesc_from_file_correct)

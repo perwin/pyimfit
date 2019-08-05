@@ -56,6 +56,24 @@ class TestParameterDescription(object):
         assert pdesc.limits == (10.0,1e5)
         assert pdesc.fixed == False
 
+    def test_ParameterDescription_setValue_limits( self ):
+        pdesc1 = ParameterDescription('X0', 100.0)
+        pdesc1.setValue(150.0, [200.0, 1e5])
+        assert pdesc1.value == 150.0
+        assert pdesc1.limits == (150.0,1e5)
+        assert pdesc1.fixed == False
+        pdesc2 = ParameterDescription('X0', 100.0)
+        pdesc2.setValue(150.0, [100.0, 120])
+        assert pdesc2.value == 150.0
+        assert pdesc2.limits == (100.0,150.0)
+        assert pdesc2.fixed == False
+
+    def test_ParameterDescription_setValue_bad( self ):
+        with pytest.raises(ValueError):
+            pdesc = ParameterDescription('X0', 100.0, 50.0)
+        with pytest.raises(ValueError):
+            pdesc = ParameterDescription('X0', 100.0, [150,100])
+
 
     def test_ParameterDescription_setThings( self ):
         pdesc = ParameterDescription('X0', 100.0, [50.0, 150.0])
@@ -71,10 +89,37 @@ class TestParameterDescription(object):
         # test setLimits
         pdesc.setLimits(10.0, 200.0)
         assert pdesc.limits == approx((10.0, 200.0))
+        pdesc.setLimits(101, 200)
+        assert pdesc.limits == approx((100.0, 200.0))
+        pdesc.setLimits(50, 90)
+        assert pdesc.limits == approx((50.0, 100.0))
 
         # test setLimitsRel
         pdesc.setLimitsRel(5, 25)
         assert pdesc.limits == approx((95.0, 125.0))
+
+    def test_ParameterDescription_setThings_bad( self ):
+        pdesc = ParameterDescription('X0', 100.0, [50.0, 150.0])
+        assert pdesc.name == "X0"
+        assert pdesc.value == 100.0
+        assert pdesc.limits == (50.0,150.0)
+        assert pdesc.fixed == False
+
+        # test setTolerance -- tolerance must be between 0 and 1
+        with pytest.raises(ValueError):
+            pdesc.setTolerance(-0.1)
+        with pytest.raises(ValueError):
+            pdesc.setTolerance(10.0)
+
+        # test setLimits -- lower limit must be < upper limit
+        with pytest.raises(ValueError):
+            pdesc.setLimits(10.0, 5.0)
+
+        # test setLimitsRel -- relative offsets should both be positive
+        with pytest.raises(ValueError):
+            pdesc.setLimitsRel(-1,2)
+        with pytest.raises(ValueError):
+            pdesc.setLimitsRel(1,-2)
 
 
     def test_ParameterDescription_getString(self):
@@ -102,6 +147,25 @@ class TestParameterDescription(object):
         # user supplied error value
         outString3c = pdesc3.getStringDescription(error=0.501)
         assert outString3c == outString3c_correct
+
+    def test_ParameterDescription_str(self):
+        pdesc1 = ParameterDescription('X0', 100.0)
+        outString1_correct = "X0\t\t100.0"
+        pdesc2 = ParameterDescription('X0', 100.0, fixed=True)
+        outString2_correct = "X0\t\t100.0\t\tfixed"
+        pdesc3 = ParameterDescription('X0', 100.0, [50.0, 150.0])
+        outString3_correct = "X0\t\t100.0\t\t50.0,150.0"
+        # user requested no limits be printed
+        outString3b_correct = "X0\t\t100.0"
+        # user supplied error value
+        outString3c_correct = "X0\t\t100.0\t\t# +/- 0.501"
+
+        outString1 = str(pdesc1)
+        assert outString1 == outString1_correct
+        outString2 = str(pdesc2)
+        assert outString2 == outString2_correct
+        outString3 = str(pdesc3)
+        assert outString3 == outString3_correct
 
 
 
@@ -135,6 +199,11 @@ class TestFunctionDescription(object):
                          "sigma\t\t10.0\t\t5.0,20.0\n"]
         outputLines = fdesc1.getStringDescription()
         assert outputLines == lines_correct
+
+        # test the str() representation:
+        str_correct = "".join(lines_correct)
+        output_str = str(fdesc1)
+        assert output_str == str_correct
 
     def test_FunctionDescription_getStrings_bestfit(self):
         fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
@@ -193,6 +262,8 @@ class TestFunctionSetDescription(object):
         # x0 and y0 should be ParameterDescription values, not floats
         with pytest.raises(ValueError):
             fsetdesc1 = FunctionSetDescription('fs0', 100.0, 200.0, self.functionList)
+        with pytest.raises(ValueError):
+            fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, 200.0, self.functionList)
 
     def test_FunctionSetDescription_catchErrors( self ):
         fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
@@ -215,6 +286,11 @@ class TestFunctionSetDescription(object):
                          "sigma\t\t10.0\t\t5.0,20.0\n"]
         outputLines = fsetdesc1.getStringDescription()
         assert outputLines == lines_correct
+
+        # test the str() representation:
+        str_correct = "".join(lines_correct)
+        output_str = str(fsetdesc1)
+        assert output_str == str_correct
 
     def test_FunctionSetDescription_getStrings_no_limits(self):
         fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)

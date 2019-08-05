@@ -53,9 +53,6 @@ PLAN:
         * Test installation on Linux
             [x] Test installation on Ubuntu 16 VM
 
-        * See if Andre can test pip installation?
-            [ ] Email Andre (again) about testing Mac installation via pip; Linux build from source
-
 
     * Documentation:
         [x] Check how to set up doc input files for readthedocs
@@ -72,7 +69,7 @@ PLAN:
             -- how to do a fit
             -- how to look at the results
 
-       [ ] Add mention/example of how to include/use PSF images and mask images
+       [X] Add mention/example of how to include/use PSF images and mask images
        [ ] Add mention/example of how to do bootstrap resampling
 
        [ ] Add API documentation
@@ -109,7 +106,7 @@ PLAN:
     -- instantiate a list of string when module is imported?
     [X] Decide which module to put this in
 
-[ ] Add ability to get list of image-function parameters
+[X] Add ability to get list of image-function parameters
 
 
 [x] Improvements/fixes to Imfit class

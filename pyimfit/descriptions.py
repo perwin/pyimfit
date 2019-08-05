@@ -132,9 +132,9 @@ class ParameterDescription(object):
                 upper_limit = value
             if lower_limit >= upper_limit:
                 raise ValueError("Lower limit must be < upper limit.")
-            self._limits = (lower_limit, upper_limit)
+            self._limits = (float(lower_limit), float(upper_limit))
 
-        self._value = value
+        self._value = float(value)
         self._fixed = fixed
 
 
@@ -235,12 +235,13 @@ class ParameterDescription(object):
 
 
     def __str__(self):
-        if self._fixed:
-            return '{0:s}      {1:f}    fixed'.format(self._name, self._value)
-        elif self.limits is not None:
-            return '{0:s}      {1:f}    {2:f},{3:f}'.format(self._name, self._value, self._limits[0], self._limits[1])
-        else:
-            return '{0:s}      {1:f}'.format(self._name, self._value)
+        return self.getStringDescription()
+        # if self._fixed:
+        #     return '{0:s}      {1:f}    fixed'.format(self._name, self._value)
+        # elif self.limits is not None:
+        #     return '{0:s}      {1:f}    {2:f},{3:f}'.format(self._name, self._value, self._limits[0], self._limits[1])
+        # else:
+        #     return '{0:s}      {1:f}'.format(self._name, self._value)
 
 
 
@@ -363,10 +364,12 @@ class FunctionDescription(object):
 
 
     def __str__(self):
-        lines = []
-        lines.append('FUNCTION {0}   # {1}'.format(self._funcName, self._label))
-        lines.extend(str(p) for p in self._parameters)
-        return '\n'.join(lines)
+        lines = self.getStringDescription()
+        return ''.join(lines)
+        # lines = []
+        # lines.append('FUNCTION {0}   # {1}'.format(self._funcName, self._label))
+        # lines.extend(str(p) for p in self._parameters)
+        # return '\n'.join(lines)
 
 
     def __deepcopy__(self, memo):

@@ -1,4 +1,5 @@
 # Code for testing fitting and computing of fit-statistic values
+# This should probably be seen as a combination of unit tests and regression tests.
 
 import pytest
 import numpy as np
