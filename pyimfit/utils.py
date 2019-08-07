@@ -30,7 +30,8 @@ except ImportError:
 #    "ell" = index for ellipticity parameter, if it exists,
 #    "a" = index or indices for semi-major-axis parameters (r_e, h, sigma, etc.)
 # THIS IS NOT MEANT TO BE A COMPLETE LIST
-imfitFunctionMap: Dict[str, Dict] = {"Exponential": {"function": imfuncs.Exponential, "nSkip": 2, "ell": 1, "a": [3]},
+imfitFunctionMap = {
+                    "Exponential": {"function": imfuncs.Exponential, "nSkip": 2, "ell": 1, "a": [3]},
                     "Exponential_GenEllipse": {"function": imfuncs.Exponential, "nSkip": 3, "ell": 1, "a": [4]},
                     "Sersic": {"function": imfuncs.Sersic, "nSkip": 2, "ell": 1, "a": [4]},
                     "Sersic_GenEllipse": {"function": imfuncs.Sersic, "nSkip": 3, "ell": 1, "a": [5]},
@@ -38,7 +39,8 @@ imfitFunctionMap: Dict[str, Dict] = {"Exponential": {"function": imfuncs.Exponen
                     "GaussianRing": {"function": imfuncs.GaussRing, "nSkip": 2, "ell": 1, "a": [3,4]},
                     "GaussianRing2Side": {"function": imfuncs.GaussRing2Side, "nSkip": 2, "ell": 1, "a": [3,4,5]},
                     "Moffat": {"function": imfuncs.Moffat, "nSkip": 2, "ell": 1, "a": [3]},
-                    "BrokenExponential": {"function": imfuncs.BrokenExp, "nSkip": 2, "ell": 1, "a": [3,4,5]}}
+                    "BrokenExponential": {"function": imfuncs.BrokenExp, "nSkip": 2, "ell": 1, "a": [3,4,5]}
+}  #type: Dict[str, Dict]
 
 
 
@@ -107,7 +109,7 @@ def ReadImfitConfigFile( fileName: str, minorAxis=False, pix=1.0, getNames=False
 
     funcNameList = []
     paramMetaList = []
-    currentParamList: List[float] = []
+    currentParamList = []  #type: List[float]
     for line in dlines:
         trimmedLine = ChopComments(line)
         if trimmedLine.find("X0") == 0:
@@ -143,7 +145,7 @@ def ReadImfitConfigFile( fileName: str, minorAxis=False, pix=1.0, getNames=False
         fullParams = paramMetaList[i]
         # calculate scaling factor for minor-axis values, if needed
         if minorAxis:
-            ellIndex: int = imfitFunctionMap[fname]["ell"]
+            ellIndex = imfitFunctionMap[fname]["ell"]  #type: int
             ell = fullParams[ellIndex + 1]
             q = 1.0 - ell
         else:
@@ -341,7 +343,7 @@ def MergeChains( fname_root: str, maxChains=None, getAllColumns=False, start=100
     dd_final = dd[startTime:,:]
     if getAllColumns is False:
         nParamColumns = len(colNames)
-        whichCols: Optional[List[int]] = list(range(nParamColumns))
+        whichCols = list(range(nParamColumns))  #type: Optional[List[int]]
     else:
         whichCols = None
 
