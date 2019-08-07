@@ -26,8 +26,11 @@ fixed_str = 'fixed'
 # The following are the currently recognized config-file image options (see
 # imfit_main.cpp) and the functions for transforming string values from a
 # config file:
-recognizedOptions = {"GAIN": float, "READNOISE": float, "EXPTIME": float,
-                    "NCOMBINED": int, "ORIGINAL_SKY": float}
+# The first is a dict mapping string keywords to Python *functions* -- note that
+# mypy will erroneously interpret these as type annotations when run under Python 3.5
+# (this is not an actual problem)
+recognizedOptions = {"GAIN": float, "READNOISE": float, "EXPTIME": float, "NCOMBINED": int,
+                     "ORIGINAL_SKY": float}
 recognizedOptionNames = list(recognizedOptions.keys())
 
 
@@ -139,7 +142,7 @@ def read_options( lines: List[str] ) -> OrderedDict:
         maps parameter names to numerical values
         e.g, {"GAIN": 4.56, "ORIGINAL_SKY": 233.87}
     """
-    config: OrderedDict = OrderedDict()
+    config = OrderedDict()  #type: OrderedDict
     for line in lines:
         # Options are key-value pairs.
         pieces = line.split()
@@ -265,7 +268,7 @@ def read_parameter( line: str ) -> ParameterDescription:
     name = pieces[0]
     value = float(pieces[1])
     if len(pieces) > 2:
-        predicate: str = pieces[2]
+        predicate = pieces[2]  #type: str
         if predicate == fixed_str:
             fixed = True
 

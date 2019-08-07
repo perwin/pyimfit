@@ -67,8 +67,8 @@ class ParameterDescription(object):
 
     """
     def __init__( self, name: str, value: float, limits: Optional[Sequence[float]]=None, fixed=False ):
-        self._name: str = name
-        self._limits: Optional[Sequence[float]] = None
+        self._name = name  #type: str
+        self._limits = None  #type: Optional[Sequence[float]]
         self.setValue(value, limits, fixed)
 
 
@@ -282,9 +282,9 @@ class FunctionDescription(object):
 
     """
     def __init__(self, func_name: str, label: Optional[str]=None, parameters=None):
-        self._funcName: str = func_name
-        self._label: Optional[str]  = label
-        self._parameters: List[ParameterDescription] = []
+        self._funcName = func_name  #type: str
+        self._label = label  #type: Optional[str]
+        self._parameters = []  #type: List[ParameterDescription]
         self.nParameters = 0
         if parameters is not None:
             for p in parameters:
@@ -438,7 +438,7 @@ class FunctionSetDescription(object):
                 msg = "y0param should be instance of ParameterDescription"
                 raise ValueError(msg)
             self.y0 = y0param
-        self._functions: List[FunctionDescription] = []
+        self._functions = []  #type: List[FunctionDescription]
         self.nFunctions = 0
         if functionList is not None:
             for f in functionList:
@@ -628,10 +628,10 @@ class ModelDescription(object):
 
     def __init__( self, functionSetsList: Optional[List[FunctionSetDescription]]=None,
                   options: Optional[Dict[str,float]]=None ):
-        self.options: Dict[str,float] = OrderedDict()
+        self.options = OrderedDict()  #type: Dict[str,float]
         if options is not None:
             self.options.update(options)
-        self._functionSets: List[FunctionSetDescription] = []
+        self._functionSets = []  #type: List[FunctionSetDescription]
         self.nFunctionSets = 0
         if functionSetsList is not None:
             for fs in functionSetsList:
