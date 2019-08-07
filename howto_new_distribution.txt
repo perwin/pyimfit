@@ -20,6 +20,9 @@ Working by default in ~/coding/pyimfit on Mac.
     [mac] $ cd pyimfit/tests ; pytest
 
 4. Do new "develop" install and run tests on Linux VM
+    [mac] $ cd ~/vagrant/ubuntu64-16_dev/transfer
+    [mac] $ git clone ~/coding/pyimfit pyimfit
+    [vm] $ cd /vagrant/transfer/pyimfit
     [vm] $ python3 setup.py develop --user
     [vm] $ cd pyimfit/tests ; pytest
 

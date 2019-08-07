@@ -270,9 +270,9 @@ def read_parameter( line: str ) -> ParameterDescription:
             fixed = True
 
         elif ',' in predicate:
-            llimit, ulimit = predicate.split(',')
-            llimit = float(llimit)
-            ulimit = float(ulimit)
+            llimit_str, ulimit_str = predicate.split(',')
+            llimit = float(llimit_str)
+            ulimit = float(ulimit_str)
             if llimit > ulimit:
                 raise ValueError('lower limit ({0:f}) is larger than upper limit ({1:f})'.format(llimit, ulimit))
             limits = [llimit, ulimit]

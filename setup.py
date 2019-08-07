@@ -205,8 +205,10 @@ if MACOS_COMPILATION and compilerName == "clang++":
     # the first pair is magic stuff to get Apple's clang++ to work with OpenMP;
     # the second turns off linker warnings (to avoid getting pages of
     # "could not create compact unwind" and other unhelpful warnings)
+    extraCompileArgs = ["-Xpreprocessor", "-fopenmp", '-std=c++11']
     extraLinkerArgs = ["-Xpreprocessor", "-fopenmp", "-Xlinker", "-w"]
 else:
+    extraCompileArgs = ["-fopenmp", '-std=c++11']
     extraLinkerArgs = ["-fopenmp"]
 extensions = [
     # specify how to create the Cython-based extension module pyimfit_lib.so
@@ -216,7 +218,7 @@ extensions = [
                 libraries=libraryList,
                 include_dirs=headerPath,
                 library_dirs=libPath,
-                extra_compile_args=['-std=c++11'],
+                extra_compile_args=extraCompileArgs,
                 extra_link_args=extraLinkerArgs,
                 #define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")],
                 language="c++")

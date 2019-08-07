@@ -67,8 +67,8 @@ class ParameterDescription(object):
 
     """
     def __init__( self, name: str, value: float, limits: Optional[Sequence[float]]=None, fixed=False ):
-        self._name = name
-        self._limits = None
+        self._name: str = name
+        self._limits: Optional[Sequence[float]] = None
         self.setValue(value, limits, fixed)
 
 
@@ -282,9 +282,9 @@ class FunctionDescription(object):
 
     """
     def __init__(self, func_name: str, label: Optional[str]=None, parameters=None):
-        self._funcName = func_name
-        self._label = label
-        self._parameters = []
+        self._funcName: str = func_name
+        self._label: Optional[str]  = label
+        self._parameters: List[ParameterDescription] = []
         self.nParameters = 0
         if parameters is not None:
             for p in parameters:
@@ -631,7 +631,7 @@ class ModelDescription(object):
         self.options: Dict[str,float] = OrderedDict()
         if options is not None:
             self.options.update(options)
-        self._functionSets = []
+        self._functionSets: List[FunctionSetDescription] = []
         self.nFunctionSets = 0
         if functionSetsList is not None:
             for fs in functionSetsList:
