@@ -48,11 +48,14 @@ an example of using PyImfit with the Markov Chain Monte Carlo code [`emcee`](htt
 
 Online documentation: [https://pyimfit.readthedocs.io/en/latest/](https://pyimfit.readthedocs.io/en/latest/).
 
+Also useful: [Onine documentation for Imfit](https://imfit.readthedocs.io); and the main Imfit manual in PDF format:
+[imfit_howto.pdf](http://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf)
+
 
 ## Requirements and Installation
 
-PyImfit is designed to work with modern versions of Python 3 (3.6 or later);
-no support for Python 2 is planned.
+PyImfit is designed to work with modern versions of Python 3 (3.5 or later on Linux; 3.6 or 
+later on macOS); no support for Python 2 is planned.
 
 ### Standard Installation: macOS
 
