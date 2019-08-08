@@ -8,13 +8,19 @@ Documentation for PyImfit
 
 
 .. toctree::
-   :maxdepth: 2
-   :caption: USER DOCUMENTATION:
+   :maxdepth: 3
+   :caption: OVERVIEW AND SAMPLE USAGE:
 
    sample_usage
    overview
+
+.. toctree::
+   :maxdepth: 2
+   :caption: USER DOCUMENTATION:
+
    defining_models
    fit_statistics_and_solvers
+   bootstrap
    pyimfit_emcee
    acknowledgments
 

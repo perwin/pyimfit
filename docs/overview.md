@@ -234,16 +234,24 @@ There are three or four basic things you might want to look at when the fit fini
             imfitter.fitConverged
             
    2. See the value of the final fit statistic, and related values (these are all properties
-   of the `Imfit` object)
+   of the `Imfit` object):
    
             imfitter.fitStatistic   # final chi^2 or PMLR value
             imfitter.reducedFitStatistic   # reduced version of same
             imfitter.AIC   # corresponding Akaike Information Criterion value
             imfitter.BIC   # corresponding Bayesian Information Criterion value
 
-   3. Get the best-fit parameter values in the form of a 1D numpy array
+   3.A. Get the best-fit parameter values in the form of a 1D numpy array:
    
             bestfit_parameters = imfit_fitter.getRawParameters()
+
+   3.B. Get the 1-sigma uncertainties on the best-fit parameter values in the form of a 1D numpy array.
+   Note that these are only produced if the default Levenberg-Marquardt solver was used, and are
+   fairly crude estimates that should be used with caution. A somewhat better approach might be to
+   do [bootstrap resampling](./bootstrap.html), or even 
+   [use a Markov Chain Monte Carlo code such as "emcee"](./pyimfit_emcee.html).
+   
+            bestfit_parameters_errs = imfit_fitter.getParameterErrors()
    
    4. Get the best-fitting model image (a 2D numpy array)
 
