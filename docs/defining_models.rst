@@ -7,7 +7,9 @@ PyImfit uses models which are instances of the ModelDescription class
 A "model" is defined as a collection of "image functions", grouped into
 one or more "function sets". Each function set (a.k.a. "function
 blocks") is a collection of one or more image functions with the same
-center within the image.
+central coordinates (X0,Y0) within the image. (The
+SimpleModelDescription class is a subclass which holds just one function
+set.)
 
 A ModelDescription object can be instantiated using a pre-existing Imfit
 configuration file; it can also be constructed programmatically within
@@ -39,29 +41,37 @@ functions.)
 The following is a brief list of the available image functions; see the
 Imfit manual for more details.
 
--  2D image functions:
+-  2D image functions: Most of these have position-angle parameter
+   ("PA") which define their orientation on the image (measured in
+   degrees counter-clockwise from the +x image axis). Many also have an
+   ellipticity parameter ("ell") defining their shape. The most common
+   type of 2D image function has elliptical isophotes with a particular
+   radial surface-brightness profile (e.g., BrokenExponential,
+   Core-Sersic, Exponential, etc.).
 
-   -  BrokenExponential --
-   -  BrokenExponential2D --
-   -  Core-Sersic --
-   -  EdgeOnDisk --
-   -  EdgeOnRing --
-   -  EdgeOnRing2Side --
-   -  Exponential --
-   -  Exponential\_GenEllipse --
-   -  FerrersBar2D --
+   -  BrokenExponential -- PA, ell
+   -  BrokenExponential2D -- PA, ell
+   -  Core-Sersic -- PA, ell
+   -  EdgeOnDisk -- PA
+   -  EdgeOnRing -- PA
+   -  EdgeOnRing2Side -- PA
+   -  Exponential -- PA, ell
+   -  Exponential\_GenEllipse -- PA, ell
+   -  FerrersBar2D -- PA
    -  FlatSky --
-   -  Gaussian --
-   -  GaussianRing --
-   -  GaussianRing2Side --
-   -  ModifiedKing --
-   -  ModifiedKing2 --
-   -  Moffat --
+   -  Gaussian -- PA, ell
+   -  GaussianRing -- PA, ell
+   -  GaussianRing2Side -- PA, ell
+   -  ModifiedKing -- PA, ell
+   -  ModifiedKing2 -- PA, ell
+   -  Moffat -- PA, ell
    -  PointSource --
-   -  Sersic --
-   -  Sersic\_GenEllipse --
+   -  Sersic -- PA, ell
+   -  Sersic\_GenEllipse -- PA, ell
 
--  3D image functions (luminosity-density functions):
+-  3D image functions (luminosity-density functions): These generate a
+   2D image via line-of-sight integration through a 3D
+   luminosity-density model.
 
    -  BrokenExponentialDisk3D --
    -  ExponentialDisk3D --

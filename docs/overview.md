@@ -55,7 +55,8 @@ There are three basic things you can do with PyImfit:
 
 In **Imfit** (and PyImfit), a "model" consists of one or more *image functions* from a library built into
 **Imfit**, sharing one or more common locations within an image and added together to form a
-summed model image. Optionally, the summed model image can then be convolved with a user-supplied
+summed model image. Each image function can generate a 2D image; the final model image is the sum
+of its component image functions. Optionally, the summed model image can then be convolved with a user-supplied
 Point-Spread Function (PSF) image to simulate the effects of seeing and telescope optics. (For greater accuracy,
 subsections of the image can be oversampled on a finer pixel scale and convolved with a
 correspondingly oversampled PSF image or images; these subsection are then downsampled back to
@@ -76,8 +77,9 @@ If you have a configuration file, you can load it via the convenience function `
 
 where `configFilePath` is a string specifying the path to the configuration file.
 
-You can also construct a ModelDescription instance programmatically from within Python; see
-[Sample Usage](./sample_usage.html) for a simple example.
+You can also construct a ModelDescription instance programmatically from within Python; see below
+for a very simple example, or [Sample Usage](./sample_usage.html) for a slightly more
+complicated example.
 
 (You can get a list of the available image functions -- "Sersic", "Exponential", etc. -- from the package-level 
 variable `pyimfit.imageFunctionList`, and you can get a list of the parameter names for each 
@@ -91,6 +93,31 @@ with a PSF, you can also supply the PSF image (in the form of a 2D numpy array):
     imfitter = pyimfit.Imfit(model_desc)
     imfitter = pyimfit.Imfit(model_desc, psfImage)
 
+#### Creating a model; setting parameter values and limits
+
+Each image-function parameter within a model can have a "current" value (e.g., the initial guess for 
+the fitting process, the result from the fit, etc.) and either: a set of lower and upper limits for 
+possible values **or** the keyword "fixed", which means the parameter value should be kept constant during fits.
+
+**Note**: Unless otherwise specified, all size values are in pixels, and all intensity/surface-brightness
+values are in counts/pixel.
+
+A very simple example of constructing a model:
+
+    model_desc = pyimfit.SimpleModelDescription()
+    # define the limits on the central-coordinate X0 and Y0 as +/-10 pixels relative to initial values
+    model_desc.x0.setValue(105, [95,115])
+    model_desc.y0.setValue(62, [52,72])
+
+    # create an Exponential image function, then define the parameter initial values and limits
+    disk = pyimfit.make_imfit_function('Exponential')
+    # set initial values, lower and upper limits for central surface brightness I_0, scale length h
+    disk.I_0.setValue(100.0, [0.0, 500.0])
+    disk.h.setValue(25, [10,50])
+    disk.PA.setValue(40, [0, 180])
+    disk.ell.setValue(0.5, fixed=True)
+
+    model_desc.addFunction(disk)
 
 
 
@@ -99,7 +126,7 @@ with a PSF, you can also supply the PSF image (in the form of a 2D numpy array):
 
 #### Specify the data (and optional mask) image
 
-The data image is a 2D numpy array; it should be in double-precision floating point with
+The data image must be a 2D numpy array; it should be in double-precision floating point with
 native byte order. Any image you create programmatically within Python will almost
 certainly be in this format already; if you load an image from a FITS file, then it's
 a good idea to run it through the convenience function `FixImage`, which will ensure the
@@ -108,12 +135,14 @@ image is in the right format:
     fits_data_im = fits.getdata(pathToImage)
     data_im = pyimfit.FixImage(fits_data_im)
 
-You then pass in the data image to the previously generated `Imfit` object (`imfitter'), along
-with an (optional) mask image:
+You then pass in the data image to the previously generated `Imfit` object (`imfitter'):
 
     imfitter.loadData(data_im)
 
 You can also specify a mask image, which should be a numpy integer or float array where values
+= 0 indicate *good* pixels, and values > 0 indicate bad pixels that should not be used
+in the fit.
+
 [UPDATE WITH BETTER DESCRIPTION OF MASK FORMATS, INCLUDING NUMPY MASKED ARRAY]
 
     imfitter.loadData(data_im, mask=mask_im)
@@ -126,24 +155,25 @@ what the assumed uncertainties are for the data values, and what "fit statistic"
 the fitting process.
 
    * &chi;<sup>2</sup> with data-based errors (default): the default is a standard &chi;<sup>2</sup> approach
-using per-pixel Gaussian errors, with the assumption that the errors (sigma values) are the square root
-of the data values.
+   using per-pixel Gaussian errors, with the assumption that the errors (sigma values) can be approximated by
+   the square root of the data values.
 
-   * &chi;<sup>2</sup> with model-based errors: Alternately, you can specify *model-based* errors, where the sigma values are
-the square root of the *model* values (these are automatically recomputed for every iteration of the fitting process).
+   * &chi;<sup>2</sup> with model-based errors: Alternately, you can specify *model-based* errors, where the 
+   sigma values are the square root of the *model* values (these are automatically recomputed for every 
+   iteration of the fitting process).
 
    * &chi;<sup>2</sup> with user-supplied errors: You can also supply a noise/error array which is the same
    size as the data array and holds per-pixel sigma or variance values precomputed in some fashion (e.g., from
    an image-reduction pipeline).
    
    * Poisson-based ("Poisson Maximum-Likelihood-Ratio"): Finally, you can specify that individual pixel 
-   errors come from the model using a true Poisson model (rather than the Gaussian approximation to Poisson 
-   statistics that's used in the &chi;<sup>2</sup> approaches). This is particularly apt when individual data 
-   pixel values are low.
+   errors come from the model assuming a true Poisson process (rather than the Gaussian approximation to Poisson 
+   statistics that's used in the &chi;<sup>2</sup> approaches). This is particularly appropriate when individual 
+   data pixel values are low.
 
 You can also tell the `Imfit` object useful things about the data values: what A/D gain conversion
 was applied, any Gaussian read noise, any constant background value that was previously subtracted from the
-data image, etc.
+data image, etc. (You do not need to do this if you are supplying your own noise/errror array.)
 
 Whatever you chose, you can specify this as part of the call to `loadData`, e.g.
 
@@ -153,8 +183,8 @@ Whatever you chose, you can specify this as part of the call to `loadData`, e.g.
     # chi^2 with model-based errors
     imfitter.loadData(data_im, gain=4.5, read_noise=0.7, use_model_for_errors=True)
     
-    # chi^2 with a variance array (assumed to already include read-noise contributions)
-    imfitter.loadData(data_im, gain=4.5, error=variances, error_type="variance")
+    # chi^2 with a numpy variance array `variances_im` (gain and read noise are not needed)
+    imfitter.loadData(data_im, error=variances_im, error_type="variance")
     
     # Poisson Maximum-Likelihood-Ratio statistics (read noise is not used in this mode)
     imfitter.loadData(data_im, gain=4.5, use_poisson_mlr=True)
@@ -166,11 +196,23 @@ To actually perform the fit, you call the `doFit` method on the `Imfit` object. 
 of the three different minimization algorithms you want to use with the `solver` keyword; the
 default is "LM" for the Levenberg-Marquardt minimizer.
 
-   * "LM" = Levenberg-Marquardt (the default): this is a fast, gradient-descent based minimizer.
+   * "LM" = Levenberg-Marquardt (the default): this is a fast, gradient-descent-based minimizer.
    
-   * "NM" = Nelder-Mead Simplex
+   * "NM" = Nelder-Mead Simplex: slower, possibly less likely to be trapped in local minimum of
+   the fit landscape.
    
-   * "DE" = Differential Evolution
+   * "DE" = Differential Evolution: genetic-algorithm-based; very slow; probably least likely
+   to be trapped in local minima. (This method ignores the initial parameter guesses, choosing
+   random values selected within the lower and upper parameter limits.)
+   
+
+E.g.,
+
+    # default Levenberg-Marquardt fit
+    imfitter.doFit()
+    
+    # fit using Nelder-Mead simplex
+    imfitter.doFit(solver='NM')
 
 
 #### Shortcut: Load data and do the fit in one step
@@ -186,7 +228,8 @@ algorithm, and start the fit all in one go
 
 There are three or four basic things you might want to look at when the fit finishes:
 
-   1. See if the fit actually converged (this is a property of the `Imfit` object):
+   1. See if the fit actually converged (this is a property of the `Imfit` object, which will be
+   either `True` or `False`):
    
             imfitter.fitConverged
             
@@ -198,21 +241,19 @@ There are three or four basic things you might want to look at when the fit fini
             imfitter.AIC   # corresponding Akaike Information Criterion value
             imfitter.BIC   # corresponding Bayesian Information Criterion value
 
-   3. Get the best-fit parameter values
+   3. Get the best-fit parameter values in the form of a 1D numpy array
    
-            # get the best-fit parameter values in the form of a 1D numpy array
             bestfit_parameters = imfit_fitter.getRawParameters()
    
-   4. Get the best-fitting model image
+   4. Get the best-fitting model image (a 2D numpy array)
 
-             # get the best-fit model image as a 2D numpy array
              bestfit_model_im = imfitter.getModelImage()
 
    5. Get fluxes and magnitudes for the best-fitting model -- note that what is returned is
    a tuple of the total flux/magnitude and a numpy array of the fluxes/magnitudes for the
    individual components of the model (in the order they are listed in the model):
    
-             # get the total flux (counts or whatever the pixels values are) and the
+             # get the total flux (counts or whatever the pixel values are) and the
              # individual-component fluxes
              (totalFlux, componentFluxes) = imfitter.getModelFluxes()
              
@@ -228,7 +269,7 @@ the output best-fit model image are both numpy arrays, this is simple enough:
 
 ### Generate a model image (without fitting)
 
-Sometimes you may just want to generate model images without fitting any data. In this case, 
+Sometimes you may want to generate model images without fitting any data. In this case, 
 you can call the `getModelImage` method on the `Imfit` object without running the fit.
 
     model_im = imfitter.getModelImage(shape=image_shape)
