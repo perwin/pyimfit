@@ -73,6 +73,8 @@ PLAN:
        [ ] Add mention/example of how to do bootstrap resampling
 
        [ ] Add API documentation
+            -- possibly we can get this to work on readthedocs by implementing a mock
+            version of pyimfit_lib, which is the non-pure-Python part of things
             [ ] Add documentation file for config.py
             [ ] Add documentation file for descriptions.py
             [ ] Add documentation file for imfit_funcs.py
@@ -84,16 +86,21 @@ PLAN:
 
 
 [ ] Rationalize handling of masks and MaskedArray in fitting.Imfit.loadData
-    1. We should check that mask has same shape as data image *before*
+    [x]1. We should check that mask has same shape as data image *before*
     we call _composemask
     2. Rationalize processing of mask
 
 [ ] Feedback options
-    [ ] Option to print feedback from Levenberg-Marquardt
-        --
-    [ ] Option to print feedback from Nelder-Mead
-    [ ] Option to print feedback from DE
-    [ ] Option to print feedback from bootstrap-resampling
+    [x] Option to print feedback from Levenberg-Marquardt
+    [x] Option to print feedback from Nelder-Mead
+    [x] Option to print feedback from DE
+    [x] Option to print feedback from bootstrap-resampling
+    [ ] Option in doFit() to print a fit summary at the end
+        [ ] Separate public method in Imfit class which prints fit summary (called by doFit())
+
+[ ] Investigate mechanisms for allowing user to halt/cancel a fit (or image-generation, or
+bootstrap resampling) in process
+    https://stackoverflow.com/questions/21550418/how-to-interrupt-native-extension-code-without-killing-the-interpreter
 
 
 [ ] Fix broken SimpleModelDescription

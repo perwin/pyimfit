@@ -724,7 +724,7 @@ cdef class ModelObjectWrapper( object ):
         self._modelImageComputed = True
 
 
-    def doBootstrapIterations( self, int nIters, double ftol=1e-8, int verbose=-1,
+    def doBootstrapIterations( self, int nIters, double ftol=1e-8, bool verboseFlag=False,
                                unsigned long seed=0 ):
         # define outputParams array [double **]
         # outputParamArray[i][nSuccessfulIters] = paramsVect[i];
@@ -733,7 +733,7 @@ cdef class ModelObjectWrapper( object ):
         # so we should pass it a typed memoryview to a numpy array we create here
 
         cdef int whichFitStatistic
-        cdef bool verboseFlag = False
+#        cdef bool verboseFlag = False
         shape = (nIters, self._nParams)
         bootstrappedParamsArray = np.zeros(shape, dtype='float64')
         if not bootstrappedParamsArray.flags['C_CONTIGUOUS']:
@@ -746,7 +746,8 @@ cdef class ModelObjectWrapper( object ):
         whichFitStatistic = self._model.WhichFitStatistic()
         nSuccessfulIterations = BootstrapErrorsArrayOnly(self._paramVect, self._paramInfo,
                                     self._paramLimitsExist, self._model, ftol, nIters,
-                                    self._nFreeParams, whichFitStatistic, &outputParams[0], seed)
+                                    self._nFreeParams, whichFitStatistic, &outputParams[0], seed,
+                                    verboseFlag)
 
         bootstrappedParamsArray = bootstrappedParamsArray_1d.reshape(shape)
         return bootstrappedParamsArray

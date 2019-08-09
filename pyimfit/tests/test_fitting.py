@@ -51,6 +51,12 @@ class TestImfit(object):
         imfit_fitter1 = Imfit(self.modelDesc)
         assert imfit_fitter1._modelDescr.optionsDict == {}
 
+    def test_Imfit_bad_fit_start( self ):
+        """Test that we catch error of trying to start a fit without any data"""
+        imfit_fitter1 = Imfit(self.modelDesc)
+        with pytest.raises(Exception):
+            imfit_fitter1.doFit()
+
     def test_Imfit_optionsDict_updates( self ):
         imfit_fitter2 = Imfit(self.modelDesc)
         imfit_fitter2.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)

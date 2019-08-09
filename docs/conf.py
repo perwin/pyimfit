@@ -14,6 +14,20 @@
 #
 import os
 import sys
+from unittest.mock import MagicMock
+
+# This will supposedly help in auto-generating API documentation on readthedocs
+# by mocking the import of pyimfit_lib (which readthedocs can't access bcs it's
+# an extension file)
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+        return MagicMock()
+
+MOCK_MODULES = ['numpy', 'scipy', 'pyimfit_lib']
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+
+
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('.pyimfit'))
 

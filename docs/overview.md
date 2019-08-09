@@ -208,14 +208,23 @@ E.g.,
     # fit using Nelder-Mead simplex
     imfitter.doFit(solver='NM')
 
+**Feedback from the fit:** By default, the `Imfit` object is silent during the fitting process.
+If you want to see feedback, you can set the `verbose` keyword of the `doFit()` method: `verbose=1`
+will print out periodic updates of the current fit statistic (e.g., &chi;<sup>2</sup>;
+`verbose=2` will also print the current best-fit parameter values of the model each time it
+prints the current fit statistic.
+
+**WARNING:*** Currently, there is no way to interrupt a fit once it has started! (Other than
+killing the underlying Python process, that is. This may change in the future.)
+
 
 #### Shortcut: Load data and do the fit in one step
 
 A shortcut is to call the `fit` method on the `Imfit` object. This lets you supply the data image
-(along with the optional mask), specify the statistical model (&chi;<sup>2</sup>, etc.) and the minimization
-algorithm, and start the fit all in one go
+(along with the optional mask), specify the statistical model (&chi;<sup>2</sup>, etc.) and (optionally)
+the minimization algorithm and verbosity, and start the fit all in one go
 
-    imfitter.fit(data_im, gain=4.5, use_poisson_mlr=True, solver="NM")
+    imfitter.fit(data_im, gain=4.5, use_poisson_mlr=True, solver="NM", verbose=1)
 
 
 #### Inspecting the results of a fit

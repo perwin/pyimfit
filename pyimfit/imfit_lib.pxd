@@ -178,5 +178,5 @@ cdef extern from "bootstrap_errors.h":
     int BootstrapErrorsArrayOnly( const double *bestfitParams, vector[mp_par] parameterLimits,
                     const bool paramLimitsExist, ModelObject *theModel, const double ftol,
                     const int nIterations, const int nFreeParams, const int whichStatistic,
-                    double *outputParamArray, unsigned long rngSeed )
+                    double *outputParamArray, unsigned long rngSeed, bool verboseFlag )
 

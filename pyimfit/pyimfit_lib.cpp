@@ -19,6 +19,8 @@
             "/Users/erwin/coding/pyimfit/libimfit/include/statistics.h"
         ],
         "extra_compile_args": [
+            "-Xpreprocessor",
+            "-fopenmp",
             "-std=c++11"
         ],
         "extra_link_args": [
@@ -2599,6 +2601,7 @@ static const char __pyx_k_debug_level[] = "debug_level";
 static const char __pyx_k_mask_format[] = "mask_format";
 static const char __pyx_k_model_descr[] = "model_descr";
 static const char __pyx_k_subsampling[] = "subsampling";
+static const char __pyx_k_verboseFlag[] = "verboseFlag";
 static const char __pyx_k_zero_is_bad[] = "zero_is_bad";
 static const char __pyx_k_C_CONTIGUOUS[] = "C_CONTIGUOUS";
 static const char __pyx_k_FixByteOrder[] = "FixByteOrder";
@@ -2950,6 +2953,7 @@ static PyObject *__pyx_n_u_use_poisson_mlr;
 static PyObject *__pyx_n_s_value;
 static PyObject *__pyx_n_u_variance;
 static PyObject *__pyx_n_s_verbose;
+static PyObject *__pyx_n_s_verboseFlag;
 static PyObject *__pyx_n_s_verbose_level;
 static PyObject *__pyx_n_u_weight;
 static PyObject *__pyx_n_s_xOffset;
@@ -2979,7 +2983,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_14_testCre
 static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_16doFinalSetup(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_18computeFitStatistic(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self, PyArrayObject *__pyx_v_newParameters); /* proto */
 static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_20fit(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self, double __pyx_v_ftol, int __pyx_v_verbose, PyObject *__pyx_v_mode, PyObject *__pyx_v_seed); /* proto */
-static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootstrapIterations(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self, int __pyx_v_nIters, double __pyx_v_ftol, CYTHON_UNUSED int __pyx_v_verbose, unsigned long __pyx_v_seed); /* proto */
+static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootstrapIterations(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self, int __pyx_v_nIters, double __pyx_v_ftol, bool __pyx_v_verboseFlag, unsigned long __pyx_v_seed); /* proto */
 static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModelDescription(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_26getRawParameters(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_28getParameterErrors(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self); /* proto */
@@ -9470,7 +9474,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_20fit(stru
 /* "pyimfit/pyimfit_lib.pyx":727
  * 
  * 
- *     def doBootstrapIterations( self, int nIters, double ftol=1e-8, int verbose=-1,             # <<<<<<<<<<<<<<
+ *     def doBootstrapIterations( self, int nIters, double ftol=1e-8, bool verboseFlag=False,             # <<<<<<<<<<<<<<
  *                                unsigned long seed=0 ):
  *         # define outputParams array [double **]
  */
@@ -9480,13 +9484,13 @@ static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_23doBootst
 static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_23doBootstrapIterations(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_nIters;
   double __pyx_v_ftol;
-  CYTHON_UNUSED int __pyx_v_verbose;
+  bool __pyx_v_verboseFlag;
   unsigned long __pyx_v_seed;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("doBootstrapIterations (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_nIters,&__pyx_n_s_ftol,&__pyx_n_s_verbose,&__pyx_n_s_seed,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_nIters,&__pyx_n_s_ftol,&__pyx_n_s_verboseFlag,&__pyx_n_s_seed,0};
     PyObject* values[4] = {0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -9517,7 +9521,7 @@ static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_23doBootst
         CYTHON_FALLTHROUGH;
         case  2:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_verbose);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_verboseFlag);
           if (value) { values[2] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
@@ -9550,9 +9554,9 @@ static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_23doBootst
       __pyx_v_ftol = ((double)1e-8);
     }
     if (values[2]) {
-      __pyx_v_verbose = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_verbose == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 727, __pyx_L3_error)
+      __pyx_v_verboseFlag = __Pyx_PyObject_IsTrue(values[2]); if (unlikely((__pyx_v_verboseFlag == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(0, 727, __pyx_L3_error)
     } else {
-      __pyx_v_verbose = ((int)-1);
+      __pyx_v_verboseFlag = ((bool)0);
     }
     if (values[3]) {
       __pyx_v_seed = __Pyx_PyInt_As_unsigned_long(values[3]); if (unlikely((__pyx_v_seed == (unsigned long)-1) && PyErr_Occurred())) __PYX_ERR(0, 728, __pyx_L3_error)
@@ -9568,16 +9572,15 @@ static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_23doBootst
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootstrapIterations(((struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *)__pyx_v_self), __pyx_v_nIters, __pyx_v_ftol, __pyx_v_verbose, __pyx_v_seed);
+  __pyx_r = __pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootstrapIterations(((struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *)__pyx_v_self), __pyx_v_nIters, __pyx_v_ftol, __pyx_v_verboseFlag, __pyx_v_seed);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootstrapIterations(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self, int __pyx_v_nIters, double __pyx_v_ftol, CYTHON_UNUSED int __pyx_v_verbose, unsigned long __pyx_v_seed) {
+static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootstrapIterations(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self, int __pyx_v_nIters, double __pyx_v_ftol, bool __pyx_v_verboseFlag, unsigned long __pyx_v_seed) {
   int __pyx_v_whichFitStatistic;
-  CYTHON_UNUSED bool __pyx_v_verboseFlag;
   PyObject *__pyx_v_shape = NULL;
   PyObject *__pyx_v_bootstrappedParamsArray = NULL;
   PyObject *__pyx_v_bootstrappedParamsArray_1d = NULL;
@@ -9596,18 +9599,9 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootst
   int __pyx_t_9;
   __Pyx_RefNannySetupContext("doBootstrapIterations", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":736
- * 
- *         cdef int whichFitStatistic
- *         cdef bool verboseFlag = False             # <<<<<<<<<<<<<<
- *         shape = (nIters, self._nParams)
- *         bootstrappedParamsArray = np.zeros(shape, dtype='float64')
- */
-  __pyx_v_verboseFlag = 0;
-
   /* "pyimfit/pyimfit_lib.pyx":737
  *         cdef int whichFitStatistic
- *         cdef bool verboseFlag = False
+ * #        cdef bool verboseFlag = False
  *         shape = (nIters, self._nParams)             # <<<<<<<<<<<<<<
  *         bootstrappedParamsArray = np.zeros(shape, dtype='float64')
  *         if not bootstrappedParamsArray.flags['C_CONTIGUOUS']:
@@ -9628,7 +9622,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootst
   __pyx_t_3 = 0;
 
   /* "pyimfit/pyimfit_lib.pyx":738
- *         cdef bool verboseFlag = False
+ * #        cdef bool verboseFlag = False
  *         shape = (nIters, self._nParams)
  *         bootstrappedParamsArray = np.zeros(shape, dtype='float64')             # <<<<<<<<<<<<<<
  *         if not bootstrappedParamsArray.flags['C_CONTIGUOUS']:
@@ -9762,9 +9756,9 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootst
   /* "pyimfit/pyimfit_lib.pyx":749
  *         nSuccessfulIterations = BootstrapErrorsArrayOnly(self._paramVect, self._paramInfo,
  *                                     self._paramLimitsExist, self._model, ftol, nIters,
- *                                     self._nFreeParams, whichFitStatistic, &outputParams[0], seed)             # <<<<<<<<<<<<<<
+ *                                     self._nFreeParams, whichFitStatistic, &outputParams[0], seed,             # <<<<<<<<<<<<<<
+ *                                     verboseFlag)
  * 
- *         bootstrappedParamsArray = bootstrappedParamsArray_1d.reshape(shape)
  */
   __pyx_t_8 = 0;
   __pyx_t_9 = -1;
@@ -9782,18 +9776,18 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootst
  *         whichFitStatistic = self._model.WhichFitStatistic()
  *         nSuccessfulIterations = BootstrapErrorsArrayOnly(self._paramVect, self._paramInfo,             # <<<<<<<<<<<<<<
  *                                     self._paramLimitsExist, self._model, ftol, nIters,
- *                                     self._nFreeParams, whichFitStatistic, &outputParams[0], seed)
+ *                                     self._nFreeParams, whichFitStatistic, &outputParams[0], seed,
  */
-  __pyx_v_nSuccessfulIterations = BootstrapErrorsArrayOnly(__pyx_v_self->_paramVect, __pyx_v_self->_paramInfo, __pyx_v_self->_paramLimitsExist, __pyx_v_self->_model, __pyx_v_ftol, __pyx_v_nIters, __pyx_v_self->_nFreeParams, __pyx_v_whichFitStatistic, (&(*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_outputParams.data) + __pyx_t_8)) )))), __pyx_v_seed);
+  __pyx_v_nSuccessfulIterations = BootstrapErrorsArrayOnly(__pyx_v_self->_paramVect, __pyx_v_self->_paramInfo, __pyx_v_self->_paramLimitsExist, __pyx_v_self->_model, __pyx_v_ftol, __pyx_v_nIters, __pyx_v_self->_nFreeParams, __pyx_v_whichFitStatistic, (&(*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_outputParams.data) + __pyx_t_8)) )))), __pyx_v_seed, __pyx_v_verboseFlag);
 
-  /* "pyimfit/pyimfit_lib.pyx":751
- *                                     self._nFreeParams, whichFitStatistic, &outputParams[0], seed)
+  /* "pyimfit/pyimfit_lib.pyx":752
+ *                                     verboseFlag)
  * 
  *         bootstrappedParamsArray = bootstrappedParamsArray_1d.reshape(shape)             # <<<<<<<<<<<<<<
  *         return bootstrappedParamsArray
  * 
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_bootstrappedParamsArray_1d, __pyx_n_s_reshape); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 751, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_bootstrappedParamsArray_1d, __pyx_n_s_reshape); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 752, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -9807,13 +9801,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootst
   }
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_v_shape) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_shape);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 751, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 752, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF_SET(__pyx_v_bootstrappedParamsArray, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "pyimfit/pyimfit_lib.pyx":752
+  /* "pyimfit/pyimfit_lib.pyx":753
  * 
  *         bootstrappedParamsArray = bootstrappedParamsArray_1d.reshape(shape)
  *         return bootstrappedParamsArray             # <<<<<<<<<<<<<<
@@ -9828,7 +9822,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootst
   /* "pyimfit/pyimfit_lib.pyx":727
  * 
  * 
- *     def doBootstrapIterations( self, int nIters, double ftol=1e-8, int verbose=-1,             # <<<<<<<<<<<<<<
+ *     def doBootstrapIterations( self, int nIters, double ftol=1e-8, bool verboseFlag=False,             # <<<<<<<<<<<<<<
  *                                unsigned long seed=0 ):
  *         # define outputParams array [double **]
  */
@@ -9852,7 +9846,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_22doBootst
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":755
+/* "pyimfit/pyimfit_lib.pyx":756
  * 
  * 
  *     def getModelDescription(self):             # <<<<<<<<<<<<<<
@@ -9890,14 +9884,14 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
   PyObject *__pyx_t_9 = NULL;
   __Pyx_RefNannySetupContext("getModelDescription", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":756
+  /* "pyimfit/pyimfit_lib.pyx":757
  * 
  *     def getModelDescription(self):
  *         model_descr = deepcopy(self._modelDescr)             # <<<<<<<<<<<<<<
  *         for i, p in enumerate(model_descr.parameterList()):
  *             p.setValue(self._paramVect[i])
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_deepcopy); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 756, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_deepcopy); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 757, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -9911,13 +9905,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_v_self->_modelDescr) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_self->_modelDescr);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 756, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 757, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_model_descr = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "pyimfit/pyimfit_lib.pyx":757
+  /* "pyimfit/pyimfit_lib.pyx":758
  *     def getModelDescription(self):
  *         model_descr = deepcopy(self._modelDescr)
  *         for i, p in enumerate(model_descr.parameterList()):             # <<<<<<<<<<<<<<
@@ -9926,7 +9920,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
  */
   __Pyx_INCREF(__pyx_int_0);
   __pyx_t_1 = __pyx_int_0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model_descr, __pyx_n_s_parameterList); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 757, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model_descr, __pyx_n_s_parameterList); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 758, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -9940,16 +9934,16 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
   }
   __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 757, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 758, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (likely(PyList_CheckExact(__pyx_t_2)) || PyTuple_CheckExact(__pyx_t_2)) {
     __pyx_t_3 = __pyx_t_2; __Pyx_INCREF(__pyx_t_3); __pyx_t_5 = 0;
     __pyx_t_6 = NULL;
   } else {
-    __pyx_t_5 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 757, __pyx_L1_error)
+    __pyx_t_5 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 758, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_6 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 757, __pyx_L1_error)
+    __pyx_t_6 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 758, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   for (;;) {
@@ -9957,17 +9951,17 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
       if (likely(PyList_CheckExact(__pyx_t_3))) {
         if (__pyx_t_5 >= PyList_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_5); __Pyx_INCREF(__pyx_t_2); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 757, __pyx_L1_error)
+        __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_5); __Pyx_INCREF(__pyx_t_2); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 758, __pyx_L1_error)
         #else
-        __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 757, __pyx_L1_error)
+        __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 758, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         #endif
       } else {
         if (__pyx_t_5 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_5); __Pyx_INCREF(__pyx_t_2); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 757, __pyx_L1_error)
+        __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_5); __Pyx_INCREF(__pyx_t_2); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 758, __pyx_L1_error)
         #else
-        __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 757, __pyx_L1_error)
+        __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 758, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         #endif
       }
@@ -9977,7 +9971,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 757, __pyx_L1_error)
+          else __PYX_ERR(0, 758, __pyx_L1_error)
         }
         break;
       }
@@ -9987,23 +9981,23 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
     __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_t_1);
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_1);
-    __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_t_1, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 757, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_t_1, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 758, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1);
     __pyx_t_1 = __pyx_t_2;
     __pyx_t_2 = 0;
 
-    /* "pyimfit/pyimfit_lib.pyx":758
+    /* "pyimfit/pyimfit_lib.pyx":759
  *         model_descr = deepcopy(self._modelDescr)
  *         for i, p in enumerate(model_descr.parameterList()):
  *             p.setValue(self._paramVect[i])             # <<<<<<<<<<<<<<
  *         return model_descr
  * 
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_p, __pyx_n_s_setValue); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 758, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_p, __pyx_n_s_setValue); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 759, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = __Pyx_PyIndex_AsSsize_t(__pyx_v_i); if (unlikely((__pyx_t_7 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 758, __pyx_L1_error)
-    __pyx_t_8 = PyFloat_FromDouble((__pyx_v_self->_paramVect[__pyx_t_7])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 758, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyIndex_AsSsize_t(__pyx_v_i); if (unlikely((__pyx_t_7 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 759, __pyx_L1_error)
+    __pyx_t_8 = PyFloat_FromDouble((__pyx_v_self->_paramVect[__pyx_t_7])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 759, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_9 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -10018,12 +10012,12 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
     __pyx_t_2 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_9, __pyx_t_8) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_8);
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 758, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 759, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "pyimfit/pyimfit_lib.pyx":757
+    /* "pyimfit/pyimfit_lib.pyx":758
  *     def getModelDescription(self):
  *         model_descr = deepcopy(self._modelDescr)
  *         for i, p in enumerate(model_descr.parameterList()):             # <<<<<<<<<<<<<<
@@ -10034,7 +10028,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pyimfit/pyimfit_lib.pyx":759
+  /* "pyimfit/pyimfit_lib.pyx":760
  *         for i, p in enumerate(model_descr.parameterList()):
  *             p.setValue(self._paramVect[i])
  *         return model_descr             # <<<<<<<<<<<<<<
@@ -10046,7 +10040,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
   __pyx_r = __pyx_v_model_descr;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":755
+  /* "pyimfit/pyimfit_lib.pyx":756
  * 
  * 
  *     def getModelDescription(self):             # <<<<<<<<<<<<<<
@@ -10073,7 +10067,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_24getModel
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":762
+/* "pyimfit/pyimfit_lib.pyx":763
  * 
  * 
  *     def getRawParameters(self):             # <<<<<<<<<<<<<<
@@ -10106,19 +10100,19 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_26getRawPa
   int __pyx_t_5;
   __Pyx_RefNannySetupContext("getRawParameters", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":763
+  /* "pyimfit/pyimfit_lib.pyx":764
  * 
  *     def getRawParameters(self):
  *         vals = []             # <<<<<<<<<<<<<<
  *         for i in range(self._nParams):
  *             vals.append(self._paramVect[i])
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 763, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 764, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_vals = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "pyimfit/pyimfit_lib.pyx":764
+  /* "pyimfit/pyimfit_lib.pyx":765
  *     def getRawParameters(self):
  *         vals = []
  *         for i in range(self._nParams):             # <<<<<<<<<<<<<<
@@ -10130,20 +10124,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_26getRawPa
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_i = __pyx_t_4;
 
-    /* "pyimfit/pyimfit_lib.pyx":765
+    /* "pyimfit/pyimfit_lib.pyx":766
  *         vals = []
  *         for i in range(self._nParams):
  *             vals.append(self._paramVect[i])             # <<<<<<<<<<<<<<
  *         return vals
  * 
  */
-    __pyx_t_1 = PyFloat_FromDouble((__pyx_v_self->_paramVect[__pyx_v_i])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 765, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble((__pyx_v_self->_paramVect[__pyx_v_i])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 766, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = __Pyx_PyList_Append(__pyx_v_vals, __pyx_t_1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 765, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyList_Append(__pyx_v_vals, __pyx_t_1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 766, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":766
+  /* "pyimfit/pyimfit_lib.pyx":767
  *         for i in range(self._nParams):
  *             vals.append(self._paramVect[i])
  *         return vals             # <<<<<<<<<<<<<<
@@ -10155,7 +10149,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_26getRawPa
   __pyx_r = __pyx_v_vals;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":762
+  /* "pyimfit/pyimfit_lib.pyx":763
  * 
  * 
  *     def getRawParameters(self):             # <<<<<<<<<<<<<<
@@ -10175,7 +10169,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_26getRawPa
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":769
+/* "pyimfit/pyimfit_lib.pyx":770
  * 
  * 
  *     def getParameterErrors(self):             # <<<<<<<<<<<<<<
@@ -10208,19 +10202,19 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_28getParam
   int __pyx_t_5;
   __Pyx_RefNannySetupContext("getParameterErrors", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":770
+  /* "pyimfit/pyimfit_lib.pyx":771
  * 
  *     def getParameterErrors(self):
  *         errorVals = []             # <<<<<<<<<<<<<<
  *         for i in range(self._nParams):
  *             errorVals.append(self._fitErrorsVect[i])
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 770, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 771, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_errorVals = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "pyimfit/pyimfit_lib.pyx":771
+  /* "pyimfit/pyimfit_lib.pyx":772
  *     def getParameterErrors(self):
  *         errorVals = []
  *         for i in range(self._nParams):             # <<<<<<<<<<<<<<
@@ -10232,20 +10226,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_28getParam
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_i = __pyx_t_4;
 
-    /* "pyimfit/pyimfit_lib.pyx":772
+    /* "pyimfit/pyimfit_lib.pyx":773
  *         errorVals = []
  *         for i in range(self._nParams):
  *             errorVals.append(self._fitErrorsVect[i])             # <<<<<<<<<<<<<<
  *         return errorVals
  * 
  */
-    __pyx_t_1 = PyFloat_FromDouble((__pyx_v_self->_fitErrorsVect[__pyx_v_i])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 772, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble((__pyx_v_self->_fitErrorsVect[__pyx_v_i])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 773, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = __Pyx_PyList_Append(__pyx_v_errorVals, __pyx_t_1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 772, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyList_Append(__pyx_v_errorVals, __pyx_t_1); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 773, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":773
+  /* "pyimfit/pyimfit_lib.pyx":774
  *         for i in range(self._nParams):
  *             errorVals.append(self._fitErrorsVect[i])
  *         return errorVals             # <<<<<<<<<<<<<<
@@ -10257,7 +10251,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_28getParam
   __pyx_r = __pyx_v_errorVals;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":769
+  /* "pyimfit/pyimfit_lib.pyx":770
  * 
  * 
  *     def getParameterErrors(self):             # <<<<<<<<<<<<<<
@@ -10277,7 +10271,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_28getParam
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":776
+/* "pyimfit/pyimfit_lib.pyx":777
  * 
  * 
  *     def getFitStatistic( self, mode='none' ):             # <<<<<<<<<<<<<<
@@ -10314,7 +10308,7 @@ static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_31getFitSt
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getFitStatistic") < 0)) __PYX_ERR(0, 776, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getFitStatistic") < 0)) __PYX_ERR(0, 777, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -10328,7 +10322,7 @@ static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_31getFitSt
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getFitStatistic", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 776, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getFitStatistic", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 777, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pyimfit.pyimfit_lib.ModelObjectWrapper.getFitStatistic", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -10353,20 +10347,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("getFitStatistic", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":778
+  /* "pyimfit/pyimfit_lib.pyx":779
  *     def getFitStatistic( self, mode='none' ):
  *         cdef double fitstat
  *         if self.fittedLM:             # <<<<<<<<<<<<<<
  *             fitstat = self._fitResult.bestnorm
  *         else:
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_fittedLM); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 778, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_fittedLM); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 779, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 778, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 779, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "pyimfit/pyimfit_lib.pyx":779
+    /* "pyimfit/pyimfit_lib.pyx":780
  *         cdef double fitstat
  *         if self.fittedLM:
  *             fitstat = self._fitResult.bestnorm             # <<<<<<<<<<<<<<
@@ -10376,7 +10370,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
     __pyx_t_3 = __pyx_v_self->_fitResult->bestnorm;
     __pyx_v_fitstat = __pyx_t_3;
 
-    /* "pyimfit/pyimfit_lib.pyx":778
+    /* "pyimfit/pyimfit_lib.pyx":779
  *     def getFitStatistic( self, mode='none' ):
  *         cdef double fitstat
  *         if self.fittedLM:             # <<<<<<<<<<<<<<
@@ -10386,7 +10380,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
     goto __pyx_L3;
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":781
+  /* "pyimfit/pyimfit_lib.pyx":782
  *             fitstat = self._fitResult.bestnorm
  *         else:
  *             fitstat = self._model.GetFitStatistic(self._paramVect)             # <<<<<<<<<<<<<<
@@ -10396,7 +10390,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
   /*else*/ {
     __pyx_v_fitstat = __pyx_v_self->_model->GetFitStatistic(__pyx_v_self->_paramVect);
 
-    /* "pyimfit/pyimfit_lib.pyx":782
+    /* "pyimfit/pyimfit_lib.pyx":783
  *         else:
  *             fitstat = self._model.GetFitStatistic(self._paramVect)
  *             self._modelImageComputed = True             # <<<<<<<<<<<<<<
@@ -10407,7 +10401,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
   }
   __pyx_L3:;
 
-  /* "pyimfit/pyimfit_lib.pyx":783
+  /* "pyimfit/pyimfit_lib.pyx":784
  *             fitstat = self._model.GetFitStatistic(self._paramVect)
  *             self._modelImageComputed = True
  *         cdef int n_valid_pix = self._model.GetNValidPixels()             # <<<<<<<<<<<<<<
@@ -10416,7 +10410,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
  */
   __pyx_v_n_valid_pix = __pyx_v_self->_model->GetNValidPixels();
 
-  /* "pyimfit/pyimfit_lib.pyx":784
+  /* "pyimfit/pyimfit_lib.pyx":785
  *             self._modelImageComputed = True
  *         cdef int n_valid_pix = self._model.GetNValidPixels()
  *         cdef int deg_free = n_valid_pix - self._nFreeParams             # <<<<<<<<<<<<<<
@@ -10425,17 +10419,17 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
  */
   __pyx_v_deg_free = (__pyx_v_n_valid_pix - __pyx_v_self->_nFreeParams);
 
-  /* "pyimfit/pyimfit_lib.pyx":786
+  /* "pyimfit/pyimfit_lib.pyx":787
  *         cdef int deg_free = n_valid_pix - self._nFreeParams
  * 
  *         if mode == 'none':             # <<<<<<<<<<<<<<
  *             return fitstat
  *         elif mode == 'reduced':
  */
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_n_u_none, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 786, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_n_u_none, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 787, __pyx_L1_error)
   if (__pyx_t_2) {
 
-    /* "pyimfit/pyimfit_lib.pyx":787
+    /* "pyimfit/pyimfit_lib.pyx":788
  * 
  *         if mode == 'none':
  *             return fitstat             # <<<<<<<<<<<<<<
@@ -10443,13 +10437,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
  *             return fitstat / deg_free
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fitstat); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 787, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_v_fitstat); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 788, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "pyimfit/pyimfit_lib.pyx":786
+    /* "pyimfit/pyimfit_lib.pyx":787
  *         cdef int deg_free = n_valid_pix - self._nFreeParams
  * 
  *         if mode == 'none':             # <<<<<<<<<<<<<<
@@ -10458,17 +10452,17 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":788
+  /* "pyimfit/pyimfit_lib.pyx":789
  *         if mode == 'none':
  *             return fitstat
  *         elif mode == 'reduced':             # <<<<<<<<<<<<<<
  *             return fitstat / deg_free
  *         elif mode == 'AIC':
  */
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_n_u_reduced, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 788, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_n_u_reduced, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 789, __pyx_L1_error)
   if (__pyx_t_2) {
 
-    /* "pyimfit/pyimfit_lib.pyx":789
+    /* "pyimfit/pyimfit_lib.pyx":790
  *             return fitstat
  *         elif mode == 'reduced':
  *             return fitstat / deg_free             # <<<<<<<<<<<<<<
@@ -10478,15 +10472,15 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
     __Pyx_XDECREF(__pyx_r);
     if (unlikely(__pyx_v_deg_free == 0)) {
       PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-      __PYX_ERR(0, 789, __pyx_L1_error)
+      __PYX_ERR(0, 790, __pyx_L1_error)
     }
-    __pyx_t_1 = PyFloat_FromDouble((__pyx_v_fitstat / ((double)__pyx_v_deg_free))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 789, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble((__pyx_v_fitstat / ((double)__pyx_v_deg_free))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 790, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "pyimfit/pyimfit_lib.pyx":788
+    /* "pyimfit/pyimfit_lib.pyx":789
  *         if mode == 'none':
  *             return fitstat
  *         elif mode == 'reduced':             # <<<<<<<<<<<<<<
@@ -10495,17 +10489,17 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":790
+  /* "pyimfit/pyimfit_lib.pyx":791
  *         elif mode == 'reduced':
  *             return fitstat / deg_free
  *         elif mode == 'AIC':             # <<<<<<<<<<<<<<
  *             return AIC_corrected(fitstat, self._nFreeParams, n_valid_pix, 1)
  *         elif mode == 'BIC':
  */
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_n_u_AIC, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 790, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_n_u_AIC, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 791, __pyx_L1_error)
   if (__pyx_t_2) {
 
-    /* "pyimfit/pyimfit_lib.pyx":791
+    /* "pyimfit/pyimfit_lib.pyx":792
  *             return fitstat / deg_free
  *         elif mode == 'AIC':
  *             return AIC_corrected(fitstat, self._nFreeParams, n_valid_pix, 1)             # <<<<<<<<<<<<<<
@@ -10513,13 +10507,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
  *             return BIC(fitstat, self._nFreeParams, n_valid_pix, 1)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = PyFloat_FromDouble(AIC_corrected(__pyx_v_fitstat, __pyx_v_self->_nFreeParams, __pyx_v_n_valid_pix, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 791, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble(AIC_corrected(__pyx_v_fitstat, __pyx_v_self->_nFreeParams, __pyx_v_n_valid_pix, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 792, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "pyimfit/pyimfit_lib.pyx":790
+    /* "pyimfit/pyimfit_lib.pyx":791
  *         elif mode == 'reduced':
  *             return fitstat / deg_free
  *         elif mode == 'AIC':             # <<<<<<<<<<<<<<
@@ -10528,17 +10522,17 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":792
+  /* "pyimfit/pyimfit_lib.pyx":793
  *         elif mode == 'AIC':
  *             return AIC_corrected(fitstat, self._nFreeParams, n_valid_pix, 1)
  *         elif mode == 'BIC':             # <<<<<<<<<<<<<<
  *             return BIC(fitstat, self._nFreeParams, n_valid_pix, 1)
  *         else:
  */
-  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_n_u_BIC, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 792, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_n_u_BIC, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 793, __pyx_L1_error)
   if (likely(__pyx_t_2)) {
 
-    /* "pyimfit/pyimfit_lib.pyx":793
+    /* "pyimfit/pyimfit_lib.pyx":794
  *             return AIC_corrected(fitstat, self._nFreeParams, n_valid_pix, 1)
  *         elif mode == 'BIC':
  *             return BIC(fitstat, self._nFreeParams, n_valid_pix, 1)             # <<<<<<<<<<<<<<
@@ -10546,13 +10540,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
  *             raise Exception('Unknown statistic mode: %s' % mode)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = PyFloat_FromDouble(BIC(__pyx_v_fitstat, __pyx_v_self->_nFreeParams, __pyx_v_n_valid_pix, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 793, __pyx_L1_error)
+    __pyx_t_1 = PyFloat_FromDouble(BIC(__pyx_v_fitstat, __pyx_v_self->_nFreeParams, __pyx_v_n_valid_pix, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 794, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "pyimfit/pyimfit_lib.pyx":792
+    /* "pyimfit/pyimfit_lib.pyx":793
  *         elif mode == 'AIC':
  *             return AIC_corrected(fitstat, self._nFreeParams, n_valid_pix, 1)
  *         elif mode == 'BIC':             # <<<<<<<<<<<<<<
@@ -10561,7 +10555,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":795
+  /* "pyimfit/pyimfit_lib.pyx":796
  *             return BIC(fitstat, self._nFreeParams, n_valid_pix, 1)
  *         else:
  *             raise Exception('Unknown statistic mode: %s' % mode)             # <<<<<<<<<<<<<<
@@ -10569,17 +10563,17 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
  * 
  */
   /*else*/ {
-    __pyx_t_1 = __Pyx_PyUnicode_FormatSafe(__pyx_kp_u_Unknown_statistic_mode_s, __pyx_v_mode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 795, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_FormatSafe(__pyx_kp_u_Unknown_statistic_mode_s, __pyx_v_mode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 796, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 795, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 796, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 795, __pyx_L1_error)
+    __PYX_ERR(0, 796, __pyx_L1_error)
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":776
+  /* "pyimfit/pyimfit_lib.pyx":777
  * 
  * 
  *     def getFitStatistic( self, mode='none' ):             # <<<<<<<<<<<<<<
@@ -10599,7 +10593,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_30getFitSt
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":803
+/* "pyimfit/pyimfit_lib.pyx":804
  *     # survive beyond the point where the ModelObject's destructor is called
  *     # (which will delete the original data pointed to by model_image)
  *     def getModelImage( self, newParameters=None ):             # <<<<<<<<<<<<<<
@@ -10636,7 +10630,7 @@ static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_33getModel
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getModelImage") < 0)) __PYX_ERR(0, 803, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getModelImage") < 0)) __PYX_ERR(0, 804, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -10650,7 +10644,7 @@ static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_33getModel
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getModelImage", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 803, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getModelImage", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 804, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pyimfit.pyimfit_lib.ModelObjectWrapper.getModelImage", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -10695,7 +10689,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
   __pyx_pybuffernd_output_array.data = NULL;
   __pyx_pybuffernd_output_array.rcbuffer = &__pyx_pybuffer_output_array;
 
-  /* "pyimfit/pyimfit_lib.pyx":806
+  /* "pyimfit/pyimfit_lib.pyx":807
  *         cdef double *model_image
  *         cdef np.ndarray[np.double_t, ndim=2, mode='c'] output_array
  *         cdef int imsize = self._nPixels * sizeof(double)             # <<<<<<<<<<<<<<
@@ -10704,7 +10698,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
  */
   __pyx_v_imsize = (__pyx_v_self->_nPixels * (sizeof(double)));
 
-  /* "pyimfit/pyimfit_lib.pyx":810
+  /* "pyimfit/pyimfit_lib.pyx":811
  * 
  *         # FIXME: if newParameters is None -- can we be sure ModelObject has parameter values if fit hasn't been done?
  *         if newParameters is not None:             # <<<<<<<<<<<<<<
@@ -10715,7 +10709,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "pyimfit/pyimfit_lib.pyx":811
+    /* "pyimfit/pyimfit_lib.pyx":812
  *         # FIXME: if newParameters is None -- can we be sure ModelObject has parameter values if fit hasn't been done?
  *         if newParameters is not None:
  *             parameterArray = <double *> calloc(self._nParams, sizeof(double))             # <<<<<<<<<<<<<<
@@ -10724,7 +10718,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
  */
     __pyx_v_parameterArray = ((double *)calloc(__pyx_v_self->_nParams, (sizeof(double))));
 
-    /* "pyimfit/pyimfit_lib.pyx":812
+    /* "pyimfit/pyimfit_lib.pyx":813
  *         if newParameters is not None:
  *             parameterArray = <double *> calloc(self._nParams, sizeof(double))
  *             for i in range(self._nParams):             # <<<<<<<<<<<<<<
@@ -10736,21 +10730,21 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
       __pyx_v_i = __pyx_t_5;
 
-      /* "pyimfit/pyimfit_lib.pyx":813
+      /* "pyimfit/pyimfit_lib.pyx":814
  *             parameterArray = <double *> calloc(self._nParams, sizeof(double))
  *             for i in range(self._nParams):
  *                 parameterArray[i] = newParameters[i]             # <<<<<<<<<<<<<<
  *             self._model.CreateModelImage(parameterArray)
  *             free(parameterArray)
  */
-      __pyx_t_6 = __Pyx_GetItemInt(__pyx_v_newParameters, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 813, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_GetItemInt(__pyx_v_newParameters, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 814, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_6); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 813, __pyx_L1_error)
+      __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_6); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 814, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       (__pyx_v_parameterArray[__pyx_v_i]) = __pyx_t_7;
     }
 
-    /* "pyimfit/pyimfit_lib.pyx":814
+    /* "pyimfit/pyimfit_lib.pyx":815
  *             for i in range(self._nParams):
  *                 parameterArray[i] = newParameters[i]
  *             self._model.CreateModelImage(parameterArray)             # <<<<<<<<<<<<<<
@@ -10759,7 +10753,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
  */
     __pyx_v_self->_model->CreateModelImage(__pyx_v_parameterArray);
 
-    /* "pyimfit/pyimfit_lib.pyx":815
+    /* "pyimfit/pyimfit_lib.pyx":816
  *                 parameterArray[i] = newParameters[i]
  *             self._model.CreateModelImage(parameterArray)
  *             free(parameterArray)             # <<<<<<<<<<<<<<
@@ -10768,7 +10762,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
  */
     free(__pyx_v_parameterArray);
 
-    /* "pyimfit/pyimfit_lib.pyx":810
+    /* "pyimfit/pyimfit_lib.pyx":811
  * 
  *         # FIXME: if newParameters is None -- can we be sure ModelObject has parameter values if fit hasn't been done?
  *         if newParameters is not None:             # <<<<<<<<<<<<<<
@@ -10777,7 +10771,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":816
+  /* "pyimfit/pyimfit_lib.pyx":817
  *             self._model.CreateModelImage(parameterArray)
  *             free(parameterArray)
  *         model_image = self._model.GetModelImageVector()             # <<<<<<<<<<<<<<
@@ -10786,7 +10780,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
  */
   __pyx_v_model_image = __pyx_v_self->_model->GetModelImageVector();
 
-  /* "pyimfit/pyimfit_lib.pyx":817
+  /* "pyimfit/pyimfit_lib.pyx":818
  *             free(parameterArray)
  *         model_image = self._model.GetModelImageVector()
  *         if model_image is NULL:             # <<<<<<<<<<<<<<
@@ -10796,20 +10790,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
   __pyx_t_2 = ((__pyx_v_model_image == NULL) != 0);
   if (unlikely(__pyx_t_2)) {
 
-    /* "pyimfit/pyimfit_lib.pyx":818
+    /* "pyimfit/pyimfit_lib.pyx":819
  *         model_image = self._model.GetModelImageVector()
  *         if model_image is NULL:
  *             raise Exception('Error: model image has not yet been computed.')             # <<<<<<<<<<<<<<
  *         output_array = np.empty((self._nRows, self._nCols), dtype='float64')
  *         memcpy(&output_array[0,0], model_image, imsize)
  */
-    __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__20, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 818, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__20, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 819, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_Raise(__pyx_t_6, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __PYX_ERR(0, 818, __pyx_L1_error)
+    __PYX_ERR(0, 819, __pyx_L1_error)
 
-    /* "pyimfit/pyimfit_lib.pyx":817
+    /* "pyimfit/pyimfit_lib.pyx":818
  *             free(parameterArray)
  *         model_image = self._model.GetModelImageVector()
  *         if model_image is NULL:             # <<<<<<<<<<<<<<
@@ -10818,23 +10812,23 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":819
+  /* "pyimfit/pyimfit_lib.pyx":820
  *         if model_image is NULL:
  *             raise Exception('Error: model image has not yet been computed.')
  *         output_array = np.empty((self._nRows, self._nCols), dtype='float64')             # <<<<<<<<<<<<<<
  *         memcpy(&output_array[0,0], model_image, imsize)
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 819, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 820, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_empty); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 819, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_empty); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 820, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->_nRows); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 819, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_self->_nRows); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 820, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_self->_nCols); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 819, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_self->_nCols); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 820, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 819, __pyx_L1_error)
+  __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 820, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_GIVEREF(__pyx_t_6);
   PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_6);
@@ -10842,20 +10836,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
   PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_t_9);
   __pyx_t_6 = 0;
   __pyx_t_9 = 0;
-  __pyx_t_9 = PyTuple_New(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 819, __pyx_L1_error)
+  __pyx_t_9 = PyTuple_New(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 820, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_GIVEREF(__pyx_t_10);
   PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_10);
   __pyx_t_10 = 0;
-  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 819, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 820, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_dtype, __pyx_n_u_float64) < 0) __PYX_ERR(0, 819, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_9, __pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 819, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_dtype, __pyx_n_u_float64) < 0) __PYX_ERR(0, 820, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_9, __pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 820, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 819, __pyx_L1_error)
+  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 820, __pyx_L1_error)
   __pyx_t_11 = ((PyArrayObject *)__pyx_t_6);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -10872,13 +10866,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
       __pyx_t_12 = __pyx_t_13 = __pyx_t_14 = 0;
     }
     __pyx_pybuffernd_output_array.diminfo[0].strides = __pyx_pybuffernd_output_array.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_output_array.diminfo[0].shape = __pyx_pybuffernd_output_array.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_output_array.diminfo[1].strides = __pyx_pybuffernd_output_array.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_output_array.diminfo[1].shape = __pyx_pybuffernd_output_array.rcbuffer->pybuffer.shape[1];
-    if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 819, __pyx_L1_error)
+    if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 820, __pyx_L1_error)
   }
   __pyx_t_11 = 0;
   __pyx_v_output_array = ((PyArrayObject *)__pyx_t_6);
   __pyx_t_6 = 0;
 
-  /* "pyimfit/pyimfit_lib.pyx":820
+  /* "pyimfit/pyimfit_lib.pyx":821
  *             raise Exception('Error: model image has not yet been computed.')
  *         output_array = np.empty((self._nRows, self._nCols), dtype='float64')
  *         memcpy(&output_array[0,0], model_image, imsize)             # <<<<<<<<<<<<<<
@@ -10898,11 +10892,11 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
   } else if (unlikely(__pyx_t_16 >= __pyx_pybuffernd_output_array.diminfo[1].shape)) __pyx_t_3 = 1;
   if (unlikely(__pyx_t_3 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_3);
-    __PYX_ERR(0, 820, __pyx_L1_error)
+    __PYX_ERR(0, 821, __pyx_L1_error)
   }
   (void)(memcpy((&(*__Pyx_BufPtrCContig2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_output_array.rcbuffer->pybuffer.buf, __pyx_t_15, __pyx_pybuffernd_output_array.diminfo[0].strides, __pyx_t_16, __pyx_pybuffernd_output_array.diminfo[1].strides))), __pyx_v_model_image, __pyx_v_imsize));
 
-  /* "pyimfit/pyimfit_lib.pyx":822
+  /* "pyimfit/pyimfit_lib.pyx":823
  *         memcpy(&output_array[0,0], model_image, imsize)
  * 
  *         return output_array             # <<<<<<<<<<<<<<
@@ -10914,7 +10908,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
   __pyx_r = ((PyObject *)__pyx_v_output_array);
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":803
+  /* "pyimfit/pyimfit_lib.pyx":804
  *     # survive beyond the point where the ModelObject's destructor is called
  *     # (which will delete the original data pointed to by model_image)
  *     def getModelImage( self, newParameters=None ):             # <<<<<<<<<<<<<<
@@ -10946,7 +10940,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_32getModel
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":825
+/* "pyimfit/pyimfit_lib.pyx":826
  * 
  * 
  *     def getModelFluxes( self, newParameters=None, estimationImageSize=5000 ):             # <<<<<<<<<<<<<<
@@ -10994,7 +10988,7 @@ static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_35getModel
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getModelFluxes") < 0)) __PYX_ERR(0, 825, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "getModelFluxes") < 0)) __PYX_ERR(0, 826, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -11011,7 +11005,7 @@ static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_35getModel
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("getModelFluxes", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 825, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("getModelFluxes", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 826, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pyimfit.pyimfit_lib.ModelObjectWrapper.getModelFluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -11046,7 +11040,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
   PyObject *__pyx_t_11 = NULL;
   __Pyx_RefNannySetupContext("getModelFluxes", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":843
+  /* "pyimfit/pyimfit_lib.pyx":844
  *         """
  *         cdef double totalFlux
  *         cdef int nFunctions = self._model.GetNFunctions()             # <<<<<<<<<<<<<<
@@ -11055,7 +11049,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  */
   __pyx_v_nFunctions = __pyx_v_self->_model->GetNFunctions();
 
-  /* "pyimfit/pyimfit_lib.pyx":846
+  /* "pyimfit/pyimfit_lib.pyx":847
  *         cdef double *parameterArray
  * 
  *         self._modelFluxes = <double *> calloc(nFunctions, sizeof(double))             # <<<<<<<<<<<<<<
@@ -11064,7 +11058,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  */
   __pyx_v_self->_modelFluxes = ((double *)calloc(__pyx_v_nFunctions, (sizeof(double))));
 
-  /* "pyimfit/pyimfit_lib.pyx":847
+  /* "pyimfit/pyimfit_lib.pyx":848
  * 
  *         self._modelFluxes = <double *> calloc(nFunctions, sizeof(double))
  *         if self._modelFluxes is NULL:             # <<<<<<<<<<<<<<
@@ -11074,20 +11068,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
   __pyx_t_1 = ((__pyx_v_self->_modelFluxes == NULL) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pyimfit/pyimfit_lib.pyx":848
+    /* "pyimfit/pyimfit_lib.pyx":849
  *         self._modelFluxes = <double *> calloc(nFunctions, sizeof(double))
  *         if self._modelFluxes is NULL:
  *             raise Exception('Error: unable to allocate memory for modelFluxes in getModelFluxes')             # <<<<<<<<<<<<<<
  *         if newParameters is not None:
  *             parameterArray = <double *> calloc(self._nParams, sizeof(double))
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__21, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 848, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__21, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 849, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 848, __pyx_L1_error)
+    __PYX_ERR(0, 849, __pyx_L1_error)
 
-    /* "pyimfit/pyimfit_lib.pyx":847
+    /* "pyimfit/pyimfit_lib.pyx":848
  * 
  *         self._modelFluxes = <double *> calloc(nFunctions, sizeof(double))
  *         if self._modelFluxes is NULL:             # <<<<<<<<<<<<<<
@@ -11096,7 +11090,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":849
+  /* "pyimfit/pyimfit_lib.pyx":850
  *         if self._modelFluxes is NULL:
  *             raise Exception('Error: unable to allocate memory for modelFluxes in getModelFluxes')
  *         if newParameters is not None:             # <<<<<<<<<<<<<<
@@ -11107,7 +11101,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
   __pyx_t_3 = (__pyx_t_1 != 0);
   if (__pyx_t_3) {
 
-    /* "pyimfit/pyimfit_lib.pyx":850
+    /* "pyimfit/pyimfit_lib.pyx":851
  *             raise Exception('Error: unable to allocate memory for modelFluxes in getModelFluxes')
  *         if newParameters is not None:
  *             parameterArray = <double *> calloc(self._nParams, sizeof(double))             # <<<<<<<<<<<<<<
@@ -11116,7 +11110,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  */
     __pyx_v_parameterArray = ((double *)calloc(__pyx_v_self->_nParams, (sizeof(double))));
 
-    /* "pyimfit/pyimfit_lib.pyx":851
+    /* "pyimfit/pyimfit_lib.pyx":852
  *         if newParameters is not None:
  *             parameterArray = <double *> calloc(self._nParams, sizeof(double))
  *             for i in range(self._nParams):             # <<<<<<<<<<<<<<
@@ -11128,21 +11122,21 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_i = __pyx_t_6;
 
-      /* "pyimfit/pyimfit_lib.pyx":852
+      /* "pyimfit/pyimfit_lib.pyx":853
  *             parameterArray = <double *> calloc(self._nParams, sizeof(double))
  *             for i in range(self._nParams):
  *                 parameterArray[i] = newParameters[i]             # <<<<<<<<<<<<<<
  *         else:
  *             parameterArray = self._paramVect
  */
-      __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_newParameters, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 852, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_newParameters, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 853, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 852, __pyx_L1_error)
+      __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 853, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       (__pyx_v_parameterArray[__pyx_v_i]) = __pyx_t_7;
     }
 
-    /* "pyimfit/pyimfit_lib.pyx":849
+    /* "pyimfit/pyimfit_lib.pyx":850
  *         if self._modelFluxes is NULL:
  *             raise Exception('Error: unable to allocate memory for modelFluxes in getModelFluxes')
  *         if newParameters is not None:             # <<<<<<<<<<<<<<
@@ -11152,7 +11146,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
     goto __pyx_L4;
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":854
+  /* "pyimfit/pyimfit_lib.pyx":855
  *                 parameterArray[i] = newParameters[i]
  *         else:
  *             parameterArray = self._paramVect             # <<<<<<<<<<<<<<
@@ -11165,25 +11159,25 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
   }
   __pyx_L4:;
 
-  /* "pyimfit/pyimfit_lib.pyx":855
+  /* "pyimfit/pyimfit_lib.pyx":856
  *         else:
  *             parameterArray = self._paramVect
  *         totalFlux = self._model.FindTotalFluxes(parameterArray, estimationImageSize,             # <<<<<<<<<<<<<<
  *                                                 estimationImageSize, self._modelFluxes)
  *         functionFluxes = [self._modelFluxes[i] for i in range(nFunctions)]
  */
-  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_v_estimationImageSize); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 855, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_v_estimationImageSize); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 856, __pyx_L1_error)
 
-  /* "pyimfit/pyimfit_lib.pyx":856
+  /* "pyimfit/pyimfit_lib.pyx":857
  *             parameterArray = self._paramVect
  *         totalFlux = self._model.FindTotalFluxes(parameterArray, estimationImageSize,
  *                                                 estimationImageSize, self._modelFluxes)             # <<<<<<<<<<<<<<
  *         functionFluxes = [self._modelFluxes[i] for i in range(nFunctions)]
  *         if newParameters is not None:
  */
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_estimationImageSize); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 856, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_estimationImageSize); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 857, __pyx_L1_error)
 
-  /* "pyimfit/pyimfit_lib.pyx":855
+  /* "pyimfit/pyimfit_lib.pyx":856
  *         else:
  *             parameterArray = self._paramVect
  *         totalFlux = self._model.FindTotalFluxes(parameterArray, estimationImageSize,             # <<<<<<<<<<<<<<
@@ -11192,7 +11186,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  */
   __pyx_v_totalFlux = __pyx_v_self->_model->FindTotalFluxes(__pyx_v_parameterArray, __pyx_t_4, __pyx_t_5, __pyx_v_self->_modelFluxes);
 
-  /* "pyimfit/pyimfit_lib.pyx":857
+  /* "pyimfit/pyimfit_lib.pyx":858
  *         totalFlux = self._model.FindTotalFluxes(parameterArray, estimationImageSize,
  *                                                 estimationImageSize, self._modelFluxes)
  *         functionFluxes = [self._modelFluxes[i] for i in range(nFunctions)]             # <<<<<<<<<<<<<<
@@ -11200,22 +11194,22 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  *             free(parameterArray)
  */
   { /* enter inner scope */
-    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 857, __pyx_L1_error)
+    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 858, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_5 = __pyx_v_nFunctions;
     __pyx_t_4 = __pyx_t_5;
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_4; __pyx_t_6+=1) {
       __pyx_8genexpr3__pyx_v_i = __pyx_t_6;
-      __pyx_t_9 = PyFloat_FromDouble((__pyx_v_self->_modelFluxes[__pyx_8genexpr3__pyx_v_i])); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 857, __pyx_L1_error)
+      __pyx_t_9 = PyFloat_FromDouble((__pyx_v_self->_modelFluxes[__pyx_8genexpr3__pyx_v_i])); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 858, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_9))) __PYX_ERR(0, 857, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_9))) __PYX_ERR(0, 858, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     }
   } /* exit inner scope */
   __pyx_v_functionFluxes = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "pyimfit/pyimfit_lib.pyx":858
+  /* "pyimfit/pyimfit_lib.pyx":859
  *                                                 estimationImageSize, self._modelFluxes)
  *         functionFluxes = [self._modelFluxes[i] for i in range(nFunctions)]
  *         if newParameters is not None:             # <<<<<<<<<<<<<<
@@ -11226,7 +11220,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
   __pyx_t_1 = (__pyx_t_3 != 0);
   if (__pyx_t_1) {
 
-    /* "pyimfit/pyimfit_lib.pyx":859
+    /* "pyimfit/pyimfit_lib.pyx":860
  *         functionFluxes = [self._modelFluxes[i] for i in range(nFunctions)]
  *         if newParameters is not None:
  *             free(parameterArray)             # <<<<<<<<<<<<<<
@@ -11235,7 +11229,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  */
     free(__pyx_v_parameterArray);
 
-    /* "pyimfit/pyimfit_lib.pyx":858
+    /* "pyimfit/pyimfit_lib.pyx":859
  *                                                 estimationImageSize, self._modelFluxes)
  *         functionFluxes = [self._modelFluxes[i] for i in range(nFunctions)]
  *         if newParameters is not None:             # <<<<<<<<<<<<<<
@@ -11244,7 +11238,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":860
+  /* "pyimfit/pyimfit_lib.pyx":861
  *         if newParameters is not None:
  *             free(parameterArray)
  *         if self._modelFluxes != NULL:             # <<<<<<<<<<<<<<
@@ -11254,7 +11248,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
   __pyx_t_1 = ((__pyx_v_self->_modelFluxes != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "pyimfit/pyimfit_lib.pyx":861
+    /* "pyimfit/pyimfit_lib.pyx":862
  *             free(parameterArray)
  *         if self._modelFluxes != NULL:
  *             free(self._modelFluxes)             # <<<<<<<<<<<<<<
@@ -11263,7 +11257,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  */
     free(__pyx_v_self->_modelFluxes);
 
-    /* "pyimfit/pyimfit_lib.pyx":860
+    /* "pyimfit/pyimfit_lib.pyx":861
  *         if newParameters is not None:
  *             free(parameterArray)
  *         if self._modelFluxes != NULL:             # <<<<<<<<<<<<<<
@@ -11272,7 +11266,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":862
+  /* "pyimfit/pyimfit_lib.pyx":863
  *         if self._modelFluxes != NULL:
  *             free(self._modelFluxes)
  *         return (totalFlux, np.array(functionFluxes))             # <<<<<<<<<<<<<<
@@ -11280,11 +11274,11 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_totalFlux); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 862, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_totalFlux); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 863, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_np); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 862, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_np); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 863, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_n_s_array); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 862, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_n_s_array); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 863, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   __pyx_t_10 = NULL;
@@ -11299,10 +11293,10 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
   }
   __pyx_t_9 = (__pyx_t_10) ? __Pyx_PyObject_Call2Args(__pyx_t_11, __pyx_t_10, __pyx_v_functionFluxes) : __Pyx_PyObject_CallOneArg(__pyx_t_11, __pyx_v_functionFluxes);
   __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-  if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 862, __pyx_L1_error)
+  if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 863, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  __pyx_t_11 = PyTuple_New(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 862, __pyx_L1_error)
+  __pyx_t_11 = PyTuple_New(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 863, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_2);
@@ -11314,7 +11308,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
   __pyx_t_11 = 0;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":825
+  /* "pyimfit/pyimfit_lib.pyx":826
  * 
  * 
  *     def getModelFluxes( self, newParameters=None, estimationImageSize=5000 ):             # <<<<<<<<<<<<<<
@@ -11337,7 +11331,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_34getModel
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":867
+/* "pyimfit/pyimfit_lib.pyx":868
  * 
  *     @property
  *     def imageSizeSet(self):             # <<<<<<<<<<<<<<
@@ -11364,7 +11358,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12imageSiz
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":868
+  /* "pyimfit/pyimfit_lib.pyx":869
  *     @property
  *     def imageSizeSet(self):
  *         return self._nPixels > 0             # <<<<<<<<<<<<<<
@@ -11372,13 +11366,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12imageSiz
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong((__pyx_v_self->_nPixels > 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 868, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong((__pyx_v_self->_nPixels > 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 869, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":867
+  /* "pyimfit/pyimfit_lib.pyx":868
  * 
  *     @property
  *     def imageSizeSet(self):             # <<<<<<<<<<<<<<
@@ -11397,7 +11391,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12imageSiz
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":872
+/* "pyimfit/pyimfit_lib.pyx":873
  * 
  *     @property
  *     def fittedLM(self):             # <<<<<<<<<<<<<<
@@ -11425,7 +11419,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_8fittedLM_
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":873
+  /* "pyimfit/pyimfit_lib.pyx":874
  *     @property
  *     def fittedLM(self):
  *         return self._fitted and (self._fitMode == 'LM')             # <<<<<<<<<<<<<<
@@ -11435,13 +11429,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_8fittedLM_
   __Pyx_XDECREF(__pyx_r);
   if (__pyx_v_self->_fitted) {
   } else {
-    __pyx_t_2 = __Pyx_PyBool_FromLong(__pyx_v_self->_fitted); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 873, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyBool_FromLong(__pyx_v_self->_fitted); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 874, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_1 = __pyx_t_2;
     __pyx_t_2 = 0;
     goto __pyx_L3_bool_binop_done;
   }
-  __pyx_t_2 = PyObject_RichCompare(__pyx_v_self->_fitMode, __pyx_n_u_LM, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 873, __pyx_L1_error)
+  __pyx_t_2 = PyObject_RichCompare(__pyx_v_self->_fitMode, __pyx_n_u_LM, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 874, __pyx_L1_error)
   __Pyx_INCREF(__pyx_t_2);
   __pyx_t_1 = __pyx_t_2;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -11450,7 +11444,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_8fittedLM_
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":872
+  /* "pyimfit/pyimfit_lib.pyx":873
  * 
  *     @property
  *     def fittedLM(self):             # <<<<<<<<<<<<<<
@@ -11470,7 +11464,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_8fittedLM_
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":877
+/* "pyimfit/pyimfit_lib.pyx":878
  * 
  *     @property
  *     def nPegged(self):             # <<<<<<<<<<<<<<
@@ -11498,20 +11492,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_7nPegged__
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":878
+  /* "pyimfit/pyimfit_lib.pyx":879
  *     @property
  *     def nPegged(self):
  *         if self.fittedLM:             # <<<<<<<<<<<<<<
  *             return self._fitResult.npegged
  *         else:
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_fittedLM); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 878, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_fittedLM); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 879, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 878, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 879, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "pyimfit/pyimfit_lib.pyx":879
+    /* "pyimfit/pyimfit_lib.pyx":880
  *     def nPegged(self):
  *         if self.fittedLM:
  *             return self._fitResult.npegged             # <<<<<<<<<<<<<<
@@ -11519,13 +11513,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_7nPegged__
  *             return -1
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->_fitResult->npegged); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 879, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->_fitResult->npegged); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 880, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "pyimfit/pyimfit_lib.pyx":878
+    /* "pyimfit/pyimfit_lib.pyx":879
  *     @property
  *     def nPegged(self):
  *         if self.fittedLM:             # <<<<<<<<<<<<<<
@@ -11534,7 +11528,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_7nPegged__
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":881
+  /* "pyimfit/pyimfit_lib.pyx":882
  *             return self._fitResult.npegged
  *         else:
  *             return -1             # <<<<<<<<<<<<<<
@@ -11548,7 +11542,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_7nPegged__
     goto __pyx_L0;
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":877
+  /* "pyimfit/pyimfit_lib.pyx":878
  * 
  *     @property
  *     def nPegged(self):             # <<<<<<<<<<<<<<
@@ -11567,7 +11561,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_7nPegged__
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":885
+/* "pyimfit/pyimfit_lib.pyx":886
  * 
  *     @property
  *     def nIter(self):             # <<<<<<<<<<<<<<
@@ -11595,20 +11589,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_5nIter___g
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":886
+  /* "pyimfit/pyimfit_lib.pyx":887
  *     @property
  *     def nIter(self):
  *         if self.fittedLM:             # <<<<<<<<<<<<<<
  *             return self._fitResult.niter
  *         else:
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_fittedLM); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 886, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_fittedLM); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 887, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 886, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 887, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "pyimfit/pyimfit_lib.pyx":887
+    /* "pyimfit/pyimfit_lib.pyx":888
  *     def nIter(self):
  *         if self.fittedLM:
  *             return self._fitResult.niter             # <<<<<<<<<<<<<<
@@ -11616,13 +11610,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_5nIter___g
  *             return -1
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->_fitResult->niter); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 887, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->_fitResult->niter); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 888, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "pyimfit/pyimfit_lib.pyx":886
+    /* "pyimfit/pyimfit_lib.pyx":887
  *     @property
  *     def nIter(self):
  *         if self.fittedLM:             # <<<<<<<<<<<<<<
@@ -11631,7 +11625,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_5nIter___g
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":889
+  /* "pyimfit/pyimfit_lib.pyx":890
  *             return self._fitResult.niter
  *         else:
  *             return -1             # <<<<<<<<<<<<<<
@@ -11645,7 +11639,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_5nIter___g
     goto __pyx_L0;
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":885
+  /* "pyimfit/pyimfit_lib.pyx":886
  * 
  *     @property
  *     def nIter(self):             # <<<<<<<<<<<<<<
@@ -11664,7 +11658,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_5nIter___g
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":893
+/* "pyimfit/pyimfit_lib.pyx":894
  * 
  *     @property
  *     def nFev(self):             # <<<<<<<<<<<<<<
@@ -11692,20 +11686,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_4nFev___ge
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":894
+  /* "pyimfit/pyimfit_lib.pyx":895
  *     @property
  *     def nFev(self):
  *         if self.fittedLM:             # <<<<<<<<<<<<<<
  *             return self._fitResult.nfev
  *         else:
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_fittedLM); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 894, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_fittedLM); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 895, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 894, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 895, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "pyimfit/pyimfit_lib.pyx":895
+    /* "pyimfit/pyimfit_lib.pyx":896
  *     def nFev(self):
  *         if self.fittedLM:
  *             return self._fitResult.nfev             # <<<<<<<<<<<<<<
@@ -11713,13 +11707,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_4nFev___ge
  *             return -1
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->_fitResult->nfev); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 895, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->_fitResult->nfev); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 896, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "pyimfit/pyimfit_lib.pyx":894
+    /* "pyimfit/pyimfit_lib.pyx":895
  *     @property
  *     def nFev(self):
  *         if self.fittedLM:             # <<<<<<<<<<<<<<
@@ -11728,7 +11722,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_4nFev___ge
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":897
+  /* "pyimfit/pyimfit_lib.pyx":898
  *             return self._fitResult.nfev
  *         else:
  *             return -1             # <<<<<<<<<<<<<<
@@ -11742,7 +11736,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_4nFev___ge
     goto __pyx_L0;
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":893
+  /* "pyimfit/pyimfit_lib.pyx":894
  * 
  *     @property
  *     def nFev(self):             # <<<<<<<<<<<<<<
@@ -11761,7 +11755,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_4nFev___ge
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":901
+/* "pyimfit/pyimfit_lib.pyx":902
  * 
  *     @property
  *     def nValidPixels(self):             # <<<<<<<<<<<<<<
@@ -11788,7 +11782,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12nValidPi
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":902
+  /* "pyimfit/pyimfit_lib.pyx":903
  *     @property
  *     def nValidPixels(self):
  *         return self._model.GetNValidPixels()             # <<<<<<<<<<<<<<
@@ -11796,13 +11790,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12nValidPi
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_self->_model->GetNValidPixels()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 902, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_self->_model->GetNValidPixels()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 903, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":901
+  /* "pyimfit/pyimfit_lib.pyx":902
  * 
  *     @property
  *     def nValidPixels(self):             # <<<<<<<<<<<<<<
@@ -11821,7 +11815,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12nValidPi
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":906
+/* "pyimfit/pyimfit_lib.pyx":907
  * 
  *     @property
  *     def validPixelFraction(self):             # <<<<<<<<<<<<<<
@@ -11849,7 +11843,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_18validPix
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":907
+  /* "pyimfit/pyimfit_lib.pyx":908
  *     @property
  *     def validPixelFraction(self):
  *         return self._model.GetNValidPixels() / self._nPixels             # <<<<<<<<<<<<<<
@@ -11860,15 +11854,15 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_18validPix
   __pyx_t_1 = __pyx_v_self->_model->GetNValidPixels();
   if (unlikely(__pyx_v_self->_nPixels == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 907, __pyx_L1_error)
+    __PYX_ERR(0, 908, __pyx_L1_error)
   }
-  __pyx_t_2 = PyFloat_FromDouble((((double)__pyx_t_1) / ((double)__pyx_v_self->_nPixels))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 907, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble((((double)__pyx_t_1) / ((double)__pyx_v_self->_nPixels))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 908, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":906
+  /* "pyimfit/pyimfit_lib.pyx":907
  * 
  *     @property
  *     def validPixelFraction(self):             # <<<<<<<<<<<<<<
@@ -11887,7 +11881,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_18validPix
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":911
+/* "pyimfit/pyimfit_lib.pyx":912
  * 
  *     @property
  *     def fitConverged(self):             # <<<<<<<<<<<<<<
@@ -11916,7 +11910,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12fitConve
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":912
+  /* "pyimfit/pyimfit_lib.pyx":913
  *     @property
  *     def fitConverged(self):
  *         if not self._fitted:             # <<<<<<<<<<<<<<
@@ -11926,20 +11920,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12fitConve
   __pyx_t_1 = ((!(__pyx_v_self->_fitted != 0)) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pyimfit/pyimfit_lib.pyx":913
+    /* "pyimfit/pyimfit_lib.pyx":914
  *     def fitConverged(self):
  *         if not self._fitted:
  *             raise Exception('Not fitted yet.')             # <<<<<<<<<<<<<<
  *         return (self._fitStatus > 0) and (self._fitStatus < 5)
  * 
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 913, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 914, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 913, __pyx_L1_error)
+    __PYX_ERR(0, 914, __pyx_L1_error)
 
-    /* "pyimfit/pyimfit_lib.pyx":912
+    /* "pyimfit/pyimfit_lib.pyx":913
  *     @property
  *     def fitConverged(self):
  *         if not self._fitted:             # <<<<<<<<<<<<<<
@@ -11948,7 +11942,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12fitConve
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":914
+  /* "pyimfit/pyimfit_lib.pyx":915
  *         if not self._fitted:
  *             raise Exception('Not fitted yet.')
  *         return (self._fitStatus > 0) and (self._fitStatus < 5)             # <<<<<<<<<<<<<<
@@ -11959,14 +11953,14 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12fitConve
   __pyx_t_1 = (__pyx_v_self->_fitStatus > 0);
   if (__pyx_t_1) {
   } else {
-    __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 914, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 915, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_2 = __pyx_t_3;
     __pyx_t_3 = 0;
     goto __pyx_L4_bool_binop_done;
   }
   __pyx_t_1 = (__pyx_v_self->_fitStatus < 5);
-  __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 914, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 915, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_2 = __pyx_t_3;
   __pyx_t_3 = 0;
@@ -11975,7 +11969,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12fitConve
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":911
+  /* "pyimfit/pyimfit_lib.pyx":912
  * 
  *     @property
  *     def fitConverged(self):             # <<<<<<<<<<<<<<
@@ -11995,7 +11989,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_12fitConve
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":918
+/* "pyimfit/pyimfit_lib.pyx":919
  * 
  *     @property
  *     def fitError(self):             # <<<<<<<<<<<<<<
@@ -12023,7 +12017,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_8fitError_
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":919
+  /* "pyimfit/pyimfit_lib.pyx":920
  *     @property
  *     def fitError(self):
  *         if not self._fitted:             # <<<<<<<<<<<<<<
@@ -12033,20 +12027,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_8fitError_
   __pyx_t_1 = ((!(__pyx_v_self->_fitted != 0)) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pyimfit/pyimfit_lib.pyx":920
+    /* "pyimfit/pyimfit_lib.pyx":921
  *     def fitError(self):
  *         if not self._fitted:
  *             raise Exception('Not fitted yet.')             # <<<<<<<<<<<<<<
  *         return self._fitStatus <= 0
  * 
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 920, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 921, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 920, __pyx_L1_error)
+    __PYX_ERR(0, 921, __pyx_L1_error)
 
-    /* "pyimfit/pyimfit_lib.pyx":919
+    /* "pyimfit/pyimfit_lib.pyx":920
  *     @property
  *     def fitError(self):
  *         if not self._fitted:             # <<<<<<<<<<<<<<
@@ -12055,7 +12049,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_8fitError_
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":921
+  /* "pyimfit/pyimfit_lib.pyx":922
  *         if not self._fitted:
  *             raise Exception('Not fitted yet.')
  *         return self._fitStatus <= 0             # <<<<<<<<<<<<<<
@@ -12063,13 +12057,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_8fitError_
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyBool_FromLong((__pyx_v_self->_fitStatus <= 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 921, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyBool_FromLong((__pyx_v_self->_fitStatus <= 0)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 922, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":918
+  /* "pyimfit/pyimfit_lib.pyx":919
  * 
  *     @property
  *     def fitError(self):             # <<<<<<<<<<<<<<
@@ -12088,7 +12082,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_8fitError_
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":925
+/* "pyimfit/pyimfit_lib.pyx":926
  * 
  *     @property
  *     def fitTerminated(self):             # <<<<<<<<<<<<<<
@@ -12116,7 +12110,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_13fitTermi
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":926
+  /* "pyimfit/pyimfit_lib.pyx":927
  *     @property
  *     def fitTerminated(self):
  *         if not self._fitted:             # <<<<<<<<<<<<<<
@@ -12126,20 +12120,20 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_13fitTermi
   __pyx_t_1 = ((!(__pyx_v_self->_fitted != 0)) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pyimfit/pyimfit_lib.pyx":927
+    /* "pyimfit/pyimfit_lib.pyx":928
  *     def fitTerminated(self):
  *         if not self._fitted:
  *             raise Exception('Not fitted yet.')             # <<<<<<<<<<<<<<
  *         # See Imfit/src/mpfit.cpp for magic numbers.
  *         return self._fitStatus >= 5
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 927, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__22, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 928, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 927, __pyx_L1_error)
+    __PYX_ERR(0, 928, __pyx_L1_error)
 
-    /* "pyimfit/pyimfit_lib.pyx":926
+    /* "pyimfit/pyimfit_lib.pyx":927
  *     @property
  *     def fitTerminated(self):
  *         if not self._fitted:             # <<<<<<<<<<<<<<
@@ -12148,7 +12142,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_13fitTermi
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":929
+  /* "pyimfit/pyimfit_lib.pyx":930
  *             raise Exception('Not fitted yet.')
  *         # See Imfit/src/mpfit.cpp for magic numbers.
  *         return self._fitStatus >= 5             # <<<<<<<<<<<<<<
@@ -12156,13 +12150,13 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_13fitTermi
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyBool_FromLong((__pyx_v_self->_fitStatus >= 5)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 929, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyBool_FromLong((__pyx_v_self->_fitStatus >= 5)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 930, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "pyimfit/pyimfit_lib.pyx":925
+  /* "pyimfit/pyimfit_lib.pyx":926
  * 
  *     @property
  *     def fitTerminated(self):             # <<<<<<<<<<<<<<
@@ -12181,7 +12175,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_13fitTermi
   return __pyx_r;
 }
 
-/* "pyimfit/pyimfit_lib.pyx":932
+/* "pyimfit/pyimfit_lib.pyx":933
  * 
  * 
  *     def close(self):             # <<<<<<<<<<<<<<
@@ -12208,7 +12202,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("close", 0);
 
-  /* "pyimfit/pyimfit_lib.pyx":933
+  /* "pyimfit/pyimfit_lib.pyx":934
  * 
  *     def close(self):
  *         if self._model != NULL:             # <<<<<<<<<<<<<<
@@ -12218,7 +12212,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
   __pyx_t_1 = ((__pyx_v_self->_model != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "pyimfit/pyimfit_lib.pyx":934
+    /* "pyimfit/pyimfit_lib.pyx":935
  *     def close(self):
  *         if self._model != NULL:
  *             del self._model             # <<<<<<<<<<<<<<
@@ -12227,7 +12221,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
  */
     delete __pyx_v_self->_model;
 
-    /* "pyimfit/pyimfit_lib.pyx":933
+    /* "pyimfit/pyimfit_lib.pyx":934
  * 
  *     def close(self):
  *         if self._model != NULL:             # <<<<<<<<<<<<<<
@@ -12236,7 +12230,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":935
+  /* "pyimfit/pyimfit_lib.pyx":936
  *         if self._model != NULL:
  *             del self._model
  *         if self._paramVect != NULL:             # <<<<<<<<<<<<<<
@@ -12246,7 +12240,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
   __pyx_t_1 = ((__pyx_v_self->_paramVect != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "pyimfit/pyimfit_lib.pyx":936
+    /* "pyimfit/pyimfit_lib.pyx":937
  *             del self._model
  *         if self._paramVect != NULL:
  *             free(self._paramVect)             # <<<<<<<<<<<<<<
@@ -12255,7 +12249,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
  */
     free(__pyx_v_self->_paramVect);
 
-    /* "pyimfit/pyimfit_lib.pyx":935
+    /* "pyimfit/pyimfit_lib.pyx":936
  *         if self._model != NULL:
  *             del self._model
  *         if self._paramVect != NULL:             # <<<<<<<<<<<<<<
@@ -12264,7 +12258,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":937
+  /* "pyimfit/pyimfit_lib.pyx":938
  *         if self._paramVect != NULL:
  *             free(self._paramVect)
  *         if self._fitErrorsVect != NULL:             # <<<<<<<<<<<<<<
@@ -12274,7 +12268,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
   __pyx_t_1 = ((__pyx_v_self->_fitErrorsVect != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "pyimfit/pyimfit_lib.pyx":938
+    /* "pyimfit/pyimfit_lib.pyx":939
  *             free(self._paramVect)
  *         if self._fitErrorsVect != NULL:
  *             free(self._fitErrorsVect)             # <<<<<<<<<<<<<<
@@ -12283,7 +12277,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
  */
     free(__pyx_v_self->_fitErrorsVect);
 
-    /* "pyimfit/pyimfit_lib.pyx":937
+    /* "pyimfit/pyimfit_lib.pyx":938
  *         if self._paramVect != NULL:
  *             free(self._paramVect)
  *         if self._fitErrorsVect != NULL:             # <<<<<<<<<<<<<<
@@ -12292,7 +12286,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":939
+  /* "pyimfit/pyimfit_lib.pyx":940
  *         if self._fitErrorsVect != NULL:
  *             free(self._fitErrorsVect)
  *         if self._solverResults != NULL:             # <<<<<<<<<<<<<<
@@ -12302,7 +12296,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
   __pyx_t_1 = ((__pyx_v_self->_solverResults != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "pyimfit/pyimfit_lib.pyx":940
+    /* "pyimfit/pyimfit_lib.pyx":941
  *             free(self._fitErrorsVect)
  *         if self._solverResults != NULL:
  *             free(self._solverResults)             # <<<<<<<<<<<<<<
@@ -12311,7 +12305,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
  */
     free(__pyx_v_self->_solverResults);
 
-    /* "pyimfit/pyimfit_lib.pyx":939
+    /* "pyimfit/pyimfit_lib.pyx":940
  *         if self._fitErrorsVect != NULL:
  *             free(self._fitErrorsVect)
  *         if self._solverResults != NULL:             # <<<<<<<<<<<<<<
@@ -12320,7 +12314,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
  */
   }
 
-  /* "pyimfit/pyimfit_lib.pyx":943
+  /* "pyimfit/pyimfit_lib.pyx":944
  *             # note that this should automatically free self._fitResult, if that
  *             # was pointing to something allocated by SolverResults
  *         self._freed = True             # <<<<<<<<<<<<<<
@@ -12328,7 +12322,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_36close(st
  */
   __pyx_v_self->_freed = 1;
 
-  /* "pyimfit/pyimfit_lib.pyx":932
+  /* "pyimfit/pyimfit_lib.pyx":933
  * 
  * 
  *     def close(self):             # <<<<<<<<<<<<<<
@@ -29912,6 +29906,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_value, __pyx_k_value, sizeof(__pyx_k_value), 0, 0, 1, 1},
   {&__pyx_n_u_variance, __pyx_k_variance, sizeof(__pyx_k_variance), 0, 1, 0, 1},
   {&__pyx_n_s_verbose, __pyx_k_verbose, sizeof(__pyx_k_verbose), 0, 0, 1, 1},
+  {&__pyx_n_s_verboseFlag, __pyx_k_verboseFlag, sizeof(__pyx_k_verboseFlag), 0, 0, 1, 1},
   {&__pyx_n_s_verbose_level, __pyx_k_verbose_level, sizeof(__pyx_k_verbose_level), 0, 0, 1, 1},
   {&__pyx_n_u_weight, __pyx_k_weight, sizeof(__pyx_k_weight), 0, 1, 0, 1},
   {&__pyx_n_s_xOffset, __pyx_k_xOffset, sizeof(__pyx_k_xOffset), 0, 0, 1, 1},
@@ -30126,36 +30121,36 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__18);
   __Pyx_GIVEREF(__pyx_tuple__18);
 
-  /* "pyimfit/pyimfit_lib.pyx":818
+  /* "pyimfit/pyimfit_lib.pyx":819
  *         model_image = self._model.GetModelImageVector()
  *         if model_image is NULL:
  *             raise Exception('Error: model image has not yet been computed.')             # <<<<<<<<<<<<<<
  *         output_array = np.empty((self._nRows, self._nCols), dtype='float64')
  *         memcpy(&output_array[0,0], model_image, imsize)
  */
-  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_kp_u_Error_model_image_has_not_yet_be); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 818, __pyx_L1_error)
+  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_kp_u_Error_model_image_has_not_yet_be); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 819, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__20);
   __Pyx_GIVEREF(__pyx_tuple__20);
 
-  /* "pyimfit/pyimfit_lib.pyx":848
+  /* "pyimfit/pyimfit_lib.pyx":849
  *         self._modelFluxes = <double *> calloc(nFunctions, sizeof(double))
  *         if self._modelFluxes is NULL:
  *             raise Exception('Error: unable to allocate memory for modelFluxes in getModelFluxes')             # <<<<<<<<<<<<<<
  *         if newParameters is not None:
  *             parameterArray = <double *> calloc(self._nParams, sizeof(double))
  */
-  __pyx_tuple__21 = PyTuple_Pack(1, __pyx_kp_u_Error_unable_to_allocate_memory); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 848, __pyx_L1_error)
+  __pyx_tuple__21 = PyTuple_Pack(1, __pyx_kp_u_Error_unable_to_allocate_memory); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 849, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__21);
   __Pyx_GIVEREF(__pyx_tuple__21);
 
-  /* "pyimfit/pyimfit_lib.pyx":913
+  /* "pyimfit/pyimfit_lib.pyx":914
  *     def fitConverged(self):
  *         if not self._fitted:
  *             raise Exception('Not fitted yet.')             # <<<<<<<<<<<<<<
  *         return (self._fitStatus > 0) and (self._fitStatus < 5)
  * 
  */
-  __pyx_tuple__22 = PyTuple_Pack(1, __pyx_kp_u_Not_fitted_yet); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 913, __pyx_L1_error)
+  __pyx_tuple__22 = PyTuple_Pack(1, __pyx_kp_u_Not_fitted_yet); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 914, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__22);
   __Pyx_GIVEREF(__pyx_tuple__22);
 

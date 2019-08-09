@@ -397,7 +397,7 @@ class Imfit(object):
 
         """
         if not self._dataSet:
-            raise Exception('Data for model not yet set')
+            raise Exception('No data for fit! (Supply it via loadData() or fit() methods)')
         if solver not in ['LM', 'NM', 'DE']:
             raise ValueError('Invalid solver name: {0}'.format(solver))
 
@@ -414,12 +414,42 @@ class Imfit(object):
             self._fitStatComputed = True
 
 
-    def fit( self, image, error=None, mask=None, solver='LM', **kwargs ):
+    def fit( self, image, error=None, mask=None, solver='LM', verbose=None, **kwargs ):
         """
-        This is the refactored version of oldfit, which was originally called "fit".
+        Supply data image (and optionally mask and/or error images) and image info, then
+        fit the model to the data.
+
+        Parameters
+        ----------
+        image : 2-D numpy array
+            Image to be fitted. Can be a masked array.
+
+        error : 2-D numpy array, optional
+            error/weight image, same shape as ``image``. If not set,
+            errors are generated from ``image``. See also the keyword args
+            ``use_poisson_mlr``, ``use_cash_statistics``, and ``use_model_for_errors``.
+
+        mask : 2-D numpy array, optional
+            Array containing the masked pixels; must have the same shape as ``image``.
+            Pixels set to ``True`` are bad by default (see the kwarg ``mask_format``
+            for other options). If not set and ``image`` is a masked array, then its
+            mask is used. If both masks are present, the final mask is composed by masking
+            any pixel that is masked in either of the input masks.
+
+        solver : string, optional
+            One of the following solvers (optimization algorithms) to be used for the fit:
+                * ``'LM'`` : Levenberg-Marquardt.
+                * ``'NM'`` : Nelder-Mead Simplex.
+                * ``'DE'`` : Differential Evolution.
+
+        verbose : int or None, optional
+            set this to an integer to specify a feedback level for the fit (this overrides
+            the Imfit object's internal verbosity setting)
+
+        See loadData() for list of allowed extra keywords.
         """
         self.loadData(image, error, mask, **kwargs)
-        self.doFit(solver=solver)
+        self.doFit(solver=solver, verbose=verbose)
 
 
     def computeFitStatistic( self, newParameters ):
@@ -430,7 +460,7 @@ class Imfit(object):
         return self._modelObjectWrapper.computeFitStatistic(newParams)
 
 
-    def runBootstrap( self, nIterations, ftol=1e-8, verbose=-1, seed=0 ):
+    def runBootstrap( self, nIterations, ftol=1e-8, verboseFlag=False, seed=0 ):
         """
         Do bootstrap resampling for a model.
 
@@ -442,14 +472,18 @@ class Imfit(object):
         ftol : float, optional
             fractional tolerance in fit statistic for determining fit convergence
 
+        verboseFlag : bool, optional
+            if True, a progress bar is printed during the boostrap iterations
+
         seed : int, optional
             random number seed (default is to use system clock)
 
         """
         if not self._dataSet:
             raise Exception('No data supplied for model')
+
         bootstrapOutput = self._modelObjectWrapper.doBootstrapIterations(nIterations, ftol=ftol,
-                                                                         seed=seed)
+                                                                         verboseFlag=verboseFlag, seed=seed)
         return bootstrapOutput
 
 
