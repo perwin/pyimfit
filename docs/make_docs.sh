@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
+#
+# This is the current master script for generating PyImfit docs, suitable for commiting
+# to GitHub and thus being processed on readthedocs.org
+
 echo "** make clean..."
 make clean
 echo
-echo "** converting Markdown to ReST..."
+echo "** converting Markdown files to ReST..."
 ./convert_md_to_rst.sh
 echo
 echo "** Making HTML (first round)..."

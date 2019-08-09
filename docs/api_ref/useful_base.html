@@ -10,24 +10,6 @@
 
 
 <dl class="function">
-<dt id="pyimfit.FixImage">
-<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">FixImage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.FixImage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks an input numpy array and, if necessary, converts it to
-double-precision floating point, little-endian byte order, with
-contiguous layout, to enable use with Imfit.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>array</strong> (<em>numpy ndarray</em>) – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>array</strong> – The input array, suitably converted</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>numpy ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="function">
 <dt id="pyimfit.make_imfit_function">
 <code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">make_imfit_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.make_imfit_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a string specifying the official name of an Imfit image function
@@ -67,6 +49,24 @@ Default: None.</p></li>
 <li><p><em>See Imfit documentation for details on the format of configuration files.</em></p></li>
 </ul>
 </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="function">
+<dt id="pyimfit.FixImage">
+<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">FixImage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.FixImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks an input numpy array and, if necessary, converts it to
+double-precision floating point, little-endian byte order, with
+contiguous layout, to enable use with Imfit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>array</strong> (<em>numpy ndarray</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>array</strong> – The input array, suitably converted</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy ndarray</p>
 </dd>
 </dl>
 </dd></dl>

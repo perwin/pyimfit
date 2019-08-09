@@ -8,6 +8,3 @@ PyImfit API
    descriptions
    fitting
    useful
-
-[Please note that these subsections are currently not available on readthedocs]
-

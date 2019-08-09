@@ -1,7 +1,7 @@
 #! /bin/bash
 
-# This script was created to convert a directory full of markdown files
-# into rst equivalents. It uses pandoc to do the conversion.
+# This script was created to convert a directory full of markdown files into rst
+# equivalents. It uses pandoc to do the conversion.
 #
 # 1. Install pandoc from http://johnmacfarlane.net/pandoc/
 # 2. Copy this script into the directory containing the .md files
