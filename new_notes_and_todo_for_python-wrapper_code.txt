@@ -83,6 +83,19 @@ PLAN:
     * Decide on consistent use of "function set" vs "function block"
 
 
+[ ] Rationalize handling of masks and MaskedArray in fitting.Imfit.loadData
+    1. We should check that mask has same shape as data image *before*
+    we call _composemask
+    2. Rationalize processing of mask
+
+[ ] Feedback options
+    [ ] Option to print feedback from Levenberg-Marquardt
+        --
+    [ ] Option to print feedback from Nelder-Mead
+    [ ] Option to print feedback from DE
+    [ ] Option to print feedback from bootstrap-resampling
+
+
 [ ] Fix broken SimpleModelDescription
     -- currently, if we create a "blank" SimpleModelDescription, we cannot add a FunctionSetDescription
     to it

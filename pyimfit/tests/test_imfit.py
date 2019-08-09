@@ -128,7 +128,7 @@ def test_loadData_data_bad_errorimage():
     imfit = Imfit(model_orig, quiet=True)
     with pytest.raises(ValueError) as exceptionInfo:
         imfit.loadData(image_n3073, error=image_ic3478_consterror, original_sky=ORIGINAL_SKY_N3073)
-    assert "Data image (200,150) and error image (256,256) shapes do not match." in str(exceptionInfo.value)
+    assert "Error image (256,256) and data image (200,150) shapes do not match." in str(exceptionInfo.value)
 
 def test_loadData_data_with_mask():
     imfit = Imfit(model_orig, quiet=True)
@@ -138,6 +138,6 @@ def test_loadData_data_bad_mask():
     imfit = Imfit(model_orig, quiet=True)
     with pytest.raises(ValueError) as exceptionInfo:
         imfit.loadData(image_n3073, mask=image_ic3478, original_sky=ORIGINAL_SKY_N3073)
-    assert "Data image (200,150) and mask image (256,256) shapes do not match." in str(exceptionInfo.value)
+    assert "Mask image (256,256) and data image (200,150) shapes do not match." in str(exceptionInfo.value)
 
 

@@ -10,7 +10,7 @@ import copy
 import numpy as np   # type: ignore
 
 from .descriptions import ModelDescription
-from .pyimfit_lib import ModelObjectWrapper  # type: ignore
+from .pyimfit_lib import FixImage, ModelObjectWrapper  # type: ignore
 
 __all__ = ['Imfit']
 
@@ -27,10 +27,20 @@ def _composemask( arr, mask, mask_zero_is_bad: bool ):
     """
     Helper function to properly compose masks.
 
-    image : 2-D numpy array
+    If ``arr`` (e.g., data image) is a MaskedArray, then:
+        If ``mask`` does not exist, the mask part of ``arr`` is returned as the final mask
+        If ``mask`` *does* exist, then the final mask is the union of it and the mask part
+        of ``arr`` (that is, any pixel that is masked in either of the input masks is
+        masked in the output final mask)
+
+    If ``arr`` is *not* a MaskedArray, then ``mask`` is returned as the final mask
+
+    Parameters
+    ----------
+    arr : 2-D numpy array
         Image to be fitted. Can be a masked array.
 
-     mask : 2-D numpy array, optional
+    mask : 2-D numpy array or None
         Array containing the masked pixels; must have the same shape as ``image``.
         Pixels set to ``True`` are bad by default (see the kwarg ``mask_format``
         for other options). If not set and ``image`` is a masked array, then its
@@ -38,6 +48,11 @@ def _composemask( arr, mask, mask_zero_is_bad: bool ):
         any pixel that is masked in either of the input masks.
 
     mask_zero_is_bad : bool
+
+    Returns
+    -------
+    mask : 2D numpy array or None
+        Final output mask
     """
     if isinstance(arr, np.ma.MaskedArray):
         if mask is None:
@@ -328,43 +343,54 @@ class Imfit(object):
         if len(kwargs) > 0:
             self._updateModelDescription(kwargs)
 
+        # Check for mismatches in image size/shape and convert to correct byte order
+        # and double-precision floating point
+        if mask is not None:
+            if mask.shape != image.shape:
+                msg = "Mask image (%d,%d) and " % mask.shape
+                msg += "data image (%d,%d) shapes do not match." % image.shape
+                raise ValueError(msg)
+            mask = FixImage(mask)
+        if error is not None:
+            if error.shape != image.shape:
+                msg = "Error image (%d,%d) and " % error.shape
+                msg += "data image (%d,%d) shapes do not match." % image.shape
+                raise ValueError(msg)
+            error = FixImage(error)
+        image = FixImage(image)
+
+        # PE: this generates a "composed" mask image, which can be None, the same as mask
+        # (if image is *not* a MaskedArray), the extracted mask from image if it *is* a
+        # MaskedArray, or
         mask = _composemask(image, mask, mask_zero_is_bad)
+        # PE: is the following step actually necessary?
         if isinstance(image, np.ma.MaskedArray):
             image = image.filled(fill_value=0.0)
-        image = image.astype('float64')
 
         if error is not None:
-            if image.shape != error.shape:
-                msg = "Data image (%d,%d) and " % image.shape
-                msg += "error image (%d,%d) shapes do not match." % error.shape
-                raise ValueError(msg)
-            mask = _composemask(image, mask, mask_zero_is_bad)
+            # PE: is the following step actually necessary?
             if isinstance(error, np.ma.MaskedArray):
                 error = error.filled(fill_value=error.max())
-            error = error.astype('float64')
 
-        if mask is not None:
-            if image.shape != mask.shape:
-                msg = "Data image (%d,%d) and " % image.shape
-                msg += "mask image (%d,%d) shapes do not match." % mask.shape
-                raise ValueError(msg)
-            mask = mask.astype('float64')
         self._modelObjectWrapper.loadData(image, error, mask, **kwargs)
         self._dataSet = True
 
 
-    def doFit( self, solver='LM' ):
+    def doFit( self, solver='LM', verbose=None ):
         """
         Fit the model to previously supplied data image.
 
         Parameters
         ----------
-        solver : string
+        solver : string, optional
             One of the following solvers (optimization algorithms) to be used for the fit:
                 * ``'LM'`` : Levenberg-Marquardt.
                 * ``'NM'`` : Nelder-Mead Simplex.
                 * ``'DE'`` : Differential Evolution.
 
+        verbose : int or None, optional
+            set this to an integer to specify a feedback level for the fit (this overrides
+            the Imfit object's internal verbosity setting)
         Examples
         --------
         TODO: Examples of doFit().
@@ -378,7 +404,11 @@ class Imfit(object):
         if not self._finalSetupDone:
             self._modelObjectWrapper.doFinalSetup()
         self._finalSetupDone = True
-        self._modelObjectWrapper.fit(verbose=self._verboseLevel, mode=solver)
+        if verbose is not None:
+            verboseLevel = verbose
+        else:
+            verboseLevel = self._verboseLevel
+        self._modelObjectWrapper.fit(verbose=verboseLevel, mode=solver)
         if not self.fitError:
             self._fitDone = True
             self._fitStatComputed = True

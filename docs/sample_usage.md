@@ -15,8 +15,8 @@ and then fit the model to the data:
     imageFile = "<path-to-FITS-file-directory>/ic3478rss_256.fits"
     imfitConfigFile = "<path-to-config-file-directory>/config_exponential_ic3478_256.dat"
 
-    # read in image data, convert to proper double-precisions, little-endian format
-    image_data = pyimfit.FixImage(fits.getdata(imageFile))
+    # read in image data
+    image_data = fits.getdata(imageFile)
 
     # construct model from config file
     model_desc = pyimfit.ModelDescription.load(configFile)
@@ -40,13 +40,13 @@ and then fit the model to the data:
     
     # Load PSF image from FITS file, then create Imfit fitter with model + PSF
     psfImageFile = "<path-to-FITS-file-directory>/psf_moffat_35.fits"
-    psf_image_data = pyimfit.FixImage(fits.getdata(psfImageFile))
+    psf_image_data = fits.getdata(psfImageFile)
     
     imfit_fitter2 = pyimfit.Imfit(model_desc, psf=psf_image_data)
     
     # load the image data and characteristics, and also a mask image, but don't run the fit yet
     maskImageFile = "<path-to-FITS-file-directory>/mask.fits"
-    mask_image_data = pyimfit.FixImage(fits.getdata(maskImageFile))
+    mask_image_data = fits.getdata(maskImageFile)
     
     imfit_fitter2.loadData(image_data, mask=mask_image_data, gain=4.725, read_noise=4.3, original_sky=130.14)
     

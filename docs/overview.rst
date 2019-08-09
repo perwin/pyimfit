@@ -152,17 +152,9 @@ Fit a model to the data
 Specify the data (and optional mask) image
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The data image must be a 2D numpy array; it should be in
-double-precision floating point with native byte order. Any image you
-create programmatically within Python will almost certainly be in this
-format already; if you load an image from a FITS file, then it's a good
-idea to run it through the convenience function ``FixImage``, which will
-ensure the image is in the right format:
-
-::
-
-    fits_data_im = fits.getdata(pathToImage)
-    data_im = pyimfit.FixImage(fits_data_im)
+The data image must be a 2D numpy array (internally, it will be
+converted to double-precision floating point with native byte order, if
+it isn't already).
 
 You then pass in the data image to the previously generated ``Imfit``
 object (\`imfitter'):
@@ -173,10 +165,11 @@ object (\`imfitter'):
 
 You can also specify a mask image, which should be a numpy integer or
 float array where values = 0 indicate *good* pixels, and values > 0
-indicate bad pixels that should not be used in the fit.
-
-[UPDATE WITH BETTER DESCRIPTION OF MASK FORMATS, INCLUDING NUMPY MASKED
-ARRAY]
+indicate bad pixels that should not be used in the fit. Alternatively,
+if the data array is a numpy MaskedArray, then *its* mask will be used.
+(If the data array is a MaskedArray *and* you supply a separate mask
+image, then the final mask will be the composition data array's mask and
+the mask image.)
 
 ::
 
