@@ -3,7 +3,7 @@
 
 This is a Jupyter notebook demonstrating how to use PyImfit with the MCMC code [emcee](https://github.com/dfm/emcee).
 
-If you are seeing this as part of the readthedocs.org HTML documentation, you can retrieve the originaly .ipynb file
+If you are seeing this as part of the readthedocs.org HTML documentation, you can retrieve the original .ipynb file
 [here](https://github.com/perwin/pyimfit/blob/master/docs/pyimfit_emcee.ipynb).
 
 Some initial setup for nice-looking plots:
@@ -36,13 +36,13 @@ import pyimfit
 from astropy.io import fits
 ```
 
-Load data image (in this case, a small cutout of an SDSS image showing a faint star), applying a correction to ensure that the data values in the resulting numpy array are little-endian and double-precision:
+Load data image (in this case, a small cutout of an SDSS image showing a faint star):
 
 
 ```python
 #imageFile = "/Users/erwin/coding/imfit/tests/faintstar.fits"
 imageFile = "./pyimfit_emcee_files/faintstar.fits"
-image_faintstar = pyimfit.FixImage(fits.getdata(imageFile))
+image_faintstar = fits.getdata(imageFile)
 ```
 
 Create a ModelDescription instance based on an imfit configuration file (which specifyies a single elliptical Gaussian model):
@@ -116,7 +116,7 @@ def lnPosterior_for_emcee( params, imfitter, lnPrior_func ):
     
     Parameters
     ----------
-    imfitter : Imfit instance
+    imfitter : pyimfit.Imfit instance
     
     lnPrior_func : function or other callable
         Should compute and return log of prior probability
@@ -151,7 +151,7 @@ def lnPrior_limits( params, imfitter ):
     ----------
     params : sequence of float
     
-    imfitter : Imfit instance
+    imfitter : pyimfit.Imfit instance
     
     Returns
     -------
@@ -210,7 +210,7 @@ Plot values from all the walkers versus step number to get an idea of where conv
 def PlotAllWalkers( sample_chain, parameterIndex, yAxisLabel ):
     nWalkers = sample_chain.shape[0]
     for i in range(nWalkers):
-        plot(sample_chain[i,:,parameterIndex], '0.5')
+        plot(sample_chain[i,:,parameterIndex], color='0.5')
     xlabel('Step number')
     ylabel(yAxisLabel)
 
