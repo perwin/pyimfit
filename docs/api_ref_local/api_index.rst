@@ -9,5 +9,5 @@ PyImfit API
    fitting
    useful
 
-[Please note that these subsections may not be complete or available on readthedocs]
+[Please note that these subsections are currently not available on readthedocs]
 

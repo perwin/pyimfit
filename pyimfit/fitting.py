@@ -651,6 +651,7 @@ class Imfit(object):
             totalFlux = total flux (or magnitude) of model
             individualFluxes = numpy ndarray of fluxes/magnitudes for each image-function in the
             model
+
         """
         totalFlux, functionFluxes = self._modelObjectWrapper.getModelFluxes(newParameters=newParameters)
         if zeroPoint is not None:

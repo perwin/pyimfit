@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  </head>
+
+  <body>
+
+
+
+<p>The core of PyImfit is the Imfit class, which acts as a wrapper around the
+underlying C++ ModelObject instance. It holds a ModelDescription instance which
+describes the model to be fit to the data (or just used to generate a model
+image, if no actual fitting is to be done). In the (usual) case of fitting the
+model to an image, it also holds the data image, optional PSF images, and
+parameters that describe the image (A/D gain, etc.).</p>
+<p>It also has methods for running a fit and for inspecting the results.</p>
+<span class="target" id="module-pyimfit.fitting"></span><dl class="class">
+<dt id="pyimfit.fitting.Imfit">
+<em class="property">class </em><code class="sig-prename descclassname">pyimfit.fitting.</code><code class="sig-name descname">Imfit</code><span class="sig-paren">(</span><em class="sig-param">model_descr: pyimfit.descriptions.ModelDescription</em>, <em class="sig-param">psf=None</em>, <em class="sig-param">psfNormalization=True</em>, <em class="sig-param">quiet=True</em>, <em class="sig-param">nproc=0</em>, <em class="sig-param">chunk_size=10</em>, <em class="sig-param">subsampling=True</em>, <em class="sig-param">zeroPoint=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class for fitting models to images using Imfit.
+Can also be used to create images based on models.</p>
+<p>Due to some library limitations, this object can only fit the model
+specified in the constructor. If you want to fit several models,
+you need to create one instance of <a class="reference internal" href="#pyimfit.fitting.Imfit" title="pyimfit.fitting.Imfit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Imfit</span></code></a> for each model.
+On the other hand, one instance can be used to fit the same model
+to any number of images, or to fit and then create the model image.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">parse_config_file</span></code></p>
+</div>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.AIC">
+<em class="property">property </em><code class="sig-name descname">AIC</code><a class="headerlink" href="#pyimfit.fitting.Imfit.AIC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bias-corrected Akaike Information Criterion for the fit.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.BIC">
+<em class="property">property </em><code class="sig-name descname">BIC</code><a class="headerlink" href="#pyimfit.fitting.Imfit.BIC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bayesian Information Criterion for the fit.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.doFit">
+<code class="sig-name descname">doFit</code><span class="sig-paren">(</span><em class="sig-param">solver='LM'</em>, <em class="sig-param">verbose=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.doFit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the model to previously supplied data image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>solver</strong> (<em>string</em><em>, </em><em>optional</em>) – <dl class="simple">
+<dt>One of the following solvers (optimization algorithms) to be used for the fit:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'LM'</span></code> : Levenberg-Marquardt.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'NM'</span></code> : Nelder-Mead Simplex.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'DE'</span></code> : Differential Evolution.</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>verbose</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – set this to an integer to specify a feedback level for the fit (this overrides
+the Imfit object’s internal verbosity setting)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>TODO: Examples of doFit().</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">image</em>, <em class="sig-param">error=None</em>, <em class="sig-param">mask=None</em>, <em class="sig-param">solver='LM'</em>, <em class="sig-param">verbose=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supply data image (and optionally mask and/or error images) and image info, then
+fit the model to the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>2-D numpy array</em>) – Image to be fitted. Can be a masked array.</p></li>
+<li><p><strong>error</strong> (<em>2-D numpy array</em><em>, </em><em>optional</em>) – error/weight image, same shape as <code class="docutils literal notranslate"><span class="pre">image</span></code>. If not set,
+errors are generated from <code class="docutils literal notranslate"><span class="pre">image</span></code>. See also the keyword args
+<code class="docutils literal notranslate"><span class="pre">use_poisson_mlr</span></code>, <code class="docutils literal notranslate"><span class="pre">use_cash_statistics</span></code>, and <code class="docutils literal notranslate"><span class="pre">use_model_for_errors</span></code>.</p></li>
+<li><p><strong>mask</strong> (<em>2-D numpy array</em><em>, </em><em>optional</em>) – Array containing the masked pixels; must have the same shape as <code class="docutils literal notranslate"><span class="pre">image</span></code>.
+Pixels set to <code class="docutils literal notranslate"><span class="pre">True</span></code> are bad by default (see the kwarg <code class="docutils literal notranslate"><span class="pre">mask_format</span></code>
+for other options). If not set and <code class="docutils literal notranslate"><span class="pre">image</span></code> is a masked array, then its
+mask is used. If both masks are present, the final mask is composed by masking
+any pixel that is masked in either of the input masks.</p></li>
+<li><p><strong>solver</strong> (<em>string</em><em>, </em><em>optional</em>) – <dl class="simple">
+<dt>One of the following solvers (optimization algorithms) to be used for the fit:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'LM'</span></code> : Levenberg-Marquardt.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'NM'</span></code> : Nelder-Mead Simplex.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'DE'</span></code> : Differential Evolution.</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>verbose</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – set this to an integer to specify a feedback level for the fit (this overrides
+the Imfit object’s internal verbosity setting)</p></li>
+<li><p><strong>loadData</strong><strong>(</strong><strong>) </strong><strong>for list of allowed extra keywords.</strong> (<em>See</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.fitStatistic">
+<em class="property">property </em><code class="sig-name descname">fitStatistic</code><a class="headerlink" href="#pyimfit.fitting.Imfit.fitStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <span class="math notranslate nohighlight">\(\chi^2\)</span>, Poisson MLR, or Cash statistic of the fit.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.getModelDescription">
+<code class="sig-name descname">getModelDescription</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelDescription" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>model</strong> – A copy of the currently fitted model, or a copy of
+the template model if no fitting has taken place yet.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelDescription</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.getModelFluxes">
+<code class="sig-name descname">getModelFluxes</code><span class="sig-paren">(</span><em class="sig-param">newParameters=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelFluxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes and returns total and individual-function fluxes for the current model
+and current parameter values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>newParameters</strong> (<em>1-D numpy array of float</em><em>, </em><em>optional</em>) – vector of parameter values to use in computing model
+(default is to use current parameter values, e.g., from fit)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>(totalFlux, individualFluxes)</strong> – totalFlux = total flux (or magnitude) of model
+individualFluxes = numpy ndarray of fluxes/magnitudes for each image-function in the
+model</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple of (float, ndarray of float)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.getModelImage">
+<code class="sig-name descname">getModelImage</code><span class="sig-paren">(</span><em class="sig-param">shape=None</em>, <em class="sig-param">newParameters=None</em>, <em class="sig-param">includeMask=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes and returns the image described by the currently fitted model.
+If not fitted, use the template model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newParameters</strong> (<em>1-D numpy array of float</em><em>, </em><em>optional</em>) – vector of parameter values to use in computing model
+(default is to use current parameter values, e.g., from fit)</p></li>
+<li><p><strong>shape</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Shape of the image in (Y, X) format.</p></li>
+<li><p><strong>includeMask</strong> (<em>bool</em><em>, </em><em>optional</em>) – Specifies whether output should be numpy masked array, if there
+is a mask image associated with the data image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>image</strong> – Image computed from the current model. If a mask is associated
+with the original data image, then the returned image is a
+numpy masked array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>2-D numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.getModelMagnitudes">
+<code class="sig-name descname">getModelMagnitudes</code><span class="sig-paren">(</span><em class="sig-param">newParameters=None</em>, <em class="sig-param">zeroPoint=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelMagnitudes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes and returns total and individual-function magnitudes for the current model
+and current parameter values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newParameters</strong> (<em>1-D numpy array of float</em><em>, </em><em>optional</em>) – vector of parameter values to use in computing model
+(default is to use current parameter values, e.g., from fit)</p></li>
+<li><p><strong>zeroPoint</strong> (<em>float</em><em>, </em><em>optional</em>) – <dl class="simple">
+<dt>If present, returned values are magnitudes, computed as</dt><dd><p>zeroPoint - 2.5*log10(flux)</p>
+</dd>
+</dl>
+<p>(default is to use value of object’s zeroPoint property)</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>(totalMag, individualMags)</strong> – totalFlux = total flux (or magnitude) of model
+individualFluxes = numpy ndarray of fluxes/magnitudes for each image-function in the
+model</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple of (float, ndarray of float)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.getParameterErrors">
+<code class="sig-name descname">getParameterErrors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getParameterErrors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model parameters for debugging purposes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>raw_params</strong> – A 1D array containing all the model parameter values.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>array of floats</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.getParameterLimits">
+<code class="sig-name descname">getParameterLimits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getParameterLimits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list containing lower and upper limits for all parameters in the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>parameterLimits</strong> – [(lower_limit, upper_limit)_1, (lower_limit, upper_limit)_2, …]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of 2-element tuples of float</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.getRawParameters">
+<code class="sig-name descname">getRawParameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getRawParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model parameters for debugging purposes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>raw_params</strong> – A 1D array containing all the model parameter values.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy ndarray of floats</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.loadData">
+<code class="sig-name descname">loadData</code><span class="sig-paren">(</span><em class="sig-param">image</em>, <em class="sig-param">error=None</em>, <em class="sig-param">mask=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.loadData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supply the underlying ModelObject instance with data image and error model,
+optionally including error and/or mask images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>2-D numpy array</em>) – Image to be fitted. Can be a masked array.</p></li>
+<li><p><strong>error</strong> (<em>2-D numpy array</em><em>, </em><em>optional</em>) – error/weight image, same shape as <code class="docutils literal notranslate"><span class="pre">image</span></code>. If not set,
+errors are generated from <code class="docutils literal notranslate"><span class="pre">image</span></code>. See also the keyword args
+<code class="docutils literal notranslate"><span class="pre">use_poisson_mlr</span></code>, <code class="docutils literal notranslate"><span class="pre">use_cash_statistics</span></code>, and <code class="docutils literal notranslate"><span class="pre">use_model_for_errors</span></code>.</p></li>
+<li><p><strong>mask</strong> (<em>2-D numpy array</em><em>, </em><em>optional</em>) – Array containing the masked pixels; must have the same shape as <code class="docutils literal notranslate"><span class="pre">image</span></code>.
+Pixels set to <code class="docutils literal notranslate"><span class="pre">True</span></code> are bad by default (see the kwarg <code class="docutils literal notranslate"><span class="pre">mask_format</span></code>
+for other options). If not set and <code class="docutils literal notranslate"><span class="pre">image</span></code> is a masked array, then its
+mask is used. If both masks are present, the final mask is composed by masking
+any pixel that is masked in either of the input masks.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>n_combined</strong> (<em>integer</em>) – Number of images which were averaged to make final image (if counts are average
+or median).
+Default: 1</p></li>
+<li><p><strong>exp_time</strong> (<em>float</em>) – Exposure time in seconds (only if image is in ADU/sec).
+Default: 1.0</p></li>
+<li><p><strong>gain</strong> (<em>float</em>) – Image gain (e-/ADU).
+Default: 1.0</p></li>
+<li><p><strong>read_noise</strong> (<em>float</em>) – Image read noise (Gaussian sigma, in e-).
+Default: 0.0</p></li>
+<li><p><strong>original_sky</strong> (<em>float</em>) – Original sky background (ADUs) which has already been subtracted from image.
+Default: 0.0</p></li>
+<li><p><strong>error_type</strong> (<em>string</em>) – <dl class="simple">
+<dt>Values in <code class="docutils literal notranslate"><span class="pre">error</span></code> should be interpreted as:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'sigma'</span></code> (default).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'weight'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'variance'</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>mask_format</strong> (<em>string</em>) – <dl class="simple">
+<dt>Values in <code class="docutils literal notranslate"><span class="pre">mask</span></code> should be interpreted as:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'zero_is_good'</span></code> (default).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'zero_is_bad'</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>psf_oversampling_list</strong> (<em>list of PsfOversampling</em>) – List of PsfOversampling objects, describing oversampling regions, PSFs,
+and oversampling scales.</p></li>
+<li><p><strong>use_poisson_mlr</strong> (<em>boolean</em>) – Use Poisson MLR (maximum-likelihood-ratio) statistic instead of
+chi^2. Takes precedence over <code class="docutils literal notranslate"><span class="pre">error</span></code>, <code class="docutils literal notranslate"><span class="pre">use_model_for_errors`,</span>
+<span class="pre">and</span> <span class="pre">``use_cash_statistics</span></code>.
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>use_cash_statistics</strong> (<em>boolean</em>) – Use Cash statistic instead of chi^2 or Poisson MLR. Takes precedence
+over <code class="docutils literal notranslate"><span class="pre">error</span></code> and <code class="docutils literal notranslate"><span class="pre">use_model_for_errors</span></code>.
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>use_model_for_errors</strong> (<em>boolean</em>) – Use model values (instead of data) to estimate errors for
+chi^2 computation. Takes precedence over <code class="docutils literal notranslate"><span class="pre">error</span></code>.
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.reducedFitStatistic">
+<em class="property">property </em><code class="sig-name descname">reducedFitStatistic</code><a class="headerlink" href="#pyimfit.fitting.Imfit.reducedFitStatistic" title="Permalink to this definition">¶</a></dt>
+<dd><p>The “reduced” <span class="math notranslate nohighlight">\(\chi^2\)</span> or Poisson MLR of the fit.</p>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.fitting.Imfit.runBootstrap">
+<code class="sig-name descname">runBootstrap</code><span class="sig-paren">(</span><em class="sig-param">nIterations</em>, <em class="sig-param">ftol=1e-08</em>, <em class="sig-param">verboseFlag=False</em>, <em class="sig-param">seed=0</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.runBootstrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do bootstrap resampling for a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nIterations</strong> (<em>int</em>) – How many bootstrap samples to generate and fit</p></li>
+<li><p><strong>ftol</strong> (<em>float</em><em>, </em><em>optional</em>) – fractional tolerance in fit statistic for determining fit convergence</p></li>
+<li><p><strong>verboseFlag</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, a progress bar is printed during the boostrap iterations</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – random number seed (default is to use system clock)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+
+
+  </body>
+</html>
