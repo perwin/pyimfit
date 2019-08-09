@@ -33,8 +33,8 @@ Working by default in ~/coding/pyimfit on Mac.
     B. Update version number in conf.py
     C. IF the Jupyter notebook file has been updated, generate a markdown version with
         $ jupyter nbconvert pyimfit_emcee.ipynb --to markdown
-    D. Generate rST versions of Markdown files and then generate HTML files
-	    $ ./convert_md_to_rst.sh && make html
+    D. Generate updated documentation
+	    $ ./make_docs.sh
 	E. View resulting docs in a web browser pointed at
 	    file:///Users/erwin/coding/pyimfit/docs/_build/html/index.html
     F. Commit the changes, upload to github
