@@ -109,6 +109,8 @@ def NewParamInfo( ):
 
 def get_function_list( ):
     """
+    Returns a list of Imfit image-function names (e.g., ["Gaussian", "Exponential", etc.])
+
     Returns
     -------
     function_list : list of str
@@ -121,6 +123,9 @@ def get_function_list( ):
 
 def get_function_dict( ):
     """
+    Returns a dict mapping each Imfit image-function names to a list of its corresponding
+    parameter names.
+
     Returns
     -------
     function_dict : dict

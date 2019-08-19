@@ -14,7 +14,9 @@
 coordinate (FunctionSet), and finally Models which combine all function sets with optional
 image-description information (ModelDescription, SimpleModelDescription).</p>
 <p>Each FunctionDescription, in turn, holds a set of ParameterDescription objects,
-which keep track of parameter names, values, and limits.</p>
+which keep track of parameter names, initial or current values, and limits.</p>
+<p>To properly instantiate an instance of the Imfit class, you must supply it with a previously
+generated instance of the ModelDescription (or SimpleModelDescription) class.</p>
 <span class="target" id="module-pyimfit.descriptions"></span><dl class="class">
 <dt id="pyimfit.descriptions.SimpleModelDescription">
 <em class="property">class </em><code class="sig-prename descclassname">pyimfit.descriptions.</code><code class="sig-name descname">SimpleModelDescription</code><span class="sig-paren">(</span><em class="sig-param">inst=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.SimpleModelDescription" title="Permalink to this definition">¶</a></dt>

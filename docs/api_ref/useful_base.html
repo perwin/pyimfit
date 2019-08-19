@@ -9,6 +9,35 @@
 
 
 
+<p>Miscellaneous useful auxiliary functions:</p>
+<dl class="function">
+<dt id="pyimfit.get_function_list">
+<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">get_function_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.get_function_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of Imfit image-function names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>function_list</strong> – list of Imfit image-function names</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="function">
+<dt id="pyimfit.get_function_dict">
+<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">get_function_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.get_function_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dict mapping Imfit image-function names to lists of the corresponding
+parameter names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>function_dict</strong> – dict where image-function names are keys and items are list of function
+parameter names</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="function">
 <dt id="pyimfit.make_imfit_function">
 <code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">make_imfit_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.make_imfit_function" title="Permalink to this definition">¶</a></dt>
@@ -51,6 +80,26 @@ Default: None.</p></li>
 </p>
 </dd>
 </dl>
+</dd></dl>
+<dl class="function">
+<dt id="pyimfit.parse_config">
+<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">parse_config</code><span class="sig-paren">(</span><em class="sig-param">lines: List[str]</em><span class="sig-paren">)</span> → pyimfit.descriptions.ModelDescription<a class="headerlink" href="#pyimfit.parse_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses an Imfit model configuration from a list of strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lines</strong> (<em>list of str</em>) – String representantion of Imfit model configuration.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>model</strong> – A model description object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelDescription</span></code></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#pyimfit.parse_config_file" title="pyimfit.parse_config_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">parse_config_file()</span></code></a></p>
+</div>
 </dd></dl>
 <dl class="function">
 <dt id="pyimfit.FixImage">

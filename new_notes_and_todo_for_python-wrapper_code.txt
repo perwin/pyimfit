@@ -73,10 +73,8 @@ PLAN:
        [ ] Add mention/example of how to do bootstrap resampling
 
        [ ] Add API documentation
-            -- possibly we can get this to work on readthedocs by implementing a mock
-            version of pyimfit_lib, which is the non-pure-Python part of things
             [ ] Add documentation file for config.py
-            [ ] Add documentation file for descriptions.py
+            [X] Add documentation file for descriptions.py
             [ ] Add documentation file for imfit_funcs.py
             [ ] Add documentation file for utils.py
 

@@ -4,8 +4,25 @@ of the repository; it is *not* a general guideline for building the docs.
 
 The general logic of our current approach is as follows:
 
-A. We use Sphinx to generate pretty HTML files for the online documentation
-(including auto-generation of same on readthedocs.org).
+A. We use Sphinx to generate pretty HTML files for the online documentation,
+including using the numpy-interpreted autodoc commands (mostly in the .rst files
+in api_ref_local/) to generate documentation from the docstrings in the Python files.
+
+B. We extract the useful bits of the API-related HTML files (which Sphinx puts
+in _build/html/api_ref_local/) and put them in minimal HTML files in api_ref/.
+
+C. We re-run Sphinx to generate new HTML files; this time, the output files
+in _build/html/api_ref/ will incorporate the updated bits of API-related HTML.
+
+(This is because stage A does *not* work properly on readthedocs.org, because
+the autodoc commands require that Sphinx be able to import the pyimfit package,
+and this can't be done on readthedocs.org. So the basic .rst files in api_ref/
+pull in the local HTML files, rather than running autodoc commands as the
+.rst files in api_ref_local/ do.)
+
+D. We commit the changes to the local git repo, then push the changes to GitHub,
+where readthedocs.org will grab the new copy and generate *its* version of the
+HTML.
 
 
 
@@ -22,10 +39,11 @@ with
    $ jupyter nbconvert pyimfit_emcee.ipynb --to markdown
 
 4. Generate rST versions of the Markdown files (by running convert_md_to_rst.sh
-script) and test the Sphinx HTML generation by running Sphinx via the Makefile
+script), generate the Sphinx HTML files, extract the apidoc-generated bits of
+HTML and copy them into files in api_ref/, and then re-run the HTML generation:
 
     $ cd docs
-	$ ./convert_md_to_rst.sh && make html
+	$ ./make_docs.sh
 
 View the resulting docs in a web browser pointed at
 	file:///Users/erwin/coding/pyimfit/docs/_build/html/index.html
@@ -73,6 +91,11 @@ to get Sphinx to include HTML files in toctrees.
 POSSIBLE APPROACH -- use the monkey-patching idea (see pyimfit/docs/extract_rst.py) to generate
 preliminary API .rst files, then run them through a script to prep them for Sphinx
 processing.
+
+CURRENT APPROACH: as described above, we locally generate good HTML files from the autodoc
+commands in the .rst files of api_ref_local/; the relevant bits of HTML are extracted
+from _build/html/api_ref_local/ and copied into minimal HTML files in api_ref/. Then,
+when we re-run Sphinx, the .rst files in api_ref/ incorporate the minimal HTML.
 
 
 

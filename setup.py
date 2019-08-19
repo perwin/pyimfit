@@ -49,6 +49,10 @@ else:
     EXTRA_LIBS_PATH = EXTRA_PATH + "lib_linux64/"
 
 
+# Stuff related to making sure which compiler we're using, and if it's
+# capable of doing what we want:
+#   1. Compiler must support OpenMP
+#   2. If compiler is GCC, it must be version 5 or newer
 if MACOS_COMPILATION:
     DEFAULT_CPP = "clang++"
 else:
@@ -105,6 +109,31 @@ NON_OPENMP_MESSAGE = """setup.py: ERROR: The C++ compiler does not appear to be 
    Try defining the environment variables CC *and* CXX with the name of a C++ compiler
    which *does* handle OpenMP. E.g.,
       $ CC=<c++-compiler-command> CXX=<c++-compiler-command> python setup.py ...
+"""
+
+# The following currently only works for gcc. We assume the output of
+# "<compilerName> --version" looks something like
+#    gcc-8 (Homebrew GCC 8.3.0) 8.3.0
+#    gcc (Ubuntu 5.4.0-6ubuntu1~16.04.11) 5.4.0
+# This should return True if GCC version is 5.0.0 or higher
+findVersion = re.compile(r"^gcc[^(]*\([^)]*\)\s*(?P<vnum>\d+\.\d+\.\d+)")
+def check_gcc_version( compilerName="gcc", getVersionNum=False ):
+    try:
+        output = subprocess.check_output([compilerName, '--version'])
+    except FileNotFoundError as err:
+        print(err)
+        return False
+    output = output.decode()
+    versionNumString = findVersion.match(output).group("vnum")
+    if getVersionNum:
+        return versionNumString
+    if versionNumString is not None:
+        return versionNumString >= "5.0.0"
+    else:
+        return False
+
+BAD_GCC_VERSION_MESSAGE = """setup.py: ERROR: GCC version 5.0 or later required!
+(Detected version: {0})
 """
 
 
@@ -175,11 +204,16 @@ class my_build_ext( build_ext ):
     IMFIT_LIBRARY_PATH; if no prebuilt version is found, then build_library_with_scons
     is called (which will, after building the library, copy it to IMFIT_LIBRARY_PATH)."""
     def run(self):
+        # Check to see if we have usable compilers (also good for compiling previously
+        # generated Cython C++ files):
+        if not check_for_openmp():
+            sys.exit(NON_OPENMP_MESSAGE)
+        if (not MACOS_COMPILATION) and (not check_gcc_version()):
+            gccVersionNum = check_gcc_version(getVersion=True)
+            sys.exit(BAD_GCC_VERSION_MESSAGE.format(gccVersionNum))
+        
         # Check to see if libimfit.a already exists
         if not os.path.exists(PREBUILT_PATH + "libimfit.a"):
-            # Figure out whether C++ compiler can handle OpenMP:
-            if not check_for_openmp():
-                sys.exit(NON_OPENMP_MESSAGE)
             # first, build the static C++ library with SCons and copy it to IMFIT_LIBRARY_PATH
             success = build_library_with_scons()
             if not success:

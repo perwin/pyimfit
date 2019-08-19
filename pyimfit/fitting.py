@@ -27,12 +27,11 @@ def _composemask( arr, mask, mask_zero_is_bad: bool ):
     """
     Helper function to properly compose masks.
 
-    If ``arr`` (e.g., data image) is a MaskedArray, then:
+    If ``arr`` (e.g., data image) is a numpy MaskedArray, then:
         If ``mask`` does not exist, the mask part of ``arr`` is returned as the final mask
         If ``mask`` *does* exist, then the final mask is the union of it and the mask part
-        of ``arr`` (that is, any pixel that is masked in either of the input masks is
-        masked in the output final mask)
-
+            of ``arr`` (that is, any pixel that is masked in either of the input masks is
+            masked in the output final mask)
     If ``arr`` is *not* a MaskedArray, then ``mask`` is returned as the final mask
 
     Parameters
@@ -248,7 +247,7 @@ class Imfit(object):
 
         Parameters
         ----------
-        image : 2-D numpy array
+        image : 2-D numpy array (ndarray or MaskedArray)
             Image to be fitted. Can be a masked array.
 
         error : 2-D numpy array, optional
@@ -360,15 +359,15 @@ class Imfit(object):
         image = FixImage(image)
 
         # PE: this generates a "composed" mask image, which can be None, the same as mask
-        # (if image is *not* a MaskedArray), the extracted mask from image if it *is* a
-        # MaskedArray, or
+        # (if image is *not* a MaskedArray), the embedded mask in image if it *is* a
+        # MaskedArray, or the composition of mask and the embedded mask of image.
         mask = _composemask(image, mask, mask_zero_is_bad)
-        # PE: is the following step actually necessary?
+        # if image is MaskedArray, work with a normal ndarray copy instead
         if isinstance(image, np.ma.MaskedArray):
             image = image.filled(fill_value=0.0)
 
         if error is not None:
-            # PE: is the following step actually necessary?
+            # if error is MaskedArray, work with a normal ndarray copy instead
             if isinstance(error, np.ma.MaskedArray):
                 error = error.filled(fill_value=error.max())
 
@@ -421,7 +420,7 @@ class Imfit(object):
 
         Parameters
         ----------
-        image : 2-D numpy array
+        image : 2-D numpy array (ndarray or MaskedArray)
             Image to be fitted. Can be a masked array.
 
         error : 2-D numpy array, optional
