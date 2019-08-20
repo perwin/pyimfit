@@ -70,7 +70,7 @@ PLAN:
             -- how to look at the results
 
        [X] Add mention/example of how to include/use PSF images and mask images
-       [ ] Add mention/example of how to do bootstrap resampling
+       [X] Add mention/example of how to do bootstrap resampling
 
        [ ] Add API documentation
             [ ] Add documentation file for config.py

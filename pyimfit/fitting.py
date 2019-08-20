@@ -362,6 +362,9 @@ class Imfit(object):
         # (if image is *not* a MaskedArray), the embedded mask in image if it *is* a
         # MaskedArray, or the composition of mask and the embedded mask of image.
         mask = _composemask(image, mask, mask_zero_is_bad)
+        # ModelObjectWrapper.loadData expects mask to be either None or numpy.double
+        if mask is not None:
+            mask = mask.astype(np.double)
         # if image is MaskedArray, work with a normal ndarray copy instead
         if isinstance(image, np.ma.MaskedArray):
             image = image.filled(fill_value=0.0)

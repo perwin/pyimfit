@@ -6,7 +6,25 @@
 changes may contain significant changes to the API.
 
 
-## 0.8.6 -- 2019-08-xx
+## 0.8.7 -- 2019-08-20
+### Added
+Imfit.runBootstrap can now optionally return a list of parameter names (annotated by function-set
+number for X0,Y0 and by function number for function parameters) along with the numpy array
+of bootstrap results.
+
+### Changed
+The FunctionSetDescription and ModelDescription classes now have both
+functionList and functionNameList methods; the former returns a list of FunctionDescription
+objects, while the latter returns a list of function *names* (strings).
+
+### Fixed
+Boolean mask images (including boolean masks that are part of a numpy MaskedArray) are
+now properly handled.
+
+
+
+
+## 0.8.6 -- 2019-08-09
 ### Added
 User can now specify verbosity level of fit via `verbose` keyword in Imfit.doFit().
 

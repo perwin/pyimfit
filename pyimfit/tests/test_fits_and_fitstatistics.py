@@ -83,6 +83,18 @@ reduced_fitstat_correct2_psf = 0.999559
 aic_correct2_psf = 2506.958574
 bic_correct2_psf = 2553.493134
 
+
+# Data and model for testing fits with masks
+imageFile_n3073 = testDataDir + "n3073rss_small.fits"
+imageFile_n3073_mask = testDataDir + "n3073rss_small_mask.fits"
+image_n3073 = FixImage(fits.getdata(imageFile_n3073))
+image_n3073_mask = FixImage(fits.getdata(imageFile_n3073_mask))
+image_n3073_mask_bool = image_n3073_mask.astype(bool)
+image_n3037_maskedarray = np.ma.array(image_n3073, mask=image_n3073_mask_bool)
+
+configFile_n3073 = testDataDir + "config_n3073.dat"
+model_desc_n3073 = ModelDescription.load(configFile_n3073)
+
 # imfit -c tests/imfit_reference/config_imfit_2gauss_small.dat tests/twogaussian_psf+2osamp_noisy.fits --psf tests/psf_moffat_35.fits --mlr
 
 #   POISSON-MLR STATISTIC = 2490.900766    (2492 DOF)
@@ -179,7 +191,7 @@ def test_2functionblocks_with_PSF():
     imfit_fitter2b.loadData(imdata2, use_poisson_mlr=True, gain=1000)
     fitstat = imfit_fitter2b.computeFitStatistic(initial_params2)
     assert fitstat == pytest.approx(fitstat_initial_correct2_psf, TOLERANCE)
- #   fit with defautl LM solver
+    # fit with defautl LM solver
     imfit_fitter2b.doFit()
 
     assert imfit_fitter2b.fitConverged == True
@@ -187,3 +199,15 @@ def test_2functionblocks_with_PSF():
     # lower tolerance to allow test to pass on Linux
     assert_allclose(pvals, parameter_vals_correct2_psf, rtol=1.0e-4)
 
+
+def test_masking():
+    """Test to see that masking works with separate mask image *and* with
+    Numpy MaskedArray instance.
+    """
+    imfit_fitter3a = Imfit(model_desc_n3073)
+    imfit_fitter3a.loadData(image_n3073, mask=image_n3073_mask)
+    imfit_fitter3a.doFit()
+
+    imfit_fitter3b = Imfit(model_desc_n3073)
+    imfit_fitter3b.loadData(image_n3037_maskedarray)
+    imfit_fitter3b.doFit()
