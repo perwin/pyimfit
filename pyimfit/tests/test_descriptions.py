@@ -189,6 +189,13 @@ class TestFunctionDescription(object):
         plist = fdesc1.parameterList()
         assert plist == self.paramDescList
 
+    def test_FunctionDescription_getParamNames(self):
+        fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
+
+        paramNames_correct = ["PA", "ell", "I_0", "sigma"]
+        outputNames = fdesc1.parameterNameList()
+        assert outputNames == paramNames_correct
+
     def test_FunctionDescription_getStrings(self):
         fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
 
@@ -341,7 +348,7 @@ class TestModelDescription(object):
     def test_ModelDescription_simple( self ):
         modeldesc1 = ModelDescription(self.fsetList)
         assert modeldesc1.functionSetIndices() == [0]
-        assert modeldesc1.functionList() == ['Gaussian']
+        assert modeldesc1.functionNameList() == ['Gaussian']
         assert modeldesc1.parameterList() == self.fullParamDescList
 
     def test_ModelDescription_getParamLimits( self ):
@@ -373,8 +380,8 @@ class TestModelDescription(object):
 
         modeldesc2 = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
         assert modeldesc2.functionSetIndices() == [0]
-        assert modeldesc2.functionList() == ['Exponential']
-        assert modeldesc2.functionSetList() == [['Exponential']]
+        assert modeldesc2.functionNameList() == ['Exponential']
+        assert modeldesc2.functionSetNameList() == [['Exponential']]
         assert modeldesc2.parameterList() == fullParamDescList
 
         input_params_correct = np.array([129.0,129.0, 18.0,0.2,100.0,25.0])
@@ -382,8 +389,8 @@ class TestModelDescription(object):
 
     def test_ModelDescription_load_from_file_2blocks( self ):
         modeldesc2blocks = ModelDescription.load(CONFIG_EXAMPLE_2BLOCKS)
-        assert modeldesc2blocks.functionList() == ['Gaussian', 'Gaussian', 'FlatSky']
-        assert modeldesc2blocks.functionSetList() == [['Gaussian'], ['Gaussian', 'FlatSky']]
+        assert modeldesc2blocks.functionNameList() == ['Gaussian', 'Gaussian', 'FlatSky']
+        assert modeldesc2blocks.functionSetNameList() == [['Gaussian'], ['Gaussian', 'FlatSky']]
 
     def test_ModelDescription_getStrings(self):
         modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
@@ -398,7 +405,7 @@ class TestModelDescription(object):
         fullParamDescList = [x0_p, y0_p, p1, p2, p3, p4]
 
         assert modeldesc.functionSetIndices() == [0]
-        assert modeldesc.functionList() == ['Exponential']
+        assert modeldesc.functionNameList() == ['Exponential']
         assert modeldesc.parameterList() == fullParamDescList
 
         lines_correct = ["\n", "X0\t\t129.0\t\t125.0,135.0\n",
@@ -465,6 +472,16 @@ class TestModelDescription(object):
         print(outputLines)
         assert outputLines == lines_correct
 
+    def test_ModelDescription_numberedParameterNames(self):
+        modeldesc1 = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
+        paramNames_correct = ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "h_1"]
+        assert modeldesc1.numberedParameterNames == paramNames_correct
+
+        modeldesc2 = ModelDescription.load(CONFIG_EXAMPLE_2BLOCKS)
+        paramNames_correct2 = ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "sigma_1",
+                              "X0_2", "Y0_2", "PA_2", "ell_2", "I_0_2", "sigma_2", "I_0_3"]
+        assert modeldesc2.numberedParameterNames == paramNames_correct2
+
 
 
 class TestSimpleModelDescription(object):
@@ -507,7 +524,7 @@ class TestSimpleModelDescription(object):
         assert simplemodeldesc.y0 == self.y0_p
 
         assert simplemodeldesc.functionSetIndices() == [0]
-        assert simplemodeldesc.functionList() == ['Gaussian']
+        assert simplemodeldesc.functionNameList() == ['Gaussian']
 
         pLimits = simplemodeldesc.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
@@ -519,19 +536,19 @@ class TestSimpleModelDescription(object):
         assert simplemodeldesc.y0 == self.y0_p
 
         assert simplemodeldesc.functionSetIndices() == [0]
-        assert simplemodeldesc.functionList() == ['Gaussian']
+        assert simplemodeldesc.functionNameList() == ['Gaussian']
 
         pLimits = simplemodeldesc.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
 
-    def test_SimpleModelDescription_from_functionSetList( self ):
+    def test_SimpleModelDescription_from_functionNameList( self ):
         simplemodeldesc = SimpleModelDescription(self.fsetList)
         print(dir(simplemodeldesc))
         assert simplemodeldesc.x0 == self.x0_p
         assert simplemodeldesc.y0 == self.y0_p
 
         assert simplemodeldesc.functionSetIndices() == [0]
-        assert simplemodeldesc.functionList() == ['Gaussian']
+        assert simplemodeldesc.functionNameList() == ['Gaussian']
 
         pLimits = simplemodeldesc.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
@@ -542,7 +559,7 @@ class TestSimpleModelDescription(object):
         assert simplemodeldesc.x0 == self.x0_p
         assert simplemodeldesc.y0 == self.y0_p
         assert simplemodeldesc.functionSetIndices() == [0]
-        assert simplemodeldesc.functionList() == ['Gaussian']
+        assert simplemodeldesc.functionNameList() == ['Gaussian']
         pLimits = simplemodeldesc.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
 

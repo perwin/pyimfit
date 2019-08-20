@@ -311,7 +311,7 @@ class FunctionDescription(object):
 
     def parameterList( self ):
         """
-        A list of the parameters of this image function.
+        A list of the parameters (ParameterDescription objects) of this image function.
 
         Returns
         -------
@@ -319,6 +319,19 @@ class FunctionDescription(object):
             List of the parameters.
         """
         return [p for p in self._parameters]
+
+
+    def parameterNameList( self ):
+        """
+        A list of the parameters names (list of str) of this image function.
+
+        Returns
+        -------
+        param_list : list of str
+            List of the parameter names.
+        """
+        return [p.name for p in self._parameters]
+
 
 
     def getStringDescription( self, noLimits=False, errors: Optional[Sequence[float]]=None ):
@@ -415,6 +428,10 @@ class FunctionSetDescription(object):
             Returns a list of the FunctionDescription objects in the function
             block/set
 
+        functionNameList()
+            Returns a list of names for the image-functions in the function
+            block/set
+
         parameterList()
             Returns a list of ParameterDescription objects corresponding to
             the function block/set (including X0,Y0)
@@ -484,11 +501,23 @@ class FunctionSetDescription(object):
 
     def functionList(self):
         """
-        A list of the Imfit image-function types making up this function set.
+        A list of the FunctionDescription objects making up this function set.
 
         Returns
         -------
-        function_list : list of strings
+        function_list : list of FunctionDescription
+            List of the functions.
+        """
+        return self._functions
+
+
+    def functionNameList(self):
+        """
+        A list of the Imfit image-function names making up this function set.
+
+        Returns
+        -------
+        function_list : list of str
             List of the function types.
         """
         return [f._funcName for f in self._functions]
@@ -620,6 +649,10 @@ class ModelDescription(object):
             Retuns a list of FunctionDescription instances for all the
             image functions in the model
 
+        functionNameList()
+            Returns a list of names for the image-functions in the function
+            block/set
+
         parameterList()
             Returns a list of ParameterDescription instances corresponding
             to all the parameters in the model
@@ -675,6 +708,29 @@ class ModelDescription(object):
         E.g., {"GAIN": 2.75, "READNOISE": 103.43}
         """
         return self.options
+
+
+    @property
+    def numberedParameterNames(self):
+        """
+        List of parameter names for the current model, annotated by function number.
+        E.g., ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "h_1", ...]
+        """
+        outputList = []
+        nCurrentFunc = 0
+        for i_set in range(self.nFunctionSets):
+            outputList.append("X0_{0:d}".format(i_set + 1))
+            outputList.append("Y0_{0:d}".format(i_set + 1))
+            funcSet = self._functionSets[i_set]
+            currentFuncList = funcSet.functionList()
+            nFuncs = len(currentFuncList)
+            for i in range(nFuncs):
+                nCurrentFunc += 1
+                thisFunc = currentFuncList[i]
+                currentFuncParamNames = thisFunc.parameterNameList()
+                for name in currentFuncParamNames:
+                    outputList.append("{0}_{1:d}".format(name, nCurrentFunc))
+        return outputList
 
 
     def addFunctionSet(self, fs: FunctionSetDescription):
@@ -740,12 +796,11 @@ class ModelDescription(object):
 
     def functionList(self):
         """
-        List of the function types composing this model, as strings.
+        List of the FunctionDescription objects making up this model.
 
         Returns
         -------
-        func_list : list of string
-            List of the function types.
+        func_list : list of FunctionDescription objects
         """
         functions = []
         for function_set in self._functionSets:
@@ -753,7 +808,22 @@ class ModelDescription(object):
         return functions
 
 
-    def functionSetList(self):
+    def functionNameList(self):
+        """
+        List of names of the image functions making up this model.
+
+        Returns
+        -------
+        func_list : list of str
+            List of the function names.
+        """
+        functionNames = []
+        for function_set in self._functionSets:
+            functionNames.extend(function_set.functionNameList())
+        return functionNames
+
+
+    def functionSetNameList(self):
         """
         List of the function sets composing this model, as strings.
 
@@ -764,14 +834,14 @@ class ModelDescription(object):
         """
         functionSetList = []
         for function_set in self._functionSets:
-            thisFunctionList = function_set.functionList()
-            functionSetList.append(thisFunctionList)
+            thisFunctionNameList = function_set.functionNameList()
+            functionSetList.append(thisFunctionNameList)
         return functionSetList
 
 
     def parameterList(self):
         """
-        A list of the parameters composing this model.
+        A list of the parameters (ParameterDescription objects) making up this model.
 
         Returns
         -------

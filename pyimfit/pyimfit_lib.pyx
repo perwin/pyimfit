@@ -427,7 +427,7 @@ cdef class ModelObjectWrapper( object ):
 
     cdef _addFunctions(self, object model_descr, bool subsampling, int verbose=0):
         cdef int status = 0
-        functionNameList = [funcName.encode() for funcName in model_descr.functionList()]
+        functionNameList = [funcName.encode() for funcName in model_descr.functionNameList()]
         status = AddFunctions(self._model, functionNameList, model_descr.functionSetIndices(),
                                 subsampling, verbose)
         if status < 0:

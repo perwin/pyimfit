@@ -19,9 +19,11 @@ Image Functions
 ---------------
 
 A list of the available image functions can be found in the module-level
-variable ``pyimfit.imageFunctionList``, and a dict containing lists of
-the parameter names for individual image functions can be found in
-'pyimfit.imageFunctionDict'. E.g.,
+variable ``pyimfit.imageFunctionList``, or by calling the function
+``pyimfit.get_function_list()``, and a dict containing lists of the
+parameter names for individual image functions can be found in
+'pyimfit.imageFunctionDict' (this dict can also be obtained by calling
+the function ``pyimfit.get_function_dict()``). E.g.,
 
 ::
 
@@ -41,8 +43,8 @@ functions.)
 The following is a brief list of the available image functions; see the
 Imfit manual for more details.
 
--  2D image functions: Most of these have position-angle parameter
-   ("PA") which define their orientation on the image (measured in
+-  2D image functions: Most of these have a position-angle parameter
+   ("PA") which defines their orientation on the image (measured in
    degrees counter-clockwise from the +x image axis). Many also have an
    ellipticity parameter ("ell") defining their shape. The most common
    type of 2D image function has elliptical isophotes with a particular

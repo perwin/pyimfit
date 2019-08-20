@@ -155,6 +155,12 @@ indices</p>
 image functions in the model</p>
 </dd></dl>
 <dl class="method">
+<dt id="pyimfit.descriptions.ModelDescription.functionNameList">
+<code class="sig-name descname">functionNameList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.functionNameList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of names for the image-functions in the function
+block/set</p>
+</dd></dl>
+<dl class="method">
 <dt id="pyimfit.descriptions.ModelDescription.parameterList">
 <code class="sig-name descname">parameterList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.parameterList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of ParameterDescription instances corresponding
@@ -173,13 +179,26 @@ to all the parameters in the model</p>
 <dl class="method">
 <dt>
 <code class="sig-name descname">functionList</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>List of the function types composing this model, as strings.</p>
+<dd><p>List of the FunctionDescription objects making up this model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>func_list</strong> – List of the function types.</p>
+<dd class="field-odd"><p><strong>func_list</strong></p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list of string</p>
+<dd class="field-even"><p>list of FunctionDescription objects</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt>
+<code class="sig-name descname">functionNameList</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>List of names of the image functions making up this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>func_list</strong> – List of the function names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -190,8 +209,8 @@ to all the parameters in the model</p>
 to the starts of individual function sets/blocks.</p>
 </dd></dl>
 <dl class="method">
-<dt id="pyimfit.descriptions.ModelDescription.functionSetList">
-<code class="sig-name descname">functionSetList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.functionSetList" title="Permalink to this definition">¶</a></dt>
+<dt id="pyimfit.descriptions.ModelDescription.functionSetNameList">
+<code class="sig-name descname">functionSetNameList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.functionSetNameList" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of the function sets composing this model, as strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -271,6 +290,12 @@ from a standard Imfit configuration file.</p>
 </div>
 </dd></dl>
 <dl class="method">
+<dt id="pyimfit.descriptions.ModelDescription.numberedParameterNames">
+<em class="property">property </em><code class="sig-name descname">numberedParameterNames</code><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.numberedParameterNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of parameter names for the current model, annotated by function number.
+E.g., [“X0_1”, “Y0_1”, “PA_1”, “ell_1”, “I_0_1”, “h_1”, …]</p>
+</dd></dl>
+<dl class="method">
 <dt>
 <em class="property">property </em><code class="sig-name descname">optionsDict</code></dt>
 <dd><p>Image-description options, as a dict
@@ -279,7 +304,7 @@ E.g., {“GAIN”: 2.75, “READNOISE”: 103.43}</p>
 <dl class="method">
 <dt>
 <code class="sig-name descname">parameterList</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>A list of the parameters composing this model.</p>
+<dd><p>A list of the parameters (ParameterDescription objects) making up this model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>param_list</strong> – List of the parameters.</p>
@@ -631,13 +656,26 @@ If errors is supplied, then parameter strings will contain “# +/- &lt;error&gt
 <dl class="method">
 <dt>
 <code class="sig-name descname">parameterList</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>A list of the parameters of this image function.</p>
+<dd><p>A list of the parameters (ParameterDescription objects) of this image function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>param_list</strong> – List of the parameters.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>list of <a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterDescription</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt id="pyimfit.descriptions.FunctionDescription.parameterNameList">
+<code class="sig-name descname">parameterNameList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription.parameterNameList" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of the parameters names (list of str) of this image function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>param_list</strong> – List of the parameter names.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -722,6 +760,12 @@ objects, and name or label for the function set (e.g., “fs0”, “star 1”,
 block/set</p>
 </dd></dl>
 <dl class="method">
+<dt id="pyimfit.descriptions.FunctionSetDescription.functionNameList">
+<code class="sig-name descname">functionNameList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.functionNameList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of names for the image-functions in the function
+block/set</p>
+</dd></dl>
+<dl class="method">
 <dt id="pyimfit.descriptions.FunctionSetDescription.parameterList">
 <code class="sig-name descname">parameterList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.parameterList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of ParameterDescription objects corresponding to
@@ -740,13 +784,26 @@ the function block/set (including X0,Y0)</p>
 <dl class="method">
 <dt>
 <code class="sig-name descname">functionList</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>A list of the Imfit image-function types making up this function set.</p>
+<dd><p>A list of the FunctionDescription objects making up this function set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>function_list</strong> – List of the functions.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of FunctionDescription</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="method">
+<dt>
+<code class="sig-name descname">functionNameList</code><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>A list of the Imfit image-function names making up this function set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>function_list</strong> – List of the function types.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list of strings</p>
+<dd class="field-even"><p>list of str</p>
 </dd>
 </dl>
 </dd></dl>

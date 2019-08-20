@@ -103,6 +103,8 @@ def ReadImfitConfigFile( fileName: str, minorAxis=False, pix=1.0, getNames=False
     Returns
     -------
     (functionList, trimmedParameterList) : (list of image-functions, list of float)
+    OR
+    (functionNameList, functionList, trimmedParameterList) : (list of str, list of image-functions, list of float)
     """
 
     dlines = [ line for line in open(fileName) if len(line.strip()) > 0 and line[0] != "#" ]

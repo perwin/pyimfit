@@ -459,7 +459,7 @@ class Imfit(object):
         return self._modelObjectWrapper.computeFitStatistic(newParams)
 
 
-    def runBootstrap( self, nIterations, ftol=1e-8, verboseFlag=False, seed=0 ):
+    def runBootstrap( self, nIterations, ftol=1e-8, verboseFlag=False, seed=0, getColumnNames=False ):
         """
         Do bootstrap resampling for a model.
 
@@ -477,13 +477,25 @@ class Imfit(object):
         seed : int, optional
             random number seed (default is to use system clock)
 
+        getColumnNames : bool, optional
+            if True, then column (parameter) names are returned as well
+
+        Returns
+        -------
+        bootstrapOutput : 2-D ndarray of float
+        OR
+        (columnNames, bootstrapOutput) : tuple of (lis of str, 2-D ndarray of float)
         """
         if not self._dataSet:
             raise Exception('No data supplied for model')
 
         bootstrapOutput = self._modelObjectWrapper.doBootstrapIterations(nIterations, ftol=ftol,
                                                                          verboseFlag=verboseFlag, seed=seed)
-        return bootstrapOutput
+        if getColumnNames:
+            parameterNames = self.numberedParameterNames
+            return (parameterNames, bootstrapOutput)
+        else:
+            return bootstrapOutput
 
 
     @property
@@ -564,6 +576,15 @@ class Imfit(object):
         Bayesian Information Criterion for the fit.
         """
         return self._modelObjectWrapper.getFitStatistic(mode='BIC')
+
+
+    @property
+    def numberedParameterNames(self):
+        """
+        List of parameter names for the current model, annotated by function number.
+        E.g., ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "h_1", ...]
+        """
+        return self._modelDescr.numberedParameterNames
 
 
     def getModelImage( self, shape=None, newParameters=None, includeMask=False ):

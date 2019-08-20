@@ -16,8 +16,8 @@ Finding the best-fit solution by minimizing a fit statistic
 
 Fitting a model to an image in PyImfit involves calculating a model
 image and then comparing it pixel-by-pixel with a data image to derive a
-summary "fit statistic" (based on some likelihood value). The goal is to
-*minimize* the fit statistic (which corresponds to maximizing the
+summary "fit statistic" (based on some total likelihood value). The goal
+is to *minimize* the fit statistic (which corresponds to maximizing the
 likelihood). This is done by iteratively adjusting the parameters of the
 model and recomputing the fit statistic until convergence is achieved;
 the algorithm which oversees this process is called a "minimizer" or
@@ -26,8 +26,8 @@ the algorithm which oversees this process is called a "minimizer" or
 Fit statistics (chi^2 and all that)
 -----------------------------------
 
-Which fit statistic to use depends on your data source, and so is
-determined as part of the ``loadData`` method of the Imfit class.
+Which fit statistic to use depends in part on your data source, and so
+is determined as part of the ``loadData`` method of the Imfit class.
 
 1. Chi^2 Statistics
 
@@ -89,6 +89,10 @@ PyImfit has three minimizers (a.k.a. solvers):
    *ignored*.
 
    imfit\_fitter.DoFit(solver="DE")
+
+Roughly speaking, the Nelder-Mead simplex minimizer is about an order of
+magnitude slower than Levenberg-Marquardt, and Differential Evolution is
+itself about an order of magnitude slower than Nelder-Mead simplex.
 
 More Information
 ----------------

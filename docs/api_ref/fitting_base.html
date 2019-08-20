@@ -293,13 +293,19 @@ Default: <code class="docutils literal notranslate"><span class="pre">False</spa
 </dl>
 </dd></dl>
 <dl class="method">
+<dt id="pyimfit.fitting.Imfit.numberedParameterNames">
+<em class="property">property </em><code class="sig-name descname">numberedParameterNames</code><a class="headerlink" href="#pyimfit.fitting.Imfit.numberedParameterNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of parameter names for the current model, annotated by function number.
+E.g., [“X0_1”, “Y0_1”, “PA_1”, “ell_1”, “I_0_1”, “h_1”, …]</p>
+</dd></dl>
+<dl class="method">
 <dt id="pyimfit.fitting.Imfit.reducedFitStatistic">
 <em class="property">property </em><code class="sig-name descname">reducedFitStatistic</code><a class="headerlink" href="#pyimfit.fitting.Imfit.reducedFitStatistic" title="Permalink to this definition">¶</a></dt>
 <dd><p>The “reduced” <span class="math notranslate nohighlight">\(\chi^2\)</span> or Poisson MLR of the fit.</p>
 </dd></dl>
 <dl class="method">
 <dt id="pyimfit.fitting.Imfit.runBootstrap">
-<code class="sig-name descname">runBootstrap</code><span class="sig-paren">(</span><em class="sig-param">nIterations</em>, <em class="sig-param">ftol=1e-08</em>, <em class="sig-param">verboseFlag=False</em>, <em class="sig-param">seed=0</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.runBootstrap" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">runBootstrap</code><span class="sig-paren">(</span><em class="sig-param">nIterations</em>, <em class="sig-param">ftol=1e-08</em>, <em class="sig-param">verboseFlag=False</em>, <em class="sig-param">seed=0</em>, <em class="sig-param">getColumnNames=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.runBootstrap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Do bootstrap resampling for a model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -308,7 +314,16 @@ Default: <code class="docutils literal notranslate"><span class="pre">False</spa
 <li><p><strong>ftol</strong> (<em>float</em><em>, </em><em>optional</em>) – fractional tolerance in fit statistic for determining fit convergence</p></li>
 <li><p><strong>verboseFlag</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, a progress bar is printed during the boostrap iterations</p></li>
 <li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – random number seed (default is to use system clock)</p></li>
+<li><p><strong>getColumnNames</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, then column (parameter) names are returned as well</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>bootstrapOutput</strong> (<em>2-D ndarray of float</em>)</p></li>
+<li><p><em>OR</em></p></li>
+<li><p><strong>(columnNames, bootstrapOutput)</strong> (<em>tuple of (lis of str, 2-D ndarray of float)</em>)</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

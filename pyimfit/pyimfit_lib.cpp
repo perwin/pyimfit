@@ -1296,7 +1296,7 @@ struct __pyx_opt_args_7pyimfit_11pyimfit_lib_18ModelObjectWrapper__addFunctions;
  * 
  *     cdef _addFunctions(self, object model_descr, bool subsampling, int verbose=0):             # <<<<<<<<<<<<<<
  *         cdef int status = 0
- *         functionNameList = [funcName.encode() for funcName in model_descr.functionList()]
+ *         functionNameList = [funcName.encode() for funcName in model_descr.functionNameList()]
  */
 struct __pyx_opt_args_7pyimfit_11pyimfit_lib_18ModelObjectWrapper__addFunctions {
   int __pyx_n;
@@ -2612,7 +2612,6 @@ static const char __pyx_k_descriptions[] = "descriptions";
 static const char __pyx_k_doFinalSetup[] = "doFinalSetup";
 static const char __pyx_k_funcNameList[] = "funcNameList";
 static const char __pyx_k_funcNameVect[] = "funcNameVect";
-static const char __pyx_k_functionList[] = "functionList";
 static const char __pyx_k_newParamInfo[] = "newParamInfo";
 static const char __pyx_k_newbyteorder[] = "newbyteorder";
 static const char __pyx_k_normalizePSF[] = "normalizePSF";
@@ -2640,6 +2639,7 @@ static const char __pyx_k_pyx_PickleError[] = "__pyx_PickleError";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
 static const char __pyx_k_use_poisson_mlr[] = "use_poisson_mlr";
 static const char __pyx_k_ModelDescription[] = "ModelDescription";
+static const char __pyx_k_functionNameList[] = "functionNameList";
 static const char __pyx_k_ascontiguousarray[] = "ascontiguousarray";
 static const char __pyx_k_get_function_dict[] = "get_function_dict";
 static const char __pyx_k_get_function_list[] = "get_function_list";
@@ -2835,7 +2835,7 @@ static PyObject *__pyx_n_s_funcNameList;
 static PyObject *__pyx_n_s_funcNameVect;
 static PyObject *__pyx_n_s_func_desc;
 static PyObject *__pyx_n_s_func_type;
-static PyObject *__pyx_n_s_functionList;
+static PyObject *__pyx_n_s_functionNameList;
 static PyObject *__pyx_n_s_functionSetIndices;
 static PyObject *__pyx_n_u_gain;
 static PyObject *__pyx_n_s_get_function_dict;
@@ -3605,12 +3605,12 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_4NewParamInfo(CYTHON_UNUSED PyO
  * 
  * def get_function_list( ):             # <<<<<<<<<<<<<<
  *     """
- *     Returns a list of Imfit image-function names.
+ *     Returns a list of Imfit image-function names (e.g., ["Gaussian", "Exponential", etc.])
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_7get_function_list(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_7pyimfit_11pyimfit_lib_6get_function_list[] = "\n    Returns a list of Imfit image-function names.\n\n    Returns\n    -------\n    function_list : list of str\n        list of Imfit image-function names\n    ";
+static char __pyx_doc_7pyimfit_11pyimfit_lib_6get_function_list[] = "\n    Returns a list of Imfit image-function names (e.g., [\"Gaussian\", \"Exponential\", etc.])\n\n    Returns\n    -------\n    function_list : list of str\n        list of Imfit image-function names\n    ";
 static PyMethodDef __pyx_mdef_7pyimfit_11pyimfit_lib_7get_function_list = {"get_function_list", (PyCFunction)__pyx_pw_7pyimfit_11pyimfit_lib_7get_function_list, METH_NOARGS, __pyx_doc_7pyimfit_11pyimfit_lib_6get_function_list};
 static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_7get_function_list(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
@@ -3675,7 +3675,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_6get_function_list(CYTHON_UNUSE
  * 
  * def get_function_list( ):             # <<<<<<<<<<<<<<
  *     """
- *     Returns a list of Imfit image-function names.
+ *     Returns a list of Imfit image-function names (e.g., ["Gaussian", "Exponential", etc.])
  */
 
   /* function exit code */
@@ -3695,12 +3695,12 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_6get_function_list(CYTHON_UNUSE
  * 
  * def get_function_dict( ):             # <<<<<<<<<<<<<<
  *     """
- *     Returns a dict mapping Imfit image-function names to lists of the corresponding
+ *     Returns a dict mapping each Imfit image-function names to a list of its corresponding
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_9get_function_dict(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_7pyimfit_11pyimfit_lib_8get_function_dict[] = "\n    Returns a dict mapping Imfit image-function names to lists of the corresponding\n    parameter names.\n    \n    Returns\n    -------\n    function_dict : dict\n        dict where image-function names are keys and items are list of function\n        parameter names\n    ";
+static char __pyx_doc_7pyimfit_11pyimfit_lib_8get_function_dict[] = "\n    Returns a dict mapping each Imfit image-function names to a list of its corresponding\n    parameter names.\n\n    Returns\n    -------\n    function_dict : dict\n        dict where image-function names are keys and items are list of function\n        parameter names\n    ";
 static PyMethodDef __pyx_mdef_7pyimfit_11pyimfit_lib_9get_function_dict = {"get_function_dict", (PyCFunction)__pyx_pw_7pyimfit_11pyimfit_lib_9get_function_dict, METH_NOARGS, __pyx_doc_7pyimfit_11pyimfit_lib_8get_function_dict};
 static PyObject *__pyx_pw_7pyimfit_11pyimfit_lib_9get_function_dict(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
@@ -3909,7 +3909,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_8get_function_dict(CYTHON_UNUSE
  * 
  * def get_function_dict( ):             # <<<<<<<<<<<<<<
  *     """
- *     Returns a dict mapping Imfit image-function names to lists of the corresponding
+ *     Returns a dict mapping each Imfit image-function names to a list of its corresponding
  */
 
   /* function exit code */
@@ -6707,7 +6707,7 @@ static PyObject *__pyx_pf_7pyimfit_11pyimfit_lib_18ModelObjectWrapper_6_paramSet
  * 
  *     cdef _addFunctions(self, object model_descr, bool subsampling, int verbose=0):             # <<<<<<<<<<<<<<
  *         cdef int status = 0
- *         functionNameList = [funcName.encode() for funcName in model_descr.functionList()]
+ *         functionNameList = [funcName.encode() for funcName in model_descr.functionNameList()]
  */
 
 static PyObject *__pyx_f_7pyimfit_11pyimfit_lib_18ModelObjectWrapper__addFunctions(struct __pyx_obj_7pyimfit_11pyimfit_lib_ModelObjectWrapper *__pyx_v_self, PyObject *__pyx_v_model_descr, bool __pyx_v_subsampling, struct __pyx_opt_args_7pyimfit_11pyimfit_lib_18ModelObjectWrapper__addFunctions *__pyx_optional_args) {
@@ -6738,7 +6738,7 @@ static PyObject *__pyx_f_7pyimfit_11pyimfit_lib_18ModelObjectWrapper__addFunctio
  * 
  *     cdef _addFunctions(self, object model_descr, bool subsampling, int verbose=0):
  *         cdef int status = 0             # <<<<<<<<<<<<<<
- *         functionNameList = [funcName.encode() for funcName in model_descr.functionList()]
+ *         functionNameList = [funcName.encode() for funcName in model_descr.functionNameList()]
  *         status = AddFunctions(self._model, functionNameList, model_descr.functionSetIndices(),
  */
   __pyx_v_status = 0;
@@ -6746,14 +6746,14 @@ static PyObject *__pyx_f_7pyimfit_11pyimfit_lib_18ModelObjectWrapper__addFunctio
   /* "pyimfit/pyimfit_lib.pyx":430
  *     cdef _addFunctions(self, object model_descr, bool subsampling, int verbose=0):
  *         cdef int status = 0
- *         functionNameList = [funcName.encode() for funcName in model_descr.functionList()]             # <<<<<<<<<<<<<<
+ *         functionNameList = [funcName.encode() for funcName in model_descr.functionNameList()]             # <<<<<<<<<<<<<<
  *         status = AddFunctions(self._model, functionNameList, model_descr.functionSetIndices(),
  *                                 subsampling, verbose)
  */
   { /* enter inner scope */
     __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 430, __pyx_L5_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model_descr, __pyx_n_s_functionList); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 430, __pyx_L5_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model_descr, __pyx_n_s_functionNameList); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 430, __pyx_L5_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -6845,7 +6845,7 @@ static PyObject *__pyx_f_7pyimfit_11pyimfit_lib_18ModelObjectWrapper__addFunctio
 
   /* "pyimfit/pyimfit_lib.pyx":431
  *         cdef int status = 0
- *         functionNameList = [funcName.encode() for funcName in model_descr.functionList()]
+ *         functionNameList = [funcName.encode() for funcName in model_descr.functionNameList()]
  *         status = AddFunctions(self._model, functionNameList, model_descr.functionSetIndices(),             # <<<<<<<<<<<<<<
  *                                 subsampling, verbose)
  *         if status < 0:
@@ -6872,7 +6872,7 @@ static PyObject *__pyx_f_7pyimfit_11pyimfit_lib_18ModelObjectWrapper__addFunctio
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "pyimfit/pyimfit_lib.pyx":432
- *         functionNameList = [funcName.encode() for funcName in model_descr.functionList()]
+ *         functionNameList = [funcName.encode() for funcName in model_descr.functionNameList()]
  *         status = AddFunctions(self._model, functionNameList, model_descr.functionSetIndices(),
  *                                 subsampling, verbose)             # <<<<<<<<<<<<<<
  *         if status < 0:
@@ -6917,7 +6917,7 @@ static PyObject *__pyx_f_7pyimfit_11pyimfit_lib_18ModelObjectWrapper__addFunctio
  * 
  *     cdef _addFunctions(self, object model_descr, bool subsampling, int verbose=0):             # <<<<<<<<<<<<<<
  *         cdef int status = 0
- *         functionNameList = [funcName.encode() for funcName in model_descr.functionList()]
+ *         functionNameList = [funcName.encode() for funcName in model_descr.functionNameList()]
  */
 
   /* function exit code */
@@ -29788,7 +29788,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_funcNameVect, __pyx_k_funcNameVect, sizeof(__pyx_k_funcNameVect), 0, 0, 1, 1},
   {&__pyx_n_s_func_desc, __pyx_k_func_desc, sizeof(__pyx_k_func_desc), 0, 0, 1, 1},
   {&__pyx_n_s_func_type, __pyx_k_func_type, sizeof(__pyx_k_func_type), 0, 0, 1, 1},
-  {&__pyx_n_s_functionList, __pyx_k_functionList, sizeof(__pyx_k_functionList), 0, 0, 1, 1},
+  {&__pyx_n_s_functionNameList, __pyx_k_functionNameList, sizeof(__pyx_k_functionNameList), 0, 0, 1, 1},
   {&__pyx_n_s_functionSetIndices, __pyx_k_functionSetIndices, sizeof(__pyx_k_functionSetIndices), 0, 0, 1, 1},
   {&__pyx_n_u_gain, __pyx_k_gain, sizeof(__pyx_k_gain), 0, 1, 0, 1},
   {&__pyx_n_s_get_function_dict, __pyx_k_get_function_dict, sizeof(__pyx_k_get_function_dict), 0, 0, 1, 1},
@@ -30494,7 +30494,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * def get_function_list( ):             # <<<<<<<<<<<<<<
  *     """
- *     Returns a list of Imfit image-function names.
+ *     Returns a list of Imfit image-function names (e.g., ["Gaussian", "Exponential", etc.])
  */
   __pyx_tuple__59 = PyTuple_Pack(2, __pyx_n_s_funcNameVect, __pyx_n_s_funcName); if (unlikely(!__pyx_tuple__59)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__59);
@@ -30506,7 +30506,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * def get_function_dict( ):             # <<<<<<<<<<<<<<
  *     """
- *     Returns a dict mapping Imfit image-function names to lists of the corresponding
+ *     Returns a dict mapping each Imfit image-function names to a list of its corresponding
  */
   __pyx_tuple__61 = PyTuple_Pack(6, __pyx_n_s_status, __pyx_n_s_parameters, __pyx_n_s_funcNameList, __pyx_n_s_theDict, __pyx_n_s_funcName, __pyx_n_s_paramName); if (unlikely(!__pyx_tuple__61)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__61);
@@ -31161,7 +31161,7 @@ if (!__Pyx_RefNanny) {
  * 
  * def get_function_list( ):             # <<<<<<<<<<<<<<
  *     """
- *     Returns a list of Imfit image-function names.
+ *     Returns a list of Imfit image-function names (e.g., ["Gaussian", "Exponential", etc.])
  */
   __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_7pyimfit_11pyimfit_lib_7get_function_list, NULL, __pyx_n_s_pyimfit_pyimfit_lib); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -31173,7 +31173,7 @@ if (!__Pyx_RefNanny) {
  * 
  * def get_function_dict( ):             # <<<<<<<<<<<<<<
  *     """
- *     Returns a dict mapping Imfit image-function names to lists of the corresponding
+ *     Returns a dict mapping each Imfit image-function names to a list of its corresponding
  */
   __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_7pyimfit_11pyimfit_lib_9get_function_dict, NULL, __pyx_n_s_pyimfit_pyimfit_lib); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);

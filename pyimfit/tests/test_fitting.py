@@ -51,6 +51,18 @@ class TestImfit(object):
         imfit_fitter1 = Imfit(self.modelDesc)
         assert imfit_fitter1._modelDescr.optionsDict == {}
 
+    def test_Imfit_columnNames_one_function( self ):
+        imfit_fitter1 = Imfit(self.modelDesc)
+        columnNames_correct = ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "h_1"]
+        columnNames = imfit_fitter1.numberedParameterNames
+        assert imfit_fitter1.numberedParameterNames == columnNames_correct
+
+    def test_Imfit_columnNames_two_functions( self ):
+        imfit_fitter2 = Imfit(model_desc2)
+        columnNames_correct = ['X0_1', 'Y0_1', 'PA_1', 'ell_1', 'n_1', 'I_e_1', 'r_e_1',
+                                'PA_2', 'ell_2', 'I_0_2', 'h_2']
+        assert imfit_fitter2.numberedParameterNames == columnNames_correct
+
     def test_Imfit_bad_fit_start( self ):
         """Test that we catch error of trying to start a fit without any data"""
         imfit_fitter1 = Imfit(self.modelDesc)

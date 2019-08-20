@@ -30,6 +30,7 @@ reduced_fitstat_correct = 2.082564
 aic_correct = 136482.400611
 bic_correct = 136536.941458
 
+columnNames_correct = ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "h_1"]
 
 (refCols, refData) = GetBootstrapOutput(bootstrapReferenceFile)
 
@@ -40,8 +41,10 @@ imfit_fitter = Imfit(modeldesc)
 imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
 imfit_fitter.doFit()
 pvals_fit = np.array(imfit_fitter.getRawParameters())
+
 # bootstrap resampling
 output = imfit_fitter.runBootstrap(nIterations=5, seed=10)
+columnNames, output = imfit_fitter.runBootstrap(nIterations=5, seed=10, getColumnNames=True)
 
 
 
@@ -55,4 +58,8 @@ def test_readin_ref_bootstrap_data():
 def test_new_bootstrap_data():
     assert output.shape == refData.shape
     assert_allclose(output, refData)
+
+def test_column_names():
+    assert len(columnNames) == 6
+    assert columnNames == columnNames_correct
 
