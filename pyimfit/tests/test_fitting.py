@@ -13,7 +13,7 @@ from astropy.io import fits
 
 from ..fitting import Imfit
 from ..descriptions import FunctionSetDescription, ModelDescription, ParameterDescription
-from ..pyimfit_lib import FixImage, make_imfit_function
+from ..pyimfit_lib import make_imfit_function
 
 
 
@@ -26,9 +26,9 @@ imageFile2 = testDataDir + "n3073rss_small.fits"
 maskFile2 = testDataDir + "n3073rss_small_mask.fits"
 configFile2 = testDataDir + "config_n3073.dat"
 
-image_ic3478 = FixImage(fits.getdata(imageFile))
-image_n3073 = FixImage(fits.getdata(imageFile2))
-mask_n3073 = FixImage(fits.getdata(maskFile2))
+image_ic3478 = fits.getdata(imageFile)
+image_n3073 = fits.getdata(imageFile2)
+mask_n3073 = fits.getdata(maskFile2)
 
 # ModelDescription object for fitting Exponential function to image of IC 3478
 model_desc = ModelDescription.load(configFile)

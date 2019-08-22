@@ -15,7 +15,7 @@ from numpy.testing import assert_allclose
 from astropy.io import fits
 
 from pyimfit import Imfit, SimpleModelDescription, make_imfit_function, gaussian_psf
-from ..pyimfit_lib import FixImage, make_imfit_function
+from ..pyimfit_lib import make_imfit_function
 
 
 GAIN = 4.725
@@ -30,11 +30,11 @@ configFile = testDataDir + "config_exponential_ic3478_256.dat"
 imageFile_n3073 = testDataDir + "n3073rss_small.fits"
 imageFile_n3073_mask = testDataDir + "n3073rss_small_mask.fits"
 
-image_ic3478 = FixImage(fits.getdata(imageFile_ic3478))
+image_ic3478 = fits.getdata(imageFile_ic3478)
 shape_ic3478 = image_ic3478.shape
 image_ic3478_consterror = np.ones(shape_ic3478)
-image_n3073 = FixImage(fits.getdata(imageFile_n3073))
-image_n3073_mask = FixImage(fits.getdata(imageFile_n3073_mask))
+image_n3073 = fits.getdata(imageFile_n3073)
+image_n3073_mask = fits.getdata(imageFile_n3073_mask)
 
 
 def create_model():

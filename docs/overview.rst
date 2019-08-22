@@ -22,7 +22,7 @@ For Those Already Familiar with Imfit
 If you've already used the command-line version of **Imfit**, here are
 the essential things to know:
 
--  PyImfit operates on 2D numpy arrays instead of FITS files; to use a
+-  PyImfit operates on 2D NumPy arrays instead of FITS files; to use a
    FITS file, read it into Python via, e.g.,
    `astropy.io.fits <http://docs.astropy.org/en/stable/io/fits/>`__.
 
@@ -34,7 +34,7 @@ the essential things to know:
    programmatically specifying components from within Python.)
 
 -  Fitting is done by instantiating an ``Imfit`` object with a
-   ModelDescription object as input, then adding a 2D numpy array as the
+   ModelDescription object as input, then adding a 2D NumPy array as the
    data to be fit (along with, optionally, mask and error images, the
    image A/D gain value, etc.) with the ``loadData`` method, and then
    calling the ``doFit`` method (along with the minimization algorithm
@@ -108,7 +108,7 @@ functions are described in detail in `the Imfit manual
 Once you have a ModelDescription object describing the model, you can
 create an instance of the ``Imfit`` class based on the model;
 optionally, if you want the model to be convolved with a PSF, you can
-also supply the PSF image (in the form of a 2D numpy array):
+also supply the PSF image (in the form of a 2D NumPy array):
 
 ::
 
@@ -126,6 +126,8 @@ should be kept constant during fits.
 
 **Note**: Unless otherwise specified, all size values are in pixels, and
 all intensity/surface-brightness values are in counts/pixel.
+(Photometric zero points are not needed except for the optional case of
+computing model magnitudes; see below.)
 
 A very simple example of constructing a model:
 
@@ -138,7 +140,8 @@ A very simple example of constructing a model:
 
     # create an Exponential image function, then define the parameter initial values and limits
     disk = pyimfit.make_imfit_function('Exponential')
-    # set initial values, lower and upper limits for central surface brightness I_0, scale length h
+    # set initial values, lower and upper limits for central surface brightness I_0, scale length h;
+    # specify that ellipticity is to remain fixed
     disk.I_0.setValue(100.0, [0.0, 500.0])
     disk.h.setValue(25, [10,50])
     disk.PA.setValue(40, [0, 180])
@@ -152,24 +155,24 @@ Fit a model to the data
 Specify the data (and optional mask) image
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The data image must be a 2D numpy array (internally, it will be
+The data image must be a 2D NumPy array (internally, it will be
 converted to double-precision floating point with native byte order, if
 it isn't already).
 
-You then pass in the data image to the previously generated ``Imfit``
-object (\`imfitter'):
+You pass in the data image to the previously generated ``Imfit`` object
+(``imfitter``) using the latter's ``loadData`` method:
 
 ::
 
     imfitter.loadData(data_im)
 
-You can also specify a mask image, which should be a numpy integer or
+You can also specify a mask image, which should be a NumPy integer or
 float array where values = 0 indicate *good* pixels, and values > 0
 indicate bad pixels that should not be used in the fit. Alternatively,
-if the data array is a numpy MaskedArray, then *its* mask will be used.
+if the data array is a NumPy MaskedArray, then *its* mask will be used.
 (If the data array is a MaskedArray *and* you supply a separate mask
-image, then the final mask will be the composition data array's mask and
-the mask image.)
+image, then the final mask will be the composition of the data array's
+mask and the mask image.)
 
 ::
 
@@ -202,7 +205,8 @@ minimized during the fitting process.
    specify that individual pixel errors come from the model assuming a
    true Poisson process (rather than the Gaussian approximation to
    Poisson statistics that's used in the χ2 approaches). This is
-   particularly appropriate when individual data pixel values are low.
+   particularly appropriate when individual pixel values of the data are
+   low.
 
 You can also tell the ``Imfit`` object useful things about the data
 values: what A/D gain conversion was applied, any Gaussian read noise,
@@ -221,7 +225,7 @@ Whatever you chose, you can specify this as part of the call to
     # chi^2 with model-based errors
     imfitter.loadData(data_im, gain=4.5, read_noise=0.7, use_model_for_errors=True)
 
-    # chi^2 with a numpy variance array `variances_im` (gain and read noise are not needed)
+    # chi^2 with a NumPy variance array `variances_im` (gain and read noise are not needed)
     imfitter.loadData(data_im, error=variances_im, error_type="variance")
 
     # Poisson Maximum-Likelihood-Ratio statistics (read noise is not used in this mode)
@@ -243,8 +247,8 @@ default is "LM" for the Levenberg-Marquardt minimizer.
 
 -  "DE" = Differential Evolution: genetic-algorithm-based; very slow;
    probably least likely to be trapped in local minima. (This method
-   ignores the initial parameter guesses, choosing random values
-   selected within the lower and upper parameter limits.)
+   ignores the initial parameter guesses, instead choosing random values
+   selected from within the lower and upper parameter bounds.)
 
 E.g.,
 
@@ -263,8 +267,8 @@ out periodic updates of the current fit statistic (e.g., χ2;
 ``verbose=2`` will also print the current best-fit parameter values of
 the model each time it prints the current fit statistic.
 
-**WARNING:**\ \* Currently, there is no way to interrupt a fit once it
-has started! (Other than killing the underlying Python process, that is.
+**WARNING:** Currently, there is no way to interrupt a fit once it has
+started! (Other than killing the underlying Python process, that is.
 This may change in the future.)
 
 Shortcut: Load data and do the fit in one step
@@ -302,14 +306,14 @@ fit finishes:
            imfitter.AIC   # corresponding Akaike Information Criterion value
            imfitter.BIC   # corresponding Bayesian Information Criterion value
 
-3.A. Get the best-fit parameter values in the form of a 1D numpy array:
+3.A. Get the best-fit parameter values in the form of a 1D NumPy array:
 
 ::
 
             bestfit_parameters = imfit_fitter.getRawParameters()
 
 3.B. Get the 1-sigma uncertainties on the best-fit parameter values in
-the form of a 1D numpy array. Note that these are only produced if the
+the form of a 1D NumPy array. Note that these are only produced if the
 default Levenberg-Marquardt solver was used, and are fairly crude
 estimates that should be used with caution. A somewhat better approach
 might be to do `bootstrap resampling <./bootstrap.html>`__, or even `use
@@ -320,14 +324,14 @@ a Markov Chain Monte Carlo code such as
 
             bestfit_parameters_errs = imfit_fitter.getParameterErrors()
 
-4. Get the best-fitting model image (a 2D numpy array)
+4. Get the best-fitting model image (a 2D NumPy array)
 
    ::
 
             bestfit_model_im = imfitter.getModelImage()
 
 5. Get fluxes and magnitudes for the best-fitting model -- note that
-   what is returned is a tuple of the total flux/magnitude and a numpy
+   what is returned is a tuple of the total flux/magnitude and a NumPy
    array of the fluxes/magnitudes for the individual components of the
    model (in the order they are listed in the model):
 
@@ -342,7 +346,7 @@ a Markov Chain Monte Carlo code such as
             (totalMag, componentMagnitudes) = imfitter.getModelMagnitudes(zeroPoint=25.72)
 
 Of course, you might also want to inspect the residuals of the fit;
-since your data image and the output best-fit model image are both numpy
+since your data image and the output best-fit model image are both NumPy
 arrays, this is simple enough:
 
 ::
@@ -361,9 +365,20 @@ data. In this case, you can call the ``getModelImage`` method on the
     model_im = imfitter.getModelImage(shape=image_shape)
 
 where ``image_shape`` is a 2-element integer tuple defining the image
-shape in the usual numpy fashion (i.e., an image with n\_rows and
+shape in the usual NumPy fashion (i.e., an image with n\_rows and
 n\_colums has shape=(n\_columns,n\_rows)).
 
 If the ``Imfit`` object (``imfitter``) already has a data image assigned
 to it, then the output image will have the same dimensions as the data
 image, and you do not need to specify the shape.
+
+Note that by default this will generate a model image using the current
+parameter values of the model (the initial values, if no fit has been
+done, or the best-fit values if a fit *has* been done). You can specify
+that a *different* set of parameter values (in the form of a 1-D NumPy
+array of the correct length) should be used to compute the model via the
+``newParameters`` keyword:
+
+::
+
+    model_im = imfitter.getModelImage(newParameters=parameter_array)

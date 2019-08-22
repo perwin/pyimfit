@@ -10,9 +10,9 @@ import numpy as np
 from numpy.testing import assert_allclose
 from astropy.io import fits
 
-from ..fitting import Imfit
+from ..fitting import Imfit, MakePsfOversampler
 from ..descriptions import ModelDescription
-from ..pyimfit_lib import FixImage, make_imfit_function, PsfOversampling
+from ..pyimfit_lib import PsfOversampling, FixImage
 
 # Note that we use looser tolerances in cases where running on Linux doesn't agree
 # with results from running on macOS
@@ -25,9 +25,12 @@ osampPsfFile = testDataDir + "psf_moffat_35_oversamp3.fits"
 configFile = testDataDir + "config_imfit_2gauss_small.dat"
 
 
-imdata = FixImage(fits.getdata(imageFile))
-psfImage = FixImage(fits.getdata(psfFile))
-osampPsfImage = FixImage(fits.getdata(osampPsfFile))
+imdata = fits.getdata(imageFile)
+psfImage = fits.getdata(psfFile)
+# NOTE: we need to apply FixImage here since the PsfOversampling class *requires* correct
+# input image format to instantiate
+osampPsfImage_orig = fits.getdata(osampPsfFile)
+osampPsfImage_fixed = FixImage(osampPsfImage_orig)
 
 # construct model from config file
 model_desc = ModelDescription.load(configFile)
@@ -90,8 +93,9 @@ def test_single_psf():
 def test_oversampled_psf():
     imfit_fitter = Imfit(model_desc, psf=psfImage)
     # construct list of PsfOversampling objects
-    osample1 = PsfOversampling(osampPsfImage, 3, "35:45,35:45", 0, 0, True)
-    osample2 = PsfOversampling(osampPsfImage, 3, "10:20,5:15", 0, 0, True)
+    osample1 = PsfOversampling(osampPsfImage_fixed, 3, "35:45,35:45", 0, 0, True)
+    #osample2 = PsfOversampling(osampPsfImage, 3, "10:20,5:15", 0, 0, True)
+    osample2 = MakePsfOversampler(osampPsfImage_orig, 3, (10,20,5,15))
     osampleList = [osample1, osample2]
     imfit_fitter.loadData(imdata, use_poisson_mlr=True, gain=1000, psf_oversampling_list=osampleList)
     fitstat = imfit_fitter.computeFitStatistic(initial_params)

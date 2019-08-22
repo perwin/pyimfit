@@ -83,10 +83,10 @@ PLAN:
     * Decide on consistent use of "function set" vs "function block"
 
 
-[ ] Rationalize handling of masks and MaskedArray in fitting.Imfit.loadData
+[x] Rationalize handling of masks and MaskedArray in fitting.Imfit.loadData
     [x]1. We should check that mask has same shape as data image *before*
     we call _composemask
-    2. Rationalize processing of mask
+    [x]2. Rationalize processing of mask
 
 [ ] Feedback options
     [x] Option to print feedback from Levenberg-Marquardt
@@ -94,6 +94,7 @@ PLAN:
     [x] Option to print feedback from DE
     [x] Option to print feedback from bootstrap-resampling
     [ ] Option in doFit() to print a fit summary at the end
+        -- automatically printed when verbose=1 or 2?
         [ ] Separate public method in Imfit class which prints fit summary (called by doFit())
 
 [x] Add method to Imfit class to return list of parameter names in bootstrap-output form
@@ -446,6 +447,14 @@ to them
     [X] Add wrapper method around ModelObject::AddOversampledPsfInfo to ModelObjectWrapper
 
     [X] Make unit/regression test for use of PSF oversampling
+
+    [ ] Add some kind of wrapper/factory function so we can make PsfOversampling objects
+    *without* having to explicitly call FixImage first
+        -- Because PsfOversampling is defined with a __cinit__ (in pyimfit_lib.pyx) and
+        an explicity format for its input PSF-image array, the input must be in proper
+        (little-endian) format *before* we call PsfOversampling()
+
+    [ ] Add preliminary PSF oversampling documenation
 
     [ ] Later: add separate method to Imfit class allowing user to pass in
     just the oversampling info?

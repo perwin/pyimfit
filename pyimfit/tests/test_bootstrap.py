@@ -11,7 +11,6 @@ from astropy.io import fits
 from ..utils import GetBootstrapOutput
 from ..fitting import Imfit
 from ..descriptions import ModelDescription
-from ..pyimfit_lib import FixImage, make_imfit_function
 
 TOLERANCE = 1.0e-6
 
@@ -35,7 +34,7 @@ columnNames_correct = ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "h_1"]
 (refCols, refData) = GetBootstrapOutput(bootstrapReferenceFile)
 
 # do the fit and the bootstrap resampling
-image_ic3478 = FixImage(fits.getdata(imageFile))
+image_ic3478 = fits.getdata(imageFile)
 modeldesc= ModelDescription.load(configFile)
 imfit_fitter = Imfit(modeldesc)
 imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)

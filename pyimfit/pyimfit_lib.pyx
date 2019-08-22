@@ -260,6 +260,8 @@ def convolve_image( np.ndarray[np.double_t, ndim=2] image not None,
 
 # cdef class to hold PSF oversampling info, mainly by storing it in a locally
 # instantiated PsfOversamplingInfo object.
+# WARNING: input psfImage must be processed by FixImage *prior* to using it to instantiate
+# an object of this class!
 cdef class PsfOversampling( object ):
     cdef PsfOversamplingInfo * _psfOversamplingInfo_ptr
     cdef double[::1] _imageData

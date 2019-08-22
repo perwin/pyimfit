@@ -19,6 +19,7 @@ Documentation for PyImfit
    :caption: USER DOCUMENTATION:
 
    defining_models
+   psf_convolution
    fit_statistics_and_solvers
    bootstrap
    pyimfit_emcee

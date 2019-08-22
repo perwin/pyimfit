@@ -28,7 +28,7 @@ data image, etc.:
 where ``nIterations`` is an integer specifying the total number of
 iterations (ideally a minimum of several hundred).
 
-This returns a 2D numpy array which has one row per iteration, with each
+This returns a 2D NumPy array which has one row per iteration, with each
 column contain the collected values for a single parameter. The ordering
 of the parameter columns is the same as in the model.
 

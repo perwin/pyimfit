@@ -10,7 +10,7 @@ import copy
 import numpy as np   # type: ignore
 
 from .descriptions import ModelDescription
-from .pyimfit_lib import FixImage, ModelObjectWrapper  # type: ignore
+from .pyimfit_lib import FixImage, PsfOversampling, ModelObjectWrapper  # type: ignore
 
 __all__ = ['Imfit']
 
@@ -68,6 +68,39 @@ def _composemask( arr, mask, mask_zero_is_bad: bool ):
 
 
 
+def MakePsfOversampler( psfImage, oversampleScale, regionSpec, psfNormalization=True ):
+    """
+    Helper function to generate PsfOversampling objects (corrects input psfImage, sets
+    up region string, etc.).
+
+    Parameters
+    ----------
+    psfImage : 2-D numpy array
+        the oversampled PSF image
+
+    oversampleScale : int
+        oversampling scale of psfImage relative to data image: number of PSF-image
+         pixels per data-image pixel in one dimension (must be >= 1)
+
+    regionSpec : sequence of int
+        specifies inclusive boundaries of image region to be oversampled
+        [x1,x2,y1,y2]
+
+    psfNormalization : bool, optional
+        Normalize the PSF image before using.
+        Default: ``True``.
+
+    Returns
+    -------
+    oversampleInfo : instance of PsfOversampling class
+    """
+
+    psfImage = FixImage(psfImage)
+    regionString = "{0:d}:{1:d},{2:d}:{3:d}".format(regionSpec[0],regionSpec[1],regionSpec[2],regionSpec[3])
+    return PsfOversampling(psfImage, oversampleScale, regionString, 0, 0, psfNormalization)
+
+
+
 class Imfit(object):
     """
     A class for fitting models to images using Imfit.
@@ -78,6 +111,21 @@ class Imfit(object):
     you need to create one instance of :class:`Imfit` for each model.
     On the other hand, one instance can be used to fit the same model
     to any number of images, or to fit and then create the model image.
+
+    Attributes
+    ----------
+    AIC
+    BIC
+    fitConverged
+    fitError
+    fitStatistic
+    fitTerminated
+    nIter
+    nPegged
+    nValidPixles
+    numberedParameterNames
+    parameterErrors
+    reducedFitStatistic
 
     See also
     --------
@@ -124,7 +172,10 @@ class Imfit(object):
         # copy the input ModelDescription (we don't want any links to the input object,
         # in case the latter gets updated later somewhere else)
         self._modelDescr = copy.deepcopy(model_descr)
-        self._psf = psf
+        if psf is not None:
+            self._psf = FixImage(psf)
+        else:
+            self._psf = None
         self._normalizePSF = psfNormalization
         self._mask = None
         self._modelObjectWrapper = None
@@ -179,6 +230,19 @@ class Imfit(object):
 
 
     def saveCurrentModelToFile( self, filename: str, includeImageOptions=False ):
+        """
+        Saves the current model and parameter values to a text file in Imfit-configuration-file
+        format.
+
+        Parameters
+        ----------
+        filename: str
+            Name for the output file
+
+        includeImageOptions : bool, optional
+            if True, then image-description options ("GAIN", etc.) are also written
+            to the output file
+        """
         # use getModelDescription to get the current (e.g., updated with best-fit parameters)
         # ModelDescription object from self._modelObjectWrapper
         modelDesc = self.getModelDescription()
@@ -192,11 +256,11 @@ class Imfit(object):
 
     def getRawParameters(self):
         """
-        Model parameters for debugging purposes.
+        Returns current model parameter values.
 
         Returns
         -------
-        raw_params : numpy ndarray of floats
+        raw_params : ndarray of float
             A 1D array containing all the model parameter values.
         """
         return np.array(self._modelObjectWrapper.getRawParameters())
@@ -204,12 +268,12 @@ class Imfit(object):
 
     def getParameterErrors(self):
         """
-        Model parameters for debugging purposes.
+        Returns current best-fit model parameter uncertainties (from L-M minimization).
 
         Returns
         -------
-        raw_params : array of floats
-            A 1D array containing all the model parameter values.
+        errors : ndarray of float
+            A 1D array containing the Levenberg-Marquardt parameter uncertainties.
         """
         return np.array(self._modelObjectWrapper.getParameterErrors())
 
@@ -378,7 +442,7 @@ class Imfit(object):
         self._dataSet = True
 
 
-    def doFit( self, solver='LM', verbose=None ):
+    def doFit( self, solver='LM', verbose=None, getSummary=False ):
         """
         Fit the model to previously supplied data image.
 
@@ -393,6 +457,10 @@ class Imfit(object):
         verbose : int or None, optional
             set this to an integer to specify a feedback level for the fit (this overrides
             the Imfit object's internal verbosity setting)
+
+        getSummary : bool, optional
+            if True, a summary of the fit is returned (as a string)
+
         Examples
         --------
         TODO: Examples of doFit().
@@ -414,9 +482,12 @@ class Imfit(object):
         if not self.fitError:
             self._fitDone = True
             self._fitStatComputed = True
+        if getSummary:
+            return self.getFitSummary()
 
 
-    def fit( self, image, error=None, mask=None, solver='LM', verbose=None, **kwargs ):
+    def fit( self, image, error=None, mask=None, solver='LM', verbose=None, getSummary=False,
+             **kwargs ):
         """
         Supply data image (and optionally mask and/or error images) and image info, then
         fit the model to the data.
@@ -448,13 +519,46 @@ class Imfit(object):
             set this to an integer to specify a feedback level for the fit (this overrides
             the Imfit object's internal verbosity setting)
 
+        getSummary : bool, optional
+            if True, a summary of the fit is returned (as a string)
+
         See loadData() for list of allowed extra keywords.
         """
         self.loadData(image, error, mask, **kwargs)
-        self.doFit(solver=solver, verbose=verbose)
+        self.doFit(solver=solver, verbose=verbose, getSummary=getSummary)
+
+
+    def getFitSummary( self ):
+        """
+        Returns a summary of the fitting process.
+
+        Returns
+        -------
+        summary : str
+        """
+        if self._fitDone and not self.fitError:
+            nIterations = self.nIter
+            fitStat = self.fitStatistic
+            fitStatReduced = self.reducedFitStatistic
+            aic, bic = self.AIC, self.BIC
+
+        return ""
 
 
     def computeFitStatistic( self, newParameters ):
+        """
+        Returns the fit-statistic value for the specified parameter vector.
+        (Which fit statistic will calculated is set by the loadData() or fit() methods.)
+
+        Parameters
+        ----------
+        newParameters : ndarray of float
+
+        Returns
+        -------
+        fitStatistic : float
+        """
+        # FIXME: Check that length of newParameters is correct
         if not isinstance(newParameters, np.ndarray):
             newParams = np.array(newParameters).astype(np.float64)
         else:
@@ -487,7 +591,7 @@ class Imfit(object):
         -------
         bootstrapOutput : 2-D ndarray of float
         OR
-        (columnNames, bootstrapOutput) : tuple of (lis of str, 2-D ndarray of float)
+        (columnNames, bootstrapOutput) : tuple of (list of str, 2-D ndarray of float)
         """
         if not self._dataSet:
             raise Exception('No data supplied for model')
@@ -503,6 +607,9 @@ class Imfit(object):
 
     @property
     def zeroPoint(self):
+        """
+        float: photometric zero point (used by getModelMagnitudes method).
+        """
         return self._zeroPoint
 
     @zeroPoint.setter
@@ -512,6 +619,9 @@ class Imfit(object):
 
     @property
     def fitConverged(self):
+        """
+        bool: indicates whether fit converged.
+        """
         return self._modelObjectWrapper.fitConverged
 
 
@@ -522,16 +632,25 @@ class Imfit(object):
 
     @property
     def fitTerminated(self):
+        """
+        bool: indicates whether fit terminated for any reason.
+        """
         return self._modelObjectWrapper.fitTerminated
 
 
     @property
     def nIter(self):
+        """
+        int: number of solver iterations during fit.
+        """
         return self._modelObjectWrapper.nIter
 
 
     @property
     def parameterErrors(self):
+        """
+        ndarray of float or None: estimated parameter errors from fit (L-M solver only)
+        """
         if (self._modelObjectWrapper is not None and self.fitConverged and
                 self._modelObjectWrapper.fittedLM):
             return self.getParameterErrors()
@@ -541,18 +660,24 @@ class Imfit(object):
 
     @property
     def nPegged(self):
+        """
+        int: number of parameters pegged against limits at end of fit.
+        """
         return self._modelObjectWrapper.nPegged
 
 
     @property
     def nValidPixels(self):
+        """
+        int: number of non-masked pixels in data image.
+        """
         return self._modelObjectWrapper.nValidPixels
 
 
     @property
     def fitStatistic(self):
         """
-        The :math:`\\chi^2`, Poisson MLR, or Cash statistic of the fit.
+        float: the :math:`\\chi^2`, Poisson MLR, or Cash statistic of the fit.
         """
         return self._modelObjectWrapper.getFitStatistic(mode='none')
 
@@ -560,7 +685,7 @@ class Imfit(object):
     @property
     def reducedFitStatistic(self):
         """
-        The "reduced" :math:`\\chi^2` or Poisson MLR of the fit.
+        float: the "reduced" :math:`\\chi^2` or Poisson MLR of the fit.
         """
         return self._modelObjectWrapper.getFitStatistic(mode='reduced')
 
@@ -568,7 +693,7 @@ class Imfit(object):
     @property
     def AIC(self):
         """
-        Bias-corrected Akaike Information Criterion for the fit.
+        float: bias-corrected Akaike Information Criterion for the fit.
         """
         return self._modelObjectWrapper.getFitStatistic(mode='AIC')
 
@@ -576,7 +701,7 @@ class Imfit(object):
     @property
     def BIC(self):
         """
-        Bayesian Information Criterion for the fit.
+        float: Bayesian Information Criterion for the fit.
         """
         return self._modelObjectWrapper.getFitStatistic(mode='BIC')
 
@@ -584,7 +709,7 @@ class Imfit(object):
     @property
     def numberedParameterNames(self):
         """
-        List of parameter names for the current model, annotated by function number.
+        list of str: List of parameter names for the current model, annotated by function number.
         E.g., ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "h_1", ...]
         """
         return self._modelDescr.numberedParameterNames
