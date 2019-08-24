@@ -11,7 +11,7 @@ from numpy.testing import assert_allclose
 
 from astropy.io import fits
 
-from ..fitting import Imfit
+from ..fitting import FitError, FitResult, Imfit
 from ..descriptions import FunctionSetDescription, ModelDescription, ParameterDescription
 from ..pyimfit_lib import make_imfit_function
 
@@ -160,6 +160,16 @@ class TestImfit(object):
         magsArray_correct = np.array([totalMag_correct])
         assert totalMag == totalMag_correct
         assert magsArray == magsArray_correct
+
+
+
+# result.fitConverged = self.fitConverged
+# result.nIter = self.nIter
+# result.fitStat = self.fitStatistic
+# result.fitStatReduced = self.reducedFitStatistic
+# result.aic = self.AIC
+# result.bic = self.BIC
+# result.params = self.getRawParameters()
 
 
 class TestImfit_MultiComponent(object):

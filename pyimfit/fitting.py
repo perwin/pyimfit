@@ -23,6 +23,66 @@ imageOptionNameDict_reverse = {"NCOMBINED": 'n_combined', "EXPTIME": 'exptime', 
                   "READNOISE": 'read_noise', "ORIGINAL_SKY": 'original_sky' }
 
 
+class FitError(Exception):
+    pass
+
+
+
+class FitResult( dict ):
+    """ Represents the result of fitting an image.
+
+    Attributes
+    ----------
+    params : ndarray
+        The best-fit vector of parameter values.
+    success : bool
+        Whether or not the optimizer exited successfully.
+    status : int
+        Termination status of the optimizer. Its value depends on the
+        underlying solver. Refer to `message` for details.
+    message : str
+        Description of the cause of the termination.
+    nfev : int
+        Number of evaluations of the objective function.
+    nit : int
+        Number of iterations performed by the optimizer.
+
+    OTHER IDEAS:
+        AIC,BIC
+        fitStatistic, reduced fitStatistic
+
+    Notes
+    -----
+    There may be additional attributes not listed above depending of the
+    specific solver. Since this class is essentially a subclass of dict
+    with attribute accessors, one can see which attributes are available
+    using the `keys()` method.
+    """
+
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
+
+
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
+
+
+    def __repr__(self):
+        if self.keys():
+            m = max(map(len, list(self.keys()))) + 1
+            return '\n'.join([k.rjust(m) + ': ' + repr(v) for k, v in sorted(self.items())])
+        else:
+            return self.__class__.__name__ + "()"
+
+
+    def __dir__(self):
+        return list(self.keys())
+
+
+
 def _composemask( arr, mask, mask_zero_is_bad: bool ):
     """
     Helper function to properly compose masks.
@@ -528,21 +588,26 @@ class Imfit(object):
         self.doFit(solver=solver, verbose=verbose, getSummary=getSummary)
 
 
-    def getFitSummary( self ):
+    def getFitResult( self ):
         """
         Returns a summary of the fitting process.
 
         Returns
         -------
-        summary : str
+        result : FitResult object
         """
+        if not self._fitDone:
+            raise FitError()
+        result = FitResult()
         if self._fitDone and not self.fitError:
-            nIterations = self.nIter
-            fitStat = self.fitStatistic
-            fitStatReduced = self.reducedFitStatistic
-            aic, bic = self.AIC, self.BIC
-
-        return ""
+            result.fitConverged = self.fitConverged
+            result.nIter = self.nIter
+            result.fitStat = self.fitStatistic
+            result.fitStatReduced = self.reducedFitStatistic
+            result.aic = self.AIC
+            result.bic = self.BIC
+            result.params = self.getRawParameters()
+        return result
 
 
     def computeFitStatistic( self, newParameters ):

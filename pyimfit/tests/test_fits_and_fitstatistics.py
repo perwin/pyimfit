@@ -6,7 +6,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 from astropy.io import fits
 
-from ..fitting import Imfit
+from ..fitting import Imfit, FitError
 from ..descriptions import ModelDescription
 from ..pyimfit_lib import FixImage, make_imfit_function
 
@@ -124,6 +124,25 @@ model_desc_n3073 = ModelDescription.load(configFile_n3073)
 # I_0		88.6055 # +/- 1.2156
 # sigma		1.01021 # +/- 0.008236
 
+
+def test_get_fitResult_no_fit():
+    # Fitting Exponential to 256x256-pixel SDSS r-band image of IC 3478 (no PSF convolution)
+    imfit_fitter = Imfit(model_desc)
+    imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+    # Should raise FitError if fit not actually done
+    with pytest.raises(FitError):
+        result = imfit_fitter.getFitResult()
+
+
+def test_get_fitResult():
+    result = imfit_fitter1.getFitResult()
+
+    assert result.fitConverged == True
+    assert result.nIter == 11
+    assert result.fitStat == 136470.39932882253
+    assert result.fitStatReduced == 2.0825637010349847
+    assert result.aic == 136482.40061069775
+    assert result.bic == 136536.94145815627
 
 
 def test_fitted_param_values():

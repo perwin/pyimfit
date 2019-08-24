@@ -94,8 +94,108 @@ PLAN:
     [x] Option to print feedback from DE
     [x] Option to print feedback from bootstrap-resampling
     [ ] Option in doFit() to print a fit summary at the end
+        **CURRENT**
         -- automatically printed when verbose=1 or 2?
-        [ ] Separate public method in Imfit class which prints fit summary (called by doFit())
+        [x] check how fitting functions in scipy (and astropy?) return things
+        -- scipy.optimize.minimize returns a slightly modified dict class called OptimizeResult (basically just
+        allowing keys to be accessed as attributes
+        [ ] Separate public method in Imfit class which returns fit summary (called by doFit())
+            [ ] Write unit test
+                [ ] Error if fit not terminated
+                [ ] Basic fit result
+            [ ] Write stub function
+
+    Scipy.optimize.minimize output
+        Optimization terminated successfully.
+            Current function value: 0.000000
+            Iterations: 339
+            Function evaluations: 571
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult
+
+Imfit output -- LM:
+*** mpfit status = 1 -- SUCCESS: Convergence in fit-statistic value.
+  CHI-SQUARE = 66932.392040    (63421 DOF)
+  INITIAL CHI^2 = 712278.469657
+        NPAR = 7
+       NFREE = 7
+     NPEGGED = 0
+     NITER = 13
+      NFEV = 98
+
+Reduced Chi^2 = 1.055366
+AIC = 66946.393806, BIC = 67009.795665
+
+Imfit output -- NM:
+Nelder-Mead Simplex: status = 3 -- SUCCESS: ftol_rel or ftol_abs reached
+
+  CHI-SQUARE = 66932.392242
+  NFEV = 557
+
+Reduced Chi^2 = 1.055366
+AIC = 66946.394008, BIC = 67009.795867
+
+
+    class FitResult(dict):
+    """ Represents the result of fitting an image.
+
+    Attributes
+    ----------
+    params : ndarray
+        The best-fit vector of parameter values.
+    success : bool
+        Whether or not the optimizer exited successfully.
+    status : int
+        Termination status of the optimizer. Its value depends on the
+        underlying solver. Refer to `message` for details.
+    message : str
+        Description of the cause of the termination.
+    nfev : int
+        Number of evaluations of the objective function.
+    nit : int
+        Number of iterations performed by the optimizer.
+
+    OTHER IDEAS:
+        AIC,BIC
+        fitStatistic, reduced fitStatistic
+
+    Notes
+    -----
+    There may be additional attributes not listed above depending of the
+    specific solver. Since this class is essentially a subclass of dict
+    with attribute accessors, one can see which attributes are available
+    using the `keys()` method.
+    """
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
+
+
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
+
+
+    def __repr__(self):
+        if self.keys():
+            m = max(map(len, list(self.keys()))) + 1
+            return '\n'.join([k.rjust(m) + ': ' + repr(v)
+                              for k, v in sorted(self.items())])
+        else:
+            return self.__class__.__name__ + "()"
+
+
+    def __dir__(self):
+        return list(self.keys())
+
+
+EXAMPLE OF USE INSIDE AN OPTIMIZER CLASS/METHOD:
+
+    result = OptimizeResult(fun=fval, nit=iterations, nfev=fcalls[0],
+                            status=warnflag, success=(warnflag == 0),
+                            message=msg, x=x, final_simplex=(sim, fsim))
+
+
 
 [x] Add method to Imfit class to return list of parameter names in bootstrap-output form
     -- e.g., ["X0_1", "Y0_1", "PA_1", etc.]
