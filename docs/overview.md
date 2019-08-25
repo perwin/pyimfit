@@ -206,10 +206,10 @@ default is "LM" for the Levenberg-Marquardt minimizer.
 E.g.,
 
     # default Levenberg-Marquardt fit
-    imfitter.doFit()
+    result = imfitter.doFit()
     
     # fit using Nelder-Mead simplex
-    imfitter.doFit(solver='NM')
+    result = imfitter.doFit(solver='NM')
 
 **Feedback from the fit:** By default, the `Imfit` object is silent during the fitting process.
 If you want to see feedback, you can set the `verbose` keyword of the `doFit()` method: `verbose=1`
@@ -227,30 +227,34 @@ A shortcut is to call the `fit` method on the `Imfit` object. This lets you supp
 (along with the optional mask), specify the statistical model (&chi;<sup>2</sup>, etc.) and (optionally)
 the minimization algorithm and verbosity, and start the fit all in one go
 
-    imfitter.fit(data_im, gain=4.5, use_poisson_mlr=True, solver="NM", verbose=1)
+    result = imfitter.fit(data_im, gain=4.5, use_poisson_mlr=True, solver="NM", verbose=1)
 
 
 #### Inspecting the results of a fit
 
-There are three or four basic things you might want to look at when the fit finishes:
+The Imfit object returns an instance of the FitResult class, which is closely based on the `OptimizeResult`
+class of `scipy.optimize` and is basically a Python dict with attribute access
 
-   1. See if the fit actually converged (this is a property of the `Imfit` object, which will be
-   either `True` or `False`):
+There are three or four basic things you might want to look at in the FitResult object
+when the fit finishes:
+
+   1. See if the fit actually converged (either `True` or `False`):
    
-            imfitter.fitConverged
+            result.fitConverged
             
-   2. See the value of the final fit statistic, and related values (these are all properties
-   of the `Imfit` object):
+   2. See the value of the final fit statistic, and related values:
    
-            imfitter.fitStatistic   # final chi^2 or PMLR value
-            imfitter.reducedFitStatistic   # reduced version of same
-            imfitter.AIC   # corresponding Akaike Information Criterion value
-            imfitter.BIC   # corresponding Bayesian Information Criterion value
+            result.fitStat   # final chi^2 or PMLR value
+            result.reducedFitStat   # reduced version of same
+            result.aic   # corresponding Akaike Information Criterion value
+            imfiresulttter.bic   # corresponding Bayesian Information Criterion value
 
    3.A. Get the best-fit parameter values in the form of a 1D NumPy array:
    
-            bestfit_parameters = imfit_fitter.getRawParameters()
+            bestfit_parameters = result.params
 
+# TODO: Fix discussion of how to get parameter errors (depends on how we include them
+# in results object)
    3.B. Get the 1-sigma uncertainties on the best-fit parameter values in the form of a 1D NumPy array.
    Note that these are only produced if the default Levenberg-Marquardt solver was used, and are
    fairly crude estimates that should be used with caution. A somewhat better approach might be to
@@ -258,12 +262,14 @@ There are three or four basic things you might want to look at when the fit fini
    [use a Markov Chain Monte Carlo code such as "emcee"](./pyimfit_emcee.html).
    
             bestfit_parameters_errs = imfit_fitter.getParameterErrors()
-   
-   4. Get the best-fitting model image (a 2D NumPy array)
+
+Other things you might be interested in:
+
+   1. Get the best-fitting model image (a 2D NumPy array)
 
              bestfit_model_im = imfitter.getModelImage()
 
-   5. Get fluxes and magnitudes for the best-fitting model -- note that what is returned is
+   2. Get fluxes and magnitudes for the best-fitting model -- note that what is returned is
    a tuple of the total flux/magnitude and a NumPy array of the fluxes/magnitudes for the
    individual components of the model (in the order they are listed in the model):
    

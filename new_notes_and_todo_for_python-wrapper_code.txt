@@ -94,16 +94,22 @@ PLAN:
     [x] Option to print feedback from DE
     [x] Option to print feedback from bootstrap-resampling
     [ ] Option in doFit() to print a fit summary at the end
-        **CURRENT**
         -- automatically printed when verbose=1 or 2?
         [x] check how fitting functions in scipy (and astropy?) return things
         -- scipy.optimize.minimize returns a slightly modified dict class called OptimizeResult (basically just
         allowing keys to be accessed as attributes
-        [ ] Separate public method in Imfit class which returns fit summary (called by doFit())
-            [ ] Write unit test
-                [ ] Error if fit not terminated
-                [ ] Basic fit result
-            [ ] Write stub function
+        [x] Separate public method in Imfit class which returns fit summary (called by doFit())
+            [x] Write unit test
+                [x] Error if fit not terminated
+                [x] Basic fit result
+            [x] Write stub function
+        **CURRENT**
+        [ ] Finish adding entries to getFitStatistic
+            -- NFEV?
+            -- NPEGGED?
+            -- solver name
+            -- solver status (and string translation?)
+            -- parameter uncertainties in L-M case?
 
     Scipy.optimize.minimize output
         Optimization terminated successfully.
@@ -134,59 +140,6 @@ Nelder-Mead Simplex: status = 3 -- SUCCESS: ftol_rel or ftol_abs reached
 Reduced Chi^2 = 1.055366
 AIC = 66946.394008, BIC = 67009.795867
 
-
-    class FitResult(dict):
-    """ Represents the result of fitting an image.
-
-    Attributes
-    ----------
-    params : ndarray
-        The best-fit vector of parameter values.
-    success : bool
-        Whether or not the optimizer exited successfully.
-    status : int
-        Termination status of the optimizer. Its value depends on the
-        underlying solver. Refer to `message` for details.
-    message : str
-        Description of the cause of the termination.
-    nfev : int
-        Number of evaluations of the objective function.
-    nit : int
-        Number of iterations performed by the optimizer.
-
-    OTHER IDEAS:
-        AIC,BIC
-        fitStatistic, reduced fitStatistic
-
-    Notes
-    -----
-    There may be additional attributes not listed above depending of the
-    specific solver. Since this class is essentially a subclass of dict
-    with attribute accessors, one can see which attributes are available
-    using the `keys()` method.
-    """
-    def __getattr__(self, name):
-        try:
-            return self[name]
-        except KeyError:
-            raise AttributeError(name)
-
-
-    __setattr__ = dict.__setitem__
-    __delattr__ = dict.__delitem__
-
-
-    def __repr__(self):
-        if self.keys():
-            m = max(map(len, list(self.keys()))) + 1
-            return '\n'.join([k.rjust(m) + ': ' + repr(v)
-                              for k, v in sorted(self.items())])
-        else:
-            return self.__class__.__name__ + "()"
-
-
-    def __dir__(self):
-        return list(self.keys())
 
 
 EXAMPLE OF USE INSIDE AN OPTIMIZER CLASS/METHOD:

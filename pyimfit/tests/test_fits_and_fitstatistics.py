@@ -139,10 +139,10 @@ def test_get_fitResult():
 
     assert result.fitConverged == True
     assert result.nIter == 11
-    assert result.fitStat == 136470.39932882253
-    assert result.fitStatReduced == 2.0825637010349847
-    assert result.aic == 136482.40061069775
-    assert result.bic == 136536.94145815627
+    assert result.fitStat == pytest.approx(136470.39932882253)
+    assert result.fitStatReduced == pytest.approx(2.0825637010349847)
+    assert result.aic == pytest.approx(136482.40061069775)
+    assert result.bic == pytest.approx(136536.94145815627)
 
 
 def test_fitted_param_values():
