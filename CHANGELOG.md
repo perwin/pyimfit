@@ -6,6 +6,18 @@
 changes may contain significant changes to the API.
 
 
+## 0.8.8 -- 2019-08-25
+## Added
+Imfit objects now return a FitResult object containing summary information about the
+fit when the doFit method is called.
+
+Added MakePsfOversampler() convenience function to create PsfOversampling objects
+(automatically applies FixImage to oversampled PSF image array).
+    
+### Changed
+Added automatic conversion (via FixImage) of input PSF images when instantiating Imfit objects.
+
+
 ## 0.8.7 -- 2019-08-20
 ### Added
 Imfit.runBootstrap can now optionally return a list of parameter names (annotated by function-set
