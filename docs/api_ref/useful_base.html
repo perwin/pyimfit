@@ -102,6 +102,34 @@ Default: None.</p></li>
 </div>
 </dd></dl>
 <dl class="function">
+<dt id="pyimfit.MakePsfOversampler">
+<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">MakePsfOversampler</code><span class="sig-paren">(</span><em class="sig-param">psfImage</em>, <em class="sig-param">oversampleScale</em>, <em class="sig-param">regionSpec</em>, <em class="sig-param">psfNormalization=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.MakePsfOversampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to generate PsfOversampling objects (corrects input psfImage, sets
+up region string, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>psfImage</strong> (<em>2-D numpy array</em>) – the oversampled PSF image</p></li>
+<li><p><strong>oversampleScale</strong> (<em>int</em>) – <dl class="simple">
+<dt>oversampling scale of psfImage relative to data image: number of PSF-image</dt><dd><p>pixels per data-image pixel in one dimension (must be &gt;= 1)</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>regionSpec</strong> (<em>sequence of int</em>) – specifies inclusive boundaries of image region to be oversampled
+[x1,x2,y1,y2]</p></li>
+<li><p><strong>psfNormalization</strong> (<em>bool</em><em>, </em><em>optional</em>) – Normalize the PSF image before using.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>oversampleInfo</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>instance of PsfOversampling class</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="function">
 <dt id="pyimfit.FixImage">
 <code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">FixImage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.FixImage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks an input numpy array and, if necessary, converts it to

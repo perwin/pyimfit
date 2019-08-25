@@ -16,7 +16,112 @@ image, if no actual fitting is to be done). In the (usual) case of fitting the
 model to an image, it also holds the data image, optional PSF images, and
 parameters that describe the image (A/D gain, etc.).</p>
 <p>It also has methods for running a fit and for inspecting the results.</p>
-<span class="target" id="module-pyimfit.fitting"></span><dl class="class">
+<span class="target" id="module-pyimfit.fitting"></span><dl class="function">
+<dt id="pyimfit.fitting.MakePsfOversampler">
+<code class="sig-prename descclassname">pyimfit.fitting.</code><code class="sig-name descname">MakePsfOversampler</code><span class="sig-paren">(</span><em class="sig-param">psfImage</em>, <em class="sig-param">oversampleScale</em>, <em class="sig-param">regionSpec</em>, <em class="sig-param">psfNormalization=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.MakePsfOversampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to generate PsfOversampling objects (corrects input psfImage, sets
+up region string, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>psfImage</strong> (<em>2-D numpy array</em>) – the oversampled PSF image</p></li>
+<li><p><strong>oversampleScale</strong> (<em>int</em>) – <dl class="simple">
+<dt>oversampling scale of psfImage relative to data image: number of PSF-image</dt><dd><p>pixels per data-image pixel in one dimension (must be &gt;= 1)</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>regionSpec</strong> (<em>sequence of int</em>) – specifies inclusive boundaries of image region to be oversampled
+[x1,x2,y1,y2]</p></li>
+<li><p><strong>psfNormalization</strong> (<em>bool</em><em>, </em><em>optional</em>) – Normalize the PSF image before using.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>oversampleInfo</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>instance of PsfOversampling class</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="class">
+<dt id="pyimfit.fitting.FitResult">
+<em class="property">class </em><code class="sig-prename descclassname">pyimfit.fitting.</code><code class="sig-name descname">FitResult</code><a class="headerlink" href="#pyimfit.fitting.FitResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the result of fitting an image.</p>
+<dl class="attribute">
+<dt id="pyimfit.fitting.FitResult.params">
+<code class="sig-name descname">params</code><a class="headerlink" href="#pyimfit.fitting.FitResult.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>The best-fit vector of parameter values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="attribute">
+<dt id="pyimfit.fitting.FitResult.success">
+<code class="sig-name descname">success</code><a class="headerlink" href="#pyimfit.fitting.FitResult.success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not the optimizer exited successfully.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="attribute">
+<dt id="pyimfit.fitting.FitResult.status">
+<code class="sig-name descname">status</code><a class="headerlink" href="#pyimfit.fitting.FitResult.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Termination status of the optimizer. Its value depends on the
+underlying solver. Refer to <cite>message</cite> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="attribute">
+<dt id="pyimfit.fitting.FitResult.message">
+<code class="sig-name descname">message</code><a class="headerlink" href="#pyimfit.fitting.FitResult.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of the cause of the termination.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="attribute">
+<dt id="pyimfit.fitting.FitResult.nfev">
+<code class="sig-name descname">nfev</code><a class="headerlink" href="#pyimfit.fitting.FitResult.nfev" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of evaluations of the objective function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="attribute">
+<dt id="pyimfit.fitting.FitResult.nit">
+<code class="sig-name descname">nit</code><a class="headerlink" href="#pyimfit.fitting.FitResult.nit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of iterations performed by the optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">OTHER IDEAS</code></dt>
+<dd><p>AIC,BIC
+fitStatistic, reduced fitStatistic</p>
+</dd></dl>
+<p class="rubric">Notes</p>
+<p>There may be additional attributes not listed above depending of the
+specific solver. Since this class is essentially a subclass of dict
+with attribute accessors, one can see which attributes are available
+using the <cite>keys()</cite> method.</p>
+</dd></dl>
+<dl class="class">
 <dt id="pyimfit.fitting.Imfit">
 <em class="property">class </em><code class="sig-prename descclassname">pyimfit.fitting.</code><code class="sig-name descname">Imfit</code><span class="sig-paren">(</span><em class="sig-param">model_descr: pyimfit.descriptions.ModelDescription</em>, <em class="sig-param">psf=None</em>, <em class="sig-param">psfNormalization=True</em>, <em class="sig-param">quiet=True</em>, <em class="sig-param">nproc=0</em>, <em class="sig-param">chunk_size=10</em>, <em class="sig-param">subsampling=True</em>, <em class="sig-param">zeroPoint=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for fitting models to images using Imfit.
@@ -136,6 +241,12 @@ the Imfit object’s internal verbosity setting)</p></li>
 <li><p><strong>getSummary</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, a summary of the fit is returned (as a string)</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>result</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FitResult object</p>
+</dd>
 </dl>
 <p class="rubric">Examples</p>
 <p>TODO: Examples of doFit().</p>
@@ -171,6 +282,12 @@ the Imfit object’s internal verbosity setting)</p></li>
 <li><p><strong>getSummary</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, a summary of the fit is returned (as a string)</p></li>
 <li><p><strong>loadData</strong><strong>(</strong><strong>) </strong><strong>for list of allowed extra keywords.</strong> (<em>See</em>) – </p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>result</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FitResult object</p>
 </dd>
 </dl>
 </dd></dl>

@@ -12,7 +12,7 @@ import numpy as np   # type: ignore
 from .descriptions import ModelDescription
 from .pyimfit_lib import FixImage, PsfOversampling, ModelObjectWrapper  # type: ignore
 
-__all__ = ['Imfit']
+__all__ = ['MakePsfOversampler', 'FitResult', 'Imfit']
 
 
 # These map PyImfit option names (e.g., "gain", "read_noise") to Imfit config-file option
@@ -522,6 +522,10 @@ class Imfit(object):
         getSummary : bool, optional
             if True, a summary of the fit is returned (as a string)
 
+        Returns
+        -------
+        result : FitResult object
+
         Examples
         --------
         TODO: Examples of doFit().
@@ -585,6 +589,10 @@ class Imfit(object):
             if True, a summary of the fit is returned (as a string)
 
         See loadData() for list of allowed extra keywords.
+
+        Returns
+        -------
+        result : FitResult object
         """
         self.loadData(image, error, mask, **kwargs)
         self.doFit(solver=solver, verbose=verbose, getSummary=getSummary)

@@ -19,5 +19,8 @@ Miscellaneous useful auxiliary functions:
 .. autofunction:: pyimfit.parse_config
 
 
+.. autofunction:: pyimfit.MakePsfOversampler
+
+
 .. autofunction:: pyimfit.FixImage
 
