@@ -9,21 +9,21 @@ The simplest approach is to use a single PSF image with the same
 intrinsic resolution (i.e., with pixels that have the same intrinsic
 size as the data and model images) to convolve the entire image.
 
-However, it is also possible to convolve one or subsections of the image
-with higher-resolution (oversampled) PSF images. In this case, the
-specifced subsections are first computed as higher-resolution model
+However, it is also possible to convolve one or more subsections of the
+image with higher-resolution (oversampled) PSF images. In this case, the
+specified subsections are first computed as higher-resolution model
 images, convolved with the higher-resolution PSF image, and then
-downsampled to the data image resolution and copied into the final model
-image.
+downsampled to the data image resolution and copied into the appropriate
+location in the final model image.
 
 Requirements for PSF images
 ---------------------------
 
-PSF images should be square, 2D Numpy floating-point arrays, ideally
+PSF images should be square, 2D NumPy floating-point arrays, ideally
 with the center of the PSF kernel in the center of the image -- so
 square images with an odd number of pixels are the best approach. They
 can come from any source: FITS images of stars, FITS images from
-telescope modeling software, numpy arrays generated in Python, etc.
+telescope modeling software, NumPy arrays generated in Python, etc.
 
 Basic PSF Convolution
 ---------------------
@@ -62,10 +62,10 @@ the model image.
 
 To specify an oversampling region, you create a PsfOversampling object;
 this is easiest to do with the ``MakePsfOversampler()`` function. You
-then place the PsfOversampling object(s) into a list and addit to the
-Imfit object as part of the call to the ``loadData`` method.
+then place the PsfOversampling object(s) into a list and add the list to
+the Imfit object as part of the call to the ``loadData`` method.
 
-For example: assuming that ``oversampledPsf_image`` is a Numpy array for
+For example: assuming that ``oversampledPsf_image`` is a NumPy array for
 a PSF that is oversampled by a factor of 5 (i.e., each data pixel
 corresponds to a 5x5 array of pixels in the oversampled PSF image) and
 you want the oversampled region within the data image to span (x,y) =
@@ -81,4 +81,4 @@ you want the oversampled region within the data image to span (x,y) =
 (Fortran/IRAF) indexing, where the lower-left pixel of the image has
 coordinates (x,y) = (1,1), and it *includes* the endpoints. Thus,
 ``pyimfit.MakePsfOversampler(osampPsfImage, 5, (35,45, 50,60))`` will in
-Python/Numpy terms apply to the image region [34:45,49:60].
+Python/NumPy terms apply to the image region [34:45,49:60].

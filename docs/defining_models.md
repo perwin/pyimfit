@@ -3,7 +3,7 @@
 PyImfit uses models which are instances of the ModelDescription class (or subclasses thereof).
 
 A "model" is defined as a collection of "image functions", grouped into one or more "function sets".
-Each function set (a.k.a. "function blocks") is a collection of one or more image functions with
+Each function set (a.k.a. "function block") is a collection of one or more image functions with
 the same central coordinates (X0,Y0) within the image. (The SimpleModelDescription class is a
 subclass which holds just one function set.)
 

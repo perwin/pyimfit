@@ -133,9 +133,21 @@ def test_get_fitResult_no_fit():
     with pytest.raises(FitError):
         result = imfit_fitter.getFitResult()
 
-
 def test_get_fitResult():
     result = imfit_fitter1.getFitResult()
+
+    assert result.solverName == "LM"
+    assert result.fitConverged == True
+    assert result.nIter == 11
+    assert result.fitStat == pytest.approx(136470.39932882253)
+    assert result.fitStatReduced == pytest.approx(2.0825637010349847)
+    assert result.aic == pytest.approx(136482.40061069775)
+    assert result.bic == pytest.approx(136536.94145815627)
+
+def test_get_fitResult_from_doFit():
+    imfit_fitter = Imfit(model_desc)
+    imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+    result = imfit_fitter.doFit(getSummary=True)
 
     assert result.solverName == "LM"
     assert result.fitConverged == True

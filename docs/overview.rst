@@ -135,6 +135,8 @@ A very simple example of constructing a model:
 
     model_desc = pyimfit.SimpleModelDescription()
     # define the limits on the central-coordinate X0 and Y0 as +/-10 pixels relative to initial values
+    # (note that Imfit treats image coordinates using the IRAF/Fortran numbering scheme: the lower-left
+    # pixel in the image has coordinates (x,y) = (1,1))
     model_desc.x0.setValue(105, [95,115])
     model_desc.y0.setValue(62, [52,72])
 

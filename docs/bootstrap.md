@@ -15,7 +15,7 @@ parameters -- via bootstrap resampling.
 
 You can do this by calling the `runBootstrap` method on an Imfit object -- ideally *after*
 you've found a best-fit solution. E.g., assuming you've properly set up an Imfit object
-and supplied it with the data image, etc.:
+("`imfitter`") and supplied it with the data image, etc.:
 
     imfitter.doFit()
     bootstrapResults = imfitter.runBootstrap(nIterations)

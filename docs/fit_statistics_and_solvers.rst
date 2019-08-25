@@ -73,10 +73,13 @@ PyImfit has three minimizers (a.k.a. solvers):
    minima in the fit-statistic landscape. It requires initial guesses
    for each parameter value.
 
-   imfit\_fitter.DoFit() imfit\_fitter.DoFit(solver="LM")
+   ::
 
--  Nelder-Mead Simplex: This is a slower algorithm, generally supposed
-   to be less likely to be trapped in local fit-statistic minima. Like
+        imfit_fitter.DoFit()
+        imfit_fitter.DoFit(solver="LM")
+
+-  Nelder-Mead Simplex: This is a slower algorithm, generally held to be
+   less likely to be trapped in local fit-statistic minima. Like
    Levenberg-Marquardt, it requires initial guesses for each parameter
    value.
 

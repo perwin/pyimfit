@@ -503,7 +503,7 @@ class Imfit(object):
         self._dataSet = True
 
 
-    def doFit( self, solver='LM', verbose=None, getSummary=False ):
+    def doFit( self, solver='LM', verbose=None, getSummary=True ):
         """
         Fit the model to previously supplied data image.
 
@@ -549,10 +549,10 @@ class Imfit(object):
             self._fitDone = True
             self._fitStatComputed = True
         if getSummary:
-            return self.getFitSummary()
+            return self.getFitResult()
 
 
-    def fit( self, image, error=None, mask=None, solver='LM', verbose=None, getSummary=False,
+    def fit( self, image, error=None, mask=None, solver='LM', verbose=None, getSummary=True,
              **kwargs ):
         """
         Supply data image (and optionally mask and/or error images) and image info, then

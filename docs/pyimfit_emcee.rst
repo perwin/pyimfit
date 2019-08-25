@@ -44,7 +44,6 @@ faint star):
 
 .. code:: python
 
-    #imageFile = "/Users/erwin/coding/imfit/tests/faintstar.fits"
     imageFile = "./pyimfit_emcee_files/faintstar.fits"
     image_faintstar = fits.getdata(imageFile)
 
@@ -53,7 +52,6 @@ Create a ModelDescription instance based on an imfit configuration file
 
 .. code:: python
 
-    #configFile = "/Users/erwin/coding/imfit/tests/imfit-mcmc_reference/config_imfit_faintstar.dat"
     configFile = "./pyimfit_emcee_files/config_imfit_faintstar.dat"
     model_desc = pyimfit.ModelDescription.load(configFile)
 
@@ -90,8 +88,8 @@ I\_0, sigma):
 
 .. code:: python
 
-    imfit_fitter.doFit()
-    p_bestfit = imfit_fitter.getRawParameters()
+    results = imfit_fitter.doFit(getSummary=True)
+    p_bestfit = results.params
 
     print("Best-fitting parameter values:")
     for i in range(len(p_bestfit) - 1):
