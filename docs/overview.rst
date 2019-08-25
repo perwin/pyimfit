@@ -255,10 +255,10 @@ E.g.,
 ::
 
     # default Levenberg-Marquardt fit
-    imfitter.doFit()
+    result = imfitter.doFit()
 
     # fit using Nelder-Mead simplex
-    imfitter.doFit(solver='NM')
+    result = imfitter.doFit(solver='NM')
 
 **Feedback from the fit:** By default, the ``Imfit`` object is silent
 during the fitting process. If you want to see feedback, you can set the
@@ -281,36 +281,47 @@ algorithm and verbosity, and start the fit all in one go
 
 ::
 
-    imfitter.fit(data_im, gain=4.5, use_poisson_mlr=True, solver="NM", verbose=1)
+    result = imfitter.fit(data_im, gain=4.5, use_poisson_mlr=True, solver="NM", verbose=1)
 
 Inspecting the results of a fit
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There are three or four basic things you might want to look at when the
-fit finishes:
+The Imfit object returns an instance of the FitResult class, which is
+closely based on the ``OptimizeResult`` class of ``scipy.optimize`` and
+is basically a Python dict with attribute access
 
-1. See if the fit actually converged (this is a property of the
-   ``Imfit`` object, which will be either ``True`` or ``False``):
+There are three or four basic things you might want to look at in the
+FitResult object when the fit finishes. You can get these things from
+the FitResult object that's returned from the ``doFit()`` method, or by
+querying the Imfit object; the examples below show each possibility.
+
+1. See if the fit actually converged (either ``True`` or ``False``):
 
    ::
 
+           result.fitConverged
            imfitter.fitConverged
 
-2. See the value of the final fit statistic, and related values (these
-   are all properties of the ``Imfit`` object):
+2. See the value of the final fit statistic, and related values:
 
    ::
 
-           imfitter.fitStatistic   # final chi^2 or PMLR value
-           imfitter.reducedFitStatistic   # reduced version of same
-           imfitter.AIC   # corresponding Akaike Information Criterion value
-           imfitter.BIC   # corresponding Bayesian Information Criterion value
+           result.fitStat   # final chi^2 or PMLR value
+           result.reducedFitStat   # reduced version of same
+           result.aic   # corresponding Akaike Information Criterion value
+           result.bic   # corresponding Bayesian Information Criterion value
+
+           imfitter.fitStatistic
+           imfitter.reducedFitStatistic
+           imfitter.AIC
+           imfitter.BIC
 
 3.A. Get the best-fit parameter values in the form of a 1D NumPy array:
 
 ::
 
-            bestfit_parameters = imfit_fitter.getRawParameters()
+            bestfit_parameters = result.params
+            bestfit_parameters = imfitter.getRawParameters()
 
 3.B. Get the 1-sigma uncertainties on the best-fit parameter values in
 the form of a 1D NumPy array. Note that these are only produced if the
@@ -322,15 +333,18 @@ a Markov Chain Monte Carlo code such as
 
 ::
 
+            bestfit_parameters_errs = results.paramErrs
             bestfit_parameters_errs = imfit_fitter.getParameterErrors()
 
-4. Get the best-fitting model image (a 2D NumPy array)
+Other things you might be interested in:
+
+1. Get the best-fitting model image (a 2D NumPy array)
 
    ::
 
             bestfit_model_im = imfitter.getModelImage()
 
-5. Get fluxes and magnitudes for the best-fitting model -- note that
+2. Get fluxes and magnitudes for the best-fitting model -- note that
    what is returned is a tuple of the total flux/magnitude and a NumPy
    array of the fluxes/magnitudes for the individual components of the
    model (in the order they are listed in the model):

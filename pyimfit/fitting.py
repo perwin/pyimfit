@@ -251,6 +251,7 @@ class Imfit(object):
         self._dataSet = False
         self._finalSetupDone = False
         self._fitDone = False
+        self._lastSolverUsed = None
         self._fitStatComputed = False
         self._zeroPoint = zeroPoint
 
@@ -539,6 +540,7 @@ class Imfit(object):
         else:
             verboseLevel = self._verboseLevel
         self._modelObjectWrapper.fit(verbose=verboseLevel, mode=solver)
+        self._lastSolverUsed = solver
         if not self.fitError:
             self._fitDone = True
             self._fitStatComputed = True
@@ -600,6 +602,7 @@ class Imfit(object):
             raise FitError()
         result = FitResult()
         if self._fitDone and not self.fitError:
+            result.solverName = self._lastSolverUsed
             result.fitConverged = self.fitConverged
             result.nIter = self.nIter
             result.fitStat = self.fitStatistic
@@ -607,6 +610,7 @@ class Imfit(object):
             result.aic = self.AIC
             result.bic = self.BIC
             result.params = self.getRawParameters()
+            result.paramErrs = self.parameterErrors
         return result
 
 

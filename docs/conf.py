@@ -28,7 +28,7 @@ author = 'Peter Erwin'
 # The short X.Y version
 version = '0.8'
 # The full version, including alpha/beta/rc tags
-release = '0.8.7'
+release = '0.8.8'
 
 
 # -- General configuration ---------------------------------------------------

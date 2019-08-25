@@ -236,31 +236,39 @@ The Imfit object returns an instance of the FitResult class, which is closely ba
 class of `scipy.optimize` and is basically a Python dict with attribute access
 
 There are three or four basic things you might want to look at in the FitResult object
-when the fit finishes:
+when the fit finishes. You can get these things from the FitResult object that's returned
+from the `doFit()` method, or by querying the Imfit object; the examples below show each
+possibility.
 
    1. See if the fit actually converged (either `True` or `False`):
    
             result.fitConverged
+            imfitter.fitConverged
             
    2. See the value of the final fit statistic, and related values:
    
             result.fitStat   # final chi^2 or PMLR value
             result.reducedFitStat   # reduced version of same
             result.aic   # corresponding Akaike Information Criterion value
-            imfiresulttter.bic   # corresponding Bayesian Information Criterion value
+            result.bic   # corresponding Bayesian Information Criterion value
+            
+            imfitter.fitStatistic
+            imfitter.reducedFitStatistic
+            imfitter.AIC
+            imfitter.BIC
 
    3.A. Get the best-fit parameter values in the form of a 1D NumPy array:
    
             bestfit_parameters = result.params
+            bestfit_parameters = imfitter.getRawParameters()
 
-# TODO: Fix discussion of how to get parameter errors (depends on how we include them
-# in results object)
    3.B. Get the 1-sigma uncertainties on the best-fit parameter values in the form of a 1D NumPy array.
    Note that these are only produced if the default Levenberg-Marquardt solver was used, and are
    fairly crude estimates that should be used with caution. A somewhat better approach might be to
    do [bootstrap resampling](./bootstrap.html), or even 
    [use a Markov Chain Monte Carlo code such as "emcee"](./pyimfit_emcee.html).
    
+            bestfit_parameters_errs = results.paramErrs
             bestfit_parameters_errs = imfit_fitter.getParameterErrors()
 
 Other things you might be interested in:

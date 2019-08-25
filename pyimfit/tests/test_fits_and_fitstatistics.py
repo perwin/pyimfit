@@ -137,6 +137,7 @@ def test_get_fitResult_no_fit():
 def test_get_fitResult():
     result = imfit_fitter1.getFitResult()
 
+    assert result.solverName == "LM"
     assert result.fitConverged == True
     assert result.nIter == 11
     assert result.fitStat == pytest.approx(136470.39932882253)
