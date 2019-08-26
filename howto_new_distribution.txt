@@ -43,16 +43,7 @@ Working by default in ~/coding/pyimfit on Mac.
 
 7. See if updated version passes Travis CI tests
 
-8. Generate source distribution and Mac binary wheels on Mac:
-    A. $ python3.7 setup.py sdist bdist_wheel
-    B. $ python3.6 setup.py bdist_wheel
-    C. Copy shared libs into wheel using delocate
-        $ cd dist
-        $ delocate-wheel -w fixed_wheels -v pyimfit-<VERSION>-cp37-cp37m-macosx_10_9_x86_64.whl
-        $ delocate-wheel -w fixed_wheels -v pyimfit-<VERSION>-cp36-cp36m-macosx_10_9_x86_64.whl
-
-9. Upload sdist and wheels to PyPI
-    $ cd ~/coding/pyimfit
-    $ python3 -m twine upload dist/pyimfit-<VERSION>.tar.gz dist/fixed_wheels/*
+8. Generate source distribution and Mac binary wheels on Mac, and upload to PyPI:
+    $ ./make_upload.sh x.x.x   [where "x.x.x" = version number]
 
 10. Test installation via pip

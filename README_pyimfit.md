@@ -17,7 +17,7 @@ or Jupyter notebook):
     imfitConfigFile = "<path-to-config-file-directory>/config_exponential_ic3478_256.dat"
 
     # read in image data, convert to proper double-precisions, little-endian format
-    image_data = pyimfit.FixImage(fits.getdata(imageFile))
+    image_data = fits.getdata(imageFile)
 
     # construct model from config file; construct new Imfit fitter based on model,;
     model_desc = pyimfit.ModelDescription.load(configFile)
@@ -27,11 +27,11 @@ or Jupyter notebook):
 
     # load the image data and image characteristics and do a standard fit
     # (using default chi^2 statistics and Levenberg-Marquardt solver)
-    imfit_fitter.fit(image_data, gain=4.725, read_noise=4.3, original_sky=130.14)
+    result = imfit_fitter.fit(image_data, gain=4.725, read_noise=4.3, original_sky=130.14)
     
     # check the fit and print the resulting best-fit parameter values
-    if imfit_fitter.fitConverged is True:
+    if result.fitConverged is True:
         print("Fit converged: chi^2 = {0}, reduced chi^2 = {1}".format(imfit_fitter.fitStatistic,
-            imfit_fitter.reducedFitStatistic))
-        bestfit_params = imfit_fitter.getRawParameters()
+            result.reducedFitStat))
+        bestfit_params = result.params
         print("Best-fit parameter values:", bestfit_params)
