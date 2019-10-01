@@ -11,6 +11,7 @@ Documentation for PyImfit
    :maxdepth: 3
    :caption: OVERVIEW AND SAMPLE USAGE:
 
+   installation
    sample_usage
    overview
 

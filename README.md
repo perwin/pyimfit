@@ -146,6 +146,8 @@ To build PyImfit from the Github source, you will need the following:
 PyImfit originated as [python-imfit](https://github.com/streeto/python-imfit), written by André Luiz de Amorim; 
 the current, updated version is by Peter Erwin.
 
+(See [the Imfit manual](http://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf) for additional credits.)
+
 
 ## License
 
