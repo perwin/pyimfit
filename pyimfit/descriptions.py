@@ -395,7 +395,7 @@ class FunctionDescription(object):
 
 class FunctionSetDescription(object):
     """
-    Holds information describing an image-function block or set: one or more
+    Holds information describing an image-function block/set: one or more
     Imfit image functions sharing a common (X0,Y0) position on the image.
 
     This contains the X0 and Y0 coordinates, a list of FunctionDescription
@@ -406,10 +406,10 @@ class FunctionSetDescription(object):
     ----------
 
         name : str
-            name for the function block
+            name for the function set
 
         _name : str
-            name for the function block
+            name for the function set
         x0 : ParameterDescription
             x-coordinate of the function block/set's center
         y0 : ParameterDescription
@@ -417,7 +417,9 @@ class FunctionSetDescription(object):
         _functions : list of `FunctionDescription`
             the FunctionDescription objects, one for each image function
         nFunctions : int
-            number of functions in the function block
+            number of functions in the function set
+        nParameters : int
+            total number of parameters for this function set, including X0 and Y0
 
     Methods
     -------
@@ -457,6 +459,7 @@ class FunctionSetDescription(object):
             self.y0 = y0param
         self._functions = []  #type: List[FunctionDescription]
         self.nFunctions = 0
+        self.nParameters = 2   # X0,Y0
         if functionList is not None:
             for f in functionList:
                 self.addFunction(f)
@@ -490,6 +493,7 @@ class FunctionSetDescription(object):
         if f._label is not None:
             setattr(self, f._label, f)
         self.nFunctions += 1
+        self.nParameters += f.nParameters
 
 
     def _contains(self, label: str):
@@ -556,7 +560,7 @@ class FunctionSetDescription(object):
         Returns
         -------
         outputStrings : list of string
-            list of newline-terminated strings describing the function block.
+            list of newline-terminated strings describing the function set.
             If errors is supplied, then parameter strings will contain "# +/- <error>" at end
         """
         # x0,y0
@@ -626,6 +630,8 @@ class ModelDescription(object):
         _functionSets : list of `FunctionSetDescription`
             the individual image-function blocks/sets making up the model
         nFunctionSets : int
+        nParameters : int
+            total number of model parameters
 
     Class methods
     -------------
@@ -642,7 +648,7 @@ class ModelDescription(object):
             Add image-description options via a dict
 
         functionSetIndices()
-            Returns a list of ``int`` specifying the function-block start
+            Returns a list of ``int`` specifying the function-set start
             indices
 
         functionList()
@@ -666,6 +672,7 @@ class ModelDescription(object):
             self.options.update(options)
         self._functionSets = []  #type: List[FunctionSetDescription]
         self.nFunctionSets = 0
+        self.nParameters = 0
         if functionSetsList is not None:
             for fs in functionSetsList:
                 # note that addFunctionSet will increment nFunctionSets, so we don't need to
@@ -749,6 +756,7 @@ class ModelDescription(object):
         self._functionSets.append(fs)
         setattr(self, fs.name, fs)
         self.nFunctionSets += 1
+        self.nParameters += fs.nParameters
 
 
     def updateOptions( self, optionsDict: Dict[str,float] ):
@@ -907,7 +915,7 @@ class ModelDescription(object):
                 newLine = "{0}\t\t{1}\n".format(key, value)
                 outputLines.append(newLine)
 
-        # function blocks
+        # function sets
         fblockIndices = self.functionSetIndices()
         for i in range(self.nFunctionSets):
             outputLines.extend("\n")

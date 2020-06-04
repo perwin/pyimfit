@@ -161,6 +161,26 @@ class TestImfit(object):
         assert totalMag == totalMag_correct
         assert magsArray == magsArray_correct
 
+    def test_Imfit_catch_bad_parameters(self):
+        """Check that we get ValueError exceptions when passing new-parameter-vector of wrong size
+        """
+        # Exponential model
+        imfit_fitter = Imfit(self.modelDesc)
+        imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+
+        badParams = np.array([129.0,129.0, 20.0])   # not enough parameter values!
+        # computeFitStatistic
+        with pytest.raises(ValueError):
+            fitstat = imfit_fitter.computeFitStatistic(badParams)
+        # getModelImage
+        with pytest.raises(ValueError):
+            image = imfit_fitter.getModelImage(newParameters=badParams)
+        # getModelFluxes
+        with pytest.raises(ValueError):
+            (totalFlux, fluxArray) = imfit_fitter.getModelFluxes(badParams)
+        # getModelMagnitudes
+        with pytest.raises(ValueError):
+            (totalMag, magsArray) = imfit_fitter.getModelMagnitudes(badParams, zeroPoint=20)
 
 
 # result.fitConverged = self.fitConverged

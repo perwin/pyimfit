@@ -104,7 +104,7 @@ PLAN:
                 [x] Basic fit result
             [x] Write stub function
         **CURRENT**
-        [ ] Finish adding entries to getFitStatistic
+        [x] Finish adding entries to getFit
             -- NFEV?
             -- NPEGGED?
             -- solver name

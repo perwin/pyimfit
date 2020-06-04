@@ -163,7 +163,7 @@ def MakePsfOversampler( psfImage, oversampleScale, regionSpec, psfNormalization=
 
 class Imfit(object):
     """
-    A class for fitting models to images using Imfit.
+    The main class for fitting models to images using Imfit.
     Can also be used to create images based on models.
 
     Due to some library limitations, this object can only fit the model
@@ -232,6 +232,7 @@ class Imfit(object):
         # copy the input ModelDescription (we don't want any links to the input object,
         # in case the latter gets updated later somewhere else)
         self._modelDescr = copy.deepcopy(model_descr)
+        self.nParameters = model_descr.nParameters
         if psf is not None:
             self._psf = FixImage(psf)
         else:
@@ -635,7 +636,10 @@ class Imfit(object):
         -------
         fitStatistic : float
         """
-        # FIXME: Check that length of newParameters is correct
+        if len(newParameters) != self.nParameters:
+            msg = "Number of input parameters (%d) " % len(newParameters)
+            msg += "does not equal number of model parameters (%d)!" % self.nParameters
+            raise ValueError(msg)
         if not isinstance(newParameters, np.ndarray):
             newParams = np.array(newParameters).astype(np.float64)
         else:
@@ -804,7 +808,7 @@ class Imfit(object):
             (default is to use current parameter values, e.g., from fit)
 
         shape : tuple, optional
-            Shape of the image in (Y, X) format.
+            Shape of the image in (Y, X) = (nRows, nColumns) format.
 
         includeMask : bool, optional
             Specifies whether output should be numpy masked array, if there
@@ -813,9 +817,8 @@ class Imfit(object):
         Returns
         -------
         image : 2-D numpy array
-            Image computed from the current model. If a mask is associated
-            with the original data image, then the returned image is a
-            numpy masked array
+            Image computed from the current model. If a mask is associated with the
+            original data image, then the returned image is a numpy masked array
         """
         if self._modelObjectWrapper is None:
             self._setupModel()
@@ -824,6 +827,10 @@ class Imfit(object):
                 msg = "Model image size has already been set!"
                 raise ValueError(msg)
             self._modelObjectWrapper.setupModelImage(shape)
+        if (newParameters is not None) and (len(newParameters) != self.nParameters):
+            msg = "Number of input parameters (%d) " % len(newParameters)
+            msg += "does not equal number of model parameters (%d)!" % self.nParameters
+            raise ValueError(msg)
 
         image = self._modelObjectWrapper.getModelImage(newParameters=newParameters)
         if self._mask is not None and includeMask:
@@ -841,7 +848,7 @@ class Imfit(object):
         ----------
         newParameters : 1-D numpy array of float, optional
             vector of parameter values to use in computing model
-            (default is to use current parameter values, e.g., from fit)
+            (default is to use current parameter values, e.g., from most rencent fit, instead)
 
         Returns
         -------
@@ -850,6 +857,10 @@ class Imfit(object):
             individualFluxes = numpy ndarray of fluxes/magnitudes for each image-function in the
             model
         """
+        if (newParameters is not None) and (len(newParameters) != self.nParameters):
+            msg = "Number of input parameters (%d) " % len(newParameters)
+            msg += "does not equal number of model parameters (%d)!" % self.nParameters
+            raise ValueError(msg)
         totalFlux, functionFluxes = self._modelObjectWrapper.getModelFluxes(newParameters=newParameters)
         return(totalFlux, functionFluxes)
 
@@ -863,7 +874,7 @@ class Imfit(object):
         ----------
         newParameters : 1-D numpy array of float, optional
             vector of parameter values to use in computing model
-            (default is to use current parameter values, e.g., from fit)
+            (default is to use current parameter values, e.g., from most rencent fit, instead)
 
         zeroPoint : float, optional
             If present, returned values are magnitudes, computed as
@@ -878,11 +889,16 @@ class Imfit(object):
             model
 
         """
+        if (newParameters is not None) and (len(newParameters) != self.nParameters):
+            msg = "Number of input parameters (%d) " % len(newParameters)
+            msg += "does not equal number of model parameters (%d)!" % self.nParameters
+            raise ValueError(msg)
         totalFlux, functionFluxes = self._modelObjectWrapper.getModelFluxes(newParameters=newParameters)
         if zeroPoint is not None:
             ZP = zeroPoint
         else:
             ZP = self.zeroPoint
+        #FIXME: Handle case of zeroPoint = None! (i.e., user forget to set it...)
         return (ZP - 2.5*np.log10(totalFlux), ZP - 2.5*np.log10(functionFluxes))
 
 

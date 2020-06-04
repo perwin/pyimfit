@@ -6,6 +6,12 @@
 changes may contain significant changes to the API.
 
 
+## 0.9.0 -- 2020-06-xxx
+## Added
+Pre-compiled version for Python 3.8 on macOS.
+
+
+
 ## 0.8.8 -- 2019-08-25
 ## Added
 Imfit objects now return a FitResult object containing summary information about the
@@ -16,6 +22,7 @@ Added MakePsfOversampler() convenience function to create PsfOversampling object
     
 ### Changed
 Added automatic conversion (via FixImage) of input PSF images when instantiating Imfit objects.
+
 
 
 ## 0.8.7 -- 2019-08-20
@@ -32,7 +39,6 @@ objects, while the latter returns a list of function *names* (strings).
 ### Fixed
 Boolean mask images (including boolean masks that are part of a numpy MaskedArray) are
 now properly handled.
-
 
 
 

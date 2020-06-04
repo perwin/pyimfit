@@ -247,6 +247,7 @@ class TestFunctionSetDescription(object):
         self.paramDescList = [self.p1, self.p2, self.p3, self.p4]
         self.fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
         self.functionList = [self.fdesc1]
+        self.N_PARAMS_CORRECT = 4 + 2
 
         self.x0_p = ParameterDescription("X0", 100.0, fixed=True)
         self.y0_p = ParameterDescription("Y0", 200.0, [180.0, 220.0])
@@ -259,6 +260,7 @@ class TestFunctionSetDescription(object):
         assert fsetdesc1.blob == self.fdesc1
         assert fsetdesc1.x0 == self.x0_p
         assert fsetdesc1.y0 == self.y0_p
+        assert fsetdesc1.nParameters == self.N_PARAMS_CORRECT
 
     def test_FunctionSetDescription_parameterList( self ):
         fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
@@ -344,12 +346,14 @@ class TestModelDescription(object):
         self.functionList = [self.fdesc1]
         self.fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
         self.fsetList = [self.fsetdesc1]
+        self.N_PARAMS_CORRECT = 4 + 2
 
     def test_ModelDescription_simple( self ):
         modeldesc1 = ModelDescription(self.fsetList)
         assert modeldesc1.functionSetIndices() == [0]
         assert modeldesc1.functionNameList() == ['Gaussian']
         assert modeldesc1.parameterList() == self.fullParamDescList
+        assert modeldesc1.nParameters == self.N_PARAMS_CORRECT
 
     def test_ModelDescription_getParamLimits( self ):
         modeldesc1 = ModelDescription(self.fsetList)
