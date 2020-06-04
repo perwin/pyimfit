@@ -114,6 +114,9 @@ def lnPosterior_for_emcee( params, imfitter, lnPrior_func ):
     
     Parameters
     ----------
+    params : 1D numpy ndarray of float
+        vector of current parameter values
+    
     imfitter : pyimfit.Imfit instance
     
     lnPrior_func : function or other callable
@@ -147,7 +150,7 @@ def lnPrior_limits( params, imfitter ):
     
     Parameters
     ----------
-    params : sequence of float
+    params : 1D numpy ndarray of float
     
     imfitter : pyimfit.Imfit instance
     

@@ -69,12 +69,12 @@ Imfit manual for more details.
 
    -  **EdgeOnRing** -- A simplistic model for an edge-on ring, using an
       off-center Gaussian for the radial profile and another Gaussian
-      (with different :math:`\sigma`) for the vertical profile.
-      Geometric parameters: PA
+      (with different sigma) for the vertical profile. Geometric
+      parameters: PA
 
    -  **EdgeOnRing2Side** -- As for "EdgeOnRing", but with the radial
-      profile similar to that of "GaussianRing2Side". Geometric
-      parameters: PA
+      profile similar to that of "GaussianRing2Side" (asymmetric
+      Gaussian). Geometric parameters: PA
 
    -  **Exponential** -- Elliptical isophotes with a radial
       surface-brightness profile following an exponential function.
@@ -82,10 +82,12 @@ Imfit manual for more details.
 
    -  **Exponential\_GenEllipse** -- As for the "Exponential" function,
       but with isophotes having generalized ellipse shapes (boxy to
-      disky). Geometric parameters: PA, ell
+      disky). Geometric parameters: PA, ell, c0 (boxy/disk
+      isophote-shape parameter)
 
-   -  **FerrersBar2D** -- Elliptical isophotes for a 2D version of the
-      Ferrers ellipsoid. Geometric parameters: PA
+   -  **FerrersBar2D** -- Isophotes (generalized elliptical shapes) for
+      a 2D version of the Ferrers ellipsoid. Geometric parameters: PA,
+      c0 (boxy/disk isophote-shape parameter)
 
    -  **FlatSky** -- Produces a constant background for the entire
       image.
@@ -124,16 +126,26 @@ Imfit manual for more details.
 
    -  **Sersic\_GenEllipse** -- As for the "Sersic" function, but with
       isophotes having generalized ellipse shapes (boxy to disky).
-      Geometric parameters: PA, ell
+      Geometric parameters: PA, ell, c0 (boxy/disk isophote-shape
+      parameter)
 
 -  3D image functions (luminosity-density functions): These generate a
    2D image via line-of-sight integration through a 3D
-   luminosity-density model.
+   luminosity-density model, seen at arbitrary inclination.
 
-   -  **BrokenExponentialDisk3D** --
-   -  **ExponentialDisk3D** --
-   -  **FerrersBar3D** --
-   -  **GaussianRing3D** --
+   -  **ExponentialDisk3D** -- A disk model where the luminosity density
+      follows a radial exponential profile and a vertical generalized
+      sech (van der Kruit 1988) profile.
+
+   -  **BrokenExponentialDisk3D** -- As for "ExponentialDisk3D", but
+      with the radial profile specified by a broken-exponential
+      function.
+
+   -  **FerrersBar3D** -- The classic Ferrers (1877) triaxial ellipsoid.
+
+   -  **GaussianRing3D** -- A 3D ring, where the luminosity density
+      follows a radial Gaussian profile and a vertical exponential
+      profile.
 
 More Information
 ----------------

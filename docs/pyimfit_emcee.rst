@@ -123,6 +123,9 @@ the sum of the log likelihood and the log of the prior:
         
         Parameters
         ----------
+        params : 1D numpy ndarray of float
+            vector of current parameter values
+        
         imfitter : pyimfit.Imfit instance
         
         lnPrior_func : function or other callable
@@ -158,7 +161,7 @@ complicated as you like.)
         
         Parameters
         ----------
-        params : sequence of float
+        params : 1D numpy ndarray of float
         
         imfitter : pyimfit.Imfit instance
         

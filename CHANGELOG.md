@@ -6,9 +6,10 @@
 changes may contain significant changes to the API.
 
 
-## 0.9.0 -- 2020-06-xxx
+## 0.9.0 -- 2020-06-04
 ## Added
-Pre-compiled version for Python 3.8 on macOS.
+Pre-compiled version for Python 3.8 on macOS. Minor added checks for correct length of
+parameter vectors as inputs to methods in Imfit class.
 
 
 
