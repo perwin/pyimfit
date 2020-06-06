@@ -773,7 +773,9 @@ class ModelDescription(object):
 
     def replaceOptions( self, optionsDict: Dict[str,float] ):
         """
-        Replaces the current image-descriptions dict.
+        Replaces the current image-descriptions dict. This differs from updateOptions()
+        in that it will completely replace the current image-descriptions dict,
+        discarding any key-value pairs with keys not in the replacement dict.
 
 
         Parameters

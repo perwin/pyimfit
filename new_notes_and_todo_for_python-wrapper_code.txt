@@ -183,7 +183,8 @@ bootstrap resampling) in process
 
     [ ] Add test of replaceOptions method (ModelDescription)
     [ ] Add test of replaceOptions method (SimpleModelDescription)
-    [ ] Add test of nParameters value (SimpleModelDescription)
+        [ ] Write test
+    [X] Add test of nParameters value (SimpleModelDescription)
 
 [X] Add ability to get list of image-function names
     -- instantiate a list of string when module is imported?

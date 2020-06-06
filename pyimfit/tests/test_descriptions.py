@@ -360,15 +360,29 @@ class TestModelDescription(object):
         pLimits = modeldesc1.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
 
-    def testModelDescription_get_and_set_options( self ):
+    def testModelDescription_updateOptions( self ):
         modeldesc1 = ModelDescription(self.fsetList)
 
         assert {} == modeldesc1.optionsDict
-        optionsDict = {"GAIN": 4.5, "READNOISE": 0.9}
-        modeldesc1.updateOptions(optionsDict)
-        assert optionsDict == modeldesc1.optionsDict
-        optionsDict2 = {"GAIN": 10.5, "READNOISE": 0.9, "ORIGINAL_SKY": 45.01}
+        optionsDict1 = {"GAIN": 10.5, "READNOISE": 0.9, "ORIGINAL_SKY": 45.01}
+        modeldesc1.updateOptions(optionsDict1)
+        assert optionsDict1 == modeldesc1.optionsDict
+        # the following should *replace* the old GAIN and READNOISE values,
+        # but leave the ORIGINAL_SKY value unchanged
+        optionsDict2 = {"GAIN": 4.5, "READNOISE": 0.95}
         modeldesc1.updateOptions(optionsDict2)
+        refDict = {"GAIN": 4.5, "READNOISE": 0.95, "ORIGINAL_SKY": 45.01}
+        assert refDict == modeldesc1.optionsDict
+
+    def testModelDescription_replaceOtions( self ):
+        modeldesc1 = ModelDescription(self.fsetList)
+
+        assert {} == modeldesc1.optionsDict
+        optionsDict1 = {"GAIN": 10.5, "READNOISE": 0.9, "ORIGINAL_SKY": 45.01}
+        modeldesc1.replaceOptions(optionsDict1)
+        assert optionsDict1 == modeldesc1.optionsDict
+        optionsDict2 = {"GAIN": 4.5, "READNOISE": 0.9}
+        modeldesc1.replaceOptions(optionsDict2)
         assert optionsDict2 == modeldesc1.optionsDict
 
     def test_ModelDescription_load_from_file( self ):
