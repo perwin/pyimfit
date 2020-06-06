@@ -506,6 +506,7 @@ class TestSimpleModelDescription(object):
         # bad example: 2 function sets
         self.fsetdesc2 = FunctionSetDescription('fs1', self.x0_p, self.y0_p, self.functionList)
         self.fsetList_bad = [self.fsetdesc1, self.fsetdesc2]
+        self.N_PARAMS_CORRECT = 4 + 2
 
     def test_SimpleModelDescription_bad( self ):
         # this attempts to instantiate a SimpleModelDescription instance with *two*
@@ -513,9 +514,6 @@ class TestSimpleModelDescription(object):
         modeldesc_bad = ModelDescription(self.fsetList_bad)
         with pytest.raises(ValueError):
             simplemodeldesc = SimpleModelDescription(modeldesc_bad)
-
-    def testSimpleModelDescription_blank( self ):
-        simplemodeldesc = SimpleModelDescription()
 
     def test_SimpleModelDescription_simple( self ):
         modeldesc1 = ModelDescription(self.fsetList)
@@ -533,6 +531,8 @@ class TestSimpleModelDescription(object):
         pLimits = simplemodeldesc.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
 
+        assert simplemodeldesc.nParameters == self.N_PARAMS_CORRECT
+
     def test_SimpleModelDescription_from_functionSet( self ):
         simplemodeldesc = SimpleModelDescription(self.fsetdesc1)
         print(dir(simplemodeldesc))
@@ -544,6 +544,8 @@ class TestSimpleModelDescription(object):
 
         pLimits = simplemodeldesc.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
+
+        assert simplemodeldesc.nParameters == self.N_PARAMS_CORRECT
 
     def test_SimpleModelDescription_from_functionNameList( self ):
         simplemodeldesc = SimpleModelDescription(self.fsetList)
@@ -557,15 +559,20 @@ class TestSimpleModelDescription(object):
         pLimits = simplemodeldesc.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
 
-    def testSimpleModelDescription_add_FunctionSet_to_Empty(self):
-        simplemodeldesc = SimpleModelDescription("empty")
-        simplemodeldesc.addFunctionSet(self.fsetdesc1)
+        assert simplemodeldesc.nParameters == self.N_PARAMS_CORRECT
+
+    def testSimpleModelDescription_add_Function_to_Empty(self):
+        simplemodeldesc = SimpleModelDescription()
+        simplemodeldesc.addFunction(self.fdesc1)
+        simplemodeldesc.x0.setValue(100, fixed=True)
+        simplemodeldesc.y0.setValue(200, limits=[180, 220])
         assert simplemodeldesc.x0 == self.x0_p
         assert simplemodeldesc.y0 == self.y0_p
         assert simplemodeldesc.functionSetIndices() == [0]
         assert simplemodeldesc.functionNameList() == ['Gaussian']
         pLimits = simplemodeldesc.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
+        assert simplemodeldesc.nParameters == self.N_PARAMS_CORRECT
 
     def testSimpleModelDescription_get_and_set_options(self):
         modeldesc1 = ModelDescription(self.fsetList)

@@ -1,0 +1,19 @@
+# imfit -c config_imfit_1.dat vcc1512rss.fits[400:520,430:590] --mask=r_mask.fits[400:520,430:590] 
+
+ORIGINAL_SKY	120.020408
+GAIN		4.725
+READNOISE	4.3
+
+X0      60
+Y0      73
+FUNCTION Sersic
+PA      155     90,180
+ell     0.2     0,0.5
+n       2.05     0,4
+I_e     120     0,1e4
+r_e     4.5       0,20
+FUNCTION Exponential
+PA      140     90,180
+ell     0.28     0,0.8
+I_0     70     0,1e4
+h       20      0,200

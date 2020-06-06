@@ -31,8 +31,9 @@ Working by default in ~/coding/pyimfit on Mac.
 6. Generate new version of docs [docs/howto_generate_docs.txt]
     A. cd docs
     B. Update version number in conf.py
-    C. IF the Jupyter notebook file has been updated, generate a markdown version with
+    C. IF the Jupyter notebook files have been updated, generate markdown versions with
         $ jupyter nbconvert pyimfit_emcee.ipynb --to markdown
+        $ jupyter nbconvert pyimfit_bootstrap_BtoT.ipynb --to markdown
     D. Generate updated documentation
 	    $ ./make_docs.sh
 	E. View resulting docs in a web browser pointed at
@@ -44,6 +45,6 @@ Working by default in ~/coding/pyimfit on Mac.
 7. See if updated version passes Travis CI tests
 
 8. Generate source distribution and Mac binary wheels on Mac, and upload to PyPI:
-    $ ./make_upload.sh x.x.x   [where "x.x.x" = version number]
+        $ ./make_upload.sh x.x.x   [where "x.x.x" = version number]
 
 10. Test installation via pip

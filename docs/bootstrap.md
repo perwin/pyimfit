@@ -64,6 +64,8 @@ fits to an SDSS *r*-band image of the galaxy IC 3478 (single-S&eacute;rsic model
 Note the clear correlations between the S&eacute;rsic model parameters (*n*, *r\_e*,
 *I\_e*).
 
+See [here](./pyimfit_bootstrap_BtoT.html for an example of using bootstrap output to estimate 
+uncertainties on derived quantities, such as bulge/total values.
 
 <p>
 

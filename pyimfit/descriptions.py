@@ -975,10 +975,7 @@ class SimpleModelDescription(ModelDescription):
             list or tuple containing a single FunctionSetDescription instance
 
         if inst is None, then a minimal object is returned (with a bare-bones
-        FunctionSetDescription)
-
-        if inst == "empty" then an *empty* object, with no FunctionSetDescription,
-        is returned
+        FunctionSetDescription), to which one can later add functions
         """
         super().__init__()
         if isinstance(inst, ModelDescription):
@@ -997,8 +994,6 @@ class SimpleModelDescription(ModelDescription):
                 raise ValueError('List or tuple argument must have length = 1')
         elif inst is None:
             self.addFunctionSet(FunctionSetDescription('fs'))
-        elif inst == "empty":
-            pass
         else:
             raise ValueError('Invalid type: %s' % type(inst))
 
@@ -1031,12 +1026,9 @@ class SimpleModelDescription(ModelDescription):
             Function description to be added to the model.
         """
         self._functionSets[0].addFunction(f)
+        self.nParameters += f.nParameters
 
 
-    def addFunctionSet(self, fs: FunctionSetDescription):
-        if len(self._functionSets) >= 1:
-            raise Exception('Only one function set allowed.')
-        super().addFunctionSet(fs)
 
 # 	return [attr] from the first (only, really) FunctionSetDescription
     #    _name; name
@@ -1044,4 +1036,7 @@ class SimpleModelDescription(ModelDescription):
     #
     # so simple_model_desc.x0 should --> simple_model_desc.functionSets[0].x0
     def __getattr__(self, attr):
-        return self._functionSets[0][attr]
+        if len(self._functionSets) == 0:
+            return None
+        else:
+            return self._functionSets[0][attr]

@@ -76,6 +76,10 @@ bootstrap resampling fits to an SDSS *r*-band image of the galaxy IC
 3478 (single-Sérsic model, no PSF convolution). Note the clear
 correlations between the Sérsic model parameters (*n*, *r\_e*, *I\_e*).
 
+See [here](./pyimfit\_bootstrap\_BtoT.html for an example of using
+bootstrap output to estimate uncertainties on derived quantities, such
+as bulge/total values.
+
 .. raw:: html
 
    <p>

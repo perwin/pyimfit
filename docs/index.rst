@@ -24,6 +24,7 @@ Documentation for PyImfit
    fit_statistics_and_solvers
    bootstrap
    pyimfit_emcee
+   pyimfit_bootstrap_BtoT
    acknowledgments
 
 
