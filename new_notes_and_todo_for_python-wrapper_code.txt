@@ -6,18 +6,18 @@ PLAN:
 
         [ ] Build and text new Mac Python version
             [ ] Update imfit submodule
-                [ ] Update submodule
+                [x] Update submodule
                     $ cd ~/coding/pyimfit
                     $ git submodule update --remote --merge
 
-                [ ] Checkout v1.8
+                [x] Checkout v1.8
                     $ cd imfit
                     $ git checkout tags/v1.8
-                    cd ..
-                    git commit -a -m "Set Imfit submodule to release v1.8"
-                    git push
+                    $ cd ..
+                    $ git commit -a -m "Set Imfit submodule to release v1.8"
+                    $ git push
 
-            [ ] Build updated libimfit
+            [x] Build updated libimfit
                 A. [mac] cd imfit
                 B. [mac] scons --clang-openmp libimfit.a
                 C. [mac] cp libimfit.a ../prebuilt/macos
