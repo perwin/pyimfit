@@ -5,9 +5,17 @@ PLAN:
     ** New Update: Update code to use Imfit v1.8
 
         [ ] Build and text new Mac Python version
-            [ ] Update imfit subdirectory
-                cd ~/coding/pyimfit/imfit
+            [ ] Update imfit submodule
+                [ ] Update submodule
+                    $ cd ~/coding/pyimfit
+                    $ git submodule update --remote --merge
 
+                [ ] Checkout v1.8
+                    $ cd imfit
+                    $ git checkout tags/v1.8
+                    cd ..
+                    git commit -a -m "Set Imfit submodule to release v1.8"
+                    git push
 
             [ ] Build updated libimfit
                 A. [mac] cd imfit
