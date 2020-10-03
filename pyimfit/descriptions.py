@@ -355,7 +355,7 @@ class FunctionDescription(object):
         """
         funcLine = "FUNCTION {0}".format(self._funcName)
         if self._label is not None:
-            funcLine += "   # {0}".format(self._label)
+            funcLine += "   # LABEL: {0}".format(self._label)
         outputLines = [funcLine + "\n"]
 
         for i in range(self.nParameters):

@@ -2,6 +2,35 @@ PLAN:
 
 ** GENERAL/FUTURE TO-DO
 
+    ** New Update: Update code to use Imfit v1.8
+
+        [ ] Build and text new Mac Python version
+            [ ] Update imfit subdirectory
+                cd ~/coding/pyimfit/imfit
+
+
+            [ ] Build updated libimfit
+                A. [mac] cd imfit
+                B. [mac] scons --clang-openmp libimfit.a
+                C. [mac] cp libimfit.a ../prebuilt/macos
+
+            [ ] Build and test pyimfit on Mac
+
+            [ ] Build and test pyimfit on Linux VM
+
+
+    ** New Update: Make build for Python 3.8
+        howto_new_distribution.txt
+
+        [ ] Upload new version to pip staging area
+
+        [ ] Email announcement to Imfit mailing list
+
+        [ ] Email announcement to AstroPy mailing list
+
+
+
+
     * Packaging:
         * Make Python package (ignore Imfit library compilation for now)
             [x] Make text file summarizing how to compile/build package in current form
@@ -73,6 +102,10 @@ PLAN:
        [X] Add mention/example of how to do bootstrap resampling
 
        [ ] Add API documentation
+            To make this work, we need to create files in api_ref_local/, such as descriptions.rst
+            files in docs/api_ref/, which are generated via lines in make_docs.sh, e.g.:
+            ./convert_apidoc_html.py ./_build/html/api_ref_local/descriptions.html ./api_ref/descriptions_base.html
+            -- modify api_ref/api_index.rst to include more files
             [ ] Add documentation file for config.py
             [X] Add documentation file for descriptions.py
             [ ] Add documentation file for imfit_funcs.py
@@ -181,9 +214,7 @@ bootstrap resampling) in process
         [x] Write test(s) instantiating from existing FunctionDescription
         [ ] Write test(s) modifying x0, y0
 
-    [ ] Add test of replaceOptions method (ModelDescription)
-    [ ] Add test of replaceOptions method (SimpleModelDescription)
-        [ ] Write test
+    [X] Add test of replaceOptions method (ModelDescription)
     [X] Add test of nParameters value (SimpleModelDescription)
 
 [X] Add ability to get list of image-function names
