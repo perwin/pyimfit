@@ -15,6 +15,7 @@ double StandardDeviation( double *vector, int nVals );
 
 std::tuple<double, double> ConfidenceInterval( double *vector, int nVals );
 
+// NOTE: the following two functions are used in PyImfit
 double AIC_corrected( double logLikelihood, int nParams, long nData, int chiSquareUsed );
 
 double BIC( double logLikelihood, int nParams, long nData, int chiSquareUsed );

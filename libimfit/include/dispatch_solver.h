@@ -13,6 +13,7 @@
 #include "param_struct.h"   // for mp_par structure
 #include "solver_results.h"
 
+// NOTE: The following functions is used in PyImfit
 
 // Possible return values from DispatchToSolver
 // All:
@@ -74,7 +75,8 @@
 int DispatchToSolver( int solverID, int nParametersTot, int nFreeParameters, int nPixelsTot,
 					double *parameters, vector<mp_par> parameterInfo, ModelObject *modelObj, 
 					double fracTolerance, bool paramLimitsExist, int verboseLevel, 
-					SolverResults *solverResults, string& solverName, unsigned long rngSeed=0 );
+					SolverResults *solverResults, string& solverName, 
+					unsigned long rngSeed=0, bool useLHS=false );
 
 
 #endif /* _DISPATCH_SOLVER_H_ */

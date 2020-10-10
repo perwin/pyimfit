@@ -69,6 +69,9 @@ struct mp_config_struct {
 
 };
 
+
+// NOTE: (parts of) the following struct are used in PyImfit
+
 /* Definition of results structure, for when fit completes */
 struct mp_result_struct {
   double bestnorm;     /* Final chi^2 */

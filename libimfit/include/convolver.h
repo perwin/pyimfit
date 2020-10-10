@@ -24,6 +24,9 @@ void PrintComplexImage_RealPart( fftw_complex *image_cmplx, int nColumns, int nR
 void PrintComplexImage_Absolute( fftw_complex *image_cmplx, int nColumns, int nRows );
 
 
+
+// NOTE: The following class is used in PyImfit
+
 /// Class for handling PSF convolution (stores PSF, performs convolutions 
 /// with input model images)
 class Convolver

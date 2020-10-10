@@ -25,6 +25,9 @@ int BootstrapErrors( const double *bestfitParams, vector<mp_par> parameterLimits
 				const int nIterations, const int nFreeParams, const int whichStatistic, 
 				FILE *outputFile_ptr, unsigned long rngSeed=0 );
 
+
+// NOTE: The following function is used in PyImfit
+
 /*! \brief Alternate interface: returns array of best-fit parameters in outputParamArray,
            which is 1D contiguous array (not array of pointers to arrays); doesn't
            print any output at all or save anything to a file.

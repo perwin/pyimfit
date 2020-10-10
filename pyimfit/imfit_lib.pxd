@@ -106,18 +106,25 @@ cdef extern from "model_object.h":
 #         void SetVerboseLevel(int level)
 
 
+# int AddFunctions( ModelObject *theModel, const vector<string> &functionNameList,
+#                   vector<string> &functionLabelList, vector<int> &functionSetIndices,
+#                   const bool subamplingFlag, const int verboseFlag=0,
+#                   vector< map<string, string> > &extraParams=EMPTY_MAP_VECTOR );
+
 cdef extern from "add_functions.h":
     int GetFunctionParameterNames( string &functionName, vector[string] &parameterNameList );
     void GetFunctionNames( vector[string] &functionNameList )
     # Tricky thing: handling possible optional parameters for AddFunctions; these have
     # default values in .h file. so we need separate definitions for the three cases
     int AddFunctions( ModelObject *theModel, const vector[string] &functionNameList,
-                  vector[int] &functionBlockIndices, const bool subamplingFlag,
-                  const int verboseFlag, vector[map[string, string]] &extraParams )
+                  const vector[string] &functionLabelList, vector[int] &functionBlockIndices,
+                  const bool subamplingFlag, const int verboseFlag,
+                  vector[map[string, string]] &extraParams )
     int AddFunctions( ModelObject *theModel, const vector[string] &functionNameList,
-                  vector[int] &functionBlockIndices, const bool subamplingFlag,
-                  const int verboseFlag )
+                  const vector[string] &functionLabelList, vector[int] &functionBlockIndices,
+                  const bool subamplingFlag, const int verboseFlag )
     int AddFunctions( ModelObject *theModel, const vector[string] &functionNameList,
+                  const vector[string] &functionLabelList,
                   vector[int] &functionBlockIndices, const bool subamplingFlag )
 
 

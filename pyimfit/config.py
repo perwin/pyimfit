@@ -83,7 +83,7 @@ def parse_config( lines: List[str] ) -> ModelDescription:
     model = ModelDescription()
 
     block_start = 0
-    functionBlock_id = 0   # number of current function block ("function set")
+    functionBlock_id = 0   # number of current function set
     for i in range(block_start, len(lines)):
         if lines[i].startswith(x0_str):
             if block_start == 0:
@@ -220,7 +220,14 @@ def read_function( lines: List[str] ) -> FunctionDescription:
     func : :class:`~imfit.`FunctionDescription`
         Contains extracted information about function and its parameters
     """
-    # First line contains the function name.
+
+    def GetFunctionLabel( theLine ):
+        labelText = ""
+        if theLine.find("LABEL:") > 0:
+            labelText = theLine.split("LABEL:")[1].strip()
+        return labelText
+
+    # First line contains the function name, and optionally the label
     pieces = lines[0].split()
     test_function_str = pieces[0]
     if test_function_str != function_str:
@@ -228,7 +235,8 @@ def read_function( lines: List[str] ) -> FunctionDescription:
     if len(pieces) <= 1:
         raise ValueError('No function name was supplied.')
     name  = pieces[1].strip()
-    func = FunctionDescription(name)
+    label = GetFunctionLabel(lines[0])
+    func = FunctionDescription(name, label)
     # Read the function parameters.
     for i in range(1, len(lines)):
         func.addParameter(read_parameter(lines[i]))

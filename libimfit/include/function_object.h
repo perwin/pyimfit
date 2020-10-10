@@ -50,11 +50,14 @@ class FunctionObject
     /// Sets internal oversamplingScale to specified value (for use in oversampled regions)
     virtual void SetOversamplingScale( int oversampleScale ) { ; };
 
-    // probably no need to modify this:
+    // probably no need to modify this (unless function uses subcomponent functions):
     virtual void SetSubsampling( bool subsampleFlag );
 
-    // probably no need to modify this:
+    // probably no need to modify this (for 1D functions):
     virtual void SetZeroPoint( double zeroPoint );
+
+    // probably no need to modify this
+    virtual void SetLabel( string & userLabel );
 
     // derived classes will almost certainly modify this, which
     // is used for pre-calculations and convolutions, if any:
@@ -86,6 +89,9 @@ class FunctionObject
     // no need to modify this:
     virtual string& GetShortName( );
 
+    // no need to modify this:
+    virtual string& GetLabel( );
+
     // probably no need to modify this:
     virtual void GetParameterNames( vector<string> &paramNameList );
 
@@ -106,7 +112,7 @@ class FunctionObject
     bool  doSubsampling;
     bool  extraParamsSet;
     vector<string>  parameterLabels;
-    string  functionName, shortFunctionName;
+    string  functionName, shortFunctionName, label;
     double  ZP;
 
     // class member (constant char-vector string) which will hold name of

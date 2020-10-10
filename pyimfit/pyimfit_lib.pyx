@@ -144,7 +144,7 @@ def get_function_dict( ):
 
 
 
-def make_imfit_function(func_type, label=None):
+def make_imfit_function(func_type, label=""):
     """
     Given a string specifying the official name of an Imfit image function
     (e.g., "Sersic", "Sersic_GenEllipse", "ExponentialDisk3D"), this
@@ -161,7 +161,7 @@ def make_imfit_function(func_type, label=None):
     label : string, optional
         Custom identifying label for this instance of this function.
         Example: "disk", "bulge".
-        Default: None.
+        Default: "" (which means no label).
 
     Returns
     -------
@@ -430,8 +430,9 @@ cdef class ModelObjectWrapper( object ):
     cdef _addFunctions(self, object model_descr, bool subsampling, int verbose=0):
         cdef int status = 0
         functionNameList = [funcName.encode() for funcName in model_descr.functionNameList()]
-        status = AddFunctions(self._model, functionNameList, model_descr.functionSetIndices(),
-                                subsampling, verbose)
+        functionLabelList = [funcName.encode() for funcName in model_descr.functionLabelList()]
+        status = AddFunctions(self._model, functionNameList, functionLabelList,
+                              model_descr.functionSetIndices(), subsampling, verbose)
         if status < 0:
             raise RuntimeError('Failed to add the functions.')
 

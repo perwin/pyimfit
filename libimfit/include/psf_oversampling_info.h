@@ -9,6 +9,8 @@
 using namespace std;
 
 
+// NOTE: the following class is used in PyImfit
+
 class PsfOversamplingInfo
 {
   public:

@@ -199,7 +199,7 @@ class TestFunctionDescription(object):
     def test_FunctionDescription_getStrings(self):
         fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
 
-        lines_correct = ["FUNCTION Gaussian   # blob\n",
+        lines_correct = ["FUNCTION Gaussian   # LABEL: blob\n",
                          "PA\t\t0.0\t\tfixed\n",
                          "ell\t\t0.5\t\t0.1,0.8\n",
                          "I_0\t\t100.0\t\t10.0,1000.0\n",
@@ -215,7 +215,7 @@ class TestFunctionDescription(object):
     def test_FunctionDescription_getStrings_bestfit(self):
         fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
 
-        lines_correct = ["FUNCTION Gaussian   # blob\n",
+        lines_correct = ["FUNCTION Gaussian   # LABEL: blob\n",
                          "PA\t\t0.0\n",
                          "ell\t\t0.5\n",
                          "I_0\t\t100.0\n",
@@ -227,7 +227,7 @@ class TestFunctionDescription(object):
         fdesc1 = FunctionDescription('Gaussian', "blob", self.paramDescList)
         errorValues = np.array([0.0, 0.001073, 3.4567, 0.333])
 
-        lines_correct = ["FUNCTION Gaussian   # blob\n",
+        lines_correct = ["FUNCTION Gaussian   # LABEL: blob\n",
                          "PA\t\t0.0\t\t# +/- 0.0\n",
                          "ell\t\t0.5\t\t# +/- 0.001073\n",
                          "I_0\t\t100.0\t\t# +/- 3.4567\n",
@@ -288,7 +288,7 @@ class TestFunctionSetDescription(object):
 
         lines_correct = ["X0\t\t100.0\t\tfixed\n",
                          "Y0\t\t200.0\t\t180.0,220.0\n",
-                        "FUNCTION Gaussian   # blob\n",
+                        "FUNCTION Gaussian   # LABEL: blob\n",
                          "PA\t\t0.0\t\tfixed\n",
                          "ell\t\t0.5\t\t0.1,0.8\n",
                          "I_0\t\t100.0\t\t10.0,1000.0\n",
@@ -306,7 +306,7 @@ class TestFunctionSetDescription(object):
 
         lines_correct = ["X0\t\t100.0\n",
                          "Y0\t\t200.0\n",
-                        "FUNCTION Gaussian   # blob\n",
+                        "FUNCTION Gaussian   # LABEL: blob\n",
                          "PA\t\t0.0\n",
                          "ell\t\t0.5\n",
                          "I_0\t\t100.0\n",
@@ -321,7 +321,7 @@ class TestFunctionSetDescription(object):
 
         lines_correct = ["X0\t\t100.0\t\t# +/- 0.0\n",
                          "Y0\t\t200.0\t\t# +/- 2.456\n",
-                         "FUNCTION Gaussian   # blob\n",
+                         "FUNCTION Gaussian   # LABEL: blob\n",
                          "PA\t\t0.0\t\t# +/- 0.0\n",
                          "ell\t\t0.5\t\t# +/- 0.001073\n",
                          "I_0\t\t100.0\t\t# +/- 3.4567\n",

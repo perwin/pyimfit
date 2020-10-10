@@ -5,7 +5,7 @@ PLAN:
     ** New Update: Update code to use Imfit v1.8
 
         [ ] Build and text new Mac Python version
-            [ ] Update imfit submodule
+            [x] Update imfit submodule
                 [x] Update submodule
                     $ cd ~/coding/pyimfit
                     $ git submodule update --remote --merge
@@ -21,8 +21,20 @@ PLAN:
                 A. [mac] cd imfit
                 B. [mac] scons --clang-openmp libimfit.a
                 C. [mac] cp libimfit.a ../prebuilt/macos
+                # copy updated Imfit C++ header files
+                D. [mac] cd .. ; ./update_from_imfit.sh
 
-            [ ] Build and test pyimfit on Mac
+            [..] Build and test pyimfit on Mac
+                [..] Changed AddFunctions() in v1.8
+                    -- now includes functionLabelList input parameter
+                    [ ] Update imfit_lib.pxd to handle changed AddFunctions
+                    [ ] Update pyimfit_lib.pyx to handle changed AddFunctions
+
+                    [ ] Update Python code to handle changed AddFunctions
+                        -- e.g., pass in labels when initializing FunctionDescription objects?
+                        [x] Update code in descriptions.py
+                        [ ] Update code that reads in config files to check for and add
+                            function labels
 
             [ ] Build and test pyimfit on Linux VM
 

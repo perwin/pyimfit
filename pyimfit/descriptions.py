@@ -259,7 +259,7 @@ class FunctionDescription(object):
     Attributes
     ----------
         label : str
-            name of the image function (e.g., "Gaussian", "EdgeOnDisk")
+            optional label for this image function (e.g., "NSC", "Outer disk", etc.)
 
         _funcName : str
             name of the image function (e.g., "Gaussian", "EdgeOnDisk")
@@ -281,7 +281,7 @@ class FunctionDescription(object):
             Returns a list of the ParameterDescription objects
 
     """
-    def __init__(self, func_name: str, label: Optional[str]=None, parameters=None):
+    def __init__(self, func_name: str, label: Optional[str]="", parameters=None):
         self._funcName = func_name  #type: str
         self._label = label  #type: Optional[str]
         self._parameters = []  #type: List[ParameterDescription]
@@ -354,7 +354,7 @@ class FunctionDescription(object):
             If errors is supplied, then parameter strings will contain "# +/- <error>" at end
         """
         funcLine = "FUNCTION {0}".format(self._funcName)
-        if self._label is not None:
+        if (self._label is not None) and (self._label != ""):
             funcLine += "   # LABEL: {0}".format(self._label)
         outputLines = [funcLine + "\n"]
 
@@ -427,12 +427,13 @@ class FunctionSetDescription(object):
             Add a FunctionDescription instance
 
         functionList()
-            Returns a list of the FunctionDescription objects in the function
-            block/set
+            Returns a list of the FunctionDescription objects in the function set
 
         functionNameList()
-            Returns a list of names for the image-functions in the function
-            block/set
+            Returns a list of names for the image-functions in the function set
+
+        functionLabelList()
+            Returns a list of labels for the image-functions in the function set
 
         parameterList()
             Returns a list of ParameterDescription objects corresponding to
@@ -485,7 +486,7 @@ class FunctionSetDescription(object):
         """
         if not isinstance(f, FunctionDescription):
             raise ValueError('func is not a Function object.')
-        if f.label is not None and self._contains(f.label):
+        if (f.label is not None) and (f.label != "") and (self._contains(f.label)):
             raise KeyError('Function with label \"%s\" already exists.' % f.label)
         self._functions.append(f)
         # add function labels as attributes, so we can do things like
@@ -525,6 +526,19 @@ class FunctionSetDescription(object):
             List of the function types.
         """
         return [f._funcName for f in self._functions]
+
+
+    def functionLabelList(self):
+        """
+        A list of labels for the Imfit image-functions making up this function set.
+
+        Returns
+        -------
+        function_list : list of str
+            List of the function types.
+        """
+        # FIXME: Get function label
+        return [f.label for f in self._functions]
 
 
     def parameterList(self):
@@ -648,16 +662,17 @@ class ModelDescription(object):
             Add image-description options via a dict
 
         functionSetIndices()
-            Returns a list of ``int`` specifying the function-set start
-            indices
+            Returns a list of ``int`` specifying the function-set start indices
 
         functionList()
             Retuns a list of FunctionDescription instances for all the
             image functions in the model
 
         functionNameList()
-            Returns a list of names for the image-functions in the function
-            block/set
+            Returns a list of names for the image-functions in the function set
+
+        functionLabelList()
+            Returns a list of labels for the image-functions in the function set
 
         parameterList()
             Returns a list of ParameterDescription instances corresponding
@@ -831,6 +846,21 @@ class ModelDescription(object):
         for function_set in self._functionSets:
             functionNames.extend(function_set.functionNameList())
         return functionNames
+
+
+    def functionLabelList(self):
+        """
+        List of labels for the image functions making up this model.
+
+        Returns
+        -------
+        func_list : list of str
+            List of the function labels.
+        """
+        functionLabels = []
+        for function_set in self._functionSets:
+            functionLabels.extend(function_set.functionLabelList())
+        return functionLabels
 
 
     def functionSetNameList(self):

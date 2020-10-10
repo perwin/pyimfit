@@ -12,6 +12,8 @@
 #define _PARAM_STRUCT_H_
 
 
+// NOTE: (parts of) the following struct is used in PyImfit
+
 /* Definition of a parameter constraint structure */
 // This is a structure which holds metadata about a particular parameter:
 // its name, whether or not it is fixed, any limits on its allowed values,
