@@ -223,8 +223,8 @@ def read_function( lines: List[str] ) -> FunctionDescription:
 
     def GetFunctionLabel( theLine ):
         labelText = ""
-        if theLine.find("LABEL:") > 0:
-            labelText = theLine.split("LABEL:")[1].strip()
+        if theLine.find("LABEL") > 0:
+            labelText = theLine.split("LABEL")[1].strip()
         return labelText
 
     # First line contains the function name, and optionally the label
