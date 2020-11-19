@@ -6,6 +6,13 @@
 changes may contain significant changes to the API.
 
 
+## 0.10.0 -- 2020-11-20
+### Changed
+Updated to use version 1.8 of Imfit, including new image functions (GaussianRingAz, FlatBar)
+and function labels in config files.
+
+
+
 ## 0.9.0 -- 2020-06-04
 ## Added
 Pre-compiled version for Python 3.8 on macOS. Minor added checks for correct length of

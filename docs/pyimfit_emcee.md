@@ -1,4 +1,3 @@
-
 # Example of using PyImfit with Markov-Chain Monte Carlo code "emcee"
 
 This is a Jupyter notebook demonstrating how to use PyImfit with the MCMC code [emcee](https://github.com/dfm/emcee).
@@ -44,7 +43,7 @@ imageFile = "./pyimfit_emcee_files/faintstar.fits"
 image_faintstar = fits.getdata(imageFile)
 ```
 
-Create a ModelDescription instance based on an imfit configuration file (which specifyies a single elliptical Gaussian model):
+Create a ModelDescription instance based on an imfit configuration file (which specifies a single elliptical Gaussian model):
 
 
 ```python

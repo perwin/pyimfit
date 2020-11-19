@@ -16,35 +16,7 @@ image, if no actual fitting is to be done). In the (usual) case of fitting the
 model to an image, it also holds the data image, optional PSF images, and
 parameters that describe the image (A/D gain, etc.).</p>
 <p>It also has methods for running a fit and for inspecting the results.</p>
-<span class="target" id="module-pyimfit.fitting"></span><dl class="py function">
-<dt id="pyimfit.fitting.MakePsfOversampler">
-<code class="sig-prename descclassname">pyimfit.fitting.</code><code class="sig-name descname">MakePsfOversampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">psfImage</span></em>, <em class="sig-param"><span class="n">oversampleScale</span></em>, <em class="sig-param"><span class="n">regionSpec</span></em>, <em class="sig-param"><span class="n">psfNormalization</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.MakePsfOversampler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Helper function to generate PsfOversampling objects (corrects input psfImage, sets
-up region string, etc.).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>psfImage</strong> (<em>2-D numpy array</em>) – the oversampled PSF image</p></li>
-<li><p><strong>oversampleScale</strong> (<em>int</em>) – <dl class="simple">
-<dt>oversampling scale of psfImage relative to data image: number of PSF-image</dt><dd><p>pixels per data-image pixel in one dimension (must be &gt;= 1)</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>regionSpec</strong> (<em>sequence of int</em>) – specifies inclusive boundaries of image region to be oversampled
-[x1,x2,y1,y2]</p></li>
-<li><p><strong>psfNormalization</strong> (<em>bool</em><em>, </em><em>optional</em>) – Normalize the PSF image before using.
-Default: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>oversampleInfo</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>instance of PsfOversampling class</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py class">
+<span class="target" id="module-pyimfit.fitting"></span><dl class="py class">
 <dt id="pyimfit.fitting.FitResult">
 <em class="property">class </em><code class="sig-prename descclassname">pyimfit.fitting.</code><code class="sig-name descname">FitResult</code><a class="headerlink" href="#pyimfit.fitting.FitResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents the result of fitting an image.</p>
@@ -633,6 +605,34 @@ to the output file</p></li>
 </dd>
 </dl>
 </dd></dl>
+</dd></dl>
+<dl class="py function">
+<dt id="pyimfit.fitting.MakePsfOversampler">
+<code class="sig-prename descclassname">pyimfit.fitting.</code><code class="sig-name descname">MakePsfOversampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">psfImage</span></em>, <em class="sig-param"><span class="n">oversampleScale</span></em>, <em class="sig-param"><span class="n">regionSpec</span></em>, <em class="sig-param"><span class="n">psfNormalization</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.MakePsfOversampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to generate PsfOversampling objects (corrects input psfImage, sets
+up region string, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>psfImage</strong> (<em>2-D numpy array</em>) – the oversampled PSF image</p></li>
+<li><p><strong>oversampleScale</strong> (<em>int</em>) – <dl class="simple">
+<dt>oversampling scale of psfImage relative to data image: number of PSF-image</dt><dd><p>pixels per data-image pixel in one dimension (must be &gt;= 1)</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>regionSpec</strong> (<em>sequence of int</em>) – specifies inclusive boundaries of image region to be oversampled
+[x1,x2,y1,y2]</p></li>
+<li><p><strong>psfNormalization</strong> (<em>bool</em><em>, </em><em>optional</em>) – Normalize the PSF image before using.
+Default: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>oversampleInfo</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>instance of PsfOversampling class</p>
+</dd>
+</dl>
 </dd></dl>
 
 

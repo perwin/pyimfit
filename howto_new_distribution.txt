@@ -13,9 +13,6 @@ Working by default in ~/coding/pyimfit on Mac.
 [opt]2. Generate updated libimfit.a for Linux [VM: ubuntu64-16_dev], IF NECESSARY
     A. [vm] cd /home/vagrant/build/pyimfit/imfit
     B. [vm] scons libimfit.a
-    C. [vm] cp libimfit.a ../prebuilt/linux64
-    # copy updated Imfit C++ header files
-    D. [mac] cd .. ; ./update_from_imfit.sh
     E. [vm] cp libimfit.a /vagrant/transfer
     F. [mac] cp ~/vagrant/ubuntu64-16_dev/transfer/libimfit.a ./prebuilt/linux64
 

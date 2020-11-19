@@ -4,7 +4,7 @@ PLAN:
 
     ** New Update: Update code to use Imfit v1.8
 
-        [ ] Build and text new Mac Python version
+        [X] Build and test new Mac Python version
             [x] Update imfit submodule
                 [x] Update submodule
                     $ cd ~/coding/pyimfit
@@ -24,23 +24,35 @@ PLAN:
                 # copy updated Imfit C++ header files
                 D. [mac] cd .. ; ./update_from_imfit.sh
 
-            [..] Build and test pyimfit on Mac
-                [..] Changed AddFunctions() in v1.8
+            [X] Build and test pyimfit on Mac
+                [X] Changed AddFunctions() in v1.8
                     -- now includes functionLabelList input parameter
-                    [ ] Update imfit_lib.pxd to handle changed AddFunctions
-                    [ ] Update pyimfit_lib.pyx to handle changed AddFunctions
+                    [X] Update imfit_lib.pxd to handle changed AddFunctions
+                    [X] Update pyimfit_lib.pyx to handle changed AddFunctions
 
                     [ ] Update Python code to handle changed AddFunctions
                         -- e.g., pass in labels when initializing FunctionDescription objects?
                         [x] Update code in descriptions.py
-                        [ ] Update code that reads in config files to check for and add
+                        [x] Update code that reads in config files to check for and add
                             function labels
 
             [ ] Build and test pyimfit on Linux VM
+                   -- howto_new_distribution.txt
+                [X] Find notes on building on Linux VM
+                [ ] Build new libimfit.a on Linux VM
+                    -- [opt]2. Generate updated libimfit.a for Linux [VM: ubuntu64-16_dev], IF NECESSARY
 
 
-    ** New Update: Make build for Python 3.8
+                [ ] Build new release on Linux VM
+                    -- 4. Do new "develop" install and run tests on Linux VM
+
+
+    ** New Update: Make build for Python 3.9
         howto_new_distribution.txt
+
+        [ ] Install Python 3.9
+            [ ] Install Python 3.9
+            [ ] Install necessary libraries via pip
 
         [ ] Upload new version to pip staging area
 
@@ -48,6 +60,9 @@ PLAN:
 
         [ ] Email announcement to AstroPy mailing list
 
+
+    ** Alternate outputs for best-fit parameter values
+        https://github.com/perwin/pyimfit/issues/2
 
 
 

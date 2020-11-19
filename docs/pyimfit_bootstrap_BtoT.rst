@@ -9,18 +9,31 @@ If you are seeing this as part of the readthedocs.org HTML
 documentation, you can retrieve the original .ipynb file
 `here <https://github.com/perwin/pyimfit/blob/master/docs/pyimfit_bootstrap_BtoT.ipynb>`__.
 
-The basic idea is this: PyImfit will estimate uncertainties for
-individual parameters from a fit (if you use the default
-Levenberg-Marquardt minimizer). You can also estimate parameter
-uncertainties via bootstrap resampling, or by using an external
-Markov-Chain Monte Carlo algorithm (see `here <./pyimfit_emcee.html>`__
-for an example of this).
+Introduction
+------------
 
-But you might also want to have some estimate of derived values based on
-a model, such as the total luminosity or the bulge/total (:math:`B/T`)
-value (assuming you have some idea of which component in your model is
-the "bulge"). This notebook shows a simple example of how one might do
-that, using PyImfit's bootstrap-resampling option.
+PyImfit will estimate uncertainties for individual model parameters from
+a fit (if you use the default Levenberg-Marquardt minimizer) -- e.g.,
+position :math:`X0,Y0`, position-angles, ellipticities, scale lengths,
+etc.. You can also estimate parameter uncertainties via bootstrap
+resampling, or by using an external Markov-Chain Monte Carlo algorithm
+(see `here <./pyimfit_emcee.html>`__ for an example of the latter).
+
+Sometimes, you might also want to have some estimate of derived values
+based on a model, such as the total luminosity or the bulge/total
+(:math:`B/T`) value (assuming you have some idea of which component in
+your model is the "bulge"). How do you determine the uncertainties for
+such quantities? This notebook shows a simple example of how one might
+do that, using PyImfit's bootstrap-resampling option.
+
+The basic idea is to generate a set of model-parameter vectors via,
+e.g., bootstrap resampling (or from an MCMC chain). You then compute the
+resulting derived quantity from those parameter values. In this
+particular case, we use the ``pyimfit.Imfit`` object containing the
+model to compute "bulge" and total flux values for each parameter
+vector, and then take the ratio to get :math:`B/T` values. By doing this
+for all the parameter vectors, you end up with a distribution for the
+derived quantity.
 
 **Preliminaries**
 
@@ -39,13 +52,8 @@ Some initial setup for nice-looking plots:
 
     Populating the interactive namespace from numpy and matplotlib
 
-
-    /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/IPython/core/magics/pylab.py:160: UserWarning: pylab import has clobbered these variables: ['mean']
-    `%matplotlib` prevents importing * from pylab and numpy
-      "\n`%matplotlib` prevents importing * from pylab and numpy"
-
-Create image-fitting model using PyImfit
-----------------------------------------
+Create an image-fitting model using PyImfit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Load the pymfit package; also load numpy and astropy.io.fits (so we can
 read FITS files):
@@ -56,8 +64,8 @@ read FITS files):
     import pyimfit
     from astropy.io import fits
 
-Load data image (SDSS :math:`r`-band image cutout of VCC 1512) and
-corresponding mask:
+Load the data image (here, an SDSS :math:`r`-band image cutout of VCC
+1512) and corresponding mask:
 
 .. code:: python
 
@@ -100,7 +108,7 @@ Create a ModelDescription instance based on an imfit configuration file
 
 Create an Imfit instance containing the model, and add the image and
 mask data. Note that we are *not* doing PSF convolution, in order to
-save time; this is not meant to be a particular accurate model.
+save time (this is not meant to be a particular accurate model).
 
 .. code:: python
 
@@ -136,7 +144,6 @@ and extract the best-fitting parameter values:
 
 .. code:: python
 
-    results = imfit_fitter.doFit(getSummary=True)
     p_bestfit = results.params
 
     print("Best-fitting parameter values:")
@@ -150,7 +157,7 @@ and extract the best-fitting parameter values:
     60.4336, 73.2059, 161.801, 0.118946, 0.956308, 121.821, 4.86538, 138.987, 0.273911, 81.389, 20.8517
 
 Run bootstrap-resampling to generate a set of parameter values (array of best-fit parameter vectors)
-----------------------------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 OK, now we're going to do some bootstrap resampling to build up a set of
 several hundred alternate "best-fit" parameter values.
@@ -158,8 +165,8 @@ several hundred alternate "best-fit" parameter values.
 Note that you coul also generate a set of parameter vectors using MCMC;
 we're doing bootstrap resampling mainly because it's faster.
 
-Run 500 iterations of bootstrap resamplng (more would be better; this is
-just to save time):
+Run 500 iterations of bootstrap resamplng. More would be better; this is
+just to save time (takes about 1 minute on a 2017 MacBook Pro).
 
 .. code:: python
 
@@ -174,7 +181,7 @@ just to save time):
     (500, 11)
 
 Use these parameter vectors to calculate range of B/T values
-------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We define a function to calculate the :math:`B/T` value, given a
 parameter vector (for this model it's simple, but you might have a more
@@ -203,6 +210,16 @@ complicated model where the first component isn't necessarily the
         # here, we assume the first component in the model is the "bulge"
         return component_fluxes[0] / total_flux
 
+The :math:`B/T` value for the best-fit model:
+
+.. code:: python
+
+    GetBtoT(imfit_fitter, p_bestfit)
+
+::
+
+    0.1557485598370547
+
 Now calculate the :math:`B/T` values for the bootstrap-generated set of
 parameter vectors:
 
@@ -224,17 +241,22 @@ For example:
 
     0.15852423639167879
 
-A histogram of the :math:`B/T` values:
+A histogram of the :math:`B/T` values (vertical line = best-fit value):
 
 .. code:: python
 
     hist(b2t_values, bins=np.arange(0.14,0.2,0.0025));xlabel(r"$B/T$");ylabel(r"$N$")
+    axvline(GetBtoT(imfit_fitter, p_bestfit), color='k')
 
 ::
 
-    Text(0, 0.5, '$N$')
+    <matplotlib.lines.Line2D at 0x12c671a10>
 
-.. figure:: pyimfit_bootstrap_BtoT_files/pyimfit_bootstrap_BtoT_34_1.png
+.. figure:: pyimfit_bootstrap_BtoT_files/pyimfit_bootstrap_BtoT_37_1.png
    :alt: png
 
    png
+
+.. code:: python
+
+

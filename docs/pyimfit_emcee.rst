@@ -48,7 +48,7 @@ faint star):
     image_faintstar = fits.getdata(imageFile)
 
 Create a ModelDescription instance based on an imfit configuration file
-(which specifyies a single elliptical Gaussian model):
+(which specifies a single elliptical Gaussian model):
 
 .. code:: python
 
