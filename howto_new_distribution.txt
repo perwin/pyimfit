@@ -17,14 +17,14 @@ Working by default in ~/coding/pyimfit on Mac.
     F. [mac] cp ~/vagrant/ubuntu64-16_dev/transfer/libimfit.a ./prebuilt/linux64
 
 3. Do new "develop" install and run tests on macOS
-    [mac] $ python3 setup.py develop
+    [mac] $ pip3 install -e ./
     [mac] $ cd pyimfit/tests ; pytest
 
 4. Do new "develop" install and run tests on Linux VM
     [mac] $ cd ~/vagrant/ubuntu64-16_dev/transfer
     [mac] $ git clone ~/coding/pyimfit pyimfit
     [vm] $ cd /vagrant/transfer/pyimfit
-    [vm] $ python3 setup.py develop --user
+    [vm] $ pip3 install --user -e ./
     [vm] $ cd pyimfit/tests ; pytest
 
 5. Update version number in pyimfit/__init__.py

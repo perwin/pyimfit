@@ -500,6 +500,7 @@ class Imfit(object):
             if isinstance(error, np.ma.MaskedArray):
                 error = error.filled(fill_value=error.max())
 
+        # Note that the following will call _modelObjectWrapper.doFinalSetup()
         self._modelObjectWrapper.loadData(image, error, mask, **kwargs)
         self._dataSet = True
 

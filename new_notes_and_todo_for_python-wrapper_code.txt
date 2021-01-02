@@ -30,7 +30,7 @@ PLAN:
                     [X] Update imfit_lib.pxd to handle changed AddFunctions
                     [X] Update pyimfit_lib.pyx to handle changed AddFunctions
 
-                    [ ] Update Python code to handle changed AddFunctions
+                    [X] Update Python code to handle changed AddFunctions
                         -- e.g., pass in labels when initializing FunctionDescription objects?
                         [x] Update code in descriptions.py
                         [x] Update code that reads in config files to check for and add
@@ -39,7 +39,7 @@ PLAN:
             [ ] Build and test pyimfit on Linux VM
                    -- howto_new_distribution.txt
                 [X] Find notes on building on Linux VM
-                [ ] Build new libimfit.a on Linux VM
+                [X] Build new libimfit.a on Linux VM
                     -- [opt]2. Generate updated libimfit.a for Linux [VM: ubuntu64-16_dev], IF NECESSARY
 
 
@@ -50,9 +50,11 @@ PLAN:
     ** New Update: Make build for Python 3.9
         howto_new_distribution.txt
 
-        [ ] Install Python 3.9
-            [ ] Install Python 3.9
-            [ ] Install necessary libraries via pip
+        [X] Install Python 3.9
+            [X] Install Python 3.9
+            [X] Install necessary libraries via pip
+
+        [ ] Add Python 3.9 as an option for GitHub Actions testing workflow
 
         [ ] Upload new version to pip staging area
 
@@ -63,6 +65,28 @@ PLAN:
 
     ** Alternate outputs for best-fit parameter values
         https://github.com/perwin/pyimfit/issues/2
+
+        [ ] Brainstorm alternate output
+            -- return ModelDescription object
+            -- return list of single-function-set dicts
+            OR: return dict containing single-function-set dicts, so we can optionally
+            have labels for each function set as the keys (e.g., corresponding to FunctionSetDescription.name)
+                Note that ModelObject stores its function sets as as List[FunctionSetDescription]
+
+        Possible outline for model-as-dict
+            optionsDict
+            dict_of_function_sets -- OrderedDict
+                'funcset-name': function-set-dict
+
+                function-set-dict -- OrderedDict
+                    optional name [--> FunctionSetDescription.name]
+                    list or OrderedDict of functions
+
+                    funtion-dict -- OrderedDict
+                        function name ("Exponential", etc.)
+                        optional label
+                        parameter-name: parameter-value
+
 
 
 
