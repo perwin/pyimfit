@@ -102,8 +102,8 @@ class TestImfit(object):
         (totalFlux, fluxArray) = imfit_fitter.getModelFluxes()
         totalFlux_correct = 643232.3971123401
         fluxArray_correct = np.array([totalFlux_correct])
-        assert_allclose(totalFlux, totalFlux_correct, rtol=1.0e-10)
-        assert_allclose(fluxArray, fluxArray_correct, rtol=1.0e-10)
+        assert_allclose(totalFlux, totalFlux_correct, rtol=1.0e-9)
+        assert_allclose(fluxArray, fluxArray_correct, rtol=1.0e-9)
 
     def test_Imfit_get_fluxes_newParameters( self ):
         # Exponential model
