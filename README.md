@@ -85,7 +85,10 @@ system is required.)
 
     $ pip3 install pyimfit   [or "pip3 install --user pyimfit", if installing for your own use]
 
-
+If the installation fails with a message containing something like "fatal error: Python.h: 
+No such file or directory", then you may be missing headers files and static libraries for
+Python development; see [this Stackexchange question](https://stackoverflow.com/questions/21530577/fatal-error-python-h-no-such-file-or-directory)
+for guidance on how to do that.
 
 
 ### Building the Whole Thing from Source

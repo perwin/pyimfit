@@ -2,6 +2,22 @@ PLAN:
 
 ** GENERAL/FUTURE TO-DO
 
+    ** Update GitHub access to new methodology
+        [ ] Visit GitHub web page
+        1. Generate Personal Authenticaion Token [PAT] (& copy to pword file)
+            https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token
+        2. Update Keychain Access
+            A. Delete current github.com "internet password" entry in Keychain Access
+                https://docs.github.com/en/free-pro-team@latest/github/using-git/updating-credentials-from-the-macos-keychain
+                -- this is the password storage for command-line access via git-credential-osxkeychain
+                (see "Access Control" tab for this entry)
+                -- do *not* modify any of the "Web form password" entries -- these are what
+                Safari, etc. use!
+            B. Force new storage of PAT in keychain
+                https://docs.github.com/en/free-pro-team@latest/github/using-git/caching-your-github-credentials-in-git
+                (Note that "$ git config --get credential.helper" confirms that osxkeychain is already set)
+
+
     ** New Update: Update code to use Imfit v1.8
 
         [X] Build and test new Mac Python version
@@ -71,22 +87,44 @@ PLAN:
             -- return list of single-function-set dicts
             OR: return dict containing single-function-set dicts, so we can optionally
             have labels for each function set as the keys (e.g., corresponding to FunctionSetDescription.name)
+                Default case: 'fs0', 'fs1', etc. as function-set names
                 Note that ModelObject stores its function sets as as List[FunctionSetDescription]
 
         Possible outline for model-as-dict
-            optionsDict
-            dict_of_function_sets -- OrderedDict
-                'funcset-name': function-set-dict
+            'options': optionsDict or None
+            'function_sets': list of function-set-dicts
 
-                function-set-dict -- OrderedDict
-                    optional name [--> FunctionSetDescription.name]
-                    list or OrderedDict of functions
+                function-set-dict -- dict
+                    'name': str or None [default]  [--> FunctionSetDescription.name]
+                    'X0'
+                    'Y0'
+                    'function_list': list of function-dicts
 
-                    funtion-dict -- OrderedDict
-                        function name ("Exponential", etc.)
-                        optional label
-                        parameter-name: parameter-value
+                        function-dict -- OrderedDict
+                            'name': <function name>' ("Exponential", etc.)
+                            'label' : str or None [default]
+                            'parameters' : parameters-dict
 
+                            parameters-dict -- OrderedDict
+                                '<parameter-name>': parameter-value
+                                etc.
+
+        [ ] Code to generate FunctionDescription object from function-dict
+            -- FunctionDescription.dict_to_FunctionDescription
+                [x] Add test code to test_descriptions.py
+                [x] Add static class function DictToFunction() to FunctionDescription class
+                [x] Update code till tests pass
+                [ ] Update code-with-parameter-limits till tests pass
+        [ ] Code to generate FunctionSetDescription object from function-set-dict
+                [x] Add test code to test_descriptions.py
+                [x] Add static class function DictToFunctionSet() to FunctionSetDescription class
+                [x] Update code till tests pass
+                [ ] Update code-with-parameter-limits till tests pass
+        [ ] Code to generate ModelDescription object from model-as-dict
+                [x] Add test code to test_descriptions.py
+                [x] Add static class function DictToFunctionSet() to FunctionSetDescription class
+                [ ] Update code till tests pass
+                [ ] Update code-with-parameter-limits till tests pass
 
 
 

@@ -391,6 +391,38 @@ class FunctionDescription(object):
         f.nParameters = self.nParameters
         return f
 
+    @classmethod
+    def dict_to_FunctionDescription(cls, inputDict):
+        """
+        This is a convenience method to generate a FunctionDescription object
+        from a dict specifying the function.
+
+        Parameters
+        ----------
+        inputDict : dict
+            dict describing the function
+            Example:
+                p = {'PA': 0.0, 'ell': 0.5, 'I_0': 100.0, 'sigma': 10.0}
+                fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
+
+        Returns
+        -------
+        fset : :class:`FunctionDescription`
+            The function description.
+        """
+        funcName = inputDict['name']
+        try:
+            funcLabel = inputDict['label']
+        except KeyError:
+            funcLabel = None
+        # FIXME: construct list of ParameterDescription objects from inputDict['parameters']
+        # entry (itself a dict)
+        try:
+            paramsObjList = [ParameterDescription(pname, pval)
+                             for pname,pval in inputDict['parameters'].items()]
+        except KeyError:
+            paramsObjList = None
+        return FunctionDescription(funcName, funcLabel, paramsObjList)
 
 
 class FunctionSetDescription(object):
@@ -420,6 +452,11 @@ class FunctionSetDescription(object):
             number of functions in the function set
         nParameters : int
             total number of parameters for this function set, including X0 and Y0
+
+    Class methods
+    -------------
+        dict_to_FunctionSetDescription(dict)
+            Returns a new instance of this class based on a dict
 
     Methods
     -------
@@ -465,6 +502,38 @@ class FunctionSetDescription(object):
             for f in functionList:
                 self.addFunction(f)
             self.nFunctions = len(functionList)
+
+
+    @classmethod
+    def dict_to_FunctionSetDescription(cls, inputDict: dict):
+        """
+        This is a convenience method to generate a ModelDescription object
+        from a standard Imfit configuration file.
+
+        Parameters
+        ----------
+        inputDict : dict
+            dict describing the function set
+
+        Returns
+        -------
+        fset : :class:`FunctionSetDescription`
+            The function-set description.
+        """
+
+        # extract name
+        try:
+            fsName = inputDict['name']
+        except KeyError:
+            fsName = 'fs0'
+        # extract x0,y0
+        x0_p = ParameterDescription("X0", float(inputDict['X0']))
+        y0_p = ParameterDescription("Y0", float(inputDict['Y0']))
+        # generate list of FunctionDescription objects
+        nFuncs = len(inputDict['function_list'])
+        funcList = [FunctionDescription.dict_to_FunctionDescription(fdict) for fdict in
+                    inputDict['function_list']]
+        return FunctionSetDescription(fsName, x0_p, y0_p, funcList)
 
 
     @property
@@ -721,6 +790,41 @@ class ModelDescription(object):
         from .config import parse_config_file
 
         return parse_config_file(fileName)
+
+
+    @classmethod
+    def dict_to_ModelDescription(cls, inputDict: dict):
+        """
+        This is a convenience method to generate a ModelDescription object
+        from a standard Imfit configuration file.
+
+        Parameters
+        ----------
+        inputDict : dict
+            dict describing the model, with one required entry -- "function_sets" --
+            and one optional entry -- "options"
+                "function_set_list" : list of dict, each one specifying a function set,
+                suitable as input to FunctionSetDescription.dict_to_FunctionSetDescription()
+
+                "options" : dict of {str: float} specifying image-description options
+                ("GAIN", "ORIGINAL_SKY", etc.)
+
+        Returns
+        -------
+        mdesc : :class:`ModelDescription`
+            The model description.
+        """
+
+        # extract function sets
+
+        fsetDictList = inputDict["function_sets"]
+        try:
+            optionsDict = inputDict["options"]
+        except KeyError:
+            optionsDict = None
+        fsetList = [ FunctionSetDescription.dict_to_FunctionSetDescription(fsetDict)
+                     for fsetDcit in fsetDictList ]
+        return ModelDescription(functionSetsList=fsetList, options=optionsDict)
 
 
     @property

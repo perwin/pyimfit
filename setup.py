@@ -209,7 +209,7 @@ class my_build_ext( build_ext ):
         if not check_for_openmp():
             sys.exit(NON_OPENMP_MESSAGE)
         if (not MACOS_COMPILATION) and (not check_gcc_version()):
-            gccVersionNum = check_gcc_version(getVersion=True)
+            gccVersionNum = check_gcc_version(getVersionNum=True)
             sys.exit(BAD_GCC_VERSION_MESSAGE.format(gccVersionNum))
         
         # Check to see if libimfit.a already exists

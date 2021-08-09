@@ -231,6 +231,7 @@ class Imfit(object):
             raise ValueError('model_descr must be a ModelDescription object.')
         # copy the input ModelDescription (we don't want any links to the input object,
         # in case the latter gets updated later somewhere else)
+        self._modelObjectWrapper = None
         self._modelDescr = copy.deepcopy(model_descr)
         self.nParameters = model_descr.nParameters
         if psf is not None:
@@ -239,7 +240,6 @@ class Imfit(object):
             self._psf = None
         self._normalizePSF = psfNormalization
         self._mask = None
-        self._modelObjectWrapper = None
         self._nproc = nproc
         self._chunkSize = chunk_size
         if quiet:
@@ -904,6 +904,11 @@ class Imfit(object):
 
 
     def __del__(self):
-        if self._modelObjectWrapper is not None:
-            # FIXME: Find a better way to free Cython resources.
-            self._modelObjectWrapper.close()
+        try:
+            if self._modelObjectWrapper is not None:
+                # FIXME: Find a better way to free Cython resources.
+                self._modelObjectWrapper.close()
+        except AttributeError:
+            # sometimes this gets called when no _modelObjectWrapper attribute
+            # was defined; in this case, there's no memory to worry about freeing
+            pass
