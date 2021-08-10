@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Execute this as, e.g. (for version 0.8.8):
 #    $ ./make_upload.sh 0.8.8
+# For test execution (uploads to TestPyPI, not to PyPI)
+#    $ ./make_upload.sh 0.8.8 --test
 
-if [[ $# -ne 1 ]]; then
-  echo "Usage: $0 VERSION_NUMBER"
+if [[ $# -lt 1 ]]; then
+  echo "Usage: $0 VERSION_NUMBER [--test]"
   echo
   exit 1
 fi
@@ -23,8 +25,22 @@ delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp36-cp36m-macosx_10_9_
 
 # Upload sdist and wheels to PyPI
 cd ..
-python3 -m twine upload dist/pyimfit-${VERSION_NUM}.tar.gz
-python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp36-cp36m-macosx_10_9_x86_64.whl
-python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp37-cp37m-macosx_10_9_x86_64.whl
-python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp38-cp38-macosx_10_9_x86_64.whl
-python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp39-cp39-macosx_10_9_x86_64.whl
+if [[ "$2" == "--test" ]]
+then
+  echo -n "   Doing test upload to TestPyPI ...)"
+  python3 -m twine upload --repository testpypi dist/pyimfit-${VERSION_NUM}.tar.gz
+  python3 -m twine upload --repository testpypi dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp36-cp36m-macosx_10_9_x86_64.whl
+  python3 -m twine upload --repository testpypi dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp37-cp37m-macosx_10_9_x86_64.whl
+  python3 -m twine upload --repository testpypi dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp38-cp38-macosx_10_9_x86_64.whl
+  python3 -m twine upload --repository testpypi dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp39-cp39-macosx_10_9_x86_64.whl
+  echo ""
+else
+  echo "   Doing standard upload to PyPI"
+  python3 -m twine upload dist/pyimfit-${VERSION_NUM}.tar.gz
+  python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp36-cp36m-macosx_10_9_x86_64.whl
+  python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp37-cp37m-macosx_10_9_x86_64.whl
+  python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp38-cp38-macosx_10_9_x86_64.whl
+  python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp39-cp39-macosx_10_9_x86_64.whl
+  echo ""
+fi
+
