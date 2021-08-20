@@ -3,10 +3,10 @@ PLAN:
 ** GENERAL/FUTURE TO-DO
 
     ** Update GitHub access to new methodology
-        [ ] Visit GitHub web page
-        1. Generate Personal Authenticaion Token [PAT] (& copy to pword file)
+        [X] Visit GitHub web page
+        [X]1. Generate Personal Authenticaion Token [PAT] (& copy to pword file)
             https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token
-        2. Update Keychain Access
+        [X]2. Update Keychain Access
             A. Delete current github.com "internet password" entry in Keychain Access
                 https://docs.github.com/en/free-pro-team@latest/github/using-git/updating-credentials-from-the-macos-keychain
                 -- this is the password storage for command-line access via git-credential-osxkeychain
@@ -70,9 +70,9 @@ PLAN:
             [X] Install Python 3.9
             [X] Install necessary libraries via pip
 
-        [ ] Add Python 3.9 as an option for GitHub Actions testing workflow
+        [X] Add Python 3.9 as an option for GitHub Actions testing workflow
 
-        [ ] Upload new version to pip staging area
+        [X] Upload new version to pip staging area
 
         [ ] Email announcement to Imfit mailing list
 
@@ -107,24 +107,26 @@ PLAN:
 
                             parameters-dict -- OrderedDict
                                 '<parameter-name>': parameter-value
+                                OR '<parameter-name>': [parameter-value, "fixed"]
+                                OR '<parameter-name>': [parameter-value, lower-limit, upper-limit]
                                 etc.
 
-        [ ] Code to generate FunctionDescription object from function-dict
+        [x] Code to generate FunctionDescription object from function-dict
             -- FunctionDescription.dict_to_FunctionDescription
                 [x] Add test code to test_descriptions.py
                 [x] Add static class function DictToFunction() to FunctionDescription class
                 [x] Update code till tests pass
-                [ ] Update code-with-parameter-limits till tests pass
-        [ ] Code to generate FunctionSetDescription object from function-set-dict
+                [x] Update code-with-parameter-limits till tests pass
+        [x] Code to generate FunctionSetDescription object from function-set-dict
                 [x] Add test code to test_descriptions.py
                 [x] Add static class function DictToFunctionSet() to FunctionSetDescription class
                 [x] Update code till tests pass
-                [ ] Update code-with-parameter-limits till tests pass
-        [ ] Code to generate ModelDescription object from model-as-dict
+                [x] Update code-with-parameter-limits till tests pass
+        [x] Code to generate ModelDescription object from model-as-dict
                 [x] Add test code to test_descriptions.py
                 [x] Add static class function DictToFunctionSet() to FunctionSetDescription class
-                [ ] Update code till tests pass
-                [ ] Update code-with-parameter-limits till tests pass
+                [x] Update code till tests pass
+                [x] Update code-with-parameter-limits till tests pass
 
 
 
@@ -210,7 +212,7 @@ PLAN:
 
     * Rework package to make it astropy-compatible
 
-    * Decide on consistent use of "function set" vs "function block"
+    * [X] Decide on consistent use of "function set" vs "function block"
 
 
 [x] Rationalize handling of masks and MaskedArray in fitting.Imfit.loadData

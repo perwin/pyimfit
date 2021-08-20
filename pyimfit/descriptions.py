@@ -291,6 +291,53 @@ class FunctionDescription(object):
                 self.addParameter(p)
 
 
+    @classmethod
+    def dict_to_FunctionDescription(cls, inputDict):
+        """
+        This is a convenience method to generate a FunctionDescription object
+        from a dict specifying the function.
+
+        Parameters
+        ----------
+        inputDict : dict
+            dict describing the function
+            Examples:
+                fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
+                where p is a dict containing parameter names and values, e.g.
+                p = {'PA': 0.0, 'ell': 0.5, 'I_0': 100.0, 'sigma': 10.0}
+                OR
+                p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
+                    'sigma': [10.0, 5.0,20.0]}
+
+        Returns
+        -------
+        fset : :class:`FunctionDescription`
+            The function description.
+        """
+        funcName = inputDict['name']
+        try:
+            funcLabel = inputDict['label']
+        except KeyError:
+            funcLabel = None
+        try:
+            paramsObjList = []
+            for pname,pval in inputDict['parameters'].items():
+                # assuming inputDict['parameters'] is an OrderedDict ...
+                if type(pval) is list:
+                    # user supplied "fixed" setting or parameter limits
+                    val = pval[0]
+                    if pval[1] == "fixed":
+                        paramsObjList.append(ParameterDescription(pname, val, fixed=True))
+                    else:
+                        paramsObjList.append(ParameterDescription(pname, val, limits=pval[1:]))
+                else:
+                    # just a single parameter value
+                    paramsObjList.append(ParameterDescription(pname, pval))
+        except KeyError:
+            paramsObjList = None
+        return FunctionDescription(funcName, funcLabel, paramsObjList)
+
+
     @property
     def label(self):
         """
@@ -391,38 +438,6 @@ class FunctionDescription(object):
         f.nParameters = self.nParameters
         return f
 
-    @classmethod
-    def dict_to_FunctionDescription(cls, inputDict):
-        """
-        This is a convenience method to generate a FunctionDescription object
-        from a dict specifying the function.
-
-        Parameters
-        ----------
-        inputDict : dict
-            dict describing the function
-            Example:
-                p = {'PA': 0.0, 'ell': 0.5, 'I_0': 100.0, 'sigma': 10.0}
-                fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
-
-        Returns
-        -------
-        fset : :class:`FunctionDescription`
-            The function description.
-        """
-        funcName = inputDict['name']
-        try:
-            funcLabel = inputDict['label']
-        except KeyError:
-            funcLabel = None
-        # FIXME: construct list of ParameterDescription objects from inputDict['parameters']
-        # entry (itself a dict)
-        try:
-            paramsObjList = [ParameterDescription(pname, pval)
-                             for pname,pval in inputDict['parameters'].items()]
-        except KeyError:
-            paramsObjList = None
-        return FunctionDescription(funcName, funcLabel, paramsObjList)
 
 
 class FunctionSetDescription(object):
@@ -527,13 +542,24 @@ class FunctionSetDescription(object):
         except KeyError:
             fsName = 'fs0'
         # extract x0,y0
-        x0_p = ParameterDescription("X0", float(inputDict['X0']))
-        y0_p = ParameterDescription("Y0", float(inputDict['Y0']))
+        x0y0_params = {}
+        for key in ['X0', 'Y0']:
+            input = inputDict[key]
+            if type(input) is list:
+                val = input[0]
+                if input[1] == "fixed":
+                    p = ParameterDescription(key, val, fixed=True)
+                else:
+                    p = ParameterDescription(key, val, limits=input[1:])
+            else:
+                # just a single parameter value
+                p = ParameterDescription(key, input)
+            x0y0_params[key] = p
         # generate list of FunctionDescription objects
         nFuncs = len(inputDict['function_list'])
         funcList = [FunctionDescription.dict_to_FunctionDescription(fdict) for fdict in
                     inputDict['function_list']]
-        return FunctionSetDescription(fsName, x0_p, y0_p, funcList)
+        return FunctionSetDescription(fsName, x0y0_params['X0'], x0y0_params['Y0'], funcList)
 
 
     @property
@@ -795,8 +821,7 @@ class ModelDescription(object):
     @classmethod
     def dict_to_ModelDescription(cls, inputDict: dict):
         """
-        This is a convenience method to generate a ModelDescription object
-        from a standard Imfit configuration file.
+        This is a convenience method to generate a ModelDescription object from a dict.
 
         Parameters
         ----------
@@ -823,7 +848,7 @@ class ModelDescription(object):
         except KeyError:
             optionsDict = None
         fsetList = [ FunctionSetDescription.dict_to_FunctionSetDescription(fsetDict)
-                     for fsetDcit in fsetDictList ]
+                     for fsetDict in fsetDictList ]
         return ModelDescription(functionSetsList=fsetList, options=optionsDict)
 
 

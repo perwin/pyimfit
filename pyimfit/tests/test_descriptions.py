@@ -249,16 +249,19 @@ class TestFunctionDescription(object):
         fdesc_from_dict = FunctionDescription.dict_to_FunctionDescription(fDict)
         assert fdesc_from_dict == fdesc_correct
 
-    # FIXME: the following is currently commented out bcs we haven't decided on an
-    # interface for including parameter limits with the input dict
-    # def test_DictToFunction_withParamLimits(self):
-    #     # start out with parameters having no limits
-    #     p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
-    #          'sigma': [10.0, 5.0,20.0]}
-    #     fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
-    #     fdesc_correct = FunctionDescription('Gaussian', "blob", self.paramDescList)
-    #     fdesc_from_dict = FunctionDescription.dict_to_FunctionDescription(fDict)
-    #     assert fdesc_from_dict == fdesc_correct
+    def test_DictToFunction_withParamLimits(self):
+        ref_p1 = ParameterDescription("PA", 0.0, fixed=True)
+        ref_p2 = ParameterDescription("ell", 0.5, limits=[0.1,0.8])
+        ref_p3 = ParameterDescription("I_0", 100.0, limits=[10.0, 1e3])
+        ref_p4 = ParameterDescription("sigma", 10.0, limits=[5.0,20.0])
+        ref_paramDescList = [ref_p1, ref_p2, ref_p3, ref_p4]
+        fdesc_correct = FunctionDescription('Gaussian', "blob", ref_paramDescList)
+
+        p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
+             'sigma': [10.0, 5.0,20.0]}
+        fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
+        fdesc_from_dict = FunctionDescription.dict_to_FunctionDescription(fDict)
+        assert fdesc_from_dict == fdesc_correct
 
 
 class TestFunctionSetDescription(object):
@@ -368,6 +371,24 @@ class TestFunctionSetDescription(object):
         p = {'PA': 0.0, 'ell': 0.5, 'I_0': 100.0, 'sigma': 10.0}
         fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
         fsetDict = {'X0': 100.0, 'Y0': 200.0, 'function_list': [fDict]}
+        fsetdesc_from_dict = FunctionSetDescription.dict_to_FunctionSetDescription(fsetDict)
+        assert fsetdesc_from_dict == fsetdesc_correct
+
+    def test_DictToFunctionSet_withParamLimits(self):
+        ref_p1 = ParameterDescription("PA", 0.0, fixed=True)
+        ref_p2 = ParameterDescription("ell", 0.5, limits=[0.1, 0.8])
+        ref_p3 = ParameterDescription("I_0", 100.0, limits=[10.0, 1e3])
+        ref_p4 = ParameterDescription("sigma", 10.0, limits=[5.0, 20.0])
+        ref_paramDescList = [ref_p1, ref_p2, ref_p3, ref_p4]
+        fdesc_correct = FunctionDescription('Gaussian', "blob", ref_paramDescList)
+        ref_x0_p = ParameterDescription("X0", 100.0, limits=[90.0,110.0])
+        ref_y0_p = ParameterDescription("Y0", 200.0, limits=[180.0,220.0])
+        fsetdesc_correct = FunctionSetDescription('fs0', ref_x0_p, ref_y0_p, [fdesc_correct])
+
+        p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
+             'sigma': [10.0, 5.0,20.0]}
+        fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
+        fsetDict = {'X0': [100.0, 90.0,110.0], 'Y0': [200.0, 180.0,220.0], 'function_list': [fDict]}
         fsetdesc_from_dict = FunctionSetDescription.dict_to_FunctionSetDescription(fsetDict)
         assert fsetdesc_from_dict == fsetdesc_correct
 
@@ -542,6 +563,58 @@ class TestModelDescription(object):
         paramNames_correct2 = ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "sigma_1",
                               "X0_2", "Y0_2", "PA_2", "ell_2", "I_0_2", "sigma_2", "I_0_3"]
         assert modeldesc2.numberedParameterNames == paramNames_correct2
+
+    def test_DictToModel_noParamLimits(self):
+        # start out with parameters having no limits
+        ref_p1 = ParameterDescription("PA", 0.0)
+        ref_p2 = ParameterDescription("ell", 0.5)
+        ref_p3 = ParameterDescription("I_0", 100.0)
+        ref_p4 = ParameterDescription("sigma", 10.0)
+        ref_paramDescList = [ref_p1, ref_p2, ref_p3, ref_p4]
+        fdesc_correct = FunctionDescription('Gaussian', "blob", ref_paramDescList)
+        ref_x0_p = ParameterDescription("X0", 100.0)
+        ref_y0_p = ParameterDescription("Y0", 200.0)
+        fsetdesc_correct = FunctionSetDescription('fs0', ref_x0_p, ref_y0_p, [fdesc_correct])
+        fsetList = [fsetdesc_correct]
+        modeldesc_no_options_correct = ModelDescription(fsetList)
+        optionsDict = {"GAIN": 2.0, "ORIGINAL_SKY": 101.0}
+        modeldesc_with_options_correct = ModelDescription(fsetList, optionsDict)
+
+        p = {'PA': 0.0, 'ell': 0.5, 'I_0': 100.0, 'sigma': 10.0}
+        fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
+        fsetDict = {'X0': 100.0, 'Y0': 200.0, 'function_list': [fDict]}
+        modelDict = {"function_sets": [fsetDict]}
+        modeldesc_from_dict = ModelDescription.dict_to_ModelDescription(modelDict)
+        assert modeldesc_from_dict == modeldesc_no_options_correct
+        modelDict_with_options = {"function_sets": [fsetDict], "options": optionsDict}
+        modeldesc_from_dict = ModelDescription.dict_to_ModelDescription(modelDict_with_options)
+        assert modeldesc_from_dict == modeldesc_with_options_correct
+
+    def test_DictToModel_withParamLimits(self):
+        ref_p1 = ParameterDescription("PA", 0.0, fixed=True)
+        ref_p2 = ParameterDescription("ell", 0.5, limits=[0.1, 0.8])
+        ref_p3 = ParameterDescription("I_0", 100.0, limits=[10.0, 1e3])
+        ref_p4 = ParameterDescription("sigma", 10.0, limits=[5.0, 20.0])
+        ref_paramDescList = [ref_p1, ref_p2, ref_p3, ref_p4]
+        fdesc_correct = FunctionDescription('Gaussian', "blob", ref_paramDescList)
+        ref_x0_p = ParameterDescription("X0", 100.0, limits=[90.0,110.0])
+        ref_y0_p = ParameterDescription("Y0", 200.0, limits=[180.0,220.0])
+        fsetdesc_correct = FunctionSetDescription('fs0', ref_x0_p, ref_y0_p, [fdesc_correct])
+        fsetList = [fsetdesc_correct]
+        modeldesc_no_options_correct = ModelDescription(fsetList)
+        optionsDict = {"GAIN": 2.0, "ORIGINAL_SKY": 101.0}
+        modeldesc_with_options_correct = ModelDescription(fsetList, optionsDict)
+
+        p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
+             'sigma': [10.0, 5.0,20.0]}
+        fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
+        fsetDict = {'X0': [100.0, 90.0,110.0], 'Y0': [200.0, 180.0,220.0], 'function_list': [fDict]}
+        modelDict = {"function_sets": [fsetDict]}
+        modeldesc_from_dict = ModelDescription.dict_to_ModelDescription(modelDict)
+        assert modeldesc_from_dict == modeldesc_no_options_correct
+        modelDict_with_options = {"function_sets": [fsetDict], "options": optionsDict}
+        modeldesc_from_dict = ModelDescription.dict_to_ModelDescription(modelDict_with_options)
+        assert modeldesc_from_dict == modeldesc_with_options_correct
 
 
 
