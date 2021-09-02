@@ -5,6 +5,7 @@
 import os
 import math
 import pytest
+from collections import OrderedDict
 from pytest import approx
 import numpy as np
 from numpy.testing import assert_allclose
@@ -161,6 +162,30 @@ class TestImfit(object):
         assert totalMag == totalMag_correct
         assert magsArray == magsArray_correct
 
+    def test_Imfit_getRawParameters(self):
+        # Exponential model for fitting IC 3478
+        imfit_fitter = Imfit(self.modelDesc)
+        imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+        # should return initial parameters from configFile ["config_exponential_ic3478_256.dat"]
+        correctParams = np.array([129.0,129.0, 18.0, 0.2, 100.0, 25.0])
+        outputParams = imfit_fitter.getRawParameters()
+        assert_allclose(outputParams, correctParams, rtol=1.0e-9)
+
+    def test_Imfit_getModelDict(self):
+        # Exponential model for fitting IC 3478
+        p = {'PA': [18.0, 0.0, 90.0], 'ell': [0.2, 0.0, 1.0], 'I_0': [100.0, 0.0, 500.0],
+             'h': [25.0, 0.0, 100.0]}
+        fDict = {'name': "Exponential", 'label': '', 'parameters': p}
+        fsetDict = {'X0': [129.0, 125.0, 135.0], 'Y0': [129.0, 125.0, 135.0], 'function_list': [fDict]}
+        options_dict = OrderedDict()
+        options_dict.update( {"GAIN": 4.725, "READNOISE": 4.3, "ORIGINAL_SKY": 130.14} )
+        model_dict_correct = {"function_sets": [fsetDict], "options": options_dict}
+
+        imfit_fitter = Imfit(self.modelDesc)
+        imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+        model_dict = imfit_fitter.getModelAsDict()
+        assert model_dict == model_dict_correct
+
     def test_Imfit_catch_bad_parameters(self):
         """Check that we get ValueError exceptions when passing new-parameter-vector of wrong size
         """
@@ -182,14 +207,6 @@ class TestImfit(object):
         with pytest.raises(ValueError):
             (totalMag, magsArray) = imfit_fitter.getModelMagnitudes(badParams, zeroPoint=20)
 
-
-# result.fitConverged = self.fitConverged
-# result.nIter = self.nIter
-# result.fitStat = self.fitStatistic
-# result.fitStatReduced = self.reducedFitStatistic
-# result.aic = self.AIC
-# result.bic = self.BIC
-# result.params = self.getRawParameters()
 
 
 class TestImfit_MultiComponent(object):

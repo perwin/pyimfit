@@ -167,6 +167,19 @@ class TestParameterDescription(object):
         outString3 = str(pdesc3)
         assert outString3 == outString3_correct
 
+    def test_getParamInfoList(self):
+        pdesc1 = ParameterDescription('X0', 100.0)
+        outList1_correct = [100.0]
+        pdesc2 = ParameterDescription('X0', 100.0, fixed=True)
+        outList2_correct = [100.0, "fixed"]
+        pdesc3 = ParameterDescription('X0', 100.0, [50.0, 150.0])
+        outList3_correct = [100.0, 50.0, 150.0]
+        outList1 = pdesc1.getParamInfoList()
+        assert outList1 == outList1_correct
+        outList2 = pdesc2.getParamInfoList()
+        assert outList2 == outList2_correct
+        outList3 = pdesc3.getParamInfoList()
+        assert outList3 == outList3_correct
 
 
 class TestFunctionDescription(object):
@@ -263,6 +276,15 @@ class TestFunctionDescription(object):
         fdesc_from_dict = FunctionDescription.dict_to_FunctionDescription(fDict)
         assert fdesc_from_dict == fdesc_correct
 
+    def test_getFunctionAsDict(self):
+        p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
+             'sigma': [10.0, 5.0,20.0]}
+        fDict_correct = {'name': "Gaussian", 'label': "blob", 'parameters': p}
+        # round-trip test
+        fdesc_from_dict = FunctionDescription.dict_to_FunctionDescription(fDict_correct)
+        fDict = fdesc_from_dict.getFunctionAsDict()
+        assert fDict == fDict_correct
+
 
 class TestFunctionSetDescription(object):
 
@@ -283,6 +305,26 @@ class TestFunctionSetDescription(object):
     def test_FunctionSetDescription_simple( self ):
         fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
         assert fsetdesc1.name == "fs0"
+        # check to see if FunctionDescription object with name "blob" (part of self.functionList)
+        # can be accessed as attribute
+        assert fsetdesc1._contains("blob") is True
+        assert fsetdesc1.blob == self.fdesc1
+        assert fsetdesc1.x0 == self.x0_p
+        assert fsetdesc1.y0 == self.y0_p
+        assert fsetdesc1.nParameters == self.N_PARAMS_CORRECT
+
+    def test_FunctionSetDescription_simple2( self ):
+        fsetdesc1 = FunctionSetDescription(None, self.x0_p, self.y0_p, self.functionList)
+        assert fsetdesc1._contains("blob") is True
+        assert fsetdesc1.blob == self.fdesc1
+        assert fsetdesc1.name is None
+        assert fsetdesc1.x0 == self.x0_p
+        assert fsetdesc1.y0 == self.y0_p
+        assert fsetdesc1.nParameters == self.N_PARAMS_CORRECT
+
+    def test_FunctionSetDescription_keywords_noname( self ):
+        fsetdesc1 = FunctionSetDescription(x0param=self.x0_p, y0param=self.y0_p, functionList=self.functionList)
+        assert fsetdesc1.name is None
         assert fsetdesc1._contains("blob") is True
         assert fsetdesc1.blob == self.fdesc1
         assert fsetdesc1.x0 == self.x0_p
@@ -366,7 +408,7 @@ class TestFunctionSetDescription(object):
         fdesc_correct = FunctionDescription('Gaussian', "blob", ref_paramDescList)
         ref_x0_p = ParameterDescription("X0", 100.0)
         ref_y0_p = ParameterDescription("Y0", 200.0)
-        fsetdesc_correct = FunctionSetDescription('fs0', ref_x0_p, ref_y0_p, [fdesc_correct])
+        fsetdesc_correct = FunctionSetDescription(None, ref_x0_p, ref_y0_p, [fdesc_correct])
 
         p = {'PA': 0.0, 'ell': 0.5, 'I_0': 100.0, 'sigma': 10.0}
         fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
@@ -383,7 +425,7 @@ class TestFunctionSetDescription(object):
         fdesc_correct = FunctionDescription('Gaussian', "blob", ref_paramDescList)
         ref_x0_p = ParameterDescription("X0", 100.0, limits=[90.0,110.0])
         ref_y0_p = ParameterDescription("Y0", 200.0, limits=[180.0,220.0])
-        fsetdesc_correct = FunctionSetDescription('fs0', ref_x0_p, ref_y0_p, [fdesc_correct])
+        fsetdesc_correct = FunctionSetDescription(None, ref_x0_p, ref_y0_p, [fdesc_correct])
 
         p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
              'sigma': [10.0, 5.0,20.0]}
@@ -392,6 +434,15 @@ class TestFunctionSetDescription(object):
         fsetdesc_from_dict = FunctionSetDescription.dict_to_FunctionSetDescription(fsetDict)
         assert fsetdesc_from_dict == fsetdesc_correct
 
+    def test_getFuncSetAsDict(self):
+        p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
+             'sigma': [10.0, 5.0,20.0]}
+        fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
+        fsetDict_correct = {'X0': [100.0, 90.0,110.0], 'Y0': [200.0, 180.0,220.0], 'function_list': [fDict]}
+        # round-trip test
+        fsetdesc_from_dict = FunctionSetDescription.dict_to_FunctionSetDescription(fsetDict_correct)
+        fsetDict = fsetdesc_from_dict.getFuncSetAsDict()
+        assert fsetDict == fsetDict_correct
 
 
 
@@ -574,7 +625,7 @@ class TestModelDescription(object):
         fdesc_correct = FunctionDescription('Gaussian', "blob", ref_paramDescList)
         ref_x0_p = ParameterDescription("X0", 100.0)
         ref_y0_p = ParameterDescription("Y0", 200.0)
-        fsetdesc_correct = FunctionSetDescription('fs0', ref_x0_p, ref_y0_p, [fdesc_correct])
+        fsetdesc_correct = FunctionSetDescription(None, ref_x0_p, ref_y0_p, [fdesc_correct])
         fsetList = [fsetdesc_correct]
         modeldesc_no_options_correct = ModelDescription(fsetList)
         optionsDict = {"GAIN": 2.0, "ORIGINAL_SKY": 101.0}
@@ -599,7 +650,7 @@ class TestModelDescription(object):
         fdesc_correct = FunctionDescription('Gaussian', "blob", ref_paramDescList)
         ref_x0_p = ParameterDescription("X0", 100.0, limits=[90.0,110.0])
         ref_y0_p = ParameterDescription("Y0", 200.0, limits=[180.0,220.0])
-        fsetdesc_correct = FunctionSetDescription('fs0', ref_x0_p, ref_y0_p, [fdesc_correct])
+        fsetdesc_correct = FunctionSetDescription("", ref_x0_p, ref_y0_p, [fdesc_correct])
         fsetList = [fsetdesc_correct]
         modeldesc_no_options_correct = ModelDescription(fsetList)
         optionsDict = {"GAIN": 2.0, "ORIGINAL_SKY": 101.0}
@@ -616,6 +667,32 @@ class TestModelDescription(object):
         modeldesc_from_dict = ModelDescription.dict_to_ModelDescription(modelDict_with_options)
         assert modeldesc_from_dict == modeldesc_with_options_correct
 
+    def test_getModelAsDict(self):
+        p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1, 0.8], 'I_0': [100.0, 10.0, 1e3],
+             'sigma': [10.0, 5.0, 20.0]}
+        fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
+        fsetDict = {'X0': [100.0, 90.0, 110.0], 'Y0': [200.0, 180.0, 220.0], 'function_list': [fDict]}
+        modelDict_correct = {"function_sets": [fsetDict]}
+
+        ref_p1 = ParameterDescription("PA", 0.0, fixed=True)
+        ref_p2 = ParameterDescription("ell", 0.5, limits=[0.1, 0.8])
+        ref_p3 = ParameterDescription("I_0", 100.0, limits=[10.0, 1e3])
+        ref_p4 = ParameterDescription("sigma", 10.0, limits=[5.0, 20.0])
+        ref_paramDescList = [ref_p1, ref_p2, ref_p3, ref_p4]
+        fdesc_correct = FunctionDescription('Gaussian', "blob", ref_paramDescList)
+        ref_x0_p = ParameterDescription("X0", 100.0, limits=[90.0,110.0])
+        ref_y0_p = ParameterDescription("Y0", 200.0, limits=[180.0,220.0])
+        fsetdesc_correct = FunctionSetDescription("", ref_x0_p, ref_y0_p, [fdesc_correct])
+        fsetList = [fsetdesc_correct]
+        modeldesc_no_options_correct = ModelDescription(fsetList)
+
+        modelDict = modeldesc_no_options_correct.getModelAsDict()
+        assert modelDict == modelDict_correct
+
+        # round-trip test
+        modeldesc_from_dict = ModelDescription.dict_to_ModelDescription(modelDict_correct)
+        modelDict = modeldesc_from_dict.getModelAsDict()
+        assert modelDict == modelDict_correct
 
 
 class TestSimpleModelDescription(object):

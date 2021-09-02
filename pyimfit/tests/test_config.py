@@ -67,8 +67,7 @@ testFunctionBlockLines_bad2 = ["X  100", "Y0 200", "FUNCTION Gaussian", "PA  10"
                                 "ell  0.5", "I_0  100", "sigma  10"]
 
 
-fsetdesc_correct1 = FunctionSetDescription("function_block_1",
-                                           x0param=ParameterDescription('X0', 100.0),
+fsetdesc_correct1 = FunctionSetDescription("", x0param=ParameterDescription('X0', 100.0),
                                            y0param=ParameterDescription('Y0', 200.0))
 fsetdesc_correct1.addFunction(fdesc_correct1)
 
@@ -76,8 +75,7 @@ fdesc_fblock2_correct1 = FunctionDescription("Gaussian")
 for line in testFunctionBlockLines_good2[3:7]:
     pdesc = read_parameter(line)
     fdesc_fblock2_correct1.addParameter(pdesc)
-fsetdesc_correct2 = FunctionSetDescription("function_block_2",
-                                           x0param=ParameterDescription('X0', 100.0, fixed=True),
+fsetdesc_correct2 = FunctionSetDescription("", x0param=ParameterDescription('X0', 100.0, fixed=True),
                                            y0param=ParameterDescription('Y0', 200.0, fixed=True))
 fsetdesc_correct2.addFunction(fdesc_fblock2_correct1)
 fsetdesc_correct2.addFunction(fdesc_correct2)
@@ -106,11 +104,11 @@ optionsDict_ord2["READNOISE"] = 0.5
 optionsDict_ord2["ORIGINAL_SKY"] = 154.33
 
 fsetdesc_correct1b = copy.copy(fsetdesc_correct1)
-fsetdesc_correct1b._name = "fs0"
+# fsetdesc_correct1b._name = "fs0"
 modeldesc_correct1 = ModelDescription([fsetdesc_correct1b],
                                       options=optionsDict_ord)
 fsetdesc_correct2b = copy.copy(fsetdesc_correct2)
-fsetdesc_correct2b._name = "fs0"
+# fsetdesc_correct2b._name = "fs0"
 modeldesc_correct2 = ModelDescription([fsetdesc_correct2b],
                                       options=optionsDict_ord2)
 
@@ -184,17 +182,17 @@ def test_read_function_attributes( ):
 
 def test_read_function_set_good( ):
     """Test that we correctly read valid function-block lines."""
-    fsetdesc1 = read_function_set("function_block_1", testFunctionBlockLines_good1)
+    fsetdesc1 = read_function_set("", testFunctionBlockLines_good1)
     assert fsetdesc1 == fsetdesc_correct1
-    fsetdesc2 = read_function_set("function_block_2", testFunctionBlockLines_good2)
+    fsetdesc2 = read_function_set("", testFunctionBlockLines_good2)
     assert fsetdesc2 == fsetdesc_correct2
 
 def test_read_function_set_bad( ):
     """Test that we correctly catch bad function-block lines."""
     with pytest.raises(ValueError):
-        fsetdesc1 = read_function_set("function_block_1", testFunctionBlockLines_bad1)
+        fsetdesc1 = read_function_set("", testFunctionBlockLines_bad1)
     with pytest.raises(ValueError):
-        fsetdesc2 = read_function_set("function_block_2", testFunctionBlockLines_bad2)
+        fsetdesc2 = read_function_set("", testFunctionBlockLines_bad2)
 
 
 

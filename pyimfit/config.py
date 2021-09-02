@@ -90,12 +90,15 @@ def parse_config( lines: List[str] ) -> ModelDescription:
                 options = read_options(lines[block_start:i])
                 model.options.update(options)
             else:
-                funcSetName = "fs{0:d}".format(functionBlock_id)
-                model.addFunctionSet(read_function_set(funcSetName, lines[block_start:i]))
+                # possible auto-label-generation code
+                # funcSetLabel = "fs{0:d}".format(functionBlock_id)
+                funcSetLabel = ""
+                model.addFunctionSet(read_function_set(funcSetLabel, lines[block_start:i]))
                 functionBlock_id += 1
             block_start = i
-    funcSetName = "fs{0:d}".format(functionBlock_id)
-    model.addFunctionSet(read_function_set(funcSetName, lines[block_start:i + 1]))
+    # funcSetLabel = "fs{0:d}".format(functionBlock_id)
+    funcSetLabel = ""
+    model.addFunctionSet(read_function_set(funcSetLabel, lines[block_start:i + 1]))
     return model
 
 
@@ -164,14 +167,15 @@ def read_options( lines: List[str] ) -> OrderedDict:
 
 
 
-def read_function_set( name: str, lines: List[str] ) -> FunctionSetDescription:
+def read_function_set( label: str, lines: List[str] ) -> FunctionSetDescription:
     """
     Reads in lines of text corresponding to a function block (or 'set') containing
     X0,Y0 coords and one or more image functions with associated parameter settings.
 
     Parameters
     ----------
-    name : str
+    label : str
+        optional label for the function set (for "no particular label", use "")
     
     lines : list of str
         lines from configuration file
@@ -186,7 +190,7 @@ def read_function_set( name: str, lines: List[str] ) -> FunctionSetDescription:
     y0 = read_parameter(lines[1])
     if x0.name != x0_str or y0.name != y0_str:
         raise ValueError('A function set must begin with the parameters X0 and Y0.')
-    fs = FunctionSetDescription(name)
+    fs = FunctionSetDescription(label)
     fs.x0 = x0
     fs.y0 = y0
     block_start = 2

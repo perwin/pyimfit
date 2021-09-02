@@ -226,6 +226,22 @@ class ParameterDescription(object):
         return outputString
 
 
+    def getParamInfoList(self):
+        """
+        Returns a list in one of three formats
+            1. [param-value]
+            2. [param-value, "fixed"] -- if parameter is fixed
+            3. [param-value, lower-limit, upper-limit] -- if parameter has limits
+        """
+        output = [self._value]
+        if self._fixed:
+            output.append("fixed")
+        elif self.limits is not None:
+            output.append(self.limits[0])
+            output.append(self.limits[1])
+        return output
+
+
     def __eq__(self, rhs):
         if ((self._name == rhs._name) and (self._value == rhs._value)
                 and (self._limits == rhs._limits) and (self._fixed == rhs._fixed)):
@@ -415,6 +431,23 @@ class FunctionDescription(object):
         return outputLines
 
 
+    def getFunctionAsDict(self):
+        """
+        Returns a dict describing the function (suitable for use in e.g. dict_to_FunctionDescription())
+            Examples:
+                fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
+                where p is a dict containing parameter names and values, e.g.
+                p = {'PA': 0.0, 'ell': 0.5, 'I_0': 100.0, 'sigma': 10.0}
+                OR
+                p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
+                    'sigma': [10.0, 5.0,20.0]}
+        """
+        # FIXME: write code for this!
+        paramsDict = { param.name: param.getParamInfoList() for param in self._parameters }
+        funcDict = {'name': self._funcName, 'label': self._label, 'parameters': paramsDict}
+        return funcDict
+
+
     def __eq__( self, rhs ):
         if ((self._funcName == rhs._funcName) and (self._label == rhs._label)
                     and (self._parameters == rhs._parameters)):
@@ -446,17 +479,17 @@ class FunctionSetDescription(object):
     Imfit image functions sharing a common (X0,Y0) position on the image.
 
     This contains the X0 and Y0 coordinates, a list of FunctionDescription
-    objects, and name or label for the function set (e.g., "fs0", "star 1",
+    objects, and an optional label for the function set (e.g., "fs0", "star 1",
     "galaxy 5", "offset nucleus", etc.)
 
     Attributes
     ----------
 
-        name : str
-            name for the function set
+        label : str
+            label for the function set ("" = default no-name value)
 
-        _name : str
-            name for the function set
+        _label : str
+            label for the function set
         x0 : ParameterDescription
             x-coordinate of the function block/set's center
         y0 : ParameterDescription
@@ -492,10 +525,10 @@ class FunctionSetDescription(object):
             the function block/set (including X0,Y0)
 
     """
-    def __init__( self, name: str, x0param: Optional[ParameterDescription]=None,
+    def __init__( self, label: Optional[str]="", x0param: Optional[ParameterDescription]=None,
                   y0param: Optional[ParameterDescription]=None,
                   functionList: Optional[List[FunctionDescription]]=None ):
-        self._name = name
+        self._label = label
         if x0param is None:
             self.x0 = ParameterDescription('X0', 0.0)
         else:
@@ -522,25 +555,30 @@ class FunctionSetDescription(object):
     @classmethod
     def dict_to_FunctionSetDescription(cls, inputDict: dict):
         """
-        This is a convenience method to generate a ModelDescription object
-        from a standard Imfit configuration file.
+        This is a convenience method to generate a FunctionSetDescription object
+        from a dict
 
         Parameters
         ----------
         inputDict : dict
             dict describing the function set
-
+            {'X0': list, 'Y0': list, 'function_list': [list of dicts describing functions]}
+            {'label': str, 'X0': list, 'Y0': list, 'function_list': [list of dicts describing functions]}
+                where "list" for X0 and Y0 is one of
+                    [value]
+                    [value, "fixed"]
+                    [value, lower-limit, upper-limit]
         Returns
         -------
         fset : :class:`FunctionSetDescription`
             The function-set description.
         """
 
-        # extract name
+        # extract label
         try:
-            fsName = inputDict['name']
+            fsLabel = inputDict['label']
         except KeyError:
-            fsName = 'fs0'
+            fsLabel = ""
         # extract x0,y0
         x0y0_params = {}
         for key in ['X0', 'Y0']:
@@ -559,15 +597,15 @@ class FunctionSetDescription(object):
         nFuncs = len(inputDict['function_list'])
         funcList = [FunctionDescription.dict_to_FunctionDescription(fdict) for fdict in
                     inputDict['function_list']]
-        return FunctionSetDescription(fsName, x0y0_params['X0'], x0y0_params['Y0'], funcList)
+        return FunctionSetDescription(fsLabel, x0y0_params['X0'], x0y0_params['Y0'], funcList)
 
 
     @property
-    def name(self):
+    def label(self):
         """
         Custom name/label for the function set.
         """
-        return self._name
+        return self._label
 
 
     def addFunction(self, f: FunctionDescription):
@@ -690,8 +728,25 @@ class FunctionSetDescription(object):
         return outputLines
 
 
+    def getFuncSetAsDict(self):
+        """
+        Returns a dict describing the function set (suitable for use in e.g. dict_to_FunctionSetDescription())
+
+            {'X0': list, 'Y0': list, 'function_list': [list of dicts describing functions]}
+            {'label': str, 'X0': list, 'Y0': list, 'function_list': [list of dicts describing functions]}
+        """
+        funcSetDict = {}
+        if self._label != "":
+            funcSetDict['label'] = self._label
+        funcSetDict['X0'] = self.x0.getParamInfoList()
+        funcSetDict['Y0'] = self.y0.getParamInfoList()
+        funcList = [ func.getFunctionAsDict() for func in self._functions ]
+        funcSetDict['function_list'] = funcList
+        return funcSetDict
+
+
     def __eq__(self, rhs):
-        if ((self._name == rhs._name) and (self.x0 == rhs.x0) and (self.y0 == rhs.y0)
+        if ((self._label == rhs._label) and (self.x0 == rhs.x0) and (self.y0 == rhs.y0)
                     and (self._functions == rhs._functions)):
             return True
         else:
@@ -707,7 +762,7 @@ class FunctionSetDescription(object):
 
 
     def __deepcopy__(self, memo):
-        fs = FunctionSetDescription(self._name)
+        fs = FunctionSetDescription(self._label)
         fs.x0 = copy(self.x0)
         fs.y0 = copy(self.y0)
         fs._functions = deepcopy(self._functions, memo)
@@ -828,7 +883,7 @@ class ModelDescription(object):
         inputDict : dict
             dict describing the model, with one required entry -- "function_sets" --
             and one optional entry -- "options"
-                "function_set_list" : list of dict, each one specifying a function set,
+                "function_sets" : list of dict, each one specifying a function set,
                 suitable as input to FunctionSetDescription.dict_to_FunctionSetDescription()
 
                 "options" : dict of {str: float} specifying image-description options
@@ -895,10 +950,11 @@ class ModelDescription(object):
         """
         if not isinstance(fs, FunctionSetDescription):
             raise ValueError('fs is not a FunctionSet object.')
-        if self._contains(fs.name):
-            raise KeyError('FunctionSet named %s already exists.' % fs.name)
+        if self._contains(fs.label):
+            raise KeyError('FunctionSet labeled %s already exists.' % fs.label)
         self._functionSets.append(fs)
-        setattr(self, fs.name, fs)
+        if fs.label is not None:
+            setattr(self, fs.label, fs)
         self.nFunctionSets += 1
         self.nParameters += fs.nParameters
 
@@ -929,9 +985,9 @@ class ModelDescription(object):
         self.options = optionsDict
 
 
-    def _contains(self, name: str):
+    def _contains(self, label: str):
         for fs in self._functionSets:
-            if fs.name == name:
+            if fs.label == label:
                 return True
         return False
 
@@ -994,12 +1050,12 @@ class ModelDescription(object):
 
     def functionSetNameList(self):
         """
-        List of the function sets composing this model, as strings.
+        List of the functions composing this model, as strings, grouped by function set.
 
         Returns
         -------
         func_set_list : list of list of string
-            List of the function sets: [[functions_in_set1], [functions_in_set2], ...]
+            List of the function names, grouped by function set: [[functions_in_set1], [functions_in_set2], ...]
         """
         functionSetList = []
         for function_set in self._functionSets:
@@ -1088,6 +1144,18 @@ class ModelDescription(object):
                 newLines = fblock.getStringDescription(noLimits=noLimits)
             outputLines.extend(newLines)
         return outputLines
+
+
+    def getModelAsDict( self ):
+        """
+        Returns the model in dict form (suitable for use in e.g. dict_to_ModelDescription)
+        """
+        modelDict = {}
+        fsetDictList = [function_set.getFuncSetAsDict() for function_set in self._functionSets ]
+        modelDict["function_sets"] = fsetDictList
+        if len(self.options) > 0:
+            modelDict["options"] = self.options
+        return modelDict
 
 
     def __eq__(self, rhs):

@@ -128,6 +128,46 @@ PLAN:
                 [x] Update code till tests pass
                 [x] Update code-with-parameter-limits till tests pass
 
+        [x] Code to generate parameter-info list from Parameter object
+            --- getParamInfoList
+                returns e.g. [33.4] or [33.4, 0.0, 100.0] or [33.4, 'fixed']
+                [x] Add test to test_descriptions.py for ParameterDescription.getParamInfoList()
+                [x] Write code till test passes
+
+        [x] Code to generate function-as-dict from FunctionDescription object
+            --- getFunctionAsDict
+                [x] Add test to test_descriptions.py for FunctionDescription.getFunctionAsDict()
+                [x] Write code till test passes
+
+        [x] Code to generate function-set-as-dict from FunctionSetDescription object
+            --- getFuncSetAsDict
+                [x] Add test to test_descriptions.py for FunctionSetDescription.getFuncSetAsDict()
+                [ ] Write code till test passes
+
+        [x] Code to generate model-as-dict from ModelDescription object
+            --- getModelAsDict
+                [x] Add test to test_descriptions.py for ModelDescription.getModelAsDict()
+                [x] Write code till test passes
+
+        [ ] Convert "name" to "label" in FunctionSetDescription code
+
+        [ ] Clean up config.parse_config() so that it *doesn't* auto-generate "fs{0}" (e.g., "fs0")
+            function-set names
+                [ ] Convert "fs{0}" name-generation to "" generation
+                [ ] Fix any tests that fail
+
+        [ ] Code to output dict-based models from Imfit object
+            -- new method for Imfit (original suggestion was to alter getRawParameters() output;
+            probably better to have a new method)
+                [ ] Check for current code (or lack thereof) for outputting models
+                [ ] Write unit test to output dict version of model (test_fitting.py)
+
+        [ ] Code to instantiate Imfit object with model-dict
+            -- imfit_fitter = Imfit(model_dict)
+
+        [ ] Write documentation for dict-based models
+            [ ] Look at current docs to see where this would go
+
 
 
     * Packaging:

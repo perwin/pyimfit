@@ -316,6 +316,19 @@ class Imfit(object):
                 outf.write(line)
 
 
+    def getModelAsDict(self):
+        """
+        Returns current model (including parameter values) as a dict suitable for use
+        with ModelDescription.dict_to_ModelDescription class method.
+
+        Returns
+        -------
+        model_dict : dict
+        """
+        model_desc = self.getModelDescription()
+        return model_desc.getModelAsDict()
+
+
     def getRawParameters(self):
         """
         Returns current model parameter values.

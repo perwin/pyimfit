@@ -6,6 +6,17 @@
 changes may contain significant changes to the API.
 
 
+## 0.11.0 -- 2021-09-xx
+## Added
+Models (including current parameter values) can now be described by a dict-based format.
+
+Pre-compiled version for Python 3.9 on macOS.
+
+### Changed
+The interface to the FunctionSetDescription class has changed: the "name" parameter is
+now optional (and defaults to None).
+
+
 ## 0.10.0 -- 2020-11-20
 ### Changed
 Updated to use version 1.8 of Imfit, including new image functions (GaussianRingAz, FlatBar)
