@@ -30,7 +30,7 @@ fixed_str = 'fixed'
 # mypy will erroneously interpret these as type annotations when run under Python 3.5
 # (this is not an actual problem)
 recognizedOptions = {"GAIN": float, "READNOISE": float, "EXPTIME": float, "NCOMBINED": int,
-                     "ORIGINAL_SKY": float}
+                     "ORIGINAL_SKY": float, "NCOLS": int, "NROWS": int}
 recognizedOptionNames = list(recognizedOptions.keys())
 
 

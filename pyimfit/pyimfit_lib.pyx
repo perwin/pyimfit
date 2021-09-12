@@ -673,6 +673,7 @@ cdef class ModelObjectWrapper( object ):
         self._nCols = shape[1]
         self._nPixels = self._nRows * self._nCols
         self._model.SetupModelImage(self._nCols, self._nRows)
+        print("ModelObjectWrapper: about to call _model.CreateModelImage()...")
         self._model.CreateModelImage(self._paramVect)
         self._inputDataLoaded = True
 

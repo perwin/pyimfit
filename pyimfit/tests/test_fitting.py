@@ -48,6 +48,22 @@ class TestImfit(object):
     def setup_method( self ):
         self.modelDesc = model_desc
 
+    def test_Imfit_instantiate_from_dict(self):
+        # Exponential model for fitting IC 3478
+        p = {'PA': [18.0, 0.0, 90.0], 'ell': [0.2, 0.0, 1.0], 'I_0': [100.0, 0.0, 500.0],
+             'h': [25.0, 0.0, 100.0]}
+        fDict = {'name': "Exponential", 'label': '', 'parameters': p}
+        fsetDict = {'X0': [129.0, 125.0, 135.0], 'Y0': [129.0, 125.0, 135.0], 'function_list': [fDict]}
+        # options_dict = OrderedDict()
+        # options_dict.update( {"GAIN": 4.725, "READNOISE": 4.3, "ORIGINAL_SKY": 130.14} )
+        model_dict_input = {"function_sets": [fsetDict]}
+
+        imfit_fitter = Imfit(model_dict_input)
+        imfit_fitter_correct = Imfit(self.modelDesc)
+        # check for equality of ModelDescription components
+        assert imfit_fitter._modelDescr.getModelAsDict() == imfit_fitter_correct._modelDescr.getModelAsDict()
+
+
     def test_Imfit_optionsDict_simple( self ):
         imfit_fitter1 = Imfit(self.modelDesc)
         assert imfit_fitter1._modelDescr.optionsDict == {}
@@ -246,8 +262,12 @@ class TestImfit_ImageGeneration(object):
 
     def test_Imfit_getImage( self ):
         output_correct = np.zeros(4).reshape((2,2))
+        print(self.modelDesc)
         imfit_fitter = Imfit(self.modelDesc)
+        print(imfit_fitter)
+        print("test_Imfit_getImage: about to call getModelImage...")
         outputImage = imfit_fitter.getModelImage((2,2))
+        print(outputImage)
         assert_allclose(outputImage, output_correct)
 
     def test_Imfit_getImage_catchImageSizeChange( self ):

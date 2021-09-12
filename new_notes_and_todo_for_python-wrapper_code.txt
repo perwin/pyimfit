@@ -149,25 +149,55 @@ PLAN:
                 [x] Add test to test_descriptions.py for ModelDescription.getModelAsDict()
                 [x] Write code till test passes
 
-        [ ] Convert "name" to "label" in FunctionSetDescription code
+        [x] Convert "name" to "label" in FunctionSetDescription code
+                [x] update code
+                [x] Fix code so that test_descriptions.py passes
 
-        [ ] Clean up config.parse_config() so that it *doesn't* auto-generate "fs{0}" (e.g., "fs0")
+        [x] Clean up config.parse_config() so that it *doesn't* auto-generate "fs{0}" (e.g., "fs0")
             function-set names
-                [ ] Convert "fs{0}" name-generation to "" generation
-                [ ] Fix any tests that fail
+                [x] Convert "fs{0}" name-generation to "" generation
+                [x] Fix any tests that fail
 
-        [ ] Code to output dict-based models from Imfit object
+        [x] Code to output dict-based models from Imfit object
             -- new method for Imfit (original suggestion was to alter getRawParameters() output;
             probably better to have a new method)
-                [ ] Check for current code (or lack thereof) for outputting models
-                [ ] Write unit test to output dict version of model (test_fitting.py)
+            getModelAsDict() method
+                [x] Check for current code (or lack thereof) for outputting models
+                [x] Write unit test to output dict version of model (test_fitting.py)
 
         [ ] Code to instantiate Imfit object with model-dict
             -- imfit_fitter = Imfit(model_dict)
+            [x] Write unit test(s) for this
+            [ ] Modify Imfit.__init__ so unit test passes
 
         [ ] Write documentation for dict-based models
             [ ] Look at current docs to see where this would go
 
+
+    * Possible bug in Imfit.getModelImage
+        Working in /Users/erwin/Beleriand/build/psf_matching_experiments/notes_for_psf-matching.txt
+        In [40]: psfMod = pyimfit.Imfit(pyimfit.ModelDescription.load(fdir+"config_psf_narrow.dat"))
+        In [44]: psfimage = psfMod.getModelImage(shape=(35,35))
+            ==> segmentation fault!
+            [ ] This seems to happen when we enter the first OpenMP code section in
+            ModelObject::CreateModelObject()
+        BUT note that this segfault does *not* happend in test_fitting.py !
+
+
+    * Figure out fix for handling makeimage-style image generation
+        -- Currently, we ignore NCOLS/NROWS image-description parameters in a config file
+        (config.py) [that is, we load and store the values, but otherwise ignore them]
+        -- Ideally, we want some way to specify image size via NCOLS/NROWS image-description parameters,
+        as is currently done by makeimage
+            -- right now, the only way to specify image size is
+ 	        1. Load an image (ModelObjectWrapper.loadData) to set model image size = data image
+ 	        (e.g., via Imfit.loadData())
+	        OR
+	        2. Use ModelObjectWrapper.getModelImage()
+	        One can call Imfit.getModelImage(shape=xxx), but only *once* (subsequent calls
+	        that include a shape specification raise errors).
+	    In ModelObjectWrapper, the loadData() and setupModelImage() methods are the only way
+	    to specify the image size
 
 
     * Packaging:

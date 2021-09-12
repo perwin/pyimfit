@@ -304,7 +304,7 @@ class TestFunctionSetDescription(object):
 
     def test_FunctionSetDescription_simple( self ):
         fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
-        assert fsetdesc1.name == "fs0"
+        assert fsetdesc1.label == "fs0"
         # check to see if FunctionDescription object with name "blob" (part of self.functionList)
         # can be accessed as attribute
         assert fsetdesc1._contains("blob") is True
@@ -317,14 +317,14 @@ class TestFunctionSetDescription(object):
         fsetdesc1 = FunctionSetDescription(None, self.x0_p, self.y0_p, self.functionList)
         assert fsetdesc1._contains("blob") is True
         assert fsetdesc1.blob == self.fdesc1
-        assert fsetdesc1.name is None
+        assert fsetdesc1.label is None
         assert fsetdesc1.x0 == self.x0_p
         assert fsetdesc1.y0 == self.y0_p
         assert fsetdesc1.nParameters == self.N_PARAMS_CORRECT
 
     def test_FunctionSetDescription_keywords_noname( self ):
         fsetdesc1 = FunctionSetDescription(x0param=self.x0_p, y0param=self.y0_p, functionList=self.functionList)
-        assert fsetdesc1.name is None
+        assert fsetdesc1.label is None
         assert fsetdesc1._contains("blob") is True
         assert fsetdesc1.blob == self.fdesc1
         assert fsetdesc1.x0 == self.x0_p

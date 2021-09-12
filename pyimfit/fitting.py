@@ -6,6 +6,7 @@
 # [original author: Andre de Luiz Amorim; modifications by Peter Erwin]
 
 import copy
+from typing import Union
 
 import numpy as np   # type: ignore
 
@@ -192,13 +193,15 @@ class Imfit(object):
     parse_config_file
     """
 
-    def __init__( self, model_descr: ModelDescription, psf=None, psfNormalization=True, quiet=True,
+    def __init__( self, model_descr: Union[ModelDescription, dict], psf=None, psfNormalization=True, quiet=True,
                   nproc=0, chunk_size=10, subsampling=True, zeroPoint=None ):
         """
         Parameters
         ----------
-        model_descr : :class:`ModelDescription`
-            Model to be fitted to the data; an instance of :class:`ModelDescription`.
+        model_descr : :class:`ModelDescription` OR dict
+            Model to be fitted to the data; can be either
+                an instance of :class:`ModelDescription`
+                OR: a dict (suitable for use by ModelDescription.dict_to_ModelDescription)
 
         psf : 2-D Numpy array, optional
             Point Spread Function image to be convolved to the images.
@@ -227,13 +230,18 @@ class Imfit(object):
             photometric zero point for data image (used only for outputting
             model and component magnitudes) via getModelMagnitudes
         """
-        if not isinstance(model_descr, ModelDescription ):
-            raise ValueError('model_descr must be a ModelDescription object.')
-        # copy the input ModelDescription (we don't want any links to the input object,
-        # in case the latter gets updated later somewhere else)
+        if (type(model_descr) != dict) and not (isinstance(model_descr, ModelDescription)):
+            raise ValueError('model_descr must be a ModelDescription object or a dict.')
         self._modelObjectWrapper = None
-        self._modelDescr = copy.deepcopy(model_descr)
-        self.nParameters = model_descr.nParameters
+        # if model_descr is an actual ModelDescription object (rather than a dict), copy it
+        # (we don't want any links to the input object, in case the latter gets updated later
+        # somewhere else). Don't use copy.deepcopy, since this zeros some attribute values
+        # (e.g., model_descr.nParameters)
+        if type(model_descr) is dict:
+            self._modelDescr = ModelDescription.dict_to_ModelDescription(model_descr)
+        else:
+            self._modelDescr = copy.deepcopy(model_descr)
+        self.nParameters = self._modelDescr.nParameters
         if psf is not None:
             self._psf = FixImage(psf)
         else:
@@ -268,11 +276,11 @@ class Imfit(object):
         if self._modelObjectWrapper is not None:
             return self._modelObjectWrapper.getModelDescription()
         else:
-            return copy.deepcopy(self._modelDescr)
+            return copy.copy(self._modelDescr)
 
 
     def _updateModelDescription( self, kwargs ):
-        """Updates the internal options dict in self._modelDesc
+        """Updates the internal options dict ("GAIN", etc.) in self._modelDesc
 
         Parameters
         ----------
@@ -689,7 +697,7 @@ class Imfit(object):
         (columnNames, bootstrapOutput) : tuple of (list of str, 2-D ndarray of float)
         """
         if not self._dataSet:
-            raise Exception('No data supplied for model')
+            raise Exception('No data supplied for model -- cannot run bootstrap resampling')
 
         bootstrapOutput = self._modelObjectWrapper.doBootstrapIterations(nIterations, ftol=ftol,
                                                                          verboseFlag=verboseFlag, seed=seed)
@@ -812,17 +820,19 @@ class Imfit(object):
 
     def getModelImage( self, shape=None, newParameters=None, includeMask=False ):
         """
-        Computes and returns the image described by the currently fitted model.
-        If not fitted, use the template model.
+        Computes and returns the image described by the currently fitted model,
+        the input model if no fit was performed, or user-supplied parameters.
 
         Parameters
         ----------
+        shape : tuple, optional
+            Shape of the image in (Y, X) = (nRows, nColumns) format.
+            Do NOT supply this if Imfit object's image shape has already been defined
+            via loadData() or fit() method!
+
         newParameters : 1-D numpy array of float, optional
             vector of parameter values to use in computing model
             (default is to use current parameter values, e.g., from fit)
-
-        shape : tuple, optional
-            Shape of the image in (Y, X) = (nRows, nColumns) format.
 
         includeMask : bool, optional
             Specifies whether output should be numpy masked array, if there
@@ -840,6 +850,7 @@ class Imfit(object):
             if self._modelObjectWrapper.imageSizeSet:
                 msg = "Model image size has already been set!"
                 raise ValueError(msg)
+            # OK, PROBLEM IS HERE!
             self._modelObjectWrapper.setupModelImage(shape)
         if (newParameters is not None) and (len(newParameters) != self.nParameters):
             msg = "Number of input parameters (%d) " % len(newParameters)
@@ -856,7 +867,7 @@ class Imfit(object):
     def getModelFluxes( self, newParameters=None ):
         """
         Computes and returns total and individual-function fluxes for the current model
-        and current parameter values.
+        and current (or user-supplied) parameter values.
 
         Parameters
         ----------
@@ -882,7 +893,7 @@ class Imfit(object):
     def getModelMagnitudes( self, newParameters=None, zeroPoint=None ):
         """
         Computes and returns total and individual-function magnitudes for the current model
-        and current parameter values.
+        and current (or user-supplied) parameter values.
 
         Parameters
         ----------

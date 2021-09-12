@@ -528,7 +528,10 @@ class FunctionSetDescription(object):
     def __init__( self, label: Optional[str]="", x0param: Optional[ParameterDescription]=None,
                   y0param: Optional[ParameterDescription]=None,
                   functionList: Optional[List[FunctionDescription]]=None ):
-        self._label = label
+        if label == "":
+            self._label = None
+        else:
+            self._label = label
         if x0param is None:
             self.x0 = ParameterDescription('X0', 0.0)
         else:
@@ -736,7 +739,7 @@ class FunctionSetDescription(object):
             {'label': str, 'X0': list, 'Y0': list, 'function_list': [list of dicts describing functions]}
         """
         funcSetDict = {}
-        if self._label != "":
+        if (self._label is not None) and (self._label != ""):
             funcSetDict['label'] = self._label
         funcSetDict['X0'] = self.x0.getParamInfoList()
         funcSetDict['Y0'] = self.y0.getParamInfoList()
@@ -987,7 +990,7 @@ class ModelDescription(object):
 
     def _contains(self, label: str):
         for fs in self._functionSets:
-            if fs.label == label:
+            if (fs.label is not None) and fs.label == label:
                 return True
         return False
 
@@ -1178,6 +1181,7 @@ class ModelDescription(object):
         model._functionSets = deepcopy(self._functionSets, memo)
         model.options = copy(self.options)
         model.nFunctionSets = self.nFunctionSets
+        model.nParameters = self.nParameters
         return model
 
 

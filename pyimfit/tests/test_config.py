@@ -213,11 +213,21 @@ def test_read_options_good( ):
     correctDict["GAIN"] = 4.5
     correctDict["READNOISE"] = 10.0
     assert configDict == correctDict
+
     # check to see that we skip unrecognized image-description parameter
     inputLines2 = ["GAIN\t\t4.5", "READNOISE   10.0", "EVANESCENCE   -2.5"]
     configDict2 = read_options(inputLines2)
     assert configDict2 == correctDict
 
+    # check to see that we recognize makeimage-mode parameters
+    correctDict3 = OrderedDict()
+    correctDict3["NCOLS"] = 100
+    correctDict3["NROWS"] = 110
+    correctDict3["GAIN"] = 4.5
+    correctDict3["READNOISE"] = 10.0
+    inputLines3 = ["NCOLS\t\t100", "NROWS    110", "GAIN\t\t4.5", "READNOISE   10.0"]
+    configDict3 = read_options(inputLines3)
+    assert configDict3 == correctDict3
 
 
 def test_parse_config( ):
