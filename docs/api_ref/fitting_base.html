@@ -8,6 +8,7 @@
   <body>
 
 
+<section id="the-imfit-class">
 
 <p>The core of PyImfit is the Imfit class, which acts as a wrapper around the
 underlying C++ ModelObject instance. It holds a ModelDescription instance which
@@ -17,12 +18,12 @@ model to an image, it also holds the data image, optional PSF images, and
 parameters that describe the image (A/D gain, etc.).</p>
 <p>It also has methods for running a fit and for inspecting the results.</p>
 <span class="target" id="module-pyimfit.fitting"></span><dl class="py class">
-<dt id="pyimfit.fitting.FitResult">
-<em class="property">class </em><code class="sig-prename descclassname">pyimfit.fitting.</code><code class="sig-name descname">FitResult</code><a class="headerlink" href="#pyimfit.fitting.FitResult" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.FitResult">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyimfit.fitting.</span></span><span class="sig-name descname"><span class="pre">FitResult</span></span><a class="headerlink" href="#pyimfit.fitting.FitResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents the result of fitting an image.</p>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.FitResult.params">
-<code class="sig-name descname">params</code><a class="headerlink" href="#pyimfit.fitting.FitResult.params" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.FitResult.params">
+<span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#pyimfit.fitting.FitResult.params" title="Permalink to this definition">¶</a></dt>
 <dd><p>The best-fit vector of parameter values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -31,8 +32,8 @@ parameters that describe the image (A/D gain, etc.).</p>
 </dl>
 </dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.FitResult.success">
-<code class="sig-name descname">success</code><a class="headerlink" href="#pyimfit.fitting.FitResult.success" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.FitResult.success">
+<span class="sig-name descname"><span class="pre">success</span></span><a class="headerlink" href="#pyimfit.fitting.FitResult.success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Whether or not the optimizer exited successfully.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -41,8 +42,8 @@ parameters that describe the image (A/D gain, etc.).</p>
 </dl>
 </dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.FitResult.status">
-<code class="sig-name descname">status</code><a class="headerlink" href="#pyimfit.fitting.FitResult.status" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.FitResult.status">
+<span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#pyimfit.fitting.FitResult.status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Termination status of the optimizer. Its value depends on the
 underlying solver. Refer to <cite>message</cite> for details.</p>
 <dl class="field-list simple">
@@ -52,8 +53,8 @@ underlying solver. Refer to <cite>message</cite> for details.</p>
 </dl>
 </dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.FitResult.message">
-<code class="sig-name descname">message</code><a class="headerlink" href="#pyimfit.fitting.FitResult.message" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.FitResult.message">
+<span class="sig-name descname"><span class="pre">message</span></span><a class="headerlink" href="#pyimfit.fitting.FitResult.message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Description of the cause of the termination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -62,8 +63,8 @@ underlying solver. Refer to <cite>message</cite> for details.</p>
 </dl>
 </dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.FitResult.nfev">
-<code class="sig-name descname">nfev</code><a class="headerlink" href="#pyimfit.fitting.FitResult.nfev" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.FitResult.nfev">
+<span class="sig-name descname"><span class="pre">nfev</span></span><a class="headerlink" href="#pyimfit.fitting.FitResult.nfev" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of evaluations of the objective function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -72,8 +73,8 @@ underlying solver. Refer to <cite>message</cite> for details.</p>
 </dl>
 </dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.FitResult.nit">
-<code class="sig-name descname">nit</code><a class="headerlink" href="#pyimfit.fitting.FitResult.nit" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.FitResult.nit">
+<span class="sig-name descname"><span class="pre">nit</span></span><a class="headerlink" href="#pyimfit.fitting.FitResult.nit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of iterations performed by the optimizer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -82,8 +83,8 @@ underlying solver. Refer to <cite>message</cite> for details.</p>
 </dl>
 </dd></dl>
 <dl class="py attribute">
-<dt>
-<code class="sig-name descname">OTHER IDEAS</code></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">OTHER</span> <span class="pre">IDEAS</span></span></dt>
 <dd><p>AIC,BIC
 fitStatistic, reduced fitStatistic</p>
 </dd></dl>
@@ -94,8 +95,8 @@ with attribute accessors, one can see which attributes are available
 using the <cite>keys()</cite> method.</p>
 </dd></dl>
 <dl class="py class">
-<dt id="pyimfit.fitting.Imfit">
-<em class="property">class </em><code class="sig-prename descclassname">pyimfit.fitting.</code><code class="sig-name descname">Imfit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_descr</span><span class="p">:</span> <span class="n"><a class="reference internal" href="descriptions.html#pyimfit.descriptions.ModelDescription" title="pyimfit.descriptions.ModelDescription">pyimfit.descriptions.ModelDescription</a></span></em>, <em class="sig-param"><span class="n">psf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">psfNormalization</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">quiet</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">nproc</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">chunk_size</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">subsampling</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">zeroPoint</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyimfit.fitting.</span></span><span class="sig-name descname"><span class="pre">Imfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_descr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="descriptions.html#pyimfit.descriptions.ModelDescription" title="pyimfit.descriptions.ModelDescription"><span class="pre">pyimfit.descriptions.ModelDescription</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psfNormalization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nproc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeroPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit" title="Permalink to this definition">¶</a></dt>
 <dd><p>The main class for fitting models to images using Imfit.
 Can also be used to create images based on models.</p>
 <p>Due to some library limitations, this object can only fit the model
@@ -104,60 +105,60 @@ you need to create one instance of <a class="reference internal" href="#pyimfit.
 On the other hand, one instance can be used to fit the same model
 to any number of images, or to fit and then create the model image.</p>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.AIC">
-<code class="sig-name descname">AIC</code><a class="headerlink" href="#pyimfit.fitting.Imfit.AIC" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.AIC">
+<span class="sig-name descname"><span class="pre">AIC</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.AIC" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.BIC">
-<code class="sig-name descname">BIC</code><a class="headerlink" href="#pyimfit.fitting.Imfit.BIC" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.BIC">
+<span class="sig-name descname"><span class="pre">BIC</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.BIC" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.fitConverged">
-<code class="sig-name descname">fitConverged</code><a class="headerlink" href="#pyimfit.fitting.Imfit.fitConverged" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.fitConverged">
+<span class="sig-name descname"><span class="pre">fitConverged</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.fitConverged" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.fitError">
-<code class="sig-name descname">fitError</code><a class="headerlink" href="#pyimfit.fitting.Imfit.fitError" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.fitError">
+<span class="sig-name descname"><span class="pre">fitError</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.fitError" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.fitStatistic">
-<code class="sig-name descname">fitStatistic</code><a class="headerlink" href="#pyimfit.fitting.Imfit.fitStatistic" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.fitStatistic">
+<span class="sig-name descname"><span class="pre">fitStatistic</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.fitStatistic" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.fitTerminated">
-<code class="sig-name descname">fitTerminated</code><a class="headerlink" href="#pyimfit.fitting.Imfit.fitTerminated" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.fitTerminated">
+<span class="sig-name descname"><span class="pre">fitTerminated</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.fitTerminated" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.nIter">
-<code class="sig-name descname">nIter</code><a class="headerlink" href="#pyimfit.fitting.Imfit.nIter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.nIter">
+<span class="sig-name descname"><span class="pre">nIter</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.nIter" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.nPegged">
-<code class="sig-name descname">nPegged</code><a class="headerlink" href="#pyimfit.fitting.Imfit.nPegged" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.nPegged">
+<span class="sig-name descname"><span class="pre">nPegged</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.nPegged" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.nValidPixles">
-<code class="sig-name descname">nValidPixles</code><a class="headerlink" href="#pyimfit.fitting.Imfit.nValidPixles" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.nValidPixles">
+<span class="sig-name descname"><span class="pre">nValidPixles</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.nValidPixles" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.numberedParameterNames">
-<code class="sig-name descname">numberedParameterNames</code><a class="headerlink" href="#pyimfit.fitting.Imfit.numberedParameterNames" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.numberedParameterNames">
+<span class="sig-name descname"><span class="pre">numberedParameterNames</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.numberedParameterNames" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.parameterErrors">
-<code class="sig-name descname">parameterErrors</code><a class="headerlink" href="#pyimfit.fitting.Imfit.parameterErrors" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.parameterErrors">
+<span class="sig-name descname"><span class="pre">parameterErrors</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.parameterErrors" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt id="pyimfit.fitting.Imfit.reducedFitStatistic">
-<code class="sig-name descname">reducedFitStatistic</code><a class="headerlink" href="#pyimfit.fitting.Imfit.reducedFitStatistic" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.reducedFitStatistic">
+<span class="sig-name descname"><span class="pre">reducedFitStatistic</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.reducedFitStatistic" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-class docutils literal notranslate"><span class="pre">parse_config_file</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_config_file</span></code></p>
 </div>
-<dl class="py method">
-<dt id="id0">
-<em class="property">property </em><code class="sig-name descname">AIC</code><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">AIC</span></span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd><p>bias-corrected Akaike Information Criterion for the fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -165,9 +166,9 @@ to any number of images, or to fit and then create the model image.</p>
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="id1">
-<em class="property">property </em><code class="sig-name descname">BIC</code><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">BIC</span></span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bayesian Information Criterion for the fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -176,8 +177,8 @@ to any number of images, or to fit and then create the model image.</p>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.computeFitStatistic">
-<code class="sig-name descname">computeFitStatistic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">newParameters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.computeFitStatistic" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.computeFitStatistic">
+<span class="sig-name descname"><span class="pre">computeFitStatistic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newParameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.computeFitStatistic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the fit-statistic value for the specified parameter vector.
 (Which fit statistic will calculated is set by the loadData() or fit() methods.)</p>
 <dl class="field-list simple">
@@ -193,8 +194,8 @@ to any number of images, or to fit and then create the model image.</p>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.doFit">
-<code class="sig-name descname">doFit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">solver</span><span class="o">=</span><span class="default_value">'LM'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">getSummary</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.doFit" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.doFit">
+<span class="sig-name descname"><span class="pre">doFit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LM'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getSummary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.doFit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model to previously supplied data image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -224,8 +225,8 @@ the Imfit object’s internal verbosity setting)</p></li>
 <p>TODO: Examples of doFit().</p>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">error</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">solver</span><span class="o">=</span><span class="default_value">'LM'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">getSummary</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.fit" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LM'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getSummary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Supply data image (and optionally mask and/or error images) and image info, then
 fit the model to the data.</p>
 <dl class="field-list simple">
@@ -252,7 +253,7 @@ any pixel that is masked in either of the input masks.</p></li>
 <li><p><strong>verbose</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – set this to an integer to specify a feedback level for the fit (this overrides
 the Imfit object’s internal verbosity setting)</p></li>
 <li><p><strong>getSummary</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, a summary of the fit is returned (as a string)</p></li>
-<li><p><strong>loadData</strong><strong>(</strong><strong>) </strong><strong>for list of allowed extra keywords.</strong> (<em>See</em>) – </p></li>
+<li><p><strong>keywords.</strong> (<em>See loadData</em><em>(</em><em>) </em><em>for list of allowed extra</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -263,9 +264,9 @@ the Imfit object’s internal verbosity setting)</p></li>
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="id2">
-<em class="property">property </em><code class="sig-name descname">fitConverged</code><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fitConverged</span></span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
 <dd><p>indicates whether fit converged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -273,9 +274,9 @@ the Imfit object’s internal verbosity setting)</p></li>
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="id3">
-<em class="property">property </em><code class="sig-name descname">fitStatistic</code><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fitStatistic</span></span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
 <dd><p>the <span class="math notranslate nohighlight">\(\chi^2\)</span>, Poisson MLR, or Cash statistic of the fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -283,9 +284,9 @@ the Imfit object’s internal verbosity setting)</p></li>
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="id4">
-<em class="property">property </em><code class="sig-name descname">fitTerminated</code><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fitTerminated</span></span><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
 <dd><p>indicates whether fit terminated for any reason.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -294,8 +295,8 @@ the Imfit object’s internal verbosity setting)</p></li>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.getFitResult">
-<code class="sig-name descname">getFitResult</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getFitResult" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.getFitResult">
+<span class="sig-name descname"><span class="pre">getFitResult</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getFitResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a summary of the fitting process.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -307,8 +308,22 @@ the Imfit object’s internal verbosity setting)</p></li>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.getModelDescription">
-<code class="sig-name descname">getModelDescription</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelDescription" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.getModelAsDict">
+<span class="sig-name descname"><span class="pre">getModelAsDict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelAsDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current model (including parameter values) as a dict suitable for use
+with ModelDescription.dict_to_ModelDescription class method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>model_dict</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.getModelDescription">
+<span class="sig-name descname"><span class="pre">getModelDescription</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelDescription" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>model</strong> – A copy of the currently fitted model, or a copy of
@@ -320,10 +335,10 @@ the template model if no fitting has taken place yet.</p>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.getModelFluxes">
-<code class="sig-name descname">getModelFluxes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">newParameters</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelFluxes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.getModelFluxes">
+<span class="sig-name descname"><span class="pre">getModelFluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newParameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelFluxes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes and returns total and individual-function fluxes for the current model
-and current parameter values.</p>
+and current (or user-supplied) parameter values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>newParameters</strong> (<em>1-D numpy array of float</em><em>, </em><em>optional</em>) – vector of parameter values to use in computing model
@@ -340,16 +355,18 @@ model</p>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.getModelImage">
-<code class="sig-name descname">getModelImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">newParameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">includeMask</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelImage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes and returns the image described by the currently fitted model.
-If not fitted, use the template model.</p>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.getModelImage">
+<span class="sig-name descname"><span class="pre">getModelImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newParameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeMask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes and returns the image described by the currently fitted model,
+the input model if no fit was performed, or user-supplied parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Shape of the image in (Y, X) = (nRows, nColumns) format.
+Do NOT supply this if Imfit object’s image shape has already been defined
+via loadData() or fit() method!</p></li>
 <li><p><strong>newParameters</strong> (<em>1-D numpy array of float</em><em>, </em><em>optional</em>) – vector of parameter values to use in computing model
 (default is to use current parameter values, e.g., from fit)</p></li>
-<li><p><strong>shape</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Shape of the image in (Y, X) = (nRows, nColumns) format.</p></li>
 <li><p><strong>includeMask</strong> (<em>bool</em><em>, </em><em>optional</em>) – Specifies whether output should be numpy masked array, if there
 is a mask image associated with the data image.</p></li>
 </ul>
@@ -364,10 +381,10 @@ original data image, then the returned image is a numpy masked array</p>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.getModelMagnitudes">
-<code class="sig-name descname">getModelMagnitudes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">newParameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zeroPoint</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelMagnitudes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.getModelMagnitudes">
+<span class="sig-name descname"><span class="pre">getModelMagnitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newParameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeroPoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getModelMagnitudes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes and returns total and individual-function magnitudes for the current model
-and current parameter values.</p>
+and current (or user-supplied) parameter values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -392,8 +409,8 @@ model</p>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.getParameterErrors">
-<code class="sig-name descname">getParameterErrors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getParameterErrors" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.getParameterErrors">
+<span class="sig-name descname"><span class="pre">getParameterErrors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getParameterErrors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns current best-fit model parameter uncertainties (from L-M minimization).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -405,8 +422,8 @@ model</p>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.getParameterLimits">
-<code class="sig-name descname">getParameterLimits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getParameterLimits" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.getParameterLimits">
+<span class="sig-name descname"><span class="pre">getParameterLimits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getParameterLimits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list containing lower and upper limits for all parameters in the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -418,8 +435,8 @@ model</p>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.getRawParameters">
-<code class="sig-name descname">getRawParameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getRawParameters" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.getRawParameters">
+<span class="sig-name descname"><span class="pre">getRawParameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.getRawParameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns current model parameter values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -431,8 +448,8 @@ model</p>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.loadData">
-<code class="sig-name descname">loadData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">error</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.loadData" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.loadData">
+<span class="sig-name descname"><span class="pre">loadData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.loadData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Supply the underlying ModelObject instance with data image and error model,
 optionally including error and/or mask images.</p>
 <dl class="field-list simple">
@@ -495,9 +512,9 @@ Default: <code class="docutils literal notranslate"><span class="pre">False</spa
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="id5">
-<em class="property">property </em><code class="sig-name descname">nIter</code><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">nIter</span></span><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
 <dd><p>number of solver iterations during fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -505,9 +522,9 @@ Default: <code class="docutils literal notranslate"><span class="pre">False</spa
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="id6">
-<em class="property">property </em><code class="sig-name descname">nPegged</code><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">nPegged</span></span><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
 <dd><p>number of parameters pegged against limits at end of fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -515,9 +532,9 @@ Default: <code class="docutils literal notranslate"><span class="pre">False</spa
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="pyimfit.fitting.Imfit.nValidPixels">
-<em class="property">property </em><code class="sig-name descname">nValidPixels</code><a class="headerlink" href="#pyimfit.fitting.Imfit.nValidPixels" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.nValidPixels">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">nValidPixels</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.nValidPixels" title="Permalink to this definition">¶</a></dt>
 <dd><p>number of non-masked pixels in data image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -525,9 +542,9 @@ Default: <code class="docutils literal notranslate"><span class="pre">False</spa
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="id7">
-<em class="property">property </em><code class="sig-name descname">numberedParameterNames</code><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id7">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">numberedParameterNames</span></span><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of parameter names for the current model, annotated by function number.
 E.g., [“X0_1”, “Y0_1”, “PA_1”, “ell_1”, “I_0_1”, “h_1”, …]</p>
 <dl class="field-list simple">
@@ -536,9 +553,9 @@ E.g., [“X0_1”, “Y0_1”, “PA_1”, “ell_1”, “I_0_1”, “h_1”, 
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="id8">
-<em class="property">property </em><code class="sig-name descname">parameterErrors</code><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id8">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameterErrors</span></span><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
 <dd><p>estimated parameter errors from fit (L-M solver only)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -546,9 +563,9 @@ E.g., [“X0_1”, “Y0_1”, “PA_1”, “ell_1”, “I_0_1”, “h_1”, 
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="id9">
-<em class="property">property </em><code class="sig-name descname">reducedFitStatistic</code><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id9">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">reducedFitStatistic</span></span><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
 <dd><p>the “reduced” <span class="math notranslate nohighlight">\(\chi^2\)</span> or Poisson MLR of the fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -557,8 +574,8 @@ E.g., [“X0_1”, “Y0_1”, “PA_1”, “ell_1”, “I_0_1”, “h_1”, 
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.runBootstrap">
-<code class="sig-name descname">runBootstrap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nIterations</span></em>, <em class="sig-param"><span class="n">ftol</span><span class="o">=</span><span class="default_value">1e-08</span></em>, <em class="sig-param"><span class="n">verboseFlag</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">getColumnNames</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.runBootstrap" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.runBootstrap">
+<span class="sig-name descname"><span class="pre">runBootstrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nIterations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verboseFlag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getColumnNames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.runBootstrap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Do bootstrap resampling for a model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -581,8 +598,8 @@ E.g., [“X0_1”, “Y0_1”, “PA_1”, “ell_1”, “I_0_1”, “h_1”, 
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt id="pyimfit.fitting.Imfit.saveCurrentModelToFile">
-<code class="sig-name descname">saveCurrentModelToFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">includeImageOptions</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.saveCurrentModelToFile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.saveCurrentModelToFile">
+<span class="sig-name descname"><span class="pre">saveCurrentModelToFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeImageOptions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.Imfit.saveCurrentModelToFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the current model and parameter values to a text file in Imfit-configuration-file
 format.</p>
 <dl class="field-list simple">
@@ -595,9 +612,9 @@ to the output file</p></li>
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="pyimfit.fitting.Imfit.zeroPoint">
-<em class="property">property </em><code class="sig-name descname">zeroPoint</code><a class="headerlink" href="#pyimfit.fitting.Imfit.zeroPoint" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyimfit.fitting.Imfit.zeroPoint">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">zeroPoint</span></span><a class="headerlink" href="#pyimfit.fitting.Imfit.zeroPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>photometric zero point (used by getModelMagnitudes method).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -607,8 +624,8 @@ to the output file</p></li>
 </dd></dl>
 </dd></dl>
 <dl class="py function">
-<dt id="pyimfit.fitting.MakePsfOversampler">
-<code class="sig-prename descclassname">pyimfit.fitting.</code><code class="sig-name descname">MakePsfOversampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">psfImage</span></em>, <em class="sig-param"><span class="n">oversampleScale</span></em>, <em class="sig-param"><span class="n">regionSpec</span></em>, <em class="sig-param"><span class="n">psfNormalization</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.MakePsfOversampler" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.fitting.MakePsfOversampler">
+<span class="sig-prename descclassname"><span class="pre">pyimfit.fitting.</span></span><span class="sig-name descname"><span class="pre">MakePsfOversampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psfImage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oversampleScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regionSpec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psfNormalization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.fitting.MakePsfOversampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper function to generate PsfOversampling objects (corrects input psfImage, sets
 up region string, etc.).</p>
 <dl class="field-list simple">
@@ -634,6 +651,7 @@ Default: <code class="docutils literal notranslate"><span class="pre">True</span
 </dd>
 </dl>
 </dd></dl>
+</section>
 
 
   </body>
