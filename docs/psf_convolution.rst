@@ -20,10 +20,10 @@ Requirements for PSF images
 ---------------------------
 
 PSF images should be square, 2D NumPy floating-point arrays, ideally
-with the center of the PSF kernel in the center of the image -- so
-square images with an odd number of pixels are the best approach. They
-can come from any source: FITS images of stars, FITS images from
-telescope modeling software, NumPy arrays generated in Python, etc.
+with the center of the PSF kernel in the center of the image – so square
+images with an odd number of pixels are the best approach. They can come
+from any source: FITS images of stars, FITS images from telescope
+modeling software, NumPy arrays generated in Python, etc.
 
 Basic PSF Convolution
 ---------------------
@@ -34,23 +34,23 @@ fitting. E.g.,
 
 ::
 
-    imfit_fitter = pyimfit.Imfit(model_description, psf=psf_image)
+   imfit_fitter = pyimfit.Imfit(model_description, psf=psf_image)
 
 By default, the PSF image will be automatically normalized so that the
 sum of its pixel values = 1, so you do not need to normalize it first.
-If you *don't* want the PSF image normalized (as is the case for, e.g.,
+If you *don’t* want the PSF image normalized (as is the case for, e.g.,
 some interferomteric PSFs), then set the ``psfNormalization`` keyword to
 False:
 
 ::
 
-    imfit_fitter = pyimfit.Imfit(model_description, psf=psf_image, psfNormalization=False)
+   imfit_fitter = pyimfit.Imfit(model_description, psf=psf_image, psfNormalization=False)
 
 Convolving with Oversampled PSFs
 --------------------------------
 
 PyImfit allows you to designate one or more subsections of an image to
-be modeled and convolved with a PSF in an "oversampled" mode, using a
+be modeled and convolved with a PSF in an “oversampled” mode, using a
 PSF image that is oversampled with respect to the data image.
 
 Thus, if you specify a 10x10-pixel subsection of the image and supply a
@@ -73,9 +73,9 @@ you want the oversampled region within the data image to span (x,y) =
 
 ::
 
-    psfOsamp = pyimfit.MakePsfOversampler(oversampledPsf_image, 5, (35,45, 50,60))
-    osampleList = [psfOsamp]
-    imfit_fitter.loadData(data_imate, psf_oversampling_list=osampleList, ...)
+   psfOsamp = pyimfit.MakePsfOversampler(oversampledPsf_image, 5, (35,45, 50,60))
+   osampleList = [psfOsamp]
+   imfit_fitter.loadData(data_imate, psf_oversampling_list=osampleList, ...)
 
 **Important:** The image section is specified using 1-based
 (Fortran/IRAF) indexing, where the lower-left pixel of the image has

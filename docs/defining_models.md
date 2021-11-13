@@ -67,7 +67,10 @@ details.
       
       - **FerrersBar2D** -- Isophotes (generalized elliptical shapes) for a 2D version of the Ferrers ellipsoid.
       Geometric parameters: PA, c0 (boxy/disk isophote-shape parameter)
-
+      
+      - **FlatBar** -- An elongated structure with a broken-exponential profile along its major
+      axis, suitable for the outer parts of (some) bars in massive disk galaxies.
+     
       - **FlatSky** -- Produces a constant background for the entire image.
       
       - **Gaussian** -- Elliptical isophotes with a radial surface-brightness
@@ -78,6 +81,10 @@ details.
       
       - **GaussianRing2Side** -- As for "GaussianRing", except that the ring profile
       is an asymmetric Gaussian, with different widths on the inner and outer sides.
+      Geometric parameters: PA, ell
+
+      - **GaussianRingAz** -- As for "GaussianRing", except that the surface brightness in the ring
+      varies as a function of azimuth.
       Geometric parameters: PA, ell
       
       - **ModifiedKing** -- Elliptical isophotes with a radial surface-brightness
@@ -98,6 +105,10 @@ details.
       - **Sersic_GenEllipse** -- As for the "Sersic" function, but with isophotes having generalized
       ellipse shapes (boxy to disky). Geometric parameters: PA, ell, c0 (boxy/disk
       isophote-shape parameter)
+     
+      - **TiltedSkyPlane** -- Produces a background for the entire image in the form of ain
+      inclined plane.
+      
 
    - 3D image functions (luminosity-density functions): These generate a 2D image via line-of-sight
    integration through a 3D luminosity-density model, seen at arbitrary inclination.

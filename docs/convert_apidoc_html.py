@@ -18,8 +18,8 @@
 #       $ cd ~/coding/pyimfit/docs
 #       $ ./convert_md_to_rst.sh && make html  [FIXME: make *local HTML files]
 #    2. Use this script to generate simplified HTML files
-#       $ get_apidoc.py ~/coding/pyimfit/docs/_build/html/api_ref_local/descriptions.html \
-#         ~/coding/pyimfit/docs/api_ref/descriptions.html
+#       $ convert_apidoc_html.py ~/coding/pyimfit/docs/_build/html/api_ref_local/descriptions.html \
+#         ~/coding/pyimfit/docs/api_ref/descriptions_base.html
 #       etc.
 
 import os, sys, optparse
@@ -51,8 +51,12 @@ def ExtractUsefulText( input ):
     """
     soup = BeautifulSoup(input, 'html.parser')
     # extract the "section" tag, then remove the H1 element inside it
-    sectionTag = soup.find('div', {'class' :'section'})
-    sectionTag.h1.decompose()
+    # sectionTag = soup.find('div', {'class' :'section'})
+    sectionTag = soup.find('div', {'class' :'body'})
+    try:
+        sectionTag.h1.decompose()
+    except AttributeError:
+        print("No h1 tag in!")
     # get the text *inside* the <div section ...></div>, return as Unicode string
     extractedBytes = sectionTag.encode_contents()
     return extractedBytes.decode()
@@ -75,7 +79,8 @@ def main( argv ):
     if not os.path.exists(inputFile):
         print("ERROR: cannot fined input file \"%s\"!" % filinputFilee1)
         return None
-    
+
+    print("*** ", inputFile)
     with open(inputFile) as inf:
         inputHTML = inf.read()
     usefulHTML = ExtractUsefulText(inputHTML)

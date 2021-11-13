@@ -26,8 +26,8 @@ If you've already used the command-line version of **Imfit**, here are the essen
    * Models (and initial parameter values and parameter limits for a fit) are specified via the 
    ModelDescription class. The utility function `parse_config_file` 
    will read a standard **Imfit** configuration file and return an instance of that class with the
-   model specification. (Or you can build up a ModelDescription instance by programmatically
-   specifying components from within Python.)
+   model specification. You can also build up a ModelDescription instance by programmatically
+   specifying components from within Python, or via a dict-based description.
    
    * Fitting is done by instantiating an `Imfit` object with a ModelDescription object as
    input, then adding a 2D NumPy array as the data to be fit (along with, optionally, mask
@@ -79,7 +79,9 @@ where `configFilePath` is a string specifying the path to the configuration file
 
 You can also construct a ModelDescription instance programmatically from within Python; see below
 for a very simple example, or [Sample Usage](./sample_usage.html) for a slightly more
-complicated example.
+complicated example. Finally, you can create a ModelDescription instance by calling the
+class function `ModelDescription.dict_to_ModelDescription` with a dict-based description
+of the model; see below for an example.
 
 (You can get a list of the available image functions -- "Sersic", "Exponential", etc. -- from the package-level 
 variable `pyimfit.imageFunctionList`, and you can get a list of the parameter names for each 
@@ -103,7 +105,7 @@ possible values **or** the keyword "fixed", which means the parameter value shou
 values are in counts/pixel. (Photometric zero points are not needed except for the optional case of
 computing model magnitudes; see below.)
 
-A very simple example of constructing a model:
+A very simple example of programmatically constructing a model:
 
     model_desc = pyimfit.SimpleModelDescription()
     # define the limits on the central-coordinate X0 and Y0 as +/-10 pixels relative to initial values
@@ -113,7 +115,7 @@ A very simple example of constructing a model:
     model_desc.y0.setValue(62, [52,72])
 
     # create an Exponential image function, then define the parameter initial values and limits
-    disk = pyimfit.make_imfit_function('Exponential')
+    disk = pyimfit.make_imfit_function("Exponential", label="disk")
     # set initial values, lower and upper limits for central surface brightness I_0, scale length h;
     # specify that ellipticity is to remain fixed
     disk.I_0.setValue(100.0, [0.0, 500.0])
@@ -122,6 +124,43 @@ A very simple example of constructing a model:
     disk.ell.setValue(0.5, fixed=True)
 
     model_desc.addFunction(disk)
+    
+    print(model_desc)
+    X0		105.0		95.0,115.0
+    Y0		62.0		52.0,72.0
+    FUNCTION Exponential   # LABEL disk
+    PA		40.0		0.0,100.0
+    ell		0.5		fixed
+    I_0		100.0		0.0,500.0
+    h		25.0		10.0,50.0
+
+
+Constructing the same model using Python dicts:
+
+    # for each function, set up a dict mapping parameter names to lists of values and (optional) limits;
+    # (e.g., the 'PA' parameter for the Exponential function has an initial value of 40 and lower and upper 
+    # limits of 0 and 100, while the 'ell' parameter has an initial value of 0.5 and will be held fixed
+    # during the fit);
+    # then make a dict for that function
+    exponentialParamsDict = {'PA': [40, 0,100], 'ell': [0.5, "fixed"], 'I_0': [100.0, 0.0,500.0], 'h': [25, 10,50]}
+    exponentialDict = {'name': "Exponential", 'label': "disk", 'parameters': exponentialParamsDict}
+    
+    # make one or more function-set dicts
+    functionSetDict = {'X0': [105, 95,115], 'Y0': [62, 52,72], 'function_list': [exponentialDict]}
+
+    # finally, make the dict describing the model and instantiate a ModelDescription object from it
+    modelDict = {'function_sets': [functionSetDict]}
+    model_desc = pyimfit.ModelDescription.dict_to_ModelDescription(modelDict)
+
+    print(model_desc)
+    X0		105.0		95.0,115.0
+    Y0		62.0		52.0,72.0
+    FUNCTION Exponential   # LABEL disk
+    PA		40.0		0.0,100.0
+    ell		0.5		fixed
+    I_0		100.0		0.0,500.0
+    h		25.0		10.0,50.0
+
 
 
 

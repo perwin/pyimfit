@@ -565,10 +565,10 @@ class FunctionSetDescription(object):
         ----------
         inputDict : dict
             dict describing the function set
-            {'X0': list, 'Y0': list, 'function_list': [list of dicts describing functions]}
-            {'label': str, 'X0': list, 'Y0': list, 'function_list': [list of dicts describing functions]}
-                where "list" for X0 and Y0 is one of
-                    [value]
+            {'X0': val-or-list, 'Y0': val-or-list, 'function_list': [list of dicts describing functions]}
+            {'label': str, 'X0': val-or-list, 'Y0': val-or-list, 'function_list': [list of dicts describing functions]}
+                where "val-or-list" for X0 and Y0 is one of
+                    value
                     [value, "fixed"]
                     [value, lower-limit, upper-limit]
         Returns

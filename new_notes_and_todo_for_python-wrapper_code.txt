@@ -82,7 +82,7 @@ PLAN:
     ** Alternate outputs for best-fit parameter values
         https://github.com/perwin/pyimfit/issues/2
 
-        [ ] Brainstorm alternate output
+        [x] Brainstorm alternate output
             -- return ModelDescription object
             -- return list of single-function-set dicts
             OR: return dict containing single-function-set dicts, so we can optionally
@@ -165,13 +165,17 @@ PLAN:
                 [x] Check for current code (or lack thereof) for outputting models
                 [x] Write unit test to output dict version of model (test_fitting.py)
 
-        [ ] Code to instantiate Imfit object with model-dict
+        [x] Code to instantiate Imfit object with model-dict
             -- imfit_fitter = Imfit(model_dict)
             [x] Write unit test(s) for this
-            [ ] Modify Imfit.__init__ so unit test passes
+            [x] Modify Imfit.__init__ so unit test passes
 
         [ ] Write documentation for dict-based models
-            [ ] Look at current docs to see where this would go
+            -- overview [somewhere in "Specifying a model"]
+            [x] Look at current docs to see where this would go
+            [x] Add 1-sentence mention of model dicts to "For Those Already Familiar with Imfit"
+            [ ] Add new subsection inside "Specify the model (and its parameters)" describing dicts
+            [ ] Add mention of Imfit.getModelAsDict() to "Inspecting the results of a fit" subsection
 
 
     * Possible bug in Imfit.getModelImage

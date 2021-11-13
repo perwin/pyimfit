@@ -1,7 +1,7 @@
 Acknowledgments
 ===============
 
-PyImfit is based on André Luiz de Amorim's
+PyImfit is based on André Luiz de Amorim’s
 `python-imfit <https://github.com/streeto/python-imfit>`__ wrapper about
 an earlier version of **Imfit**.
 
@@ -53,7 +53,7 @@ PyImfit makes use of the following external libraries:
 -  `NLopt <https://nlopt.readthedocs.io/en/latest/>`__
 
 Minpack
-^^^^^^^
+'''''''
 
 This product includes software developed by the University of Chicago,
 as Operator of the Argonne National Laboratory.

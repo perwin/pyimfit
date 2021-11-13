@@ -9,19 +9,19 @@ For example,
 
 ::
 
-    imfit_fitter = pyimfit.Imfit(someModelDescription)
+   imfit_fitter = pyimfit.Imfit(someModelDescription)
 
 Finding the best-fit solution by minimizing a fit statistic
 -----------------------------------------------------------
 
 Fitting a model to an image in PyImfit involves calculating a model
 image and then comparing it pixel-by-pixel with a data image to derive a
-summary "fit statistic" (based on some total likelihood value). The goal
+summary “fit statistic” (based on some total likelihood value). The goal
 is to *minimize* the fit statistic (which corresponds to maximizing the
 likelihood). This is done by iteratively adjusting the parameters of the
 model and recomputing the fit statistic until convergence is achieved;
-the algorithm which oversees this process is called a "minimizer" or
-"solver".
+the algorithm which oversees this process is called a “minimizer” or
+“solver”.
 
 Fit statistics (chi^2 and all that)
 -----------------------------------
@@ -31,24 +31,24 @@ is determined as part of the ``loadData`` method of the Imfit class.
 
 1. Chi^2 Statistics
 
-A. Sigmas estimated from the data values
+   A. Sigmas estimated from the data values
 
-B. Sigmas estimated from the model values
+   B. Sigmas estimated from the model values
 
-C. Sigmas from a pre-existing error/uncertainty/variance image
+   C. Sigmas from a pre-existing error/uncertainty/variance image
 
 To specify model-based chi^2 as the fit statistic
 
 ::
 
-    imfit_fitter.loadData(imageData, ..., use_model_for_errors=True)
+   imfit_fitter.loadData(imageData, ..., use_model_for_errors=True)
 
 To supply your own error/uncertainty map
 
 ::
 
-    imfit_fitter.loadData(imageData, error=errorImageData, ...)
-    imfit_fitter.loadData(imageData, error=errorImageData, error_type="variance", ...)
+   imfit_fitter.loadData(imageData, error=errorImageData, ...)
+   imfit_fitter.loadData(imageData, error=errorImageData, error_type="variance", ...)
 
 **TBD:** Gain; sky background; read noise
 
@@ -58,7 +58,7 @@ To specify Poisson-MLR as the fit statistic
 
 ::
 
-    imfit_fitter.loadData(imageData, ..., use_poisson_mlr=True)
+   imfit_fitter.loadData(imageData, ..., use_poisson_mlr=True)
 
 Minimizers/Solvers
 ------------------
@@ -75,15 +75,17 @@ PyImfit has three minimizers (a.k.a. solvers):
 
    ::
 
-        imfit_fitter.DoFit()
-        imfit_fitter.DoFit(solver="LM")
+      imfit_fitter.DoFit()
+      imfit_fitter.DoFit(solver="LM")
 
 -  Nelder-Mead Simplex: This is a slower algorithm, generally held to be
    less likely to be trapped in local fit-statistic minima. Like
    Levenberg-Marquardt, it requires initial guesses for each parameter
    value.
 
-   imfit\_fitter.DoFit(solver="NM")
+::
+
+   imfit_fitter.DoFit(solver="NM")
 
 -  Differential Evolution: This is a genetic-algorithms approach, and is
    the slowest of all the algorithms. Unlike the other two solvers, it
@@ -91,7 +93,9 @@ PyImfit has three minimizers (a.k.a. solvers):
    parameters. Initial guesses for the non-fixed parameter values are
    *ignored*.
 
-   imfit\_fitter.DoFit(solver="DE")
+::
+
+   imfit_fitter.DoFit(solver="DE")
 
 Roughly speaking, the Nelder-Mead simplex minimizer is about an order of
 magnitude slower than Levenberg-Marquardt, and Differential Evolution is

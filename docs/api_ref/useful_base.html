@@ -8,11 +8,12 @@
   <body>
 
 
+<section id="useful-functions">
 
 <p>Miscellaneous useful auxiliary functions:</p>
 <dl class="py function">
-<dt id="pyimfit.get_function_list">
-<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">get_function_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.get_function_list" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.get_function_list">
+<span class="sig-prename descclassname"><span class="pre">pyimfit.</span></span><span class="sig-name descname"><span class="pre">get_function_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.get_function_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of Imfit image-function names (e.g., [“Gaussian”, “Exponential”, etc.])</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -24,8 +25,8 @@
 </dl>
 </dd></dl>
 <dl class="py function">
-<dt id="pyimfit.get_function_dict">
-<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">get_function_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.get_function_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.get_function_dict">
+<span class="sig-prename descclassname"><span class="pre">pyimfit.</span></span><span class="sig-name descname"><span class="pre">get_function_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.get_function_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a dict mapping each Imfit image-function names to a list of its corresponding
 parameter names.</p>
 <dl class="field-list simple">
@@ -39,8 +40,8 @@ parameter names</p>
 </dl>
 </dd></dl>
 <dl class="py function">
-<dt id="pyimfit.make_imfit_function">
-<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">make_imfit_function</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.make_imfit_function" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.make_imfit_function">
+<span class="sig-prename descclassname"><span class="pre">pyimfit.</span></span><span class="sig-name descname"><span class="pre">make_imfit_function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.make_imfit_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a string specifying the official name of an Imfit image function
 (e.g., “Sersic”, “Sersic_GenEllipse”, “ExponentialDisk3D”), this
 returns an instance of FunctionDescription describing that function
@@ -65,8 +66,8 @@ Default: “” (which means no label).</p></li>
 </dl>
 </dd></dl>
 <dl class="py function">
-<dt id="pyimfit.parse_config_file">
-<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">parse_config_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fileName</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> → <a class="reference internal" href="descriptions.html#pyimfit.descriptions.ModelDescription" title="pyimfit.descriptions.ModelDescription">pyimfit.descriptions.ModelDescription</a><a class="headerlink" href="#pyimfit.parse_config_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.parse_config_file">
+<span class="sig-prename descclassname"><span class="pre">pyimfit.</span></span><span class="sig-name descname"><span class="pre">parse_config_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference internal" href="descriptions.html#pyimfit.descriptions.ModelDescription" title="pyimfit.descriptions.ModelDescription"><span class="pre">pyimfit.descriptions.ModelDescription</span></a></span></span><a class="headerlink" href="#pyimfit.parse_config_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read an Imfit model-configuration file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -82,8 +83,8 @@ Default: “” (which means no label).</p></li>
 </dl>
 </dd></dl>
 <dl class="py function">
-<dt id="pyimfit.parse_config">
-<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">parse_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lines</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="descriptions.html#pyimfit.descriptions.ModelDescription" title="pyimfit.descriptions.ModelDescription">pyimfit.descriptions.ModelDescription</a><a class="headerlink" href="#pyimfit.parse_config" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.parse_config">
+<span class="sig-prename descclassname"><span class="pre">pyimfit.</span></span><span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><a class="reference internal" href="descriptions.html#pyimfit.descriptions.ModelDescription" title="pyimfit.descriptions.ModelDescription"><span class="pre">pyimfit.descriptions.ModelDescription</span></a></span></span><a class="headerlink" href="#pyimfit.parse_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses an Imfit model configuration from a list of strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -98,12 +99,12 @@ Default: “” (which means no label).</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#pyimfit.parse_config_file" title="pyimfit.parse_config_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">parse_config_file()</span></code></a></p>
+<p><a class="reference internal" href="#pyimfit.parse_config_file" title="pyimfit.parse_config_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_config_file</span></code></a></p>
 </div>
 </dd></dl>
 <dl class="py function">
-<dt id="pyimfit.MakePsfOversampler">
-<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">MakePsfOversampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">psfImage</span></em>, <em class="sig-param"><span class="n">oversampleScale</span></em>, <em class="sig-param"><span class="n">regionSpec</span></em>, <em class="sig-param"><span class="n">psfNormalization</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.MakePsfOversampler" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.MakePsfOversampler">
+<span class="sig-prename descclassname"><span class="pre">pyimfit.</span></span><span class="sig-name descname"><span class="pre">MakePsfOversampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psfImage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oversampleScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regionSpec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psfNormalization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.MakePsfOversampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper function to generate PsfOversampling objects (corrects input psfImage, sets
 up region string, etc.).</p>
 <dl class="field-list simple">
@@ -130,8 +131,8 @@ Default: <code class="docutils literal notranslate"><span class="pre">True</span
 </dl>
 </dd></dl>
 <dl class="py function">
-<dt id="pyimfit.FixImage">
-<code class="sig-prename descclassname">pyimfit.</code><code class="sig-name descname">FixImage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.FixImage" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pyimfit.FixImage">
+<span class="sig-prename descclassname"><span class="pre">pyimfit.</span></span><span class="sig-name descname"><span class="pre">FixImage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.FixImage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks an input numpy array and, if necessary, converts it to
 double-precision floating point, little-endian byte order, with
 contiguous layout, to enable use with Imfit.</p>
@@ -147,6 +148,7 @@ contiguous layout, to enable use with Imfit.</p>
 </dd>
 </dl>
 </dd></dl>
+</section>
 
 
   </body>
