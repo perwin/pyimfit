@@ -174,8 +174,8 @@ PLAN:
             -- overview [somewhere in "Specifying a model"]
             [x] Look at current docs to see where this would go
             [x] Add 1-sentence mention of model dicts to "For Those Already Familiar with Imfit"
-            [ ] Add new subsection inside "Specify the model (and its parameters)" describing dicts
-            [ ] Add mention of Imfit.getModelAsDict() to "Inspecting the results of a fit" subsection
+            [x] Add new subsection inside "Specify the model (and its parameters)" describing dicts
+            [x] Add mention of Imfit.getModelAsDict() to "Inspecting the results of a fit" subsection
 
 
     * Possible bug in Imfit.getModelImage

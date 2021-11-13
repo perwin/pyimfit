@@ -26,10 +26,10 @@ If you've already used the command-line version of **Imfit**, here are the essen
    * Models (and initial parameter values and parameter limits for a fit) are specified via the 
    ModelDescription class. The utility function `parse_config_file` 
    will read a standard **Imfit** configuration file and return an instance of that class with the
-   model specification. You can also build up a ModelDescription instance by programmatically
+   model specification. You can also build up a `ModelDescription` instance by programmatically
    specifying components from within Python, or via a dict-based description.
    
-   * Fitting is done by instantiating an `Imfit` object with a ModelDescription object as
+   * Fitting is done by instantiating an `Imfit` object with a `ModelDescription` object as
    input, then adding a 2D NumPy array as the data to be fit (along with, optionally, mask
    and error images, the image A/D gain value, etc.) with the `loadData` method, and then calling 
    the `doFit` method (along with the minimization algorithm to use). Or just call the `fit` method 
@@ -65,7 +65,7 @@ the native image pixel scale.)
 
 ### Specify the model (and its parameters)
 
-The model is specified by an instance of the ModelDescription class.
+The model is specified by an instance of the `ModelDescription` class.
 
 For the command-line program, this is done via a "configuration" text file, which has a
 specific format described in [the Imfit manual (PDF)](https://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf),
@@ -77,9 +77,9 @@ If you have a configuration file, you can load it via the convenience function `
 
 where `configFilePath` is a string specifying the path to the configuration file.
 
-You can also construct a ModelDescription instance programmatically from within Python; see below
+You can also construct a `ModelDescription` instance programmatically from within Python; see below
 for a very simple example, or [Sample Usage](./sample_usage.html) for a slightly more
-complicated example. Finally, you can create a ModelDescription instance by calling the
+complicated example. Finally, you can create a `ModelDescription` instance by calling the
 class function `ModelDescription.dict_to_ModelDescription` with a dict-based description
 of the model; see below for an example.
 
@@ -88,7 +88,7 @@ variable `pyimfit.imageFunctionList`, and you can get a list of the parameter na
 function from `pyimfit.imageFunctionDict`. These functions are described in detail in
 [the Imfit manual (PDF)](https://www.mpe.mpg.de/~erwin/resources/imfit/imfit_howto.pdf).)
 
-Once you have a ModelDescription object describing the model, you can create an instance of
+Once you have a `ModelDescription` object describing the model, you can create an instance of
 the `Imfit` class based on the model; optionally, if you want the model to be convolved
 with a PSF, you can also supply the PSF image (in the form of a 2D NumPy array):
 
@@ -334,6 +334,22 @@ Of course, you might also want to inspect the residuals of the fit; since your d
 the output best-fit model image are both NumPy arrays, this is simple enough:
 
     residual_im = data_im - bestfit_model_im
+
+
+#### Getting the model description
+
+There are two ways to get a copy of the current model description (which will include the current
+best-fit parameter values if a successful fit was performed, though it will *not* include
+parameter error estimates). The first returns a `ModelDescription` object; the second returns
+a dict containing information about the model (which may be simpler to inspect). The dict format
+can then be used with `pyimfit.ModelDescription.dict_to_ModelDescription()` to generate a new
+ModelObject instance.
+
+    model_desc = imfitter.getModelDescription()
+
+    model_dict = imfitter.getModelAsDict()
+
+
 
 
 ### Generate a model image (without fitting)
