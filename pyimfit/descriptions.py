@@ -316,14 +316,12 @@ class FunctionDescription(object):
         Parameters
         ----------
         inputDict : dict
-            dict describing the function
-            Examples:
+            dict describing the function. Examples:
                 fDict = {'name': "Gaussian", 'label': "blob", 'parameters': p}
                 where p is a dict containing parameter names and values, e.g.
                 p = {'PA': 0.0, 'ell': 0.5, 'I_0': 100.0, 'sigma': 10.0}
                 OR
-                p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
-                    'sigma': [10.0, 5.0,20.0]}
+                p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3], 'sigma': [10.0, 5.0,20.0]}
 
         Returns
         -------
@@ -439,8 +437,7 @@ class FunctionDescription(object):
                 where p is a dict containing parameter names and values, e.g.
                 p = {'PA': 0.0, 'ell': 0.5, 'I_0': 100.0, 'sigma': 10.0}
                 OR
-                p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3],
-                    'sigma': [10.0, 5.0,20.0]}
+                p = {'PA': [0.0, "fixed"], 'ell': [0.5, 0.1,0.8], 'I_0': [100.0, 10.0,1e3], 'sigma': [10.0, 5.0,20.0]}
         """
         # FIXME: write code for this!
         paramsDict = { param.name: param.getParamInfoList() for param in self._parameters }
@@ -567,6 +564,7 @@ class FunctionSetDescription(object):
             dict describing the function set
             {'X0': val-or-list, 'Y0': val-or-list, 'function_list': [list of dicts describing functions]}
             {'label': str, 'X0': val-or-list, 'Y0': val-or-list, 'function_list': [list of dicts describing functions]}
+
                 where "val-or-list" for X0 and Y0 is one of
                     value
                     [value, "fixed"]
@@ -886,6 +884,7 @@ class ModelDescription(object):
         inputDict : dict
             dict describing the model, with one required entry -- "function_sets" --
             and one optional entry -- "options"
+
                 "function_sets" : list of dict, each one specifying a function set,
                 suitable as input to FunctionSetDescription.dict_to_FunctionSetDescription()
 

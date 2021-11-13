@@ -256,5 +256,3 @@ A histogram of the :math:`B/T` values (vertical line = best-fit value):
    :alt: png
 
    png
-
-.. code:: python

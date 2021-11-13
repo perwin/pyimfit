@@ -34,9 +34,10 @@ while editing them.
 2. Update rST files if needed: index.rst; api_ref/api_index.rst, other
 api-related .rst files in that directory.
 
-3. IF the Jupyter notebook file has been updated, generate a markdown version
+3. IF one or more the Jupyter notebook files have been updated, generate a markdown versions
 with
    $ jupyter nbconvert pyimfit_emcee.ipynb --to markdown
+   $ jupyter nbconvert pyimfit_bootstrap_BtoT.ipynb --to markdown
 
 4. Generate rST versions of the Markdown files (by running convert_md_to_rst.sh
 script), generate the Sphinx HTML files, extract the apidoc-generated bits of

@@ -244,10 +244,7 @@ axvline(GetBtoT(imfit_fitter, p_bestfit), color='k')
 
 
 
+    
 ![png](pyimfit_bootstrap_BtoT_files/pyimfit_bootstrap_BtoT_37_1.png)
+    
 
-
-
-```python
-
-```

@@ -14,4 +14,5 @@ generated instance of the ModelDescription (or SimpleModelDescription) class.
 
 
 .. automodule:: pyimfit.descriptions
+      :imported-members:
       :members:
