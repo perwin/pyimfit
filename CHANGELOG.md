@@ -6,11 +6,13 @@
 changes may contain significant changes to the API.
 
 
-## 0.11.0 -- 2021-09-xx
+## 0.11.0 -- 2021-11-xx [NOT YET RELEASED]
 ## Added
-Models (including current parameter values) can now be described by a dict-based format.
+Models (including current parameter values) can now be described by a dict-based format;
+dict-based model descriptions (including current best-fit parameter values) can be
+returned by Imfit instances as well.
 
-Pre-compiled version for Python 3.9 on macOS.
+Pre-compiled version for Python versions 3.9 and 3.10 on macOS.
 
 ### Changed
 The interface to the FunctionSetDescription class has changed: the "name" parameter is

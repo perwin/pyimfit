@@ -1,3 +1,7 @@
 # Pip requirements.txt file for PyImfit
 numpy
 scipy
+
+# stuff to avoid possible conflicts involving Sphinx and docutils-0.18 on readthedocs.org
+sphinx<4.0
+sphinx_rtd_theme==0.5.1
