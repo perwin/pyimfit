@@ -125,8 +125,8 @@ Creating a model; setting parameter values and limits
 Each image-function parameter within a model can have a “current” value
 (e.g., the initial guess for the fitting process, the result from the
 fit, etc.) and either: a set of lower and upper limits for possible
-values **or** the keyword “fixed”, which means the parameter value
-should be kept constant during fits.
+values **or** the string “fixed”, which means the parameter value should
+be kept constant during fits.
 
 **Note**: Unless otherwise specified, all size values are in pixels, and
 all intensity/surface-brightness values are in counts/pixel.
@@ -244,12 +244,12 @@ minimized during the fitting process.
    variance values precomputed in some fashion (e.g., from an
    image-reduction pipeline).
 
--  Poisson-based (“Poisson Maximum-Likelihood-Ratio”): Finally, you can
-   specify that individual pixel errors come from the model assuming a
-   true Poisson process (rather than the Gaussian approximation to
-   Poisson statistics that’s used in the χ2 approaches). This is
-   particularly appropriate when individual pixel values of the data are
-   low.
+-  Poisson-based (“Poisson Maximum-Likelihood-Ratio” = “PMLR”): Finally,
+   you can specify that individual pixel errors come from the model
+   assuming a true Poisson process (rather than the Gaussian
+   approximation to Poisson statistics that’s used in the χ2
+   approaches). This is particularly appropriate when individual pixel
+   values of the data are low.
 
 You can also tell the ``Imfit`` object useful things about the data
 values: what A/D gain conversion was applied, any Gaussian read noise,
@@ -329,14 +329,15 @@ algorithm and verbosity, and start the fit all in one go
 Inspecting the results of a fit
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Imfit object returns an instance of the FitResult class, which is
-closely based on the ``OptimizeResult`` class of ``scipy.optimize`` and
-is basically a Python dict with attribute access
+The Imfit object returns an instance of the ``FitResult`` class, which
+is closely based on the ``OptimizeResult`` class of ``scipy.optimize``
+and is basically a Python dict with attribute access
 
 There are three or four basic things you might want to look at in the
-FitResult object when the fit finishes. You can get these things from
-the FitResult object that’s returned from the ``doFit()`` method, or by
-querying the Imfit object; the examples below show each possibility.
+``FitResult`` object when the fit finishes. You can get these things
+from the ``FitResult`` object that’s returned from the ``doFit()``
+method, or by querying the Imfit object; the examples below show each
+possibility.
 
 1. See if the fit actually converged (either ``True`` or ``False``):
 

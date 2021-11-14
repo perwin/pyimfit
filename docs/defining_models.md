@@ -69,7 +69,9 @@ details.
       Geometric parameters: PA, c0 (boxy/disk isophote-shape parameter)
       
       - **FlatBar** -- An elongated structure with a broken-exponential profile along its major
-      axis, suitable for the outer parts of (some) bars in massive disk galaxies.
+      axis, suitable for the outer parts of (some) bars in massive disk galaxies; see 
+      [Erwin et al. (2021)](https://ui.adsabs.harvard.edu/abs/2021MNRAS.502.2446E/abstract)
+      for more details and examples of use. Geometric parameters: PA, ell, deltaPA_max
      
       - **FlatSky** -- Produces a constant background for the entire image.
       

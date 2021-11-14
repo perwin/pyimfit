@@ -99,7 +99,7 @@ with a PSF, you can also supply the PSF image (in the form of a 2D NumPy array):
 
 Each image-function parameter within a model can have a "current" value (e.g., the initial guess for 
 the fitting process, the result from the fit, etc.) and either: a set of lower and upper limits for 
-possible values **or** the keyword "fixed", which means the parameter value should be kept constant during fits.
+possible values **or** the string "fixed", which means the parameter value should be kept constant during fits.
 
 **Note**: Unless otherwise specified, all size values are in pixels, and all intensity/surface-brightness
 values are in counts/pixel. (Photometric zero points are not needed except for the optional case of
@@ -204,7 +204,7 @@ the fitting process.
    size as the data array and holds per-pixel sigma or variance values precomputed in some fashion (e.g., from
    an image-reduction pipeline).
    
-   * Poisson-based ("Poisson Maximum-Likelihood-Ratio"): Finally, you can specify that individual pixel 
+   * Poisson-based ("Poisson Maximum-Likelihood-Ratio" = "PMLR"): Finally, you can specify that individual pixel 
    errors come from the model assuming a true Poisson process (rather than the Gaussian approximation to Poisson 
    statistics that's used in the &chi;<sup>2</sup> approaches). This is particularly appropriate when individual 
    pixel values of the data are low.
@@ -273,11 +273,11 @@ the minimization algorithm and verbosity, and start the fit all in one go
 
 #### Inspecting the results of a fit
 
-The Imfit object returns an instance of the FitResult class, which is closely based on the `OptimizeResult`
+The Imfit object returns an instance of the `FitResult` class, which is closely based on the `OptimizeResult`
 class of `scipy.optimize` and is basically a Python dict with attribute access
 
-There are three or four basic things you might want to look at in the FitResult object
-when the fit finishes. You can get these things from the FitResult object that's returned
+There are three or four basic things you might want to look at in the `FitResult` object
+when the fit finishes. You can get these things from the `FitResult` object that's returned
 from the `doFit()` method, or by querying the Imfit object; the examples below show each
 possibility.
 

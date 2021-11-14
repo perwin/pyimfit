@@ -18,7 +18,7 @@ and then fit the model to the data:
     # read in image data
     image_data = fits.getdata(imageFile)
 
-    # construct model from config file
+    # construct model (ModelDescription object) from config file
     model_desc = pyimfit.ModelDescription.load(configFile)
 
     # create an Imfit object, using the previously loaded model configuration
@@ -91,8 +91,8 @@ to read it from a text file):
 
     # etc.
 
-You can do the same thing by defining the model using a set of nested Python dicts, 
-and passing the parent dict to the ModelObject.xxx function: 
+Another way to construct the model is by defining it using a set of nested Python dicts, 
+and passing the parent dict to the `ModelObject.dict_to_ModelDescription` function: 
 
     # define a function for making a simple bulge+disk model, where both components 
     # share the same central coordinate; this version uses dicts internally

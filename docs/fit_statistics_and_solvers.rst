@@ -50,8 +50,6 @@ To supply your own error/uncertainty map
    imfit_fitter.loadData(imageData, error=errorImageData, ...)
    imfit_fitter.loadData(imageData, error=errorImageData, error_type="variance", ...)
 
-**TBD:** Gain; sky background; read noise
-
 2. Pure Poisson Statistics
 
 To specify Poisson-MLR as the fit statistic
@@ -59,6 +57,44 @@ To specify Poisson-MLR as the fit statistic
 ::
 
    imfit_fitter.loadData(imageData, ..., use_poisson_mlr=True)
+
+3. Possible specification of image A/D gain, exposure time, etc.
+
+For any case *except* using a pre-existing error map, you may need to
+supply information about how the values in the data image can be
+converted to *detected* counts (e.g., detected photoelectrons), since
+the underlying statistical models assume the latter. For example, if the
+per-pixel values were converted to ADUs via an A/D gain, you should
+supply the gain value (in electrons/ADU); if the values are
+counts/second, you should also supply the total intgration time. If
+there was a significant read noise term, this should also be described.
+The relevant keywords for the ``loadData`` and ``fit`` methods are:
+``gain`` (A/D gain in electrons/ADU), ``read_noise`` (Gaussian read
+noise in electrons), ``exp_time`` (seconds, *if* the data values are
+ADU/sec), and ``n_combined`` (number of combined exposures). An example:
+
+::
+
+   imfit_fitter.loadData(imageData, ..., gain=3.1, exp_time=800, read_noise=7.5)
+
+**Note:** If you are using Poisson-MLR as the fit statistic, then
+``read_noise`` should not be used (the Poisson MLR statistical model
+cannot handle a Gaussian read-noise term).
+
+4. Possible pre-subtracted background level
+
+In some cases, it may be convenient to work with data images where the
+sky background has been removed. The fitting process needs to know about
+this, since otherwise there will be problems with data pixels having
+values near or below zero. You can specify a *constant* background level
+that has already been subtracted from the image, using the
+``original_sky`` keyword for the ``loadData`` and ``fit`` methods; the
+value should be in the same units as the data pixels (e.g., ADU,
+ADU/sec, etc.). An example:
+
+::
+
+   imfit_fitter.loadData(imageData, ..., original_sky=244.9)
 
 Minimizers/Solvers
 ------------------
