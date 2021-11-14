@@ -18,6 +18,7 @@ PLAN:
                 (Note that "$ git config --get credential.helper" confirms that osxkeychain is already set)
 
 
+
     ** New Update: Update code to use Imfit v1.8
 
         [X] Build and test new Mac Python version

@@ -19,7 +19,7 @@ python3.6 setup.py bdist_wheel
 # Copy shared libs into wheel using delocate
 VERSION_NUM=$1
 cd dist
-delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp310-cp310-macosx_10_9_x86_64.whl
+delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp310-cp310-macosx_10_9_universal2.whl
 delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp39-cp39-macosx_10_9_x86_64.whl
 delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp38-cp38-macosx_10_9_x86_64.whl
 delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp37-cp37m-macosx_10_9_x86_64.whl
@@ -44,7 +44,7 @@ else
   python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp37-cp37m-macosx_10_9_x86_64.whl
   python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp38-cp38-macosx_10_9_x86_64.whl
   python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp39-cp39-macosx_10_9_x86_64.whl
-  python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp310-cp310-macosx_10_9_x86_64.whl
+  python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp310-cp310-macosx_10_9_universal2.whl
   echo ""
 fi
 
