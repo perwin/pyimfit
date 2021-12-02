@@ -143,7 +143,7 @@ PLAN:
         [x] Code to generate function-set-as-dict from FunctionSetDescription object
             --- getFuncSetAsDict
                 [x] Add test to test_descriptions.py for FunctionSetDescription.getFuncSetAsDict()
-                [ ] Write code till test passes
+                [x] Write code till test passes
 
         [x] Code to generate model-as-dict from ModelDescription object
             --- getModelAsDict
@@ -192,6 +192,8 @@ PLAN:
     * Figure out fix for handling makeimage-style image generation
         -- Currently, we ignore NCOLS/NROWS image-description parameters in a config file
         (config.py) [that is, we load and store the values, but otherwise ignore them]
+        -- Remember that model-image size combines with PSF size to set the internal model-image array,
+        so it's not something that can be easily changed
         -- Ideally, we want some way to specify image size via NCOLS/NROWS image-description parameters,
         as is currently done by makeimage
             -- right now, the only way to specify image size is
@@ -728,6 +730,7 @@ ModelObjectWrapper:
        psf_oversampling_list : list of PsfOversampling
             List of PsfOversampling objects, describing oversampling regions, PSFs,
             and oversampling scales.
+
 
 
 

@@ -40,7 +40,7 @@ recognizedOptionNames = list(recognizedOptions.keys())
 
 def parse_config_file( fileName: str ) -> ModelDescription:
     """
-    Read an Imfit model-configuration file.
+    Read and parse an Imfit model-configuration file.
 
     Parameters
     ----------
@@ -62,7 +62,7 @@ def parse_config_file( fileName: str ) -> ModelDescription:
 
 def parse_config( lines: List[str] ) -> ModelDescription:
     """
-    Parses an Imfit model configuration from a list of strings.
+    Parse an Imfit model configuration from a list of strings.
 
     Parameters
     ----------
@@ -113,8 +113,12 @@ def clean_lines( lines: List[str] ) -> List[str]:
     Parameters
     ----------
     lines : list of str
+
+    Returns
+    -------
+    cleaned_lines : list of str
     """
-    clean = []
+    cleaned_lines = []
     for line in lines:
         # Clean the comments.
         line = line.split(commentChar, 1)[0]
@@ -123,8 +127,8 @@ def clean_lines( lines: List[str] ) -> List[str]:
         # Skip the empty lines.
         if line == '':
             continue
-        clean.append(line)
-    return clean
+        cleaned_lines.append(line)
+    return cleaned_lines
 
 
 

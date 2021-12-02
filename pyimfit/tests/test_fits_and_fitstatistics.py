@@ -147,7 +147,7 @@ def test_get_fitResult():
 def test_get_fitResult_from_doFit():
     imfit_fitter = Imfit(model_desc)
     imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
-    result = imfit_fitter.doFit(getSummary=True)
+    result = imfit_fitter.doFit()
 
     assert result.solverName == "LM"
     assert result.fitConverged == True

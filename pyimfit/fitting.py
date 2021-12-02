@@ -30,27 +30,31 @@ class FitError(Exception):
 
 
 class FitResult( dict ):
-    """ Represents the result of fitting an image.
+    """
+    Represents the result of fitting an image.
+    Constructed by Imfit.getFitResult method.
 
     Attributes
     ----------
+    solverName : str
+        Which solver was used (e.g., "LM", "NM", "DE")
+    fitConverged : bool
+        Whether fit converged or not
+    nIter : int
+        Number of iterations performed during fit
+    fitStat : float
+        Final fit-statistic value
+    fitStatReduced : float
+        Final reduced fit-statistic value
+    aic : float
+        Final Akaike Information Criterion value
+    bic : float
+        Final Bayesian Information Criterion value
     params : ndarray
         The best-fit vector of parameter values.
-    success : bool
-        Whether or not the optimizer exited successfully.
-    status : int
-        Termination status of the optimizer. Its value depends on the
-        underlying solver. Refer to `message` for details.
-    message : str
-        Description of the cause of the termination.
-    nfev : int
-        Number of evaluations of the objective function.
-    nit : int
-        Number of iterations performed by the optimizer.
-
-    OTHER IDEAS:
-        AIC,BIC
-        fitStatistic, reduced fitStatistic
+    paramErrs : ndarray
+        Cooresponding uncertainties on best-fit parameter values, if L-M
+        fit was done.
 
     Notes
     -----
@@ -301,12 +305,12 @@ class Imfit(object):
 
     def saveCurrentModelToFile( self, filename: str, includeImageOptions=False ):
         """
-        Saves the current model and parameter values to a text file in Imfit-configuration-file
-        format.
+        Saves the current model description and parameter values to a text file in
+        Imfit-configuration-file format.
 
         Parameters
         ----------
-        filename: str
+        filename : str
             Name for the output file
 
         includeImageOptions : bool, optional
@@ -526,7 +530,7 @@ class Imfit(object):
         self._dataSet = True
 
 
-    def doFit( self, solver='LM', verbose=None, getSummary=True ):
+    def doFit( self, solver='LM', verbose=None ):
         """
         Fit the model to previously supplied data image.
 
@@ -541,9 +545,6 @@ class Imfit(object):
         verbose : int or None, optional
             set this to an integer to specify a feedback level for the fit (this overrides
             the Imfit object's internal verbosity setting)
-
-        getSummary : bool, optional
-            if True, a summary of the fit is returned (as a string)
 
         Returns
         -------
@@ -571,12 +572,10 @@ class Imfit(object):
         if not self.fitError:
             self._fitDone = True
             self._fitStatComputed = True
-        if getSummary:
-            return self.getFitResult()
+        return self.getFitResult()
 
 
-    def fit( self, image, error=None, mask=None, solver='LM', verbose=None, getSummary=True,
-             **kwargs ):
+    def fit( self, image, error=None, mask=None, solver='LM', verbose=None, **kwargs ):
         """
         Supply data image (and optionally mask and/or error images) and image info, then
         fit the model to the data.
@@ -608,9 +607,6 @@ class Imfit(object):
             set this to an integer to specify a feedback level for the fit (this overrides
             the Imfit object's internal verbosity setting)
 
-        getSummary : bool, optional
-            if True, a summary of the fit is returned (as a string)
-
         See loadData() for list of allowed extra keywords.
 
         Returns
@@ -618,7 +614,7 @@ class Imfit(object):
         result : FitResult object
         """
         self.loadData(image, error, mask, **kwargs)
-        self.doFit(solver=solver, verbose=verbose, getSummary=getSummary)
+        return self.doFit(solver=solver, verbose=verbose)
 
 
     def getFitResult( self ):

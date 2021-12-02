@@ -75,7 +75,7 @@ class ParameterDescription(object):
     @property
     def name(self):
         """
-        The label of the parameter. Examples: "x0", "I_e".
+        The label of the parameter (str). Examples: "x0", "I_e".
         """
         return self._name
 
@@ -83,7 +83,7 @@ class ParameterDescription(object):
     @property
     def value(self):
         """
-        The value of the parameter.
+        The value of the parameter (float).
         """
         return self._value
 
@@ -91,7 +91,7 @@ class ParameterDescription(object):
     @property
     def limits(self):
         """
-        The low and upper limits for the parameter, as a tuple.
+        The low and upper limits for the parameter, as a tuple of float.
         """
         return self._limits
 
@@ -148,8 +148,7 @@ class ParameterDescription(object):
         Parameters
         ----------
         tol : float
-            Fractional offset for lower and upper limits
-            Must lie between ``0.0`` and ``1.0``.
+            Fractional offset for lower and upper limits; must lie between 0.0 and 1.0.
         """
         if tol > 1.0 or tol < 0.0:
             raise ValueError('Tolerance must be between 0.0 and 1.0.')
@@ -211,7 +210,7 @@ class ParameterDescription(object):
 
         Returns
         -------
-        outputString : string
+        outputString : str
         """
         outputString = "{0}\t\t{1}".format(self.name, self.value)
         if error is not None:
@@ -252,12 +251,6 @@ class ParameterDescription(object):
 
     def __str__(self):
         return self.getStringDescription()
-        # if self._fixed:
-        #     return '{0:s}      {1:f}    fixed'.format(self._name, self._value)
-        # elif self.limits is not None:
-        #     return '{0:s}      {1:f}    {2:f},{3:f}'.format(self._name, self._value, self._limits[0], self._limits[1])
-        # else:
-        #     return '{0:s}      {1:f}'.format(self._name, self._value)
 
 
 
@@ -325,7 +318,7 @@ class FunctionDescription(object):
 
         Returns
         -------
-        fset : :class:`FunctionDescription`
+        fdesc : :class:`FunctionDescription`
             The function description.
         """
         funcName = inputDict['name']
@@ -361,6 +354,13 @@ class FunctionDescription(object):
 
 
     def addParameter( self, p: ParameterDescription ):
+        """
+        Add a new ParameterDescription object.
+
+        Params
+        ------
+        p : ParameterDecription
+        """
         if not isinstance(p, ParameterDescription):
             raise ValueError('p is not a ParameterDescription object.')
         self._parameters.append(p)
@@ -555,8 +555,7 @@ class FunctionSetDescription(object):
     @classmethod
     def dict_to_FunctionSetDescription(cls, inputDict: dict):
         """
-        This is a convenience method to generate a FunctionSetDescription object
-        from a dict
+        A convenience method to generate a FunctionSetDescription object from a dict
 
         Parameters
         ----------
@@ -734,6 +733,7 @@ class FunctionSetDescription(object):
         Returns a dict describing the function set (suitable for use in e.g. dict_to_FunctionSetDescription())
 
             {'X0': list, 'Y0': list, 'function_list': [list of dicts describing functions]}
+            OR
             {'label': str, 'X0': list, 'Y0': list, 'function_list': [list of dicts describing functions]}
         """
         funcSetDict = {}
@@ -849,8 +849,8 @@ class ModelDescription(object):
     @classmethod
     def load(cls, fileName: str):
         """
-        This is a convenience method to generate a ModelDescription object
-        from a standard Imfit configuration file.
+        A convenience method to generate a ModelDescription object from a standard Imfit
+        configuration file.
 
         Parameters
         ----------
@@ -877,7 +877,7 @@ class ModelDescription(object):
     @classmethod
     def dict_to_ModelDescription(cls, inputDict: dict):
         """
-        This is a convenience method to generate a ModelDescription object from a dict.
+        A convenience method to generate a ModelDescription object from a dict.
 
         Parameters
         ----------
@@ -963,7 +963,7 @@ class ModelDescription(object):
 
     def updateOptions( self, optionsDict: Dict[str,float] ):
         """
-        Updates the internal image-descriptions dict, replacing current values for keys
+        Update the internal image-descriptions dict, replacing current values for keys
         already in the dict and added key-value pairs for keys not already present.
 
         Parameters
@@ -975,10 +975,9 @@ class ModelDescription(object):
 
     def replaceOptions( self, optionsDict: Dict[str,float] ):
         """
-        Replaces the current image-descriptions dict. This differs from updateOptions()
+        Replace the current image-descriptions dict. This differs from updateOptions()
         in that it will completely replace the current image-descriptions dict,
         discarding any key-value pairs with keys not in the replacement dict.
-
 
         Parameters
         ----------
@@ -996,8 +995,12 @@ class ModelDescription(object):
 
     def functionSetIndices(self):
         """
-        Returns the indices in the full parameters list corresponding
+        Get the indices in the full parameters list corresponding
         to the starts of individual function sets/blocks.
+
+        Returns
+        -------
+        indices : list of int
         """
         indices = [0]
         for i in range(self.nFunctionSets - 1):
@@ -1008,11 +1011,11 @@ class ModelDescription(object):
 
     def functionList(self):
         """
-        List of the FunctionDescription objects making up this model.
+        Get list of the FunctionDescription objects making up this model.
 
         Returns
         -------
-        func_list : list of FunctionDescription objects
+        functions : list of FunctionDescription objects
         """
         functions = []
         for function_set in self._functionSets:
@@ -1022,11 +1025,11 @@ class ModelDescription(object):
 
     def functionNameList(self):
         """
-        List of names of the image functions making up this model.
+        Get list of names of the image functions making up this model.
 
         Returns
         -------
-        func_list : list of str
+        functionNames : list of str
             List of the function names.
         """
         functionNames = []
@@ -1037,11 +1040,11 @@ class ModelDescription(object):
 
     def functionLabelList(self):
         """
-        List of labels for the image functions making up this model.
+        Get list of labels for the image functions making up this model.
 
         Returns
         -------
-        func_list : list of str
+        functionLabels : list of str
             List of the function labels.
         """
         functionLabels = []
@@ -1052,12 +1055,13 @@ class ModelDescription(object):
 
     def functionSetNameList(self):
         """
-        List of the functions composing this model, as strings, grouped by function set.
+        Get list of the functions composing this model, as strings, grouped by function set.
 
         Returns
         -------
-        func_set_list : list of list of string
-            List of the function names, grouped by function set: [[functions_in_set1], [functions_in_set2], ...]
+        functionSetList : list of list of string
+            List of the function names, grouped by function set:
+            [[functions_in_set1], [functions_in_set2], ...]
         """
         functionSetList = []
         for function_set in self._functionSets:
@@ -1068,11 +1072,11 @@ class ModelDescription(object):
 
     def parameterList(self):
         """
-        A list of the parameters (ParameterDescription objects) making up this model.
+        Get list of the parameters (ParameterDescription objects) making up this model.
 
         Returns
         -------
-        param_list : list of :class:`ParameterDescription`
+        params : list of :class:`ParameterDescription`
             List of the parameters.
         """
         params = []
@@ -1083,7 +1087,7 @@ class ModelDescription(object):
 
     def getRawParameters(self):
         """
-        Returns a Numpy array of the ModelDescription's current parameter values
+        Get Numpy array of the ModelDescription's current parameter values
 
         Returns
         -------
@@ -1095,7 +1099,7 @@ class ModelDescription(object):
 
     def getParameterLimits(self):
         """
-        Returns a list containing lower and upper limits for all parameters in the model.
+        Get list containing lower and upper limits for all parameters in the model.
 
         Returns
         -------
@@ -1108,7 +1112,7 @@ class ModelDescription(object):
 
     def getStringDescription( self, noLimits=False, errors: Optional[Sequence[float]]=None, saveOptions=False ):
         """
-        Returns a list of strings suitable for inclusion in an imfit/makeimage config file.
+        Get list of strings suitable for inclusion in an imfit/makeimage config file.
 
         Parameters
         ----------
@@ -1123,7 +1127,7 @@ class ModelDescription(object):
 
         Returns
         -------
-        outputStrings : list of string
+        outputLines : list of string
             list of newline-terminated strings describing the model.
             If errors is supplied, then parameter strings will contain "# +/- <error>" at end
         """
@@ -1151,6 +1155,10 @@ class ModelDescription(object):
     def getModelAsDict( self ):
         """
         Returns the model in dict form (suitable for use in e.g. dict_to_ModelDescription)
+
+        Returns
+        -------
+        modelDict : dict
         """
         modelDict = {}
         fsetDictList = [function_set.getFuncSetAsDict() for function_set in self._functionSets ]
