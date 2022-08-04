@@ -12,6 +12,10 @@ Models (including current parameter values) can now be described by a dict-based
 dict-based model descriptions (including current best-fit parameter values) can be
 returned by Imfit instances as well.
 
+Imfit.fit and Imfit.doFit can now take an optional `ftol` parameter (same as the `--ftol`
+parameter for the command-line `imfit` program -- controls fractional tolerance of fit statistics
+as a convergence criterion).
+
 Pre-compiled version for Python versions 3.9 and 3.10 on macOS.
 
 ### Changed

@@ -131,7 +131,8 @@ class ParameterDescription(object):
             elif value > upper_limit:
                 upper_limit = value
             if lower_limit >= upper_limit:
-                raise ValueError("Lower limit must be < upper limit.")
+                err_msg = "Lower limit ({0}) must be < upper limit ({1}).".format(lower_limit, upper_limit)
+                raise ValueError(err_msg)
             self._limits = (float(lower_limit), float(upper_limit))
 
         self._value = float(value)

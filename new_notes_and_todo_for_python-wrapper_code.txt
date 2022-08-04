@@ -2,6 +2,14 @@ PLAN:
 
 ** GENERAL/FUTURE TO-DO
 
+[X] Add ftol keyword to fitting.py --
+    Imfit.fit and Imfit.doFit
+
+
+[ ] Modify various methods in Imfit class to check whether _modelObjectWrapper has been
+    instantiated or not.
+
+
     ** Update GitHub access to new methodology
         [X] Visit GitHub web page
         [X]1. Generate Personal Authenticaion Token [PAT] (& copy to pword file)
@@ -64,20 +72,24 @@ PLAN:
                     -- 4. Do new "develop" install and run tests on Linux VM
 
 
-    ** New Update: Make build for Python 3.9
+    ** New Update: Make build for Python 3.10
         howto_new_distribution.txt
 
-        [X] Install Python 3.9
-            [X] Install Python 3.9
+        [X] Install Python 3.10
+            [X] Install Python
             [X] Install necessary libraries via pip
 
-        [X] Add Python 3.9 as an option for GitHub Actions testing workflow
+        [X] Add Python 3.10 as an option for GitHub Actions testing workflow
 
         [X] Upload new version to pip staging area
 
         [ ] Email announcement to Imfit mailing list
 
         [ ] Email announcement to AstroPy mailing list
+
+        [ ] Announce on Facebook Python-Astronomy group
+
+        [ ] Announce on Facebook Astrostatistics group
 
 
     ** Alternate outputs for best-fit parameter values
@@ -190,6 +202,13 @@ PLAN:
 
 
     * Figure out fix for handling makeimage-style image generation
+        Three levels/stages:
+            0. Instantiate Imfit instance
+                -- optionally supply PSF, subsampling flag, zero point
+            1. Instantiate ModelObjectWrapper *without* image size
+                -- can then be used for e.g. getModelFluxes()
+            2. Specify image size (e.g. via loadData)
+
         -- Currently, we ignore NCOLS/NROWS image-description parameters in a config file
         (config.py) [that is, we load and store the values, but otherwise ignore them]
         -- Remember that model-image size combines with PSF size to set the internal model-image array,

@@ -23,6 +23,9 @@ from ..pyimfit_lib import make_imfit_function
 testDataDir = "../data/"
 imageFile = testDataDir + "ic3478rss_256.fits"
 configFile = testDataDir + "config_exponential_ic3478_256.dat"
+true_bestfit_params_ic3478 = np.array([128.8540,129.1028, 19.7266,0.23152,316.313,20.522])
+true_errs_ic3478 = np.array([0.0239,0.0293, 0.21721,0.0015524,0.61962,0.034674])
+
 imageFile2 = testDataDir + "n3073rss_small.fits"
 maskFile2 = testDataDir + "n3073rss_small_mask.fits"
 configFile2 = testDataDir + "config_n3073.dat"
@@ -108,6 +111,33 @@ class TestImfit(object):
         optionsDict_correct3 = {'GAIN': 10.0, 'READNOISE': 0.5, 'ORIGINAL_SKY': 130.14, 'NCOMBINED': 5}
         imfit_fitter2._updateModelDescription(keywords_new)
         assert imfit_fitter2._modelDescr.optionsDict == optionsDict_correct3
+
+    def test_Imfit_simple_fit( self ):
+        # Fitting Exponential to 256x256-pixel SDSS r-band image of IC 3478 (no PSF convolution)
+        imfit_fitter = Imfit(self.modelDesc)
+        imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+        # fit with defautl LM solver
+        imfit_fitter.doFit()
+        assert imfit_fitter.fitTerminated == False
+        assert imfit_fitter.fitConverged == True
+        assert imfit_fitter.fitStatistic == approx(136470.399329, rel=1e-10)
+        assert imfit_fitter.AIC == approx(136482.400611, rel=1e-10)
+        bestfit_params = imfit_fitter.getRawParameters()
+        assert_allclose(bestfit_params, true_bestfit_params_ic3478, rtol=1e-5)
+        bestfit_errs = imfit_fitter.getParameterErrors()
+        assert_allclose(bestfit_errs, true_errs_ic3478, rtol=1e-2)
+
+    def test_Imfit_simple_fit_altftol( self ):
+        # Fitting Exponential to 256x256-pixel SDSS r-band image of IC 3478 (no PSF convolution)
+        # this time we explicitly use ftol=1e-6 (instead of default 1e-8)
+        imfit_fitter = Imfit(self.modelDesc)
+        imfit_fitter.loadData(image_ic3478, gain=4.725, read_noise=4.3, original_sky=130.14)
+        # fit with defautl LM solver
+        imfit_fitter.doFit(ftol=1e-6)
+        assert imfit_fitter.fitTerminated == False
+        assert imfit_fitter.fitConverged == True
+        assert imfit_fitter.fitStatistic == approx(136470.402986, rel=1e-10)
+        assert imfit_fitter.AIC == approx(136482.404268, rel=1e-10)
 
     def test_Imfit_get_fluxes( self ):
         # Fitting Exponential to 256x256-pixel SDSS r-band image of IC 3478 (no PSF convolution)

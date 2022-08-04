@@ -1,6 +1,6 @@
 # Cython implementation file for wrapping Imfit code, by PE; based on code
 # by Andre Luis de Amorim.
-# Copyright André Luiz de Amorim, 2013; Peter Erwin, 2018-2019.
+# Copyright André Luiz de Amorim, 2013; Peter Erwin, 2018-2022.
 
 # Note that we are using "typed memoryviews" to translate numpy arrays into
 # C-style double * arrays; this apparently the preferred (newer, more flexible)

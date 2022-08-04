@@ -530,7 +530,7 @@ class Imfit(object):
         self._dataSet = True
 
 
-    def doFit( self, solver='LM', verbose=None ):
+    def doFit( self, solver='LM', ftol=1e-8, verbose=None ):
         """
         Fit the model to previously supplied data image.
 
@@ -541,6 +541,9 @@ class Imfit(object):
                 * ``'LM'`` : Levenberg-Marquardt.
                 * ``'NM'`` : Nelder-Mead Simplex.
                 * ``'DE'`` : Differential Evolution.
+
+        ftol : float, optional
+            fractional tolerance in fit statistic for determining fit convergence
 
         verbose : int or None, optional
             set this to an integer to specify a feedback level for the fit (this overrides
@@ -567,7 +570,7 @@ class Imfit(object):
             verboseLevel = verbose
         else:
             verboseLevel = self._verboseLevel
-        self._modelObjectWrapper.fit(verbose=verboseLevel, mode=solver)
+        self._modelObjectWrapper.fit(verbose=verboseLevel, mode=solver, ftol=ftol)
         self._lastSolverUsed = solver
         if not self.fitError:
             self._fitDone = True
@@ -575,7 +578,7 @@ class Imfit(object):
         return self.getFitResult()
 
 
-    def fit( self, image, error=None, mask=None, solver='LM', verbose=None, **kwargs ):
+    def fit( self, image, error=None, mask=None, solver='LM', ftol=1e-8, verbose=None, **kwargs ):
         """
         Supply data image (and optionally mask and/or error images) and image info, then
         fit the model to the data.
@@ -603,6 +606,9 @@ class Imfit(object):
                 * ``'NM'`` : Nelder-Mead Simplex.
                 * ``'DE'`` : Differential Evolution.
 
+        ftol : float, optional
+            fractional tolerance in fit statistic for determining fit convergence
+
         verbose : int or None, optional
             set this to an integer to specify a feedback level for the fit (this overrides
             the Imfit object's internal verbosity setting)
@@ -614,7 +620,7 @@ class Imfit(object):
         result : FitResult object
         """
         self.loadData(image, error, mask, **kwargs)
-        return self.doFit(solver=solver, verbose=verbose)
+        return self.doFit(solver=solver, ftol=ftol, verbose=verbose)
 
 
     def getFitResult( self ):
