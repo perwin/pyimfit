@@ -2,19 +2,19 @@
 
 (Formatting and design based on Olivier Lacan's [Keep a CHANGELOG](http://keepachangelog.com/))
 
-**NOTE:** PyImfit is currently in a state of rapid development; minor-version-number
+**NOTE:** PyImfit is currently in a state of fairly rapid development; minor-version-number
 changes may contain significant changes to the API.
 
 
-## 0.11.0 -- 2021-11-xx [NOT YET RELEASED]
+## 0.11.0 -- 2022-08-xx [NOT YET RELEASED]
 ## Added
 Models (including current parameter values) can now be described by a dict-based format;
 dict-based model descriptions (including current best-fit parameter values) can be
-returned by Imfit instances as well.
+returned by Imfit instances as well, via their getModelAsDict method.
 
 Imfit.fit and Imfit.doFit can now take an optional `ftol` parameter (same as the `--ftol`
 parameter for the command-line `imfit` program -- controls fractional tolerance of fit statistics
-as a convergence criterion).
+as a convergence criterion during the fitting process).
 
 Pre-compiled version for Python versions 3.9 and 3.10 on macOS.
 

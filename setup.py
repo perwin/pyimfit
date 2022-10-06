@@ -128,7 +128,9 @@ def check_gcc_version( compilerName="gcc", getVersionNum=False ):
     if getVersionNum:
         return versionNumString
     if versionNumString is not None:
-        return versionNumString >= "5.0.0"
+        mainVersionNum = versionNumString.split(".")[0]
+        return mainVersionNum >= 5
+        # return versionNumString >= "5.0.0"
     else:
         return False
 

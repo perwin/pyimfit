@@ -108,11 +108,11 @@ nested Python dicts, and passing the parent dict to the
        # dict describing the bulge (first define the parameter dict, with initial values
        # and lower & upper limits for each parameter)
        p_bulge = {'PA': [PA_bulge, 0, 180], 'ell_bulge': [ell, 0, 1], 'n': [n, 0.5, 5], 
-                   'I_e': I_e, 0.0, 10*I_e]], 'r_e': [r_e, 0.0, 10*r_e}
+                   'I_e': [I_e, 0.0, 10*I_e], 'r_e': [r_e, 0.0, 10*r_e]}
        bulge_dict = {'name': "Sersic", 'label': "bulge", 'parameters': p_bulge}
        # do the same thing for the disk component
        p_disk = {'PA': [PA_disk, 0, 180], 'ell_disk': [ell, 0, 1], 'I_0': [I_0, 0, 10*I_0],
-                   'h': [h, 0.0, 10*h}
+                   'h': [h, 0.0, 10*h]}
        disk_dict = {'name': "Exponential", 'label': "disk", 'parameters': p_disk}
 
        # make dict for the function set that combines the bulge and disk components
