@@ -80,7 +80,7 @@ def test_no_psf():
 
 
 def test_single_psf():
-    imfit_fitter = Imfit(model_desc, psf=psfImage)
+    imfit_fitter = Imfit(model_desc, psf=psfImage, maxThreads=8)
     imfit_fitter.loadData(imdata, use_poisson_mlr=True, gain=1000)
     # fit with defautl LM solver
     imfit_fitter.doFit()
@@ -91,7 +91,7 @@ def test_single_psf():
 
 
 def test_oversampled_psf():
-    imfit_fitter = Imfit(model_desc, psf=psfImage)
+    imfit_fitter = Imfit(model_desc, psf=psfImage, maxThreads=8)
     # construct list of PsfOversampling objects
     osample1 = PsfOversampling(osampPsfImage_fixed, 3, "35:45,35:45", 0, 0, True)
     #osample2 = PsfOversampling(osampPsfImage, 3, "10:20,5:15", 0, 0, True)

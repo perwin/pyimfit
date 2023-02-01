@@ -12,7 +12,7 @@ from ..descriptions import ParameterDescription, FunctionDescription, FunctionSe
 from ..descriptions import ModelDescription, SimpleModelDescription
 
 CONFIG_EXAMPLE_EXPONENTIAL = "../data/config_exponential_ic3478_256.dat"
-CONFIG_EXAMPLE_2BLOCKS = "../data/config_imfit_2gauss_small.dat"
+CONFIG_EXAMPLE_2SETS = "../data/config_imfit_2gauss_small.dat"
 
 
 
@@ -298,6 +298,12 @@ class TestFunctionSetDescription(object):
         self.functionList = [self.fdesc1]
         self.N_PARAMS_CORRECT = 4 + 2
 
+        self.p1_2 = ParameterDescription("I_tot", 1000.0, [0,1e5])
+        self.paramDescList2 = [self.p1_2]
+        self.fdesc2 = FunctionDescription('PointSource', "nsc", self.paramDescList2)
+        self.functionList2 = [self.fdesc2]
+        self.N_PARAMS_CORRECT2 = 1 + 2
+
         self.x0_p = ParameterDescription("X0", 100.0, fixed=True)
         self.y0_p = ParameterDescription("Y0", 200.0, [180.0, 220.0])
 
@@ -308,6 +314,7 @@ class TestFunctionSetDescription(object):
         # check to see if FunctionDescription object with name "blob" (part of self.functionList)
         # can be accessed as attribute
         assert fsetdesc1._contains("blob") is True
+        assert fsetdesc1.hasPointSources is False
         assert fsetdesc1.blob == self.fdesc1
         assert fsetdesc1.x0 == self.x0_p
         assert fsetdesc1.y0 == self.y0_p
@@ -316,6 +323,7 @@ class TestFunctionSetDescription(object):
     def test_FunctionSetDescription_simple2( self ):
         fsetdesc1 = FunctionSetDescription(None, self.x0_p, self.y0_p, self.functionList)
         assert fsetdesc1._contains("blob") is True
+        assert fsetdesc1.hasPointSources is False
         assert fsetdesc1.blob == self.fdesc1
         assert fsetdesc1.label is None
         assert fsetdesc1.x0 == self.x0_p
@@ -326,10 +334,21 @@ class TestFunctionSetDescription(object):
         fsetdesc1 = FunctionSetDescription(x0param=self.x0_p, y0param=self.y0_p, functionList=self.functionList)
         assert fsetdesc1.label is None
         assert fsetdesc1._contains("blob") is True
+        assert fsetdesc1.hasPointSources is False
         assert fsetdesc1.blob == self.fdesc1
         assert fsetdesc1.x0 == self.x0_p
         assert fsetdesc1.y0 == self.y0_p
         assert fsetdesc1.nParameters == self.N_PARAMS_CORRECT
+
+    def test_FunctionSetDescription_hasPointSource( self ):
+        fsetdesc2 = FunctionSetDescription(x0param=self.x0_p, y0param=self.y0_p, functionList=self.functionList2)
+        assert fsetdesc2.label is None
+        assert fsetdesc2._contains("nsc") is True
+        assert fsetdesc2.hasPointSources is True
+        assert fsetdesc2.nsc == self.fdesc2
+        assert fsetdesc2.x0 == self.x0_p
+        assert fsetdesc2.y0 == self.y0_p
+        assert fsetdesc2.nParameters == self.N_PARAMS_CORRECT2
 
     def test_FunctionSetDescription_parameterList( self ):
         fsetdesc1 = FunctionSetDescription('fs0', self.x0_p, self.y0_p, self.functionList)
@@ -463,12 +482,30 @@ class TestModelDescription(object):
         self.fsetList = [self.fsetdesc1]
         self.N_PARAMS_CORRECT = 4 + 2
 
+        self.p1_2 = ParameterDescription("I_tot", 1000.0, [0,1e5])
+        self.paramDescList2 = [self.p1_2]
+        self.fullParamDescList2 = [self.x0_p, self.y0_p, self.p1_2]
+        self.fdesc2 = FunctionDescription('PointSource', "nsc", self.paramDescList2)
+        self.functionList2 = [self.fdesc2]
+        self.fsetdesc2 = FunctionSetDescription('fs1', self.x0_p, self.y0_p, self.functionList2)
+        self.fsetList2 = [self.fsetdesc2]
+        self.N_PARAMS_CORRECT2 = 1 + 2
+
     def test_ModelDescription_simple( self ):
         modeldesc1 = ModelDescription(self.fsetList)
         assert modeldesc1.functionSetIndices() == [0]
         assert modeldesc1.functionNameList() == ['Gaussian']
         assert modeldesc1.parameterList() == self.fullParamDescList
         assert modeldesc1.nParameters == self.N_PARAMS_CORRECT
+        assert modeldesc1.hasPointSources is False
+
+    def test_ModelDescription_simple_hasPointSources( self ):
+        modeldesc2 = ModelDescription(self.fsetList2)
+        assert modeldesc2.functionSetIndices() == [0]
+        assert modeldesc2.functionNameList() == ['PointSource']
+        assert modeldesc2.parameterList() == self.fullParamDescList2
+        assert modeldesc2.nParameters == self.N_PARAMS_CORRECT2
+        assert modeldesc2.hasPointSources is True
 
     def test_ModelDescription_getParamLimits( self ):
         modeldesc1 = ModelDescription(self.fsetList)
@@ -511,19 +548,21 @@ class TestModelDescription(object):
         fullParamDescList = [x0_p, y0_p, p1, p2, p3, p4]
         fdesc = FunctionDescription('Exponential', "blob", paramDescList)
 
-        modeldesc2 = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
-        assert modeldesc2.functionSetIndices() == [0]
-        assert modeldesc2.functionNameList() == ['Exponential']
-        assert modeldesc2.functionSetNameList() == [['Exponential']]
-        assert modeldesc2.parameterList() == fullParamDescList
+        modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
+        assert modeldesc.functionSetIndices() == [0]
+        assert modeldesc.functionNameList() == ['Exponential']
+        assert modeldesc.functionSetNameList() == [['Exponential']]
+        assert modeldesc.parameterList() == fullParamDescList
+        assert modeldesc.hasPointSources is False
 
         input_params_correct = np.array([129.0,129.0, 18.0,0.2,100.0,25.0])
-        assert_allclose(modeldesc2.getRawParameters(), input_params_correct)
+        assert_allclose(modeldesc.getRawParameters(), input_params_correct)
 
-    def test_ModelDescription_load_from_file_2blocks( self ):
-        modeldesc2blocks = ModelDescription.load(CONFIG_EXAMPLE_2BLOCKS)
-        assert modeldesc2blocks.functionNameList() == ['Gaussian', 'Gaussian', 'FlatSky']
-        assert modeldesc2blocks.functionSetNameList() == [['Gaussian'], ['Gaussian', 'FlatSky']]
+    def test_ModelDescription_load_from_file_2sets( self ):
+        modeldesc2sets = ModelDescription.load(CONFIG_EXAMPLE_2SETS)
+        assert modeldesc2sets.functionNameList() == ['Gaussian', 'Gaussian', 'FlatSky']
+        assert modeldesc2sets.functionSetNameList() == [['Gaussian'], ['Gaussian', 'FlatSky']]
+        assert modeldesc2sets.hasPointSources is False
 
     def test_ModelDescription_getStrings(self):
         modeldesc = ModelDescription.load(CONFIG_EXAMPLE_EXPONENTIAL)
@@ -610,7 +649,7 @@ class TestModelDescription(object):
         paramNames_correct = ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "h_1"]
         assert modeldesc1.numberedParameterNames == paramNames_correct
 
-        modeldesc2 = ModelDescription.load(CONFIG_EXAMPLE_2BLOCKS)
+        modeldesc2 = ModelDescription.load(CONFIG_EXAMPLE_2SETS)
         paramNames_correct2 = ["X0_1", "Y0_1", "PA_1", "ell_1", "I_0_1", "sigma_1",
                               "X0_2", "Y0_2", "PA_2", "ell_2", "I_0_2", "sigma_2", "I_0_3"]
         assert modeldesc2.numberedParameterNames == paramNames_correct2
@@ -715,6 +754,15 @@ class TestSimpleModelDescription(object):
         self.fsetList_bad = [self.fsetdesc1, self.fsetdesc2]
         self.N_PARAMS_CORRECT = 4 + 2
 
+        self.p1_2 = ParameterDescription("I_tot", 1000.0, [0,1e5])
+        self.paramDescList2 = [self.p1_2]
+        self.fullParamDescList2 = [self.x0_p, self.y0_p, self.p1_2]
+        self.fdesc2 = FunctionDescription('PointSource', "nsc", self.paramDescList2)
+        self.functionList2 = [self.fdesc2]
+        self.fsetdesc2 = FunctionSetDescription('fs1', self.x0_p, self.y0_p, self.functionList2)
+        self.fsetList2 = [self.fsetdesc2]
+        self.N_PARAMS_CORRECT2 = 1 + 2
+
     def test_SimpleModelDescription_bad( self ):
         # this attempts to instantiate a SimpleModelDescription instance with *two*
         # function sets, which is one more the SimpleModelDescription can handle
@@ -734,11 +782,20 @@ class TestSimpleModelDescription(object):
 
         assert simplemodeldesc.functionSetIndices() == [0]
         assert simplemodeldesc.functionNameList() == ['Gaussian']
+        assert simplemodeldesc.hasPointSources is False
 
         pLimits = simplemodeldesc.getParameterLimits()
         assert pLimits == [None,(180.0,220.0), None, (0.1,0.8), (10.0,1e3), (5.0,20.0)]
 
         assert simplemodeldesc.nParameters == self.N_PARAMS_CORRECT
+
+    def test_SimpleModelDescription_simple_hasPointSources( self ):
+        modeldesc2 = SimpleModelDescription(self.fsetList2)
+        assert modeldesc2.functionSetIndices() == [0]
+        assert modeldesc2.functionNameList() == ['PointSource']
+        assert modeldesc2.parameterList() == self.fullParamDescList2
+        assert modeldesc2.nParameters == self.N_PARAMS_CORRECT2
+        assert modeldesc2.hasPointSources is True
 
     def test_SimpleModelDescription_from_functionSet( self ):
         simplemodeldesc = SimpleModelDescription(self.fsetdesc1)

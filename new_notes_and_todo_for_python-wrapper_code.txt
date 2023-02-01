@@ -6,6 +6,40 @@ PLAN:
     Imfit.fit and Imfit.doFit
 
 
+[ ] Rewrite SimpleModelDescription from scratch
+    -- this class is currently a mess
+    -- should just be a light wrapper around ModelDescription, with as little as possible
+    separate/unique code
+
+[ ] Fix bug in trying to use PointSource-type (PSF interpolation) functios
+	[X] I. Modify ModelObjectWrapper.__init__() to accept optional PSF & normalization flag
+
+		If PSF and flag are non-None, ModelObjectWrapper.__init__() should call setPSF()
+		*before* calling ModelObjectWrapper._addFunctions()
+
+	[X] II. Move code from ModelObjectWrapper.setPSF() into ModelObjectWrapper.__init__();
+	delete ModelObjectWrapper.setPSF()
+
+	[X] III. Modify Imfit._setupModel() so that it initializes ModelObjectWrapper with
+	new interface, including PSF.
+		np.asarray(self._psf), self._normalizePSF
+
+	[X] IV. Modify Imfit._setupModel() to remove call to self._modelObjectWrapper.setPSF()
+
+    [X] Run pytest test_imfit.py to see if test passes
+
+    [ ] Modify ModelDescription to include reporting if it contains PointSource-type functions
+        -- attribute hasPointSources [bool]
+        [ ] Add tests to test_descriptions.py
+        [ ] Write code to pass tests
+
+    [ ] Add error-checking to catch and report if we try to instantiate Imfit object when
+    model has PointSource and we didn't supply one (raise TypeError)
+        [ ] Write test (in test_imfit.py) to check this
+
+        [ ] Write code in Imfit.__init__ to make test pass
+
+
 [ ] Modify various methods in Imfit class to check whether _modelObjectWrapper has been
     instantiated or not.
 

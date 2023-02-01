@@ -10,6 +10,18 @@
 #ifndef _DEFINITIONS_H_
 #define _DEFINITIONS_H_
 
+#include <string>
+#include <vector>
+#include <map>
+#include <signal.h>   // for sig_atomic_t
+
+using namespace std;
+
+#ifndef NO_SIGNALS
+// volatile sig_atomic_t  stopSignal_flag;
+extern volatile sig_atomic_t  stopSignal_flag;
+#endif
+
 
 const int  MAXLINE = 1024;
 const int MAX_FILENAME_LENGTH = 512;
@@ -23,7 +35,7 @@ const double MEMORY_WARNING_LIMT = 1073741824.0;   /* 1 gigabyte */
 // imfit-related
 #define DEFAULT_IMFIT_CONFIG_FILE   "imfit_config.dat"
 #define DEFAULT_OUTPUT_PARAMETER_FILE   "bestfit_parameters_imfit.dat"
-
+#define USER_INTERRUPT_OUTPUT_PARAMETER_FILE   "current_parameters_imfit.dat"
 
 // makeimage-related
 #define DEFAULT_MAKEIMAGE_OUTPUT_FILENAME   "modelimage.fits"
@@ -68,16 +80,22 @@ const int  MASK_ZERO_IS_BAD  =       20;  /// alternate input mask format (good 
 
 
 
+/* STRING DEFINITIONS FOR PARAMETER NAMES */
+const std::string  X0_string("X0");
+const std::string  Y0_string("Y0");
+
+
+
 /* Output string formats for printing parameter values */
 #define XY_FORMAT "%s%s\t\t%.4f\n"
 #define XY_FORMAT_WITH_ERRS "%s%s\t\t%.4f # +/- %.4f\n"
 #define XY_FORMAT_WITH_LIMITS "%s%s\t\t%.4f\t\t%g,%g\n"
 #define XY_FORMAT_WITH_FIXED "%s%s\t\t%.4f\t\tfixed\n"
-#define PARAM_FORMAT "%s%s\t\t%7g\n"
-#define PARAM_FORMAT_WITH_ERRS "%s%s\t\t%7g # +/- %.5g\n"
-#define PARAM_FORMAT_WITH_LIMITS "%s%s\t\t%7g\t\t%g,%g\n"
-#define PARAM_FORMAT_WITH_FIXED "%s%s\t\t%7g\t\tfixed\n"
-
-
+// the following do *not* have "\n" at the end
+#define PARAM_FORMAT "%s%s\t\t%7g"
+#define PARAM_FORMAT_WITH_ERRS "%s%s\t\t%7g # +/- %.5g"
+#define PARAM_FORMAT_WITH_LIMITS "%s%s\t\t%7g\t\t%g,%g"
+#define PARAM_FORMAT_WITH_FIXED "%s%s\t\t%7g\t\tfixed"
+#define UNITS_FORMAT "\t%s%s"
 
 #endif /* _DEFINITIONS_H_ */

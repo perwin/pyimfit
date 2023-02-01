@@ -81,4 +81,22 @@ class PsfInterpolator_lanczos2 : public PsfInterpolator
     double *psfDataArray;
 };
 
+
+// Derived class using Lanczos3 kernel
+class PsfInterpolator_lanczos3 : public PsfInterpolator
+{
+  public:
+  PsfInterpolator_lanczos3( double *inputImage, int nCols_image, int nRows_image );
+  
+  ~PsfInterpolator_lanczos3( );
+  
+  double GetValue( double x, double y );
+
+  private:
+    // new data members
+    double *xArray;
+    double *yArray;
+    double *psfDataArray;
+};
+
 #endif   // _PSF_INTERPOLATORS_H_

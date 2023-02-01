@@ -1,3 +1,29 @@
+* Problems with missing symbols when importing pyimfit into Python session:
+
+In trying to use the updated version of PyImfit (v0.12, based on Imfit v1.9),
+I encountered the following when trying to import pyimfit into a Python
+session:
+
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/Users/erwin/coding/pyimfit/pyimfit/__init__.py", line 4, in <module>
+    from .pyimfit_lib import convolve_image, make_imfit_function, ModelObjectWrapper  # type: ignore
+ImportError: dlopen(/Users/erwin/coding/pyimfit/pyimfit/pyimfit_lib.cpython-310-darwin.so, 0x0002): symbol not found in flat namespace (__Z20GetPhysicalCoreCountv)
+
+The missing symbol is a mangled form of GetPhysicalCoreCount, which is in the new (in v1.9)
+count_cpu_cores.cpp code in Imfit. Since convolver.cpp uses that function, it needs to be
+in the library (libimfit.a) file.
+
+The problem turned out to be that the compiled object code for that file -- count_cpu_cores.o --
+was *not* in the list of object files to be incorporated into libimfit.a inside SConstruct.
+Modifying the base_for_lib_objstring string in SConstruct to add "count_cpu_cores" fixed the problem.
+
+(Note that the SConstruct file in the current Imfit repo already had that modification, but
+the Github version and the version inside the pyimfit directory did *not*; this has been
+fixed.)
+
+
+
 * Problem with attribute access:
 
 Problem encountered in writing unit tests for read_function_set()

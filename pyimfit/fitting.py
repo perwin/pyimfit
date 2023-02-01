@@ -5,6 +5,7 @@
 #
 # [original author: Andre de Luiz Amorim; modifications by Peter Erwin]
 
+import sys
 import copy
 from typing import Union
 
@@ -166,7 +167,7 @@ def MakePsfOversampler( psfImage, oversampleScale, regionSpec, psfNormalization=
 
 
 
-class Imfit(object):
+class Imfit( object ):
     """
     The main class for fitting models to images using Imfit.
     Can also be used to create images based on models.
@@ -197,8 +198,8 @@ class Imfit(object):
     parse_config_file
     """
 
-    def __init__( self, model_descr: Union[ModelDescription, dict], psf=None, psfNormalization=True, quiet=True,
-                  nproc=0, chunk_size=10, subsampling=True, zeroPoint=None ):
+    def __init__( self, model_descr: Union[ModelDescription, dict], psf=None, psfNormalization=True,
+                  quiet=True, maxThreads=0, chunk_size=10, subsampling=True, zeroPoint=None ):
         """
         Parameters
         ----------
@@ -209,6 +210,8 @@ class Imfit(object):
 
         psf : 2-D Numpy array, optional
             Point Spread Function image to be convolved to the images.
+            Note that if the model_descr contains one or more PointSource-type functions,
+            then a PSF *must* be supplied.
             Default: ``None`` (no convolution).
 
         psfNormalization : bool, optional
@@ -219,9 +222,9 @@ class Imfit(object):
             Suppress output, only error messages will be printed.
             Default: ``True``.
 
-        nproc : int, optional
-            Number of processor cores to use when fitting. If `0``, use all available cores.
-            Default: ``0`` (use all processors).
+        maxThreads : int, optional
+            Number of threads to use when fitting. If `0``, use all available threads.
+            Default: ``0`` (use all available threads).
 
         chunk_size : int, optional
             Chunk size for OpenMP processing
@@ -250,9 +253,15 @@ class Imfit(object):
             self._psf = FixImage(psf)
         else:
             self._psf = None
+            # [ ] check to see if model_descr contains a PointSource-type function; if so,
+            # raise an error
+            if self._modelDescr.hasPointSources:
+                msg = "Model description includes at least one PointSource-type function, "
+                msg += "but no PSF image was supplied in call to Imfit()"
+                raise TypeError(msg)
         self._normalizePSF = psfNormalization
         self._mask = None
-        self._nproc = nproc
+        self._maxThreads = maxThreads
         self._chunkSize = chunk_size
         if quiet:
             self._debugLevel = 0
@@ -378,20 +387,25 @@ class Imfit(object):
 
 
     def _setupModel(self):
+        """
+        Creates the internal ModelObjectWrapper instance (which in turn creates the actual
+        C++ ModelObject instance), including model description (and PSF if it exists).
+        """
         if self._modelObjectWrapper is not None:
             # FIXME: Find a better way to free cython resources.
             self._modelObjectWrapper.close()
         self._modelObjectWrapper = ModelObjectWrapper(self._modelDescr, self._debugLevel,
-                                                      self._verboseLevel, self._subsampling)
-        if self._psf is not None:
-            self._modelObjectWrapper.setPSF(np.asarray(self._psf), self._normalizePSF)
-        if self._nproc > 0:
-            self._modelObjectWrapper.setMaxThreads(self._nproc)
+                                                      self._verboseLevel, self._subsampling,
+                                                      self._psf, self._normalizePSF)
+        # if self._psf is not None:
+        #     self._modelObjectWrapper.setPSF(np.asarray(self._psf), self._normalizePSF)
+        if self._maxThreads > 0:
+            self._modelObjectWrapper.setMaxThreads(self._maxThreads)
         if self._chunkSize > 0:
             self._modelObjectWrapper.setChunkSize(self._chunkSize)
 
 
-    def loadData(self, image, error=None, mask=None, **kwargs ):
+    def loadData( self, image, error=None, mask=None, **kwargs ):
         """
         Supply the underlying ModelObject instance with data image and error model,
         optionally including error and/or mask images.

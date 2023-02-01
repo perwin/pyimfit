@@ -60,7 +60,8 @@ class OversampledRegion
     int  nRegionColumns, nRegionRows, nRegionVals;
     int  x1_region, y1_region;
     int  nMainImageColumns, nMainImageRows, nMainPSFColumns, nMainPSFRows;
-    int  nModelColumns, nModelRows, nModelVals;
+    int  nModelColumns, nModelRows;
+    long  nModelVals;
     bool  doConvolution, setupComplete, modelVectorAllocated;
     double  *modelVector;
     string  debugImageName;

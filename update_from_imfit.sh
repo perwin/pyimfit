@@ -3,6 +3,7 @@
 # Bash script to copy updated header files
 cp imfit/core/add_functions.h libimfit/include/
 cp imfit/core/bootstrap_errors.h libimfit/include/
+cp imfit/core/count_cpu_cores.h libimfit/include/
 cp imfit/core/convolver.h libimfit/include/
 cp imfit/core/definitions.h libimfit/include/
 cp imfit/core/model_object.h libimfit/include/

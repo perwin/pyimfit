@@ -1,6 +1,6 @@
 # Cython implementation file for wrapping Imfit code, by PE; based on code
 # by Andre Luis de Amorim.
-# Copyright André Luiz de Amorim, 2013; Peter Erwin, 2018-2022.
+# Copyright André Luiz de Amorim, 2013; Peter Erwin, 2018-2023.
 
 # Note that we are using "typed memoryviews" to translate numpy arrays into
 # C-style double * arrays; this apparently the preferred (newer, more flexible)
@@ -326,7 +326,8 @@ cdef class ModelObjectWrapper( object ):
 
 
     def __init__( self, object model_descr, int debug_level=0, int verbose_level=-1,
-                    bool subsampling=True ):
+                  bool subsampling=True, np.ndarray[np.double_t, ndim=2, mode='c'] psf=None,
+                  bool normalizePSF=True ):
         self._paramLimitsExist = False
         self._paramVect = NULL
         self._fitErrorsVect = NULL
@@ -357,6 +358,12 @@ cdef class ModelObjectWrapper( object ):
             raise MemoryError('Could not allocate ModelObject.')
         self._model.SetDebugLevel(debug_level)
         self._model.SetVerboseLevel(verbose_level)
+        if psf is not None:
+            self._psfData = psf.flatten()
+            n_rows_psf = psf.shape[0]
+            n_cols_psf = psf.shape[1]
+            self._model.AddPSFVector(n_cols_psf * n_rows_psf, n_cols_psf, n_rows_psf, &self._psfData[0],
+                                     normalizePSF)
         # self._addFunctions(self._modelDescr, subsampling=subsampling, verbose=debug_level>0)
         self._addFunctions(self._modelDescr, subsampling=subsampling, verbose=verbose_level)
         self._paramSetup(self._modelDescr)
@@ -437,21 +444,21 @@ cdef class ModelObjectWrapper( object ):
             raise RuntimeError('Failed to add the functions.')
 
 
-    def setPSF(self, np.ndarray[np.double_t, ndim=2, mode='c'] psf, bool normalizePSF=True):
-        cdef int n_rows_psf, n_cols_psf
-
-        # FIXME: check that PSF data has correct type, byteorder
-        # Maybe this was called before.
-# 		if self._psfData != NULL:
-# 			free(self._psfData)
-# 		self._psfData = alloc_copy_from_ndarray(psf)
-        # Cython typed memoryview, pointing to flattened (1D) copy of PSF data
-        self._psfData = psf.flatten()
-
-        n_rows_psf = psf.shape[0]
-        n_cols_psf = psf.shape[1]
-        self._model.AddPSFVector(n_cols_psf * n_rows_psf, n_cols_psf, n_rows_psf, &self._psfData[0],
-                                 normalizePSF)
+#     def setPSF(self, np.ndarray[np.double_t, ndim=2, mode='c'] psf, bool normalizePSF=True):
+#         cdef int n_rows_psf, n_cols_psf
+#
+#         # FIXME: check that PSF data has correct type, byteorder
+#         # Maybe this was called before.
+# # 		if self._psfData != NULL:
+# # 			free(self._psfData)
+# # 		self._psfData = alloc_copy_from_ndarray(psf)
+#         # Cython typed memoryview, pointing to flattened (1D) copy of PSF data
+#         self._psfData = psf.flatten()
+#
+#         n_rows_psf = psf.shape[0]
+#         n_cols_psf = psf.shape[1]
+#         self._model.AddPSFVector(n_cols_psf * n_rows_psf, n_cols_psf, n_rows_psf, &self._psfData[0],
+#                                  normalizePSF)
 
 
     # The following needs to be cdef so we can directly access the C++ pointer inside the

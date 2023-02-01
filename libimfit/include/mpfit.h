@@ -126,6 +126,7 @@ typedef int (*mp_func)(int m, /* Number of functions (elts of fvec) */
 #define MP_FTOL (6)              /* ftol is too small; no further improvement*/
 #define MP_XTOL (7)              /* xtol is too small; no further improvement*/
 #define MP_GTOL (8)              /* gtol is too small; no further improvement*/
+#define MP_SIGINT (100)          /* PE: user typed Ctrl-C */
 
 /* Double precision numeric constants */
 #define MP_MACHEP0 2.2204460e-16

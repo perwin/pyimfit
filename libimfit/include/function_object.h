@@ -75,7 +75,7 @@ class FunctionObject
     // override in derived classes only if said class is a "background" object
     // which should *not* be used in total flux calculations
     /// Returns true if class can calculate total flux internally
-    virtual bool IsBackground(  ) { return(false); }
+    virtual bool IsBackground(  ) { return isBackground; }
     // override in derived classes only if said class *can* calcluate total flux
     /// Returns true if class can calculate total flux internally
     virtual bool CanCalculateTotalFlux(  ) { return(false); }
@@ -95,6 +95,13 @@ class FunctionObject
     // probably no need to modify this:
     virtual void GetParameterNames( vector<string> &paramNameList );
 
+    bool HasParameterUnits( ) { return parameterUnitsExist; };
+    
+    // probably no need to modify this:
+    virtual void GetParameterUnits( vector<string> &paramUnitList );
+    
+    virtual void GetExtraParamsDescription( vector<string> &outputLines );
+
     // probably no need to modify this:
     virtual int GetNParams( );
 
@@ -110,8 +117,11 @@ class FunctionObject
   protected:
     int  nParams;  ///< number of input parameters that image-function uses
     bool  doSubsampling;
-    bool  extraParamsSet;
-    vector<string>  parameterLabels;
+    bool  isBackground = false;
+    bool  parameterUnitsExist = false;
+    bool  extraParamsSet = false;
+    vector<string>  parameterLabels, parameterUnits;
+    map<string, string>  inputExtraParams;
     string  functionName, shortFunctionName, label;
     double  ZP;
 

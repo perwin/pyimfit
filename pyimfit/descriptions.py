@@ -15,6 +15,11 @@ __all__ = ['SimpleModelDescription', 'ModelDescription',
            'ParameterDescription', 'FunctionDescription', 'FunctionSetDescription']
 
 
+# These are Imfit image functions which do interpolation of a PSF image, and therefore
+# require that a PSF image be present (fitting.Imfit will check for this)
+# (More precisely, these are functions that implement psf_interpolators.h)
+POINTSOURCE_FUNCTION_NAMES = ["PointSource", "PointSourceRot"]
+
 
 class ParameterDescription(object):
     """
@@ -498,6 +503,9 @@ class FunctionSetDescription(object):
             number of functions in the function set
         nParameters : int
             total number of parameters for this function set, including X0 and Y0
+        hasPointSources : bool
+            whether or not any of the image functions are PointSource-like (implementing
+            interpolation of a PSF image)
 
     Class methods
     -------------
@@ -547,6 +555,7 @@ class FunctionSetDescription(object):
         self._functions = []  #type: List[FunctionDescription]
         self.nFunctions = 0
         self.nParameters = 2   # X0,Y0
+        self._hasPointSources = False
         if functionList is not None:
             for f in functionList:
                 self.addFunction(f)
@@ -609,6 +618,11 @@ class FunctionSetDescription(object):
         return self._label
 
 
+    @property
+    def hasPointSources(self):
+       return self._hasPointSources
+
+
     def addFunction(self, f: FunctionDescription):
         """
         Add an Imfit image function created using :func:`make_image_function`.
@@ -629,6 +643,8 @@ class FunctionSetDescription(object):
             setattr(self, f._label, f)
         self.nFunctions += 1
         self.nParameters += f.nParameters
+        if f._funcName in POINTSOURCE_FUNCTION_NAMES:
+            self._hasPointSources = True
 
 
     def _contains(self, label: str):
@@ -794,10 +810,13 @@ class ModelDescription(object):
             their corresponding values [this is the internal name for the
             property optionsDict]
         _functionSets : list of `FunctionSetDescription`
-            the individual image-function blocks/sets making up the model
+            the individual image-function sets making up the model
         nFunctionSets : int
         nParameters : int
             total number of model parameters
+        hasPointSources : bool
+            whether or not any of the image functions are PointSource-like (implementing
+            interpolation of a PSF image)
 
     Class methods
     -------------
@@ -840,6 +859,7 @@ class ModelDescription(object):
         self._functionSets = []  #type: List[FunctionSetDescription]
         self.nFunctionSets = 0
         self.nParameters = 0
+        self._hasPointSources = False
         if functionSetsList is not None:
             for fs in functionSetsList:
                 # note that addFunctionSet will increment nFunctionSets, so we don't need to
@@ -942,6 +962,11 @@ class ModelDescription(object):
         return outputList
 
 
+    @property
+    def hasPointSources(self):
+       return self._hasPointSources
+
+
     def addFunctionSet(self, fs: FunctionSetDescription):
         """
         Add a function set to the model description.
@@ -958,6 +983,8 @@ class ModelDescription(object):
         self._functionSets.append(fs)
         if fs.label is not None:
             setattr(self, fs.label, fs)
+        if fs.hasPointSources:
+            self._hasPointSources = True
         self.nFunctionSets += 1
         self.nParameters += fs.nParameters
 
@@ -1190,6 +1217,7 @@ class ModelDescription(object):
         model.options = copy(self.options)
         model.nFunctionSets = self.nFunctionSets
         model.nParameters = self.nParameters
+        model._hasPointSources = self._hasPointSources
         return model
 
 
@@ -1257,7 +1285,7 @@ class SimpleModelDescription(ModelDescription):
         return self._functionSets[0].y0
 
 
-    def addFunction(self, f: FunctionDescription):
+    def addFunction( self, f: FunctionDescription ):
         """
         Add a function created using :func:`function_description`.
 
@@ -1268,6 +1296,8 @@ class SimpleModelDescription(ModelDescription):
         """
         self._functionSets[0].addFunction(f)
         self.nParameters += f.nParameters
+        if f._funcName in POINTSOURCE_FUNCTION_NAMES:
+            self._hasPointSources = True
 
 
 

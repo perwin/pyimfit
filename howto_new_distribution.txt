@@ -5,16 +5,18 @@ Working by default in ~/coding/pyimfit on Mac.
 
 [opt]1. Generate updated libimfit.a for macOS, IF NECESSARY
     A. [mac] cd imfit
-    B. [mac] scons --clang-openmp libimfit.a
-    C. [mac] cp libimfit.a ../prebuilt/macos
+    B. [mac] git pull origin master   [if necessary]
+    C. [mac] scons --clang-openmp libimfit.a
+    D. [mac] cp libimfit.a ../prebuilt/macos
     # copy updated Imfit C++ header files
-    D. [mac] cd .. ; ./update_from_imfit.sh
+    E. [mac] cd .. ; ./update_from_imfit.sh
 
 [opt]2. Generate updated libimfit.a for Linux [VM: ubuntu64-16_dev], IF NECESSARY
     A. [vm] cd /home/vagrant/build/pyimfit/imfit
-    B. [vm] scons libimfit.a
-    E. [vm] cp libimfit.a /vagrant/transfer
-    F. [mac] cp ~/vagrant/ubuntu64-16_dev/transfer/libimfit.a ./prebuilt/linux64
+    B. [vm] git pull origin master   [if necessary]
+    C. [vm] scons libimfit.a
+    D. [vm] cp libimfit.a /vagrant/transfer
+    E. [mac] cp ~/vagrant/ubuntu64-16_dev/transfer/libimfit.a ./prebuilt/linux64
 
 3. Do new "develop" install and run tests on macOS
     [mac] $ pip3 install -e ./
