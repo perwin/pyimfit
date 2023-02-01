@@ -2,16 +2,14 @@ PLAN:
 
 ** GENERAL/FUTURE TO-DO
 
+[ ] Update Linux libimfit.a to include count_cpu_cores.o
+
+
 [X] Add ftol keyword to fitting.py --
     Imfit.fit and Imfit.doFit
 
 
-[ ] Rewrite SimpleModelDescription from scratch
-    -- this class is currently a mess
-    -- should just be a light wrapper around ModelDescription, with as little as possible
-    separate/unique code
-
-[ ] Fix bug in trying to use PointSource-type (PSF interpolation) functios
+[X] Fix bug in trying to use PointSource-type (PSF interpolation) functios
 	[X] I. Modify ModelObjectWrapper.__init__() to accept optional PSF & normalization flag
 
 		If PSF and flag are non-None, ModelObjectWrapper.__init__() should call setPSF()
@@ -28,16 +26,16 @@ PLAN:
 
     [X] Run pytest test_imfit.py to see if test passes
 
-    [ ] Modify ModelDescription to include reporting if it contains PointSource-type functions
+    [X] Modify ModelDescription to include reporting if it contains PointSource-type functions
         -- attribute hasPointSources [bool]
-        [ ] Add tests to test_descriptions.py
-        [ ] Write code to pass tests
+        [X] Add tests to test_descriptions.py
+        [X] Write code to pass tests
 
-    [ ] Add error-checking to catch and report if we try to instantiate Imfit object when
+    [X] Add error-checking to catch and report if we try to instantiate Imfit object when
     model has PointSource and we didn't supply one (raise TypeError)
-        [ ] Write test (in test_imfit.py) to check this
+        [X] Write test (in test_imfit.py) to check this
 
-        [ ] Write code in Imfit.__init__ to make test pass
+        [X] Write code in Imfit.__init__ to make test pass
 
 
 [ ] Modify various methods in Imfit class to check whether _modelObjectWrapper has been
