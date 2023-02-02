@@ -18,6 +18,1057 @@ image-description information (ModelDescription, SimpleModelDescription).</p>
 which keep track of parameter names, initial or current values, and limits.</p>
 <p>To properly instantiate an instance of the Imfit class, you must supply it with a previously
 generated instance of the ModelDescription (or SimpleModelDescription) class.</p>
+<span class="target" id="module-pyimfit.descriptions"></span><dl class="py class">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyimfit.descriptions.</span></span><span class="sig-name descname"><span class="pre">FunctionDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds information describing a single Imfit image function and its
+associated parameters, including their values and limits.</p>
+<p>This contains the official Imfit image-function name (e.g., “Gaussian”,
+“EdgeOnDisk”), an optional label (e.g., “disk”, “outer ring”), and a
+list of ParameterDescription objects which describe the parameter names,
+values, and limits (or fixed status) for each of the image function’s
+parameters.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription.label">
+<span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>optional label for this image function (e.g., “NSC”, “Outer disk”, etc.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription._funcName">
+<span class="sig-name descname"><span class="pre">_funcName</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription._funcName" title="Permalink to this definition">¶</a></dt>
+<dd><p>name of the image function (e.g., “Gaussian”, “EdgeOnDisk”)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription._label">
+<span class="sig-name descname"><span class="pre">_label</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription._label" title="Permalink to this definition">¶</a></dt>
+<dd><p>unique (optional) label for this function (e.g., “disk”, “nuclear ring”)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription._parameters">
+<span class="sig-name descname"><span class="pre">_parameters</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription._parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>the list of <cite>ParameterDescription</cite> objects for the image-function
+parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of <cite>ParameterDescription</cite></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription.nParameters">
+<span class="sig-name descname"><span class="pre">nParameters</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription.nParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of parameters for this function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription.addParameter">
+<span class="sig-name descname"><span class="pre">addParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription.addParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a <cite>ParameterDescription</cite> instance for one of the function’s
+parameter</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription.parameterList">
+<span class="sig-name descname"><span class="pre">parameterList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription.parameterList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the ParameterDescription objects</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">addParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription"><span class="pre">ParameterDescription</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new ParameterDescription object.</p>
+<section id="params">
+<h2>Params<a class="headerlink" href="#params" title="Permalink to this heading">¶</a></h2>
+<p>p : ParameterDecription</p>
+</section>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription.dict_to_FunctionDescription">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dict_to_FunctionDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputDict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription.dict_to_FunctionDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a convenience method to generate a FunctionDescription object
+from a dict specifying the function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inputDict</strong> (<em>dict</em>) – <dl class="simple">
+<dt>dict describing the function. Examples:</dt><dd><p>fDict = {‘name’: “Gaussian”, ‘label’: “blob”, ‘parameters’: p}
+where p is a dict containing parameter names and values, e.g.
+p = {‘PA’: 0.0, ‘ell’: 0.5, ‘I_0’: 100.0, ‘sigma’: 10.0}
+OR
+p = {‘PA’: [0.0, “fixed”], ‘ell’: [0.5, 0.1,0.8], ‘I_0’: [100.0, 10.0,1e3], ‘sigma’: [10.0, 5.0,20.0]}</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fdesc</strong> – The function description.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyimfit.descriptions.FunctionDescription" title="pyimfit.descriptions.FunctionDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionDescription</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription.getFunctionAsDict">
+<span class="sig-name descname"><span class="pre">getFunctionAsDict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription.getFunctionAsDict" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Returns a dict describing the function (suitable for use in e.g. dict_to_FunctionDescription())</dt><dd><dl class="simple">
+<dt>Examples:</dt><dd><p>fDict = {‘name’: “Gaussian”, ‘label’: “blob”, ‘parameters’: p}
+where p is a dict containing parameter names and values, e.g.
+p = {‘PA’: 0.0, ‘ell’: 0.5, ‘I_0’: 100.0, ‘sigma’: 10.0}
+OR
+p = {‘PA’: [0.0, “fixed”], ‘ell’: [0.5, 0.1,0.8], ‘I_0’: [100.0, 10.0,1e3], ‘sigma’: [10.0, 5.0,20.0]}</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription.getStringDescription">
+<span class="sig-name descname"><span class="pre">getStringDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noLimits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription.getStringDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of strings suitable for inclusion in an imfit/makeimage config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>noLimits</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, then only parameter values (no limits or “fixed” indicators) are output</p></li>
+<li><p><strong>errors</strong> (<em>sequence float</em><em>, </em><em>optional</em>) – errors on parameter values (e.g., from Levenberg-Marquardt minimization)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>outputStrings</strong> – list of newline-terminated strings, starting with function name and followed
+by one string for each parameter, as output by ParameterDescription.getStringDescription
+If errors is supplied, then parameter strings will contain “# +/- &lt;error&gt;” at end</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom name/label for the function (e.g., “disk”, “nuclear ring”).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">parameterList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of the parameters (ParameterDescription objects) of this image function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>param_list</strong> – List of the parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of <a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterDescription</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionDescription.parameterNameList">
+<span class="sig-name descname"><span class="pre">parameterNameList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionDescription.parameterNameList" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of the parameters names (list of str) of this image function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>param_list</strong> – List of the parameter names.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of str</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyimfit.descriptions.</span></span><span class="sig-name descname"><span class="pre">FunctionSetDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription"><span class="pre">ParameterDescription</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription"><span class="pre">ParameterDescription</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">functionList</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyimfit.descriptions.FunctionDescription" title="pyimfit.descriptions.FunctionDescription"><span class="pre">FunctionDescription</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds information describing an image-function block/set: one or more
+Imfit image functions sharing a common (X0,Y0) position on the image.</p>
+<p>This contains the X0 and Y0 coordinates, a list of FunctionDescription
+objects, and an optional label for the function set (e.g., “fs0”, “star 1”,
+“galaxy 5”, “offset nucleus”, etc.)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.label">
+<span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>label for the function set (”” = default no-name value)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription._label">
+<span class="sig-name descname"><span class="pre">_label</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription._label" title="Permalink to this definition">¶</a></dt>
+<dd><p>label for the function set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.x0">
+<span class="sig-name descname"><span class="pre">x0</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.x0" title="Permalink to this definition">¶</a></dt>
+<dd><p>x-coordinate of the function block/set’s center</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription">ParameterDescription</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.y0">
+<span class="sig-name descname"><span class="pre">y0</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.y0" title="Permalink to this definition">¶</a></dt>
+<dd><p>y-coordinate of the function block/set’s center</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription">ParameterDescription</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription._functions">
+<span class="sig-name descname"><span class="pre">_functions</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription._functions" title="Permalink to this definition">¶</a></dt>
+<dd><p>the FunctionDescription objects, one for each image function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of <cite>FunctionDescription</cite></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.nFunctions">
+<span class="sig-name descname"><span class="pre">nFunctions</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.nFunctions" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of functions in the function set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.nParameters">
+<span class="sig-name descname"><span class="pre">nParameters</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.nParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>total number of parameters for this function set, including X0 and Y0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.hasPointSources">
+<span class="sig-name descname"><span class="pre">hasPointSources</span></span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.hasPointSources" title="Permalink to this definition">¶</a></dt>
+<dd><p>whether or not any of the image functions are PointSource-like (implementing
+interpolation of a PSF image)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<section id="class-methods">
+<h2>Class methods<a class="headerlink" href="#class-methods" title="Permalink to this heading">¶</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>dict_to_FunctionSetDescription(dict)</dt><dd><p>Returns a new instance of this class based on a dict</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.addFunction">
+<span class="sig-name descname"><span class="pre">addFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.addFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a FunctionDescription instance</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.functionList">
+<span class="sig-name descname"><span class="pre">functionList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.functionList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the FunctionDescription objects in the function set</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.functionNameList">
+<span class="sig-name descname"><span class="pre">functionNameList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.functionNameList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of names for the image-functions in the function set</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.functionLabelList">
+<span class="sig-name descname"><span class="pre">functionLabelList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.functionLabelList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of labels for the image-functions in the function set</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.parameterList">
+<span class="sig-name descname"><span class="pre">parameterList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.parameterList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of ParameterDescription objects corresponding to
+the function block/set (including X0,Y0)</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">addFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyimfit.descriptions.FunctionDescription" title="pyimfit.descriptions.FunctionDescription"><span class="pre">FunctionDescription</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an Imfit image function created using <code class="xref py py-func docutils literal notranslate"><span class="pre">make_image_function()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>f</strong> (<a class="reference internal" href="#pyimfit.descriptions.FunctionDescription" title="pyimfit.descriptions.FunctionDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionDescription</span></code></a>.) – Function description to be added to the function set.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.dict_to_FunctionSetDescription">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dict_to_FunctionSetDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputDict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.dict_to_FunctionSetDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience method to generate a FunctionSetDescription object from a dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inputDict</strong> (<em>dict</em>) – <p>dict describing the function set
+{‘X0’: val-or-list, ‘Y0’: val-or-list, ‘function_list’: [list of dicts describing functions]}
+{‘label’: str, ‘X0’: val-or-list, ‘Y0’: val-or-list, ‘function_list’: [list of dicts describing functions]}</p>
+<blockquote>
+<div><dl class="simple">
+<dt>where “val-or-list” for X0 and Y0 is one of</dt><dd><p>value
+[value, “fixed”]
+[value, lower-limit, upper-limit]</p>
+</dd>
+</dl>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fset</strong> – The function-set description.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyimfit.descriptions.FunctionSetDescription" title="pyimfit.descriptions.FunctionSetDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionSetDescription</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">functionLabelList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of labels for the Imfit image-functions making up this function set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>function_list</strong> – List of the function types.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">functionList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of the FunctionDescription objects making up this function set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>function_list</strong> – List of the functions.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of <a class="reference internal" href="#pyimfit.descriptions.FunctionDescription" title="pyimfit.descriptions.FunctionDescription">FunctionDescription</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">functionNameList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of the Imfit image-function names making up this function set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>function_list</strong> – List of the function types.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.getFuncSetAsDict">
+<span class="sig-name descname"><span class="pre">getFuncSetAsDict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.getFuncSetAsDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dict describing the function set (suitable for use in e.g. dict_to_FunctionSetDescription())</p>
+<blockquote>
+<div><p>{‘X0’: list, ‘Y0’: list, ‘function_list’: [list of dicts describing functions]}
+OR
+{‘label’: str, ‘X0’: list, ‘Y0’: list, ‘function_list’: [list of dicts describing functions]}</p>
+</div></blockquote>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.FunctionSetDescription.getStringDescription">
+<span class="sig-name descname"><span class="pre">getStringDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noLimits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.FunctionSetDescription.getStringDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of strings suitable for inclusion in an imfit/makeimage config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>noLimits</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, then only parameter values (no limits or “fixed” indicators) are output</p></li>
+<li><p><strong>errors</strong> (<em>sequence float</em><em>, </em><em>optional</em>) – errors on parameter values (e.g., from Levenberg-Marquardt minimization)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>outputStrings</strong> – list of newline-terminated strings describing the function set.
+If errors is supplied, then parameter strings will contain “# +/- &lt;error&gt;” at end</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id7">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom name/label for the function set.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">parameterList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of all the parameters corresponding to this function set
+(including the X0,Y0 position).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>param_list</strong> – List of the parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of <a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterDescription</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+</section>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyimfit.descriptions.</span></span><span class="sig-name descname"><span class="pre">ModelDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functionSetsList</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyimfit.descriptions.FunctionSetDescription" title="pyimfit.descriptions.FunctionSetDescription"><span class="pre">FunctionSetDescription</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds information describing an Imfit model, including image-description
+data.</p>
+<p>The main components are a dict containing image-descriptions parameters
+and their values (e.g., {“GAIN”: 4.5, “ORIGINAL_SKY”: 325.39} and a list
+of FunctionSetDescription objects, corresponding to the image-function
+sets/blocks making up the model proper.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.optionsDict">
+<span class="sig-name descname"><span class="pre">optionsDict</span></span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.optionsDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>dict mapping image-description parameters (e.g., “GAIN”) to
+their corresponding values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of {str: float}</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>dict mapping image-description parameters (e.g., “GAIN”) to
+their corresponding values [this is the internal name for the
+property optionsDict]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of {str: float}</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription._functionSets">
+<span class="sig-name descname"><span class="pre">_functionSets</span></span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription._functionSets" title="Permalink to this definition">¶</a></dt>
+<dd><p>the individual image-function sets making up the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of <cite>FunctionSetDescription</cite></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.nFunctionSets">
+<span class="sig-name descname"><span class="pre">nFunctionSets</span></span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.nFunctionSets" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.nParameters">
+<span class="sig-name descname"><span class="pre">nParameters</span></span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.nParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>total number of model parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.hasPointSources">
+<span class="sig-name descname"><span class="pre">hasPointSources</span></span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.hasPointSources" title="Permalink to this definition">¶</a></dt>
+<dd><p>whether or not any of the image functions are PointSource-like (implementing
+interpolation of a PSF image)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<section id="id9">
+<h2>Class methods<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h2>
+<blockquote>
+<div><dl class="simple">
+<dt>load(fname)</dt><dd><p>Returns a new instance of this class based on a standard Imfit
+configuration file (<cite>fname</cite>).</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.addFunctionSet">
+<span class="sig-name descname"><span class="pre">addFunctionSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.addFunctionSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a function block/set to the model description</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.addOptions">
+<span class="sig-name descname"><span class="pre">addOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optionDict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.addOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add image-description options via a dict</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.functionSetIndices">
+<span class="sig-name descname"><span class="pre">functionSetIndices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.functionSetIndices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of <code class="docutils literal notranslate"><span class="pre">int</span></code> specifying the function-set start indices</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.functionList">
+<span class="sig-name descname"><span class="pre">functionList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.functionList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retuns a list of FunctionDescription instances for all the
+image functions in the model</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.functionNameList">
+<span class="sig-name descname"><span class="pre">functionNameList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.functionNameList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of names for the image-functions in the function set</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.functionLabelList">
+<span class="sig-name descname"><span class="pre">functionLabelList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.functionLabelList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of labels for the image-functions in the function set</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.parameterList">
+<span class="sig-name descname"><span class="pre">parameterList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.parameterList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of ParameterDescription instances corresponding
+to all the parameters in the model</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">addFunctionSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyimfit.descriptions.FunctionSetDescription" title="pyimfit.descriptions.FunctionSetDescription"><span class="pre">FunctionSetDescription</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a function set to the model description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fs</strong> (<a class="reference internal" href="#pyimfit.descriptions.FunctionSetDescription" title="pyimfit.descriptions.FunctionSetDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionSetDescription</span></code></a>) – Function set description instance.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.dict_to_ModelDescription">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dict_to_ModelDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputDict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.dict_to_ModelDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience method to generate a ModelDescription object from a dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inputDict</strong> (<em>dict</em>) – <p>dict describing the model, with one required entry – “function_sets” –
+and one optional entry – “options”</p>
+<blockquote>
+<div><p>”function_sets” : list of dict, each one specifying a function set,
+suitable as input to FunctionSetDescription.dict_to_FunctionSetDescription()</p>
+<p>”options” : dict of {str: float} specifying image-description options
+(“GAIN”, “ORIGINAL_SKY”, etc.)</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>mdesc</strong> – The model description.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyimfit.descriptions.ModelDescription" title="pyimfit.descriptions.ModelDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelDescription</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">functionLabelList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of labels for the image functions making up this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>functionLabels</strong> – List of the function labels.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">functionList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of the FunctionDescription objects making up this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>functions</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of FunctionDescription objects</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">functionNameList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id13" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of names of the image functions making up this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>functionNames</strong> – List of the function names.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">functionSetIndices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id14" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the indices in the full parameters list corresponding
+to the starts of individual function sets/blocks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>indices</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.functionSetNameList">
+<span class="sig-name descname"><span class="pre">functionSetNameList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.functionSetNameList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of the functions composing this model, as strings, grouped by function set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>functionSetList</strong> – List of the function names, grouped by function set:
+[[functions_in_set1], [functions_in_set2], …]</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of list of string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.getModelAsDict">
+<span class="sig-name descname"><span class="pre">getModelAsDict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.getModelAsDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the model in dict form (suitable for use in e.g. dict_to_ModelDescription)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>modelDict</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.getParameterLimits">
+<span class="sig-name descname"><span class="pre">getParameterLimits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.getParameterLimits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list containing lower and upper limits for all parameters in the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>parameterLimits</strong> – [(lower_limit, upper_limit)_1, (lower_limit, upper_limit)_2, …]</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of 2-element tuples of float</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.getRawParameters">
+<span class="sig-name descname"><span class="pre">getRawParameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.getRawParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Numpy array of the ModelDescription’s current parameter values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>paramValues</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray of float</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.getStringDescription">
+<span class="sig-name descname"><span class="pre">getStringDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noLimits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saveOptions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.getStringDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of strings suitable for inclusion in an imfit/makeimage config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>noLimits</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, then only parameter values (no limits or “fixed” indicators) are output</p></li>
+<li><p><strong>errors</strong> (<em>sequence float</em><em>, </em><em>optional</em>) – errors on parameter values (e.g., from Levenberg-Marquardt minimization)</p></li>
+<li><p><strong>saveOptions</strong> (<em>bool</em><em>, </em><em>optional</em>) – if False, then image-description options (GAIN, READNOISE, etc.) are <em>not</em> output</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>outputLines</strong> – list of newline-terminated strings describing the model.
+If errors is supplied, then parameter strings will contain “# +/- &lt;error&gt;” at end</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience method to generate a ModelDescription object from a standard Imfit
+configuration file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fileName</strong> (<em>string</em>) – Path to the Imfit configuration file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>model</strong> – The model description.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyimfit.descriptions.ModelDescription" title="pyimfit.descriptions.ModelDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelDescription</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_config_file</span></code></p>
+</div>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.numberedParameterNames">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">numberedParameterNames</span></span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.numberedParameterNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of parameter names for the current model, annotated by function number.
+E.g., [“X0_1”, “Y0_1”, “PA_1”, “ell_1”, “I_0_1”, “h_1”, …]</p>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id15">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">optionsDict</span></span><a class="headerlink" href="#id15" title="Permalink to this definition">¶</a></dt>
+<dd><p>Image-description options, as a dict
+E.g., {“GAIN”: 2.75, “READNOISE”: 103.43}</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">parameterList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id16" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of the parameters (ParameterDescription objects) making up this model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> – List of the parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of <a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterDescription</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.replaceOptions">
+<span class="sig-name descname"><span class="pre">replaceOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optionsDict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.replaceOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the current image-descriptions dict. This differs from updateOptions()
+in that it will completely replace the current image-descriptions dict,
+discarding any key-value pairs with keys not in the replacement dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>optionDict</strong> (<em>dict</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ModelDescription.updateOptions">
+<span class="sig-name descname"><span class="pre">updateOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optionsDict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ModelDescription.updateOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the internal image-descriptions dict, replacing current values for keys
+already in the dict and added key-value pairs for keys not already present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>optionDict</strong> (<em>dict</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+</section>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyimfit.descriptions.</span></span><span class="sig-name descname"><span class="pre">ParameterDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds information for a single parameter of an Imfit image function,
+or the X0 or Y0 parameter of a function block/set
+(corresponding to what is encoded in a single parameter line of an
+Imfit configuration file).</p>
+<p>It holds the name, current value (e.g., a suggested initial value),
+possible lower and upper limits for fitting purposes, and whether or
+not the value is to be held fixed during a fit.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>label of the parameter (e.g., “X0”, “sigma”)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value of the parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription.limits">
+<span class="sig-name descname"><span class="pre">limits</span></span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription.limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>lower and upper limits for parameter when fitting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2-element tuple of float</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription.fixed">
+<span class="sig-name descname"><span class="pre">fixed</span></span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription.fixed" title="Permalink to this definition">¶</a></dt>
+<dd><p>whether a parameter should be held fixed during fitting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription._name">
+<span class="sig-name descname"><span class="pre">_name</span></span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription._name" title="Permalink to this definition">¶</a></dt>
+<dd><p>label of the parameter (e.g., “X0”, “sigma”)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription._value">
+<span class="sig-name descname"><span class="pre">_value</span></span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription._value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value of the parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription._limits">
+<span class="sig-name descname"><span class="pre">_limits</span></span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription._limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>lower and upper limits for parameter when fitting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2-element tuple of float</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription._fixed">
+<span class="sig-name descname"><span class="pre">_fixed</span></span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription._fixed" title="Permalink to this definition">¶</a></dt>
+<dd><p>whether a parameter should be held fixed during fitting</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription.setValue">
+<span class="sig-name descname"><span class="pre">setValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription.setValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value (and limits, fixed state) of the parameter</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription.setTolerance">
+<span class="sig-name descname"><span class="pre">setTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription.setTolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the limits as +/- fraction of parameter value</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription.setLimitsRel">
+<span class="sig-name descname"><span class="pre">setLimitsRel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription.setLimitsRel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the limits as -i1,+i2 relative to parameter value</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription.setLimits">
+<span class="sig-name descname"><span class="pre">setLimits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription.setLimits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the limits directly</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription.getStringDescription">
+<span class="sig-name descname"><span class="pre">getStringDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noLimits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">none</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription.getStringDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string containing parameter name and value (and optionally limits or
+1-sigma uncertainty)</p>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id17">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed</span></span><a class="headerlink" href="#id17" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not this parameter is to be held fixed, as a bool.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.ParameterDescription.getParamInfoList">
+<span class="sig-name descname"><span class="pre">getParamInfoList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.ParameterDescription.getParamInfoList" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Returns a list in one of three formats</dt><dd><ol class="arabic simple">
+<li><p>[param-value]</p></li>
+<li><p>[param-value, “fixed”] – if parameter is fixed</p></li>
+<li><p>[param-value, lower-limit, upper-limit] – if parameter has limits</p></li>
+</ol>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">getStringDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noLimits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id18" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string with parameter name, value, limits, suitable for inclusion in
+an imfit/makeimage config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>noLimits</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, then only parameter values (no limits or “fixed” indicators) are output</p></li>
+<li><p><strong>error</strong> (<em>float</em><em>, </em><em>optional</em>) – error on parameter value (e.g., from Levenberg-Marquardt minimization); if supplied
+then no limit info is output, but “# +/- &lt;error&gt;” is appended</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>outputString</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id19">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">limits</span></span><a class="headerlink" href="#id19" title="Permalink to this definition">¶</a></dt>
+<dd><p>The low and upper limits for the parameter, as a tuple of float.</p>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id20">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#id20" title="Permalink to this definition">¶</a></dt>
+<dd><p>“x0”, “I_e”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The label of the parameter (str). Examples</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">setLimits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id21" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameter limits using specified values: [v1, v2]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v1</strong> (<em>float</em>) – Lower limit.</p></li>
+<li><p><strong>v2</strong> (<em>float</em>) – Upper limit.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">setLimitsRel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id22" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameter limits using relative intervals. The limits
+will be [value - i1, value + i2]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i1</strong> (<em>float</em>) – Lower limit interval.</p></li>
+<li><p><strong>i2</strong> (<em>float</em>) – Upper limit interval.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">setTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id23" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameter limits using a fractional “tolerance” value, so that the
+lower limit = (1 - <cite>tol</cite>)*value and the upper limit = (1 + <cite>tol</cite>)*value.
+For example, a tolerance of 0.2 for a property of value 1.0 sets the
+limits to [0.8, 1.2].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tol</strong> (<em>float</em>) – Fractional offset for lower and upper limits; must lie between 0.0 and 1.0.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">setValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id24" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value and (optionally) constraints of the parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>float</em>) – Value of the parameter.</p></li>
+<li><p><strong>limits</strong> (<em>2-element sequence</em><em> of </em><em>float</em><em>, </em><em>optional</em>) – Lower and upper limits of the parameter.
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code> (= no limits).</p></li>
+<li><p><strong>fixed</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag the parameter as fixed. Default: <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id25">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#id25" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the parameter (float).</p>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyimfit.descriptions.SimpleModelDescription">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyimfit.descriptions.</span></span><span class="sig-name descname"><span class="pre">SimpleModelDescription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.SimpleModelDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple version of ModelDescription with only one function set.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.SimpleModelDescription.x0">
+<span class="sig-name descname"><span class="pre">x0</span></span><a class="headerlink" href="#pyimfit.descriptions.SimpleModelDescription.x0" title="Permalink to this definition">¶</a></dt>
+<dd><p>ParameterDescription object for the x-coordinate of the model center</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription">ParameterDescription</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyimfit.descriptions.SimpleModelDescription.y0">
+<span class="sig-name descname"><span class="pre">y0</span></span><a class="headerlink" href="#pyimfit.descriptions.SimpleModelDescription.y0" title="Permalink to this definition">¶</a></dt>
+<dd><p>ParameterDescription object for the y-coordinate of the model center</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription">ParameterDescription</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyimfit.descriptions.SimpleModelDescription.addFunction">
+<span class="sig-name descname"><span class="pre">addFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyimfit.descriptions.FunctionDescription" title="pyimfit.descriptions.FunctionDescription"><span class="pre">FunctionDescription</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyimfit.descriptions.SimpleModelDescription.addFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a function created using <code class="xref py py-func docutils literal notranslate"><span class="pre">function_description()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>f</strong> (<a class="reference internal" href="#pyimfit.descriptions.FunctionDescription" title="pyimfit.descriptions.FunctionDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionDescription</span></code></a>.) – Function description to be added to the model.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id26">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x0</span></span><a class="headerlink" href="#id26" title="Permalink to this definition">¶</a></dt>
+<dd><p>X coordinate of the center of the model.
+Instance of <a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterDescription</span></code></a>.</p>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id27">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y0</span></span><a class="headerlink" href="#id27" title="Permalink to this definition">¶</a></dt>
+<dd><p>Y coordinate of the center of the model.
+Instance of <a class="reference internal" href="#pyimfit.descriptions.ParameterDescription" title="pyimfit.descriptions.ParameterDescription"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterDescription</span></code></a>.</p>
+</dd></dl>
+</dd></dl>
 </section>
 
 

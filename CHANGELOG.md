@@ -6,7 +6,36 @@
 changes may contain significant changes to the API.
 
 
-## 0.11.0 -- 2022-08-xx [NOT YET RELEASED]
+## 0.12.0 -- 2023-02-xx [NOT YET RELEASED]
+## Added
+Now based on version 1.9 of Imfit.
+
+Models (including current parameter values) can now be described by a dict-based format;
+dict-based model descriptions (including current best-fit parameter values) can be
+returned by Imfit instances as well, via their getModelAsDict method.
+
+Imfit.fit and Imfit.doFit can now take an optional `ftol` parameter (same as the `--ftol`
+parameter for the command-line `imfit` program -- controls fractional tolerance of fit statistics
+as a convergence criterion during the fitting process).
+
+Pre-compiled version for Python versions 3.9 and 3.10 on macOS.
+
+### Changed
+The interface to the FunctionSetDescription class has changed: the "name" parameter is
+now optional (and defaults to None).
+
+### Fixed
+Imfit now correctly loads models with PointSource and PointSourceRot image functions.
+
+
+
+## 0.11.2 -- 2022-10-07
+## Added
+Added "ftol" as optional input parameter for Imfit.doFit() and Imfit.fit().
+
+
+
+## 0.11.0 and 0.11.1 -- 2021-11-14
 ## Added
 Models (including current parameter values) can now be described by a dict-based format;
 dict-based model descriptions (including current best-fit parameter values) can be
