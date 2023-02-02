@@ -11,12 +11,12 @@ Working by default in ~/coding/pyimfit on Mac.
     # copy updated Imfit C++ header files
     E. [mac] cd .. ; ./update_from_imfit.sh
 
-[opt]2. Generate updated libimfit.a for Linux [VM: ubuntu64-16_dev], IF NECESSARY
+[opt]2. Generate updated libimfit.a for Linux [VM: ubuntu64-18_iraf], IF NECESSARY
     A. [vm] cd /home/vagrant/build/pyimfit/imfit
     B. [vm] git pull origin master   [if necessary]
     C. [vm] scons libimfit.a
     D. [vm] cp libimfit.a /vagrant/transfer
-    E. [mac] cp ~/vagrant/ubuntu64-16_dev/transfer/libimfit.a ./prebuilt/linux64
+    E. [mac] cp ~/vagrant/ubuntu64-18_iraf/transfer/libimfit.a ./prebuilt/linux64
 
 3. Do new "develop" install and run tests on macOS
     [mac] $ pip3 install -e ./
