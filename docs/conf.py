@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.abspath('.pyimfit'))
 # -- Project information -----------------------------------------------------
 
 project = 'PyImfit'
-copyright = '2019-2022, Peter Erwin'
+copyright = '2019-2023, Peter Erwin'
 author = 'Peter Erwin'
 
 # The short X.Y version

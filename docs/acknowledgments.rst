@@ -18,7 +18,8 @@ Maximilian Fabricius for suggesting improvements to the documentation.
 Additional bug reports and suggestions from André Luiz de Amorim, Giulia
 Savorgnan, David Streich, Guillermo Barro, Sergio Pascual, Lee Kelvin,
 Colleen Gilhuly, Semyeong Oh, Benne Holwerde, David Wilman, Iskren
-Georgiev, Corentin Schreiber, and Dan Prole are gratefully appreciated.
+Georgiev, Corentin Schreiber, Dan Prole, Alex Borlaff, and Daria Kozlova
+are gratefully appreciated.
 
 Data Sources
 ~~~~~~~~~~~~
