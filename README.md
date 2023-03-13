@@ -4,8 +4,6 @@ PyImfit is a Python wrapper for [Imfit](https://github.com/perwin/imfit), a C++-
 2D models to scientific images. It is specialized for fitting astronomical images of galaxies, but can in 
 principle be used to fit any 2D Numpy array of data. 
 
-**WARNING: This is currently a work in progress; use at your own risk!**
-
 [Changelog](./CHANGELOG.md)
 
 [![Build Status](https://travis-ci.org/perwin/pyimfit.svg?branch=master)](https://travis-ci.org/perwin/pyimfit)

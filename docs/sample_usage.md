@@ -26,8 +26,9 @@ and then fit the model to the data:
 
     # load the image data and image characteristics and do a standard fit
     # (using default chi^2 statistics and Levenberg-Marquardt solver)
-    imfit_fitter.fit(image_data, gain=4.725, read_noise=4.3, original_sky=130.14)
-    
+    fit_result = imfit_fitter.fit(image_data, gain=4.725, read_noise=4.3, original_sky=130.14)
+    print(fit_result)
+
     # check the fit and print the resulting best-fit parameter values
     if imfit_fitter.fitConverged is True:
         print("Fit converged: chi^2 = {0}, reduced chi^2 = {1}".format(imfit_fitter.fitStatistic,
@@ -51,7 +52,7 @@ and then fit the model to the data:
     imfit_fitter2.loadData(image_data, mask=mask_image_data, gain=4.725, read_noise=4.3, original_sky=130.14)
     
     # do the fit, using Nelder-Mead simplex (instead of default Levenberg-Marquardt) as the solver
-    imfit_fitter2.doFit(solver="NM")
+    fit_result2 = imfit_fitter2.doFit(solver="NM")
 
 
 You can also programmatically construct a model within Python (rather than having

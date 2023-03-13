@@ -7,7 +7,7 @@ Python 3, then you don't need to explicitly specify `pip3`.
 
 ### Standard Installation: macOS
 
-A precompiled binary version ("wheel") of PyImfit for macOS can be installed from PyPI via `pip`:
+A precompiled Intel (x86-64) binary version ("wheel") of PyImfit for macOS can be installed from PyPI via `pip`:
 
     $ pip3 install pyimfit
 
@@ -19,6 +19,17 @@ by `pip` if they are not already present):
 
 Astropy is also useful for reading in FITS files as numpy arrays (and is required by the
 unit tests).
+
+#### Installation on Apple Silicon (e.g., M1, M2) Macs
+
+At present, the precompiled version of PyImfit is an x86-64 ("Intel") binary. This will not
+work with arm64 (Apple Silicon, including M1 and M2 chips) versions of Python. However, you *can* 
+run PyImfit on an arm64-based Mac by running an x86-64 version of Python. How you do this depends 
+on how you prefer to install and use Python (e.g., python.org installers vs conda vs Homebrew); there
+are various suggestions available online for how to do this, depending on how you prefer to install Python.
+
+(The plan is to have a future release of PyImfit that natively supports arm64 as well as x86-64.)
+
 
 
 ### Standard Installation: Linux

@@ -2,7 +2,8 @@ PLAN:
 
 ** GENERAL/FUTURE TO-DO
 
-[ ] Update Linux libimfit.a to include count_cpu_cores.o
+[ ] Add indications of n_iterations to FitResult output in case of NM or DE fits
+    -- currently, FitResult.nIter = -1 when they succeed
 
 
 [X] Add ftol keyword to fitting.py --
