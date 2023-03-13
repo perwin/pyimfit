@@ -6,7 +6,7 @@
 changes may contain significant changes to the API.
 
 
-## 0.12.0 -- 2023-02-xx [NOT YET RELEASED]
+## 0.12.0 -- 2023-03-12
 ## Added
 Now based on version 1.9 of Imfit.
 
@@ -18,7 +18,7 @@ Imfit.fit and Imfit.doFit can now take an optional `ftol` parameter (same as the
 parameter for the command-line `imfit` program -- controls fractional tolerance of fit statistics
 as a convergence criterion during the fitting process).
 
-Pre-compiled version for Python versions 3.9 and 3.10 on macOS.
+Pre-compiled versions for Python versions 3.9--3.11 on macOS.
 
 ### Changed
 The interface to the FunctionSetDescription class has changed: the "name" parameter is
