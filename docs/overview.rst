@@ -34,6 +34,11 @@ the essential things to know:
    by programmatically specifying components from within Python, or via
    a dict-based description.
 
+-  PyImfit uses the same `column-major, 1-based
+   indexing <./pixel_conventions.html>`__ as Imfit; thus, a function set
+   with (Py)Imfit coordnates x0,y0 = 100,50 would have Python (NumPy)
+   coordinates ``array[49,99]``
+
 -  Fitting is done by instantiating an ``Imfit`` object with a
    ``ModelDescription`` object as input, then adding a 2D NumPy array as
    the data to be fit (along with, optionally, mask and error images,
@@ -122,6 +127,14 @@ also supply the PSF image (in the form of a 2D NumPy array):
 Creating a model; setting parameter values and limits
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+**Important Note on Pixel Conventions:** PyImfit uses the same
+FITS/IRAF/SAOimage convention for pixel coordinates, where the first
+coordinate is the column number and the second is the row number and
+indexing is 1-based (i.e., the center of the lower-left pixel in an
+image is at x,y = 1.0,1.0). This is *different from* the default
+Python/NumPy (column-major, 0-based) convention; see
+`here <./pixel_conventions.html>`__ for more details.
+
 Each image-function parameter within a model can have a “current” value
 (e.g., the initial guess for the fitting process, the result from the
 fit, etc.) and either: a set of lower and upper limits for possible
@@ -138,8 +151,10 @@ A very simple example of programmatically constructing a model:
 ::
 
    model_desc = pyimfit.SimpleModelDescription()
-   # define the limits on the central-coordinate X0 and Y0 as +/-10 pixels relative to initial values
-   # (note that Imfit treats image coordinates using the IRAF/Fortran numbering scheme: the lower-left
+   # define the limits on the central-coordinate X0 and Y0 
+   # as +/-10 pixels relative to initial values
+   # (note that Imfit treats image coordinates using the 
+   # FITS/IRAF/Fortran 1-based numbering scheme: the lower-left
    # pixel in the image has coordinates (x,y) = (1,1))
    model_desc.x0.setValue(105, [95,115])
    model_desc.y0.setValue(62, [52,72])

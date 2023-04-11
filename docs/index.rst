@@ -14,6 +14,7 @@ Documentation for PyImfit
    installation
    sample_usage
    overview
+   pixel_conventions
 
 .. toctree::
    :maxdepth: 2
