@@ -6,7 +6,7 @@ principle be used to fit any 2D Numpy array of data.
 
 [Changelog](./CHANGELOG.md)
 
-[![Build Status](https://travis-ci.org/perwin/pyimfit.svg?branch=master)](https://travis-ci.org/perwin/pyimfit)
+[comment]: <> ([![Build Status]&#40;https://travis-ci.org/perwin/pyimfit.svg?branch=master&#41;]&#40;https://travis-ci.org/perwin/pyimfit&#41;)
 ![PyImfit](https://github.com/perwin/pyimfit/workflows/PyImfit/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/pyimfit/badge/?version=latest)](http://pyimfit.readthedocs.io/en/latest/?badge=latest)
 
