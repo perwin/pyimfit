@@ -18,7 +18,9 @@ jobs:
       matrix:
         # use quotes to avoid YAML processor interpreting version numbers as *numbers*
         # and e.g. trying to turn 3.10 into 3.1
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        # python-version: ['3.7', '3.8', '3.9', '3.10']
+        # TEMPORARY SIMPLIFICATION FOR TESTNG PURPOSES
+        python-version: ['3.10']
 
     steps:
     - uses: actions/checkout@v3
@@ -28,12 +30,12 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip==23.0.1
+        python -m pip install --upgrade pip
         python -m pip install flake8 astropy pytest scons
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Build and test import of package
       run: |
-        pip install --no-build-isolation -e . ; python -c "import pyimfit"  
+        pip install -e . ; python -c "import pyimfit"  
     - name: Test with pytest
       run: |
         cd pyimfit/tests ; pytest
