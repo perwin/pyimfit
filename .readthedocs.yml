@@ -19,7 +19,7 @@ formats: all
 # Optionally set the version of Python and requirements required to build your docs
 # Currently (Nov 2021), readthedocs does not support Python later than 3.8
 python:
-  version: 3.9
+  version: 3.8
   system_packages: true
 
   install:
