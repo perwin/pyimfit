@@ -19,9 +19,6 @@ jobs:
         # use quotes to avoid YAML processor interpreting version numbers as *numbers*
         # and e.g. trying to turn 3.10 into 3.1
         # python-version: ['3.7', '3.8', '3.9', '3.10']
-        # TEMPORARY SIMPLIFICATION FOR TESTNG PURPOSES
-        python-version: ['3.10']
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -30,6 +27,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        # pip version 23.x breaks editable installs in this scenario (unable to import
+        # previously installed modules such as numpy), for some reason
         python -m pip install --upgrade pip==22.3.1
         python -m pip install flake8 astropy pytest scons
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
