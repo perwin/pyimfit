@@ -6,6 +6,11 @@
 changes may contain significant changes to the API.
 
 
+## 0.xx
+
+Pre-compiled versions for Python versions 3.9--3.12 on macOS>
+
+
 ## 0.12.0 -- 2023-03-12
 ## Added
 Now based on version 1.9 of Imfit.

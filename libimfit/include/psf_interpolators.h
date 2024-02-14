@@ -88,7 +88,7 @@ class PsfInterpolator_lanczos3 : public PsfInterpolator
   public:
   PsfInterpolator_lanczos3( double *inputImage, int nCols_image, int nRows_image );
   
-  ~PsfInterpolator_lanczos3( );
+~PsfInterpolator_lanczos3( );
   
   double GetValue( double x, double y );
 

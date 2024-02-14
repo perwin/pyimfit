@@ -1,5 +1,5 @@
 # Cython header file for Imfit, by PE
-# Copyright Peter Erwin, 2018.
+# Copyright Peter Erwin, 2018--2024.
 
 from libcpp.map cimport map
 from libcpp.string cimport string
@@ -8,23 +8,23 @@ from libcpp cimport bool
 
 
 cdef extern from "definitions.h":
-    const int FITSTAT_CHISQUARE       =       1   # standard chi^2
-    const int FITSTAT_CASH            =       2   # standard (minimal) Cash statistic
-    const int FITSTAT_POISSON_MLR     =       3   # Poisson Maximum Likelihood Ratio statistic
-    const int FITSTAT_CHISQUARE_DATA  =      10   # chi^2, per-pixel errors from data values
-    const int FITSTAT_CHISQUARE_MODEL =      11   # chi^2, per-pixel errors from model values
-    const int FITSTAT_CHISQUARE_USER  =      12   # chi^2, per-pixel errors are user-supplied
-    const int WEIGHTS_ARE_SIGMAS    = 100 # "weight image" pixel value = sigma
-    const int WEIGHTS_ARE_VARIANCES = 110 # "weight image" pixel value = variance (sigma^2)
-    const int WEIGHTS_ARE_WEIGHTS   = 120 # "weight image" pixel value = weight
-    const int MASK_ZERO_IS_GOOD     =  10 # "standard" input mask format (good pixels = 0)
-    const int MASK_ZERO_IS_BAD      =  20 # alternate input mask format (good pixels = 1)
-    const int NO_FITTING           =     0
-    const int MPFIT_SOLVER         =     1
-    const int DIFF_EVOLN_SOLVER    =     2
-    const int NMSIMPLEX_SOLVER     =     3
-    const int ALT_SOLVER           =     4
-    const int GENERIC_NLOPT_SOLVER =     5
+    int FITSTAT_CHISQUARE       =       1   # standard chi^2
+    int FITSTAT_CASH            =       2   # standard (minimal) Cash statistic
+    int FITSTAT_POISSON_MLR     =       3   # Poisson Maximum Likelihood Ratio statistic
+    int FITSTAT_CHISQUARE_DATA  =      10   # chi^2, per-pixel errors from data values
+    int FITSTAT_CHISQUARE_MODEL =      11   # chi^2, per-pixel errors from model values
+    int FITSTAT_CHISQUARE_USER  =      12   # chi^2, per-pixel errors are user-supplied
+    int WEIGHTS_ARE_SIGMAS    = 100 # "weight image" pixel value = sigma
+    int WEIGHTS_ARE_VARIANCES = 110 # "weight image" pixel value = variance (sigma^2)
+    int WEIGHTS_ARE_WEIGHTS   = 120 # "weight image" pixel value = weight
+    int MASK_ZERO_IS_GOOD     =  10 # "standard" input mask format (good pixels = 0)
+    int MASK_ZERO_IS_BAD      =  20 # alternate input mask format (good pixels = 1)
+    int NO_FITTING           =     0
+    int MPFIT_SOLVER         =     1
+    int DIFF_EVOLN_SOLVER    =     2
+    int NMSIMPLEX_SOLVER     =     3
+    int ALT_SOLVER           =     4
+    int GENERIC_NLOPT_SOLVER =     5
 
 
 cdef extern from "statistics.h":

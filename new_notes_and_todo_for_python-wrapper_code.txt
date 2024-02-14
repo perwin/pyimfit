@@ -105,6 +105,30 @@ PLAN:
                     -- 4. Do new "develop" install and run tests on Linux VM
 
 
+    ** New Update: Make build for Python 3.12
+        howto_new_distribution.txt
+
+        [X] Install Python 3.12
+            [X] Install Python
+            [X] Install necessary libraries via pip
+
+        [ ] Add Python 3.12 as an option for GitHub Actions testing workflow
+
+        [ ] Upload new version to pip staging area
+
+        [ ] Email announcement to Imfit mailing list
+
+        [ ] Email announcement to AstroPy mailing list
+
+        [ ] Announce on Facebook Python-Astronomy group
+
+        [ ] Announce on Twitter?
+
+        [ ] Announce on Bluesky?
+
+        [ ] Announce on Facebook Astrostatistics group
+
+
     ** New Update: Make build for Python 3.10
         howto_new_distribution.txt
 
