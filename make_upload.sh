@@ -3,6 +3,8 @@
 #    $ ./make_upload.sh 0.8.8
 # For test execution (uploads to TestPyPI, not to PyPI)
 #    $ ./make_upload.sh 0.8.8 --test
+#
+# Note that uploading assumes we have a valid API token defined in our ~/.pypirc file
 
 if [[ $# -lt 1 ]]; then
   echo "Usage: $0 VERSION_NUMBER [--test]"
@@ -11,6 +13,7 @@ if [[ $# -lt 1 ]]; then
 fi
 
 # Make sdist (.tar.gz) and macOS binary wheels
+python3.12 setup.py sdist bdist_wheel
 python3.11 setup.py sdist bdist_wheel
 python3.10 setup.py sdist bdist_wheel
 python3.9 setup.py sdist bdist_wheel
@@ -20,6 +23,7 @@ python3.6 setup.py bdist_wheel
 # Copy shared libs into wheel using delocate
 VERSION_NUM=$1
 cd dist
+delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp312-cp312-macosx_10_9_universal2.whl
 delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp311-cp311-macosx_10_9_universal2.whl
 delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp310-cp310-macosx_10_9_universal2.whl
 delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp39-cp39-macosx_10_9_x86_64.whl
@@ -39,6 +43,7 @@ then
   python3 -m twine upload --repository testpypi dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp39-cp39-macosx_10_9_x86_64.whl
   python3 -m twine upload --repository testpypi dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp310-cp310-macosx_10_9_universal2.whl
   python3 -m twine upload --repository testpypi dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp311-cp311-macosx_10_9_universal2.whl
+  python3 -m twine upload --repository testpypi dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp312-cp312-macosx_10_9_universal2.whl
   echo ""
 else
   echo "   Doing standard upload to PyPI"
@@ -49,6 +54,7 @@ else
   python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp39-cp39-macosx_10_9_x86_64.whl
   python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp310-cp310-macosx_10_9_universal2.whl
   python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp311-cp311-macosx_10_9_universal2.whl
+  python3 -m twine upload dist/fixed_wheels/pyimfit-${VERSION_NUM}-cp312-cp312-macosx_10_9_universal2.whl
   echo ""
 fi
 

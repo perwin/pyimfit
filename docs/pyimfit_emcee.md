@@ -1,12 +1,27 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.16.1
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
 # Example of using PyImfit with Markov-Chain Monte Carlo code "emcee"
+
 
 This is a Jupyter notebook demonstrating how to use PyImfit with the MCMC code [emcee](https://github.com/dfm/emcee).
 
 If you are seeing this as part of the readthedocs.org HTML documentation, you can retrieve the original .ipynb file
 [here](https://github.com/perwin/pyimfit/blob/master/docs/pyimfit_emcee.ipynb).
 
-Some initial setup for nice-looking plots:
 
+Some initial setup for nice-looking plots:
 
 ```python
 %pylab inline
@@ -17,18 +32,10 @@ matplotlib.rcParams['ytick.labelsize'] = 16
 matplotlib.rcParams['axes.labelsize'] = 20
 ```
 
-    Populating the interactive namespace from numpy and matplotlib
-
-
-    /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/IPython/core/magics/pylab.py:160: UserWarning: pylab import has clobbered these variables: ['mean']
-    `%matplotlib` prevents importing * from pylab and numpy
-      "\n`%matplotlib` prevents importing * from pylab and numpy"
-
-
 ### Create image-fitting model using PyImfit
 
-Load the pymfit package; also load astropy.io.fits so we can read FITS files:
 
+Load the pymfit package; also load astropy.io.fits so we can read FITS files:
 
 ```python
 import pyimfit
@@ -37,7 +44,6 @@ from astropy.io import fits
 
 Load data image (in this case, a small cutout of an SDSS image showing a faint star):
 
-
 ```python
 imageFile = "./pyimfit_emcee_files/faintstar.fits"
 image_faintstar = fits.getdata(imageFile)
@@ -45,14 +51,12 @@ image_faintstar = fits.getdata(imageFile)
 
 Create a ModelDescription instance based on an imfit configuration file (which specifies a single elliptical Gaussian model):
 
-
 ```python
 configFile = "./pyimfit_emcee_files/config_imfit_faintstar.dat"
 model_desc = pyimfit.ModelDescription.load(configFile)
 ```
 
 Alternately, you can create the ModelDescription programmatically from within Python:
-
 
 ```python
 # create a SimpleModelDescription instance (one function block); specify the x0,y0 center for the function block.
@@ -72,7 +76,6 @@ model_desc.addFunction(star_function)
 
 Create an Imfit instance containing the model, and add the image data and image-description info:
 
-
 ```python
 imfit_fitter = pyimfit.Imfit(model_desc)
 imfit_fitter.loadData(image_faintstar, gain=4.72, read_noise=1.15, original_sky=124.94)
@@ -80,7 +83,6 @@ imfit_fitter.loadData(image_faintstar, gain=4.72, read_noise=1.15, original_sky=
 
 Fit the model to the data (using the default Levenberg-Marquardt solver) and extract the best-fitting parameter values
 (X0, Y0, PA, ellipticity, I_0, sigma):
-
 
 ```python
 results = imfit_fitter.doFit(getSummary=True)
@@ -92,17 +94,12 @@ for i in range(len(p_bestfit) - 1):
 print("{0:g}\n".format(p_bestfit[-1]))
 ```
 
-    Best-fitting parameter values:
-    5.64339, 6.18794, 155.354, 0.0950157, 268.92, 1.00772
-    
-
-
 ### Define log-probability functions for use with emcee
+
 
 Emcee requires a function which calculates and returns the log of the posterior probability (using the likelihood and the prior probability).
 
 We'll create a general function for this which takes as input the current model parameters, an Imfit instance which can compute the fit statistic for those parameters (= $-2 \: \times$ log likelihood) and a user-supplied function for computing the prior; this will return the sum of the log likelihood and the log of the prior:
-
 
 ```python
 def lnPosterior_for_emcee( params, imfitter, lnPrior_func ):
@@ -138,7 +135,6 @@ Now, we'll create a prior-probability function.
 
 For simplicity, we'll use the case of constant priors within parameter limits, with the parameter limits obtained from a user-supplied Imfit instance. (But you can make the prior-probability function as complicated as you like.)
 
-
 ```python
 def lnPrior_limits( params, imfitter ):
     """
@@ -169,8 +165,8 @@ def lnPrior_limits( params, imfitter ):
 
 ### Set up and run Markov-Chain Monte Carlo using emcee
 
-Import [emcee](https://emcee.readthedocs.io/en/latest/), and also [corner](https://corner.readthedocs.io/en/latest/) (so we can make a nice plot of the results):
 
+Import [emcee](https://emcee.readthedocs.io/en/latest/), and also [corner](https://corner.readthedocs.io/en/latest/) (so we can make a nice plot of the results):
 
 ```python
 import emcee
@@ -180,7 +176,6 @@ import corner
 Specify the number of dimensions (= number of parameters in the model) and a large number of walkers, then instantiate
 a standard emcee sampler, using our previously defined posterior function (the Imfit instance containing the data and model and the simple prior function are provided as extra arguments):
 
-
 ```python
 ndims, nwalkers = 6, 100
 
@@ -189,13 +184,11 @@ sampler = emcee.EnsembleSampler(nwalkers, ndims, lnPosterior_for_emcee, args=(im
 
 Define some initial starting values -- 0.1% Gaussian perturbations around the previously determined best-fit parameters:
 
-
 ```python
 initial_pos = [p_bestfit * (1 + 0.001*np.random.randn(ndims)) for i in range(nwalkers)]
 ```
 
 Run the sampler for 500 steps (reset it first, in case we're running this again, to ensure we start anew):
-
 
 ```python
 sampler.reset()
@@ -204,7 +197,6 @@ final_state = sampler.run_mcmc(initial_pos, 500)
 
 Plot values from all the walkers versus step number to get an idea of where convergence might happend
 (here, we just plot the ellipticity and I_0 values):
-
 
 ```python
 def PlotAllWalkers( sample_chain, parameterIndex, yAxisLabel ):
@@ -217,34 +209,21 @@ def PlotAllWalkers( sample_chain, parameterIndex, yAxisLabel ):
 PlotAllWalkers(sampler.chain, 3, 'ellipticity')
 ```
 
-
-![png](pyimfit_emcee_files/pyimfit_emcee_32_0.png)
-
-
-
 ```python
 PlotAllWalkers(sampler.chain, 4, 'I_0')
 ```
 
-
-![png](pyimfit_emcee_files/pyimfit_emcee_33_0.png)
-
-
 Define the "converged" subset of the chains as step numbers $\ge 200$, and merge all the individual walkers:
-
 
 ```python
 converged_samples = sampler.chain[:, 200:, :].reshape((-1, ndims))
 print("Number of samples in \"converged\" chain = {0}".format(len(converged_samples)))
 ```
 
-    Number of samples in "converged" chain = 30000
-
-
 ### Corner plot of converged MCMC samples
 
-Define some nice labels and parameter ranges for the corner plot:
 
+Define some nice labels and parameter ranges for the corner plot:
 
 ```python
 cornerLabels = [r"$X_{0}$", r"$Y_{0}$", "PA", "ell", r"$I_{0}$", r"$\sigma$"] 
@@ -260,13 +239,8 @@ ranges = [x0_range, y0_range, pa_range, ell_range, i0_range, sigma_range]
 
 Make a corner plot; the thin blue lines/points indicate best-fit values from above. [Note that we have to explicitly capture the Figure instance returned by corner.corner, otherwise we'll get a duplicate display of the plot]:
 
-
 ```python
 fig = corner.corner(converged_samples, labels=cornerLabels, range=ranges, truths=p_bestfit)
 ```
-
-
-![png](pyimfit_emcee_files/pyimfit_emcee_40_0.png)
-
 
 One thing to notice is that the PA values are running up against our (rather narrow) limits for that parameter, so a next step might be to re-run this with larger PA limits.

@@ -16,7 +16,7 @@ Imfit-format text file, and then fit the model to the data:
    # 1. A simple fit to an image (no PSF or mask)
 
    imageFile = "<path-to-FITS-file-directory>/ic3478rss_256.fits"
-   imfitConfigFile = "<path-to-config-file-directory>/config_exponential_ic3478_256.dat"
+   configFile = "<path-to-config-file-directory>/config_exponential_ic3478_256.dat"
 
    # read in image data
    image_data = fits.getdata(imageFile)
