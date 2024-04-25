@@ -38,6 +38,7 @@ jobs:
     - name: Build and test import of package
       run: |
         python -m pip install numpy
+        python -c "import numpy; print(numpy.__version__)"
         python -m pip install -e .
         python -c "import pyimfit"  
     - name: Test with pytest
