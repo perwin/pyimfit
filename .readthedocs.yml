@@ -6,6 +6,7 @@
 version: 2
 
 # Set the OS, Python version and other tools you might need
+# Currently (April 2024), we can't get sphinx to work with Python > 3.x
 build:
     os: ubuntu-22.04
     tools:
@@ -22,11 +23,6 @@ sphinx:
 # Optionally build your docs in additional formats such as PDF and ePub
 formats: all
 
-# Optionally set the version of Python and requirements required to build your docs
-# Currently (Nov 2021), readthedocs does not support Python later than 3.8
-#python:
-#  version: 3.8
-#  system_packages: true
 python:
   install:
     - requirements: requirements.txt

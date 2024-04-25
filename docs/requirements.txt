@@ -1,5 +1,5 @@
 ipykernel
 nbsphinx
-sphinx==4.2.0
-# the following is necessary in order for sphinx to be imported import without error!
+sphinx==5.0.0
+# the following is necessary in order for sphinx to be imported without error!
 jinja2==3.0.0
