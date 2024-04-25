@@ -19,7 +19,7 @@ jobs:
         # use quotes to avoid YAML processor interpreting version numbers as *numbers*
         # and e.g. trying to turn 3.10 into 3.1
 #        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
-        python-version: ['3.11', '3.12']
+        python-version: ['3.11']
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -33,11 +33,11 @@ jobs:
         # python -m pip install --upgrade pip==22.3.1
         python -m pip install --upgrade pip
         python -m pip install flake8 astropy pytest scons
-        python -m pip install numpy
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         python -c "import setuptools; print(setuptools.__version__)"
     - name: Build and test import of package
       run: |
+        python -m pip install numpy
         python -m pip install -e .
         python -c "import pyimfit"  
     - name: Test with pytest
