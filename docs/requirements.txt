@@ -1,5 +1,11 @@
 ipykernel
 nbsphinx
+
+# the following pair of requirements works with Python 3.9 on readthedocs
 sphinx==5.0.0
 # the following is necessary in order for sphinx to be imported without error!
 jinja2==3.0.0
+
+# the following works with Python 3.8 on readthedocs
+# sphinx==4.2.0
+# jinja2==3.0.0

@@ -6,7 +6,8 @@
 version: 2
 
 # Set the OS, Python version and other tools you might need
-# Currently (April 2024), we can't get sphinx to work with Python > 3.x
+# Currently (April 2024), we can get things working on readthedocs with Python 3.9
+# (and the versions of sphinx and jinja2 specified in docs/requirements.txt)
 build:
     os: ubuntu-22.04
     tools:
