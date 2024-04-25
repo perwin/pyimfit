@@ -10,7 +10,6 @@ version: 2
     os: ubuntu-22.04
     tools:
       python: "3.12"
-      system_packages: true
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
@@ -28,7 +27,7 @@ formats: all
 #python:
 #  version: 3.8
 #  system_packages: true
-
+python:
   install:
     - requirements: requirements.txt
     - requirements: docs/requirements.txt
