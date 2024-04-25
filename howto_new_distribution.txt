@@ -48,7 +48,7 @@ Working by default in ~/coding/pyimfit on Mac.
         $ git commit -a -m "Updated documentation"      [or something like that]
         $ git push
 
-7. See if updated version passes Travis CI tests
+7. See if updated version passes Github Workflows CI tests
 
 8. Generate source distribution and Mac binary wheels on Mac, and upload to PyPI:
     A. test version:
