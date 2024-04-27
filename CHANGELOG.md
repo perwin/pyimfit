@@ -6,9 +6,20 @@
 changes may contain significant changes to the API.
 
 
-## 0.xx
+## 0.13.0 -- 2024-04-27
 
-Pre-compiled versions for Python versions 3.9--3.12 on macOS>
+## Added
+Pre-compiled versions for Python versions 3.9--3.12 on macOS
+
+### Changed
+No longer supporting Python 3.6.
+
+Minor updates to documentation.
+
+### Fixed
+Miscellaneous workarounds to get Github Actions CI working (still doesn't work for Python 3.12 testing).
+
+Minor fixes to Cython code to get compilation working with latest version of Cython.
 
 
 ## 0.12.0 -- 2023-03-12

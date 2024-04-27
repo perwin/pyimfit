@@ -333,7 +333,7 @@ setup(
         "Operating System :: POSIX",
         "Intended Audience :: Science/Research",
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     # setup_requires = temporary local installation in order to run this script
     # install_requires = standard pip installation for general future use
     # NOTE: it's not clear we really need 'numpy' in the install_requires, since we

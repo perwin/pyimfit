@@ -55,8 +55,7 @@ Also useful: [Onine documentation for Imfit](https://imfit.readthedocs.io); and 
 
 ## Requirements and Installation
 
-PyImfit is designed to work with modern versions of Python 3 (3.5 or later on Linux; 3.6 or 
-later on macOS); no support for Python 2 is planned.
+PyImfit is designed to work with modern versions of Python 3 (3.7 or later); no support for Python 2 is planned.
 
 ### Standard Installation: macOS
 
