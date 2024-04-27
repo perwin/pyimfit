@@ -337,7 +337,7 @@ setup(
     # setup_requires = temporary local installation in order to run this script
     # install_requires = standard pip installation for general future use
     setup_requires=['scons'],
-    install_requires=['scipy'],
+    install_requires=['numpy', 'scipy'],
     # install_requires=['numpy', 'scipy'],
     cmdclass={'build_ext': my_build_ext, 'clean': CleanCommand, 'cleanall': CleanAllCommand},
     ext_modules=extensions
