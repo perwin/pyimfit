@@ -18,6 +18,7 @@
 
 import os
 import sys
+import platform
 import tempfile
 import subprocess
 import shutil
@@ -42,11 +43,13 @@ baseDir = os.getcwd() + "/"
 if sys.platform == 'darwin':
     MACOS_COMPILATION = True
     PREBUILT_PATH = baseDir + "prebuilt/macos/"
+    # the following should be either "i386" for Intel or "arm" for Apple Silicon
+    MACOS_PROCESSOR = platform.processor()
 else:
     MACOS_COMPILATION = False
     PREBUILT_PATH = baseDir + "prebuilt/linux64/"
-    EXTRA_PATH = baseDir + "extra_libs/"
     EXTRA_LIBS_PATH = EXTRA_PATH + "lib_linux64/"
+EXTRA_PATH = baseDir + "extra_libs/"
 
 
 # Stuff related to making sure which compiler we're using, and if it's
@@ -153,12 +156,16 @@ IMFIT_HEADER_PATH = "imfit"
 IMFIT_LIBRARY_PATH = baseDir + "libimfit/"
 
 libPath = [IMFIT_LIBRARY_PATH]
-#headerPath = [IMFIT_HEADER_PATH, IMFIT_HEADER_PATH+"/function_objects", IMFIT_HEADER_PATH+"/core",
-#              ".", np.get_include()]
-headerPath = [IMFIT_LIBRARY_PATH + "include", ".", np.get_include()]
+headerPath = [IMFIT_LIBRARY_PATH + "include", ".", EXTRA_PATH + "include", np.get_include()]
 if not MACOS_COMPILATION:
+    # case for Linux
     headerPath.append(EXTRA_PATH + "include")
     libPath.append(EXTRA_LIBS_PATH)
+elif MACOS_PROCESSOR == "arm":
+    # case for compiling arm64 (Apple Silicon) version
+    # kludge: assume dynamic library versions of FFTW3, GSL, etc. are in Homebrew
+    # /opt/homebrew/lib location (arm64 version of Homebrew)
+    libPath.append("/opt/homebrew/lib")
 # Note two versions of NLopt library ("nlopt_cxx" is for case of version with extra C++
 # interfaces (e.g., CentOS package)
 libraryList = ["imfit", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
