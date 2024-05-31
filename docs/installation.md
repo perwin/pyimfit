@@ -1,7 +1,7 @@
 # Installation of PyImfit
 
-Note that since PyImfit is only meant to work with Python 3 (specifically, version 3.5 or
-later on Linux and version 3.6 or later on macOS), I reference `pip3` instead of just `pip` in
+Note that since PyImfit is only meant to work with Python 3 (specifically, versions 3.8 or
+later), I reference `pip3` instead of just `pip` in
 the example installation commands below. If your version of `pip` automatically installs into
 Python 3, then you don't need to explicitly specify `pip3`.
 

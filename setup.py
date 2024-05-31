@@ -249,7 +249,7 @@ else:
 extensions = [
     # specify how to create the Cython-based extension module pyimfit_lib.so
     Extension(SRC_DIR + ".pyimfit_lib",     # [= pyimfit.pyimfit_lib] = base name for .so file
-                                            # (e.g., pyimfit_lib.cpython-37m-darwin.so)
+                                            # (e.g., pyimfit_lib.cpython-312m-darwin.so)
                 [SRC_DIR + "/pyimfit_lib" + ext],       # source code files
                 libraries=libraryList,
                 include_dirs=headerPath,
@@ -333,7 +333,7 @@ setup(
         "Operating System :: POSIX",
         "Intended Audience :: Science/Research",
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     # setup_requires = temporary local installation in order to run this script
     # install_requires = standard pip installation for general future use
     # NOTE: it's not clear we really need 'numpy' in the install_requires, since we
