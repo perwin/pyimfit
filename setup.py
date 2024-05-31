@@ -1,5 +1,7 @@
 # For development work, execute this via:
 # $ python3 setup.py develop
+# OR
+# $ pip3 install -e .
 #
 # To generate source distribution
 # $ python3 setup.py sdist
@@ -13,7 +15,7 @@
 #   Linux: build on user's machine using static libs for fftw3, gsl, nlopt
 #
 # To restart process from scratch (compile libimfit.a, then run Cython, then
-# compile binary library:
+# compile binary library):
 # $ python setup.py
 
 import os
