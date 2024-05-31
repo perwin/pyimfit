@@ -53,6 +53,8 @@ else:
     PREBUILT_PATH = baseDir + "prebuilt/linux64/"
     EXTRA_LIBS_PATH = EXTRA_PATH + "lib_linux64/"
 
+# extra library search path in case of arm64 (Apple Silicon) mac:
+HOMEBREW_LIB_PATH_ARM = "/opt/homebrew/lib"
 
 # Stuff related to making sure which compiler we're using, and if it's
 # capable of doing what we want:
@@ -102,8 +104,12 @@ def check_for_openmp(compilerName=compilerName):
     with open(os.devnull, 'w') as fnull:
         if MACOS_COMPILATION and (compilerName == "clang++"):
             args = [compilerName, '-Xpreprocessor', '-fopenmp', '-lomp', filename]
+            if MACOS_PROCESSOR == "arm":
+                # kludge: additional path to search for libomp
+                args.append("-L" + HOMEBREW_LIB_PATH_ARM)
         else:
             args = [compilerName, '-fopenmp', filename]
+        print("Running check_for_openmp() with these args: ", args)
         result = subprocess.call(args, stdout=fnull, stderr=fnull)
     os.chdir(curdir)
     #clean up
@@ -167,7 +173,7 @@ elif MACOS_PROCESSOR == "arm":
     # case for compiling arm64 (Apple Silicon) version
     # kludge: assume dynamic library versions of FFTW3, GSL, etc. are in Homebrew
     # /opt/homebrew/lib location (arm64 version of Homebrew)
-    libPath.append("/opt/homebrew/lib")
+    libPath.append(HOMEBREW_LIB_PATH_ARM)
 # Note two versions of NLopt library ("nlopt_cxx" is for case of version with extra C++
 # interfaces (e.g., CentOS package)
 libraryList = ["imfit", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
