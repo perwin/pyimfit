@@ -20,7 +20,7 @@ jobs:
         # and e.g. trying to turn 3.10 into 3.1
         # NOTE that we currently do *not* test with Python 3.12, since that breaks the
         # pip version we need to use (see below)
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.8', '3.9', '3.10', '3.11']
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
