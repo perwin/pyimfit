@@ -1,0 +1,120 @@
+NOTES ON FAILURE OF PYIMFIT GITHUB-ACTIONS CI
+
+Problem seems to have cropped up between 2023 April 11 (last set of updates, CI run without
+error -- corresponding logs unfortunately have expired) and 2023 April 30, when
+Melton-Elizabeth opened a Github issue about being unable to install on her Windows 10 machine
+via Anaconda (using pip) -- exact same error!
+
+    pip version updates in April 2023: 23.1--23.1.2
+    setuptools version updates in April 2023: 67.7.0--67.7.2
+
+
+SELECTD OUTPUT FROM GITHUB ACTIONS CI RUN
+
+* "Install dependencies"
+[at end of "Install dependencies" run]
+Requirement already satisfied: numpy in /opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages (1.25.2)
+
+
+* "Build and test import of package":
+
+env:
+    pythonLocation: /opt/hostedtoolcache/Python/3.10.12/x64
+    PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.10.12/x64/lib/pkgconfig
+    Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.12/x64
+    Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.12/x64
+    Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.10.12/x64
+    LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.10.12/x64/lib
+
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'error'
+  error: subprocess-exited-with-error
+  
+  × Getting requirements to build editable did not run successfully.
+  │ exit code: 1
+  ╰─> [19 lines of output]
+...
+        File "/tmp/pip-build-env-dy3y4o54/overlay/lib/python3.10/site-packages/setuptools/build_meta.py", line 338, in run_setup
+          exec(code, locals())
+        File "<string>", line 25, in <module>
+      ModuleNotFoundError: No module named 'numpy'
+      [end of output]
+
+
+THINGS THAT HAVE NO EFFECT
+• Removing "pip install --upgrade pip" [i.e., reverting to 23.0.1 from 23.2.1]
+• Manually installing numpy at end of "Install dependencies" (just gets you the
+"Requirement already satisfied" message quoted above)
+• Upgrading from actions/setup-python@v3 to actions/setup-python@v4
+• Adding numpy to setup_requires in setup.py [27 Apr 2024, from suggested answer to my stackoverflow question]
+
+
+PIP VERSION: 23.0.1
+SETUPTOOLS VERSION: 65.5.0
+
+
+THIS WORKS ON MY MAC. E.g.
+
+erwin@Glamdring pyimfit % pip3.10 install -e .     
+Obtaining file:///Users/erwin/coding/pyimfit
+  Preparing metadata (setup.py) ... done
+Requirement already satisfied: numpy in /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages (from pyimfit==0.12.0) (1.24.1)
+Requirement already satisfied: scipy in /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages (from pyimfit==0.12.0) (1.10.0)
+Installing collected packages: pyimfit
+  Running setup.py develop for pyimfit
+Successfully installed pyimfit-0.12.0
+
+Standard Python3.11 ipython on my Mac:
+In [309]: import setuptools
+In [310]: print(setuptools.__version__)
+67.6.1
+
+
+*** WHAT WORKED:
+
+Downgrading pip to version 22.3.1 via (in "Install dependencies" step)
+	python -m pip install --upgrade pip==22.3.1
+
+RESULT IN LOG:
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 23.0.1
+    Uninstalling pip-23.0.1:
+      Successfully uninstalled pip-23.0.1
+Successfully installed pip-22.3.1
+
+Setuptools version: 65.5.0
+
+
+
+*** Problems with Python 3.12
+
+CI with version 3.12 of Python fails due to an incompatibility with older versions of pip
+(such as the 22.3.1 we are forcing the use of to avoid the silly numpy import problems).
+
+The problem is clearly with pip, since the stack trace ends with:
+  File "/opt/hostedtoolcache/Python/3.12.3/x64/lib/python3.12/site-packages/pip/_vendor/pkg_resources/__init__.py", line 2164, in <module>
+    register_finder(pkgutil.ImpImporter, find_on_path)
+                    ^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'pkgutil' has no attribute 'ImpImporter'. Did you mean: 'zipimporter'?
+
+
+The problem is that Python 3.12 removed several deprecated classes, including pkgutil.ImpImporter.
+Evidently more modern versions of pip have been updated to account for this -- but those versions
+of pip have the "No module named 'numpy'" error noted above!
+
+https://stackoverflow.com/questions/77364550/attributeerror-module-pkgutil-has-no-attribute-impimporter-did-you-mean
+
+https://ubuntuhandbook.org/index.php/2023/10/fix-broken-pip-python-312-ubuntu/
+"Due to removal of long deprecated pkgutil.ImpImporter class, pip command may not work for
+Python 3.12 in your Linux with old setuptools. It either just does not work or outputs following
+error, when installing anything via pip install"
+
+(Unfortunately, this just tells you how to install (the latest version of ) pip on Python 3.12)
+
+CONCLUSION: For the time being, we *cannot* do a Github Actions CI test of pyimfit on Python 3.12
+

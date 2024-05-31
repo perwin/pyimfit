@@ -42,6 +42,7 @@ if not sys.version_info[0] >= 3:
     sys.exit("setup.py: Python 3 required for pyimfit!")
 
 baseDir = os.getcwd() + "/"
+EXTRA_PATH = baseDir + "extra_libs/"
 if sys.platform == 'darwin':
     MACOS_COMPILATION = True
     PREBUILT_PATH = baseDir + "prebuilt/macos/"
@@ -51,7 +52,6 @@ else:
     MACOS_COMPILATION = False
     PREBUILT_PATH = baseDir + "prebuilt/linux64/"
     EXTRA_LIBS_PATH = EXTRA_PATH + "lib_linux64/"
-EXTRA_PATH = baseDir + "extra_libs/"
 
 
 # Stuff related to making sure which compiler we're using, and if it's

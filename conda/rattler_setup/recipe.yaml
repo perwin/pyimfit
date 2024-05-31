@@ -1,0 +1,48 @@
+# recipe file for use by rattler-config in building conda packages for pyimfit
+
+context:
+  version: 0.12.2
+
+package:
+  name: pyimfit
+  version: ${{ version }}
+
+# https://pypi.io/packages/source/{ package_name_first_letter }/{ package_name }/{ package_name }-{ package_version }.tar.gz
+
+source:
+  url: https://pypi.io/packages/source/p/pyimfit/pyimfit-${{ version }}.tar.gz
+  sha256: c36b38203786f1c955b6c7f2e95288b761ba789cef006ea42cd68201a052958e
+
+
+build:
+  number: 0
+  script: python -m pip install . -vv
+
+
+# Note the difference with conda-build: we do *not* need/want a separate requirements:build
+# list; instead, all of those requirements should go under host. If we have a build
+# requirements list, then the output package is built without the Python wheel, and
+# will not import.
+requirements:
+  host:
+    - python
+    - pip
+    - scons
+    - nomkl
+    - numpy
+    - scipy
+  run:
+    - python
+    - nomkl
+    - numpy
+    - scipy
+
+# test:
+#   imports:
+#     - pyimfit
+
+about:
+  repository: https://github.com/perwin/pyimfit
+  license: GPL-3.0
+  license_family: GPL
+  summary: Python wrapper for the astronomical image-fitting program Imfit

@@ -1,0 +1,36 @@
+SIMPLE NOTES ON HOW TO BUILD CONDA PACKAGES WITH RATTLER-BUILD
+
+Note that <some-appropriate-environment> should probably be an environment with the
+"nomkl" meta-package installed.
+
+$ conda activate <some-appropriate-environment>
+
+The following will generate packages for Python 3.8--3.12
+
+$ rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
+
+Generated conda packages will be in a subdirectory of output/
+	output/osx-64 -- for Intel (x86-64) binaries
+
+
+HOW TO UPLOAD:
+
+Activate a conda environment that has the anaconda client installed, then log in to Anaconda
+% conda activate <environment-name>
+% anaconda login
+
+Use "anaconda upload" and the names of the .conda (or .tar.bz2) files
+
+% anaconda upload output/osx-86/pyimfit-*.conda   [change output subdirectory name as appropriate]
+
+These will be uploaded to https://anaconda.org/perwin/pyimfit
+
+
+SUMMARY -- HOW TO INSTALL:
+% conda install -c conda-forge perwin::pyimfit
+
+The "-c conda-forge" usage is necessary to get installation of python_abi, which
+was automatically generated as a requirement when pyimfit was built.
+
+(If people for some reason *don't* have anaconda as a default channel, they might
+have trouble finding perwin::pyimfit, so they could try adding "-c anaconda".)
