@@ -1,7 +1,7 @@
 # recipe file for use by rattler-config in building conda packages for pyimfit
 
 context:
-  version: 0.12.2
+  version: 0.13.0
 
 package:
   name: pyimfit
@@ -10,8 +10,9 @@ package:
 # https://pypi.io/packages/source/{ package_name_first_letter }/{ package_name }/{ package_name }-{ package_version }.tar.gz
 
 source:
-  url: https://pypi.io/packages/source/p/pyimfit/pyimfit-${{ version }}.tar.gz
-  sha256: c36b38203786f1c955b6c7f2e95288b761ba789cef006ea42cd68201a052958e
+#  url: https://pypi.io/packages/source/p/pyimfit/pyimfit-${{ version }}.tar.gz
+#  sha256: c36b38203786f1c955b6c7f2e95288b761ba789cef006ea42cd68201a052958e
+  git: https://github.com/perwin/pyimfit.git
 
 
 build:
@@ -42,7 +43,10 @@ requirements:
 #     - pyimfit
 
 about:
+  homepage: https://github.com/perwin/pyimfit
   repository: https://github.com/perwin/pyimfit
   license: GPL-3.0
   license_family: GPL
   summary: Python wrapper for the astronomical image-fitting program Imfit
+  description: Python wrapper for Imfit, a program for fast fitting of astronomica images
+  documentation: https://pyimfit.readthedocs.io
