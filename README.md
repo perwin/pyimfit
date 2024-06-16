@@ -55,9 +55,9 @@ Also useful: [Onine documentation for Imfit](https://imfit.readthedocs.io); and 
 
 ## Requirements and Installation
 
-PyImfit is designed to work with modern versions of Python 3 (3.7 or later); no support for Python 2 is planned.
+PyImfit is designed to work with modern versions of Python 3 (3.8 or later); no support for Python 2 is planned.
 
-### Standard Installation: macOS
+### Standard installation via pip: macOS
 
 A precompiled binary version ("wheel") of PyImfit for macOS can be installed from PyPI via `pip`:
 
@@ -73,7 +73,7 @@ Astropy is also useful for reading in FITS files as numpy arrays (and is require
 unit tests).
 
 
-### Standard Installation: Linux
+### Standard installation via pip: Linux
 
 PyImfit can also be installed on Linux using `pip`. Since this involves building from source,
 you will need to have a working C++-11-compatible compiler (e.g., GCC version 4.8.1 or later);
@@ -86,6 +86,15 @@ If the installation fails with a message containing something like "fatal error:
 No such file or directory", then you may be missing headers files and static libraries for
 Python development; see [this Stackexchange question](https://stackoverflow.com/questions/21530577/fatal-error-python-h-no-such-file-or-directory)
 for guidance on how to deal with that.
+
+
+### Installation via conda
+
+PyImfit can also be installed into a conda environment, via
+
+    $ conda install -c conda-forge perwin::pyimfit
+
+**[Note that conda installation his is currently a bit experimental, but should be standard soon]**
 
 
 ### Building the Whole Thing from Source
