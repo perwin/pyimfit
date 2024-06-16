@@ -64,12 +64,13 @@ Working by default in ~/coding/pyimfit on Mac.
     A. [vm] cd /home/vagrant/build/pyimfit
     B. [vm] git pull origin master   [if necessary]
     C. [vm] cd conda
-    D. [vm] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
-    E. [vm] cd output
-    F. [vm] tar -cf linux-64.tar linux-64 && gzip linux-64.tar
-    G. [vm] cp linux-64.tar.gz /vagrant/transfer/
-    H. [mac] cd /Users/erwin/coding/pyimfit/conda
-    I. [mac] tar -xf ~/vagrant/iraf/transfer/linux-64.tar.gz -C output
+    D. [vm] rm -rf output
+    E. [vm] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
+    F. [vm] cd output
+    G. [vm] tar -cf linux-64.tar linux-64 && gzip linux-64.tar
+    H. [vm] cp linux-64.tar.gz /vagrant/transfer/
+    I. [mac] cd /Users/erwin/coding/pyimfit/conda
+    J. [mac] tar -xf ~/vagrant/iraf/transfer/linux-64.tar.gz -C output
 
 12. Upload conda packages to anaconda
     A. conda activate

@@ -1,6 +1,8 @@
-# Pip requirements.txt file for PyImfit
+# Pip requirements.txt file for PyImfit, including for testing
 numpy
 scipy
+pytest
+requests
 
 # stuff to avoid possible conflicts involving Sphinx and docutils-0.18 on readthedocs.org
 sphinx<4.0

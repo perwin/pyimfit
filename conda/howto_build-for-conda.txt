@@ -1,16 +1,14 @@
 SIMPLE NOTES ON HOW TO BUILD CONDA PACKAGES WITH RATTLER-BUILD
 
-Note that <some-appropriate-environment> should probably be an environment with the
-"nomkl" meta-package installed.
-
-$ conda activate <some-appropriate-environment>
-
 The following will generate packages for Python 3.8--3.12
 
 $ rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
 
 Generated conda packages will be in a subdirectory of output/
+Doing this on MacBook Pro 2019
 	output/osx-64 -- for Intel (x86-64) binaries
+Doing this in Ubuntu VM on MBPro 2019
+	output/linux-64 -- for Intel Linux binaries
 
 
 HOW TO UPLOAD:
@@ -21,7 +19,10 @@ Activate a conda environment that has the anaconda client installed, then log in
 
 Use "anaconda upload" and the names of the .conda (or .tar.bz2) files
 
+MacOS Intel:
 % anaconda upload output/osx-86/pyimfit-*.conda   [change output subdirectory name as appropriate]
+Ubuntu VM (Intel):
+% anaconda upload output/linux-64/pyimfit-*.conda   [change output subdirectory name as appropriate]
 
 These will be uploaded to https://anaconda.org/perwin/pyimfit
 
