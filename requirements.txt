@@ -1,5 +1,5 @@
 # Pip requirements.txt file for PyImfit, including for testing
-numpy
+numpy<2.0
 scipy
 pytest
 requests
