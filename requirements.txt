@@ -1,4 +1,5 @@
 # Pip requirements.txt file for PyImfit, including for testing
+# numpy 2.0 breaks some of the Cython-generated .cpp code (even though we're using Cython 3.0)
 numpy<2.0
 scipy
 pytest
