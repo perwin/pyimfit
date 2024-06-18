@@ -1,0 +1,31 @@
+# Sequence of shell commands for testing conda installation of pyimfit:
+
+conda activate py38_temp
+conda uninstall pyimfit
+conda install -c conda-forge perwin::pyimfit
+./test_pyimfit_install.py
+conda deactivate
+
+conda activate py39_temp
+conda uninstall pyimfit
+conda install -c conda-forge perwin::pyimfit
+./test_pyimfit_install.py
+conda deactivate
+
+conda activate py310_temp
+conda uninstall pyimfit
+conda install -c conda-forge perwin::pyimfit
+./test_pyimfit_install.py
+conda deactivate
+
+conda activate py311_temp
+conda uninstall pyimfit
+conda install -c conda-forge perwin::pyimfit
+./test_pyimfit_install.py
+conda deactivate
+
+conda activate py312_temp
+conda uninstall pyimfit
+conda install -c conda-forge perwin::pyimfit
+./test_pyimfit_install.py
+conda deactivate

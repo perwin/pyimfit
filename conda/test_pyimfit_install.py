@@ -11,7 +11,8 @@ from astropy.io import fits
 
 
 # UPDATE THIS TO POING TO WHERE THE IMFIT-EXAMPLES DIRECTORY IS LOCATED
-BASE_DIR_ERWIN = "/Users/erwin/coding/imfit/examples/bob/"
+BASEDIR_PACKAGE = "../pyimfit/data/"
+BASE_DIR_ERWIN = "/Users/erwin/coding/imfit/examples/"
 EXAMPLES_URL = "https://www.mpe.mpg.de/~erwin/resources/imfit/imfit_examples.tar.gz"
 
 IMAGE_FILE = "ic3478rss_256.fits"
@@ -25,8 +26,13 @@ def main( argv ):
     # from the Imfit webpage at MPE
     if os.path.exists("./examples"):
         baseDir = "./examples/"
+        print("Using files in local examples/ directory.")
+    elif os.path.exists(BASEDIR_PACKAGE):
+        baseDir = BASEDIR_PACKAGE
+        print("Using files in package examples/ directory.")
     elif os.path.exists(BASE_DIR_ERWIN):
         baseDir = BASE_DIR_ERWIN
+        print("Using files in BASE_DIR_ERWIN examples/ directory.")
     else:
         print("ERROR: Unable to locate pre-existing examples directory.")
         print("Downloading and unpacking examples directory...")

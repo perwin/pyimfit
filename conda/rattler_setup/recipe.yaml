@@ -37,6 +37,7 @@ requirements:
     - nomkl
     - numpy
     - scipy
+    - requests
 
 # test:
 #   imports:
