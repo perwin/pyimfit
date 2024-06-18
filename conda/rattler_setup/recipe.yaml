@@ -1,7 +1,7 @@
 # recipe file for use by rattler-config in building conda packages for pyimfit
 
 context:
-  version: 0.13.0
+  version: 0.13.1
 
 package:
   name: pyimfit
@@ -30,7 +30,7 @@ requirements:
     - pip
     - scons
     - nomkl
-    - numpy
+    - numpy<2.0
     - scipy
   run:
     - python

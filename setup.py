@@ -332,7 +332,7 @@ setup(
     name=NAME,   # name for distribution package (aka "distribution"), as listed on PyPI
     version=__version__,
     author="Peter Erwin",
-    author_email="erwin@sigmaxi.net",
+    author_email="peter.erwin@gmail.com",
     description="Python wrapper for astronomical image-fitting program Imfit",
     long_description=long_description,
     long_description_content_type="text/markdown",
