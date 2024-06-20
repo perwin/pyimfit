@@ -7,12 +7,15 @@ principle be used to fit any 2D Numpy array of data.
 [Changelog](./CHANGELOG.md)
 
 [comment]: <> ([![Build Status]&#40;https://travis-ci.org/perwin/pyimfit.svg?branch=master&#41;]&#40;https://travis-ci.org/perwin/pyimfit&#41;)
-![PyImfit](https://github.com/perwin/pyimfit/workflows/PyImfit/badge.svg)
+
+[comment]: <> (![PyImfit]&#40;https://github.com/perwin/pyimfit/workflows/PyImfit/badge.svg&#41;)
+![PyImfit](https://github.com/perwin/pyimfit/actions/workflows/python-package.yml/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/pyimfit/badge/?version=latest)](http://pyimfit.readthedocs.io/en/latest/?badge=latest)
+
 
 ## A Simple Example of Use
 
-Assuming you want to fit an astronomical image named `galaxy.fits` using a model defined
+Assuming you want to fit an astronomical image (stored as a FITS file) named `galaxy.fits` using a model defined
 in an Imfit configuration file named `config_galaxy.dat`:
 
     from astropy.io import fits
@@ -55,7 +58,8 @@ Also useful: [Onine documentation for Imfit](https://imfit.readthedocs.io); and 
 
 ## Requirements and Installation
 
-PyImfit is designed to work with modern versions of Python 3 (3.8 or later); no support for Python 2 is planned.
+PyImfit is designed to work with modern versions of Python 3 (3.8 or later on Linux and Intel macOS; 3.10 or later
+on Apple Silicon macOS); no support for Python 2 is planned.
 
 ### Standard installation via pip: macOS
 
@@ -69,7 +73,10 @@ by `pip` if they are not already present):
 * Numpy
 * Scipy
 
-Astropy is also useful for reading in FITS files as numpy arrays (and is required by the
+The `requests` package will also be installed if not already present, though this is only used
+for running the test script.
+
+The `astropy.io` package is also useful for reading in FITS files as numpy arrays (and is required by the
 unit tests).
 
 
@@ -90,7 +97,7 @@ for guidance on how to deal with that.
 
 ### Installation via conda
 
-PyImfit can also be installed into a conda environment, via
+PyImfit can also be installed into a conda environment on macOS or Linux, via
 
     $ conda install -c conda-forge perwin::pyimfit
 

@@ -1,3 +1,24 @@
+# Notes on Distributing PyPI
+
+In principle we have the following possible combinations (ignoring Windows):
+
+PyPI wheels *and* conda packages for
+
+Python 3.8, 3.9, 3.10, 3.11, 3.12
+
+Mac x86-64, Mac arm64, Linux x86-64
+
+This is a total of 5 x 3 = 15 different binary packages (plus at least the
+source-only version).
+
+
+## Conda Packages
+
+These rely on the pre-existing PyPI-wheel-building infrastructure.
+
+Currently what works is using `rattler-build`.
+
+
 
 ## Binary Builds of Wheels for PyPI
 
@@ -36,7 +57,7 @@ before calling `python setup.py bdist_wheel`
 (with some if-then-else selection based on first calling `uname -m`).
 
 
-## Future Work
+### Future Work
 
 Apparently "`python setup.py`" (including "`python setup.py bdist_wheel`") is supposed
 to be deprecated sometime in the future.
@@ -63,9 +84,9 @@ using the updated repo.
 
 
 
-## Things That Don't Work
+### Things That Don't Work
 
-### cibuildwheel
+#### cibuildwheel
 
 In [this discussion](https://github.com/pypa/wheel/issues/573) "henryiii" recommended cibuildwheel (note that henryiii is one of the developers). Although the Github page and the first page of the docs (URL) say this is for use in CI systems, the second page of the docs *does* say you can run this locally.
 
