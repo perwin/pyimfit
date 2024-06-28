@@ -54,7 +54,7 @@ class ModelObject
     
     // Adds a new FunctionObject pointer to the internal vector
     // (Overridden by ModelObjectMultImage)
-    virtual int AddFunction( FunctionObject *newFunctionObj_ptr );
+    virtual int AddFunction( FunctionObject *newFunctionObj_ptr, bool isGlobalFunc=true );
     
     // 2D only
     int SetupPsfInterpolation( int interpolationType=kInterpolator_bicubic );
@@ -125,6 +125,9 @@ class ModelObject
     virtual void ApplyMask( );
 
 
+    // [x] used in multimfit-related programs
+    virtual void SetImageParameters( double imageDescriptionParams[] );
+    
     // common, but specialized by ModelObject1D
     virtual void CreateModelImage( double params[] );
     
@@ -196,6 +199,9 @@ class ModelObject
     // common, but specialized by ModelObject1D
     virtual int FinalSetupForFitting( );
 
+    // [x] overridden in ModelObjectMultImage
+    virtual int FinalModelSetup( );
+
     string& GetParameterName( int i );
 
     int GetNFunctions( );
@@ -213,7 +219,7 @@ class ModelObject
     bool HasOversampledPSF( );
     bool HasMask( );
 
-	// 2D only
+	// 2D only (overridden in ModelObjectMultImage)
     virtual double * GetModelImageVector( );
 
 	// 2D only
@@ -227,6 +233,12 @@ class ModelObject
 
 	// 2D only
     double * GetDataVector( );
+
+    // [x] NEW FOR MODEL_OBJECT (used in multimfit_main.cpp)
+    void AddDataFilename( string filename );
+
+    // [x] NEW FOR MODEL_OBJECT; overriden in model_object_multimage (used in model_object_multimage; print_results_multi.cpp)
+    string GetDataFilename( );
 
 	// 2D only
     double FindTotalFluxes(double params[], int xSize, int ySize, 
@@ -247,6 +259,9 @@ class ModelObject
     virtual int UseBootstrap( );
     
     virtual int MakeBootstrapSample( );
+    
+    // [x] 2D only (used in model_object_multimage.cpp)
+    void GetDataImageDimensions( int *nColumns, int *nRows );
 
 
   protected:
@@ -285,7 +300,13 @@ class ModelObject
     bool  extraCashTermsVectorAllocated;
     bool  localPsfPixels_allocated;
     bool  zeroPointSet;
-    int  nFunctions, nFunctionSets, nFunctionParams, nParamsTot;
+    int  nFunctions, nFunctionSets;
+    int  nFunctionParams;  // all function parameters (*excluding* X0,Y0)
+    // nParamsTot = *all* parameters, including X0,Y0 for each function set
+    // (for ModelObjectMultImage subclass, this includes parameters for per-image
+    // functions and image-description parameters). This is always the size of
+    // the parameter vector.
+    int  nParamsTot;
     double  *dataVector;
     double  *weightVector, *standardWeightVector;
     double  *maskVector;
@@ -302,6 +323,7 @@ class ModelObject
     vector<string>  parameterLabels;
     vector<SimpleParameterInfo> parameterInfoVect;
     int  imageOffset_X0, imageOffset_Y0;
+    string  dataFilename;
     
     PsfInterpolator *psfInterpolator;
     bool  psfInterpolator_allocated;
@@ -315,7 +337,13 @@ class ModelObject
     int  nOversampledRegions;
     vector<OversampledRegion *>oversampledRegionsVect;
 
-  
+    // multimfit-related
+    // specifies which functions are part of main/global model (true) and which are
+    // local to just this image (false)
+    vector<bool>  globalFunctionFlags;
+    int  nGlobalFunctions;  // always <= nFunctions
+    int  nPerImageFunctionSets;
+    int  nPerImageParams;  // parameters (including X0,Y0) for per-image functions only
 };
 
 #endif   // _MODEL_OBJ_H_

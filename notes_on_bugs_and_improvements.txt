@@ -1,3 +1,19 @@
+* (Newer) Problems with missing symbols when importing pyimfit into Python session:
+
+Similar to the problem below, EXCEPT that the missing symbols had something to do with
+C++ string functions.
+
+The solution was to redo the compilation of libimfit.a, forcing the use of clang++ (since that's
+what gets used by setuptools when setup.py is executed). The problem I had was apparently that
+the clang-compiled C++ code from Cython did not want to talk to the GCC-compiled version of
+libmimfit.a.
+
+https://stackoverflow.com/questions/72764375/symbol-not-found-using-dlopen-in-python
+"I found the problem. I was mixing compilers, using clang for the BlockSci code and gcc in pybind11 to bind
+the C++ code with Python."
+
+
+
 * Problems with missing symbols when importing pyimfit into Python session:
 
 In trying to use the updated version of PyImfit (v0.12, based on Imfit v1.9),

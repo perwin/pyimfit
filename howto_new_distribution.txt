@@ -3,14 +3,23 @@ NOTES/CHECKLIST FOR CREATING AND DISTRIBUTION A NEW DISTRIBUTION
 
 Working by default in ~/coding/pyimfit on Mac.
 
-[opt]1. Generate updated libimfit.a for macOS, IF NECESSARY
+[opt]1. Generate updated libimfit.a for macOS [x86-64], IF NECESSARY
     A. [mac] cd imfit
     B. [mac] git pull origin master   [if necessary]
     C. [mac]
-    C. [mac] scons libimfit.a
+    C. [mac] scons --clang-openmp libimfit.a
     D. [mac] cp libimfit.a ../prebuilt/macos
     # copy updated Imfit C++ header files
     E. [mac] cd .. ; ./update_from_imfit.sh
+
+[opt]1. Generate updated libimfit.a for macOS [arm64], IF NECESSARY
+    A. [mac-arm64] cd imfit
+    B. [mac-arm64] git pull origin master   [if necessary]
+    C. [macarm64]]
+    C. [macarm64]] scons --clang-openmp libimfit.a
+    D. [macarm64]] cp libimfit.a ../prebuilt/macos
+    # copy updated Imfit C++ header files
+    E. [macarm64]] cd .. ; ./update_from_imfit.sh
 
 [opt]2. Generate updated libimfit.a for Linux [VM: ubuntu64-18_iraf], IF NECESSARY
     A. [vm] cd /home/vagrant/build/pyimfit/imfit
@@ -52,9 +61,9 @@ Working by default in ~/coding/pyimfit on Mac.
 
 8. Generate source distribution and Mac binary wheels on Mac, and upload to PyPI:
     A. test version:
-        $ ./make_upload.sh --test x.x.x   [where "x.x.x" = version number]
+        $ ./make_upload.py --test-upload x.x.x   [where "x.x.x" = version number]
     B. For real:
-        $ ./make_upload.sh x.x.x   [where "x.x.x" = version number]
+        $ ./make_upload.py --upload x.x.x   [where "x.x.x" = version number]
 
 9. Test installation via pip
 

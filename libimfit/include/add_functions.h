@@ -13,7 +13,8 @@
 
 using namespace std;
 
-static vector< map<string, string> > EMPTY_MAP_VECTOR;
+// static vector< map<string, string> > EMPTY_MAP_VECTOR;
+static vector<bool> EMPTY_BOOL_VECTOR;
 
 
 // NOTE: (some of) the following functions are used in PyImfit
@@ -22,7 +23,8 @@ static vector< map<string, string> > EMPTY_MAP_VECTOR;
 int AddFunctions( ModelObject *theModel, const vector<string> &functionNameList,
                   vector<string> &functionLabelList, vector<int> &functionSetIndices, 
                   const bool subamplingFlag, const int verboseFlag=0, 
-                  vector< map<string, string> > &extraParams=EMPTY_MAP_VECTOR );
+                  vector< map<string, string> > &extraParams=EMPTY_MAP_VECTOR,
+                  const vector<bool> &globalFuncFlags=EMPTY_BOOL_VECTOR );
 
 //! Prints out names of available image functions (FunctionObject classes) to stdout
 void PrintAvailableFunctions( );

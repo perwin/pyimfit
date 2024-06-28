@@ -56,6 +56,14 @@ class FunctionObject
     // probably no need to modify this (for 1D functions):
     virtual void SetZeroPoint( double zeroPoint );
 
+    // NEW MULTIMFIT STUFF
+    // probably no need to modify this:
+    virtual void SetImageParameters( double pixScale, double imageRot, double intensScale );
+
+    virtual void AdjustParametersForImage( const double inputFunctionsParams[], 
+										double adjustedFunctionParams[], int offsetIndex );
+
+
     // probably no need to modify this
     virtual void SetLabel( string & userLabel );
 
@@ -124,6 +132,12 @@ class FunctionObject
     map<string, string>  inputExtraParams;
     string  functionName, shortFunctionName, label;
     double  ZP;
+    
+    // NEW MULTIMFIT STUFF
+    double  pixelScaling;    // multiply input size parameters by this
+    double  intensityScale;  // multiply input intensity parameters by this
+    double  imageRotation;   // treat image +y axis as rotated CCW relative to
+                             // reference image by this many degrees
 
     // class member (constant char-vector string) which will hold name of
     // individual class in derived classes

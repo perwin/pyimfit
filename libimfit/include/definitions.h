@@ -98,4 +98,6 @@ const std::string  Y0_string("Y0");
 #define PARAM_FORMAT_WITH_FIXED "%s%s\t\t%7g\t\tfixed"
 #define UNITS_FORMAT "\t%s%s"
 
+static vector< map<string, string> > EMPTY_MAP_VECTOR;
+
 #endif /* _DEFINITIONS_H_ */

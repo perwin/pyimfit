@@ -23,7 +23,7 @@
 int BootstrapErrors( const double *bestfitParams, vector<mp_par> parameterLimits, 
 				const bool paramLimitsExist, ModelObject *theModel, const double ftol, 
 				const int nIterations, const int nFreeParams, const int whichStatistic, 
-				FILE *outputFile_ptr, unsigned long rngSeed=0 );
+				FILE *outputFile_ptr, unsigned long rngSeed=0, bool multimfitMode=false );
 
 
 // NOTE: The following function is used in PyImfit
