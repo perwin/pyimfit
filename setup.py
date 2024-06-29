@@ -1,7 +1,7 @@
 # For development work, execute this via:
-# $ python3 setup.py develop
-# OR
 # $ pip3 install -e .
+# OR
+# $ python3 -m pip install -e .
 #
 # To generate source distribution
 # $ python3 setup.py sdist
@@ -174,9 +174,20 @@ elif MACOS_PROCESSOR == "arm":
     # kludge: assume dynamic library versions of FFTW3, GSL, etc. are in Homebrew
     # /opt/homebrew/lib location (arm64 version of Homebrew)
     libPath.append(HOMEBREW_LIB_PATH_ARM)
+    MAC_STATIC_LIBRARY_PATH = "/opt/homebrew/lib/"
+elif MACOS_PROCESSOR == "i386":
+    MAC_STATIC_LIBRARY_PATH = "/usr/local/lib/"
 # Note two versions of NLopt library ("nlopt_cxx" is for case of version with extra C++
 # interfaces (e.g., CentOS package)
-libraryList = ["imfit", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
+# If we're compiling on Mac, force use of static libraries for GSL, FFTW3, NLOPT;
+# if Linux, then for now stick with dynamic linking
+if MACOS_COMPILATION:
+    libraryList = ["imfit"]   # OK, since there's no dynamic-library version of libimfit to confuse the linker
+    staticLibraries = [MAC_STATIC_LIBRARY_PATH + libname for libname in
+                     ["libgsl.a", "libgslcblas.a", "libfftw3.a", "libfftw3_threads.a", "libnlopt.a"]]
+else:   # Linux
+    libraryList = ["imfit", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
+    staticLibraries = None
 if MACOS_COMPILATION and (compilerName == "clang++"):
 	libraryList.append("omp")
 
@@ -266,7 +277,7 @@ extensions = [
     Extension(SRC_DIR + ".pyimfit_lib",     # [= pyimfit.pyimfit_lib] = base name for .so file
                                             # (e.g., pyimfit_lib.cpython-312m-darwin.so)
                 [SRC_DIR + "/pyimfit_lib" + ext],       # source code files
-                libraries=libraryList,
+                libraries=libraryList, extra_objects=staticLibraries,
                 include_dirs=headerPath,
                 library_dirs=libPath,
                 extra_compile_args=extraCompileArgs,

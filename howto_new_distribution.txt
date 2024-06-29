@@ -67,10 +67,11 @@ Working by default in ~/coding/pyimfit on Mac.
 
 9. Test installation via pip
 
-10. Generate conda packages on Mac
+10. Generate conda packages on Intel Mac
     A. cd conda
     B. Update rattler_setup/recipe.yaml file [e.g., update version number]
-    C.
+    C. rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
+    D.
 
 11. Generate conda packages on Linux VM
     A. [vm] cd /home/vagrant/build/pyimfit
