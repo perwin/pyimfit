@@ -2,6 +2,7 @@ SIMPLE NOTES ON HOW TO BUILD CONDA PACKAGES WITH RATTLER-BUILD
 
 The following will generate packages for Python 3.8--3.12
 
+$ cd /Users/erwin/coding/pyimfit/conda
 $ rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
 
 Generated conda packages will be in a subdirectory of output/
