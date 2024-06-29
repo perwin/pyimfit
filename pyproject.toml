@@ -1,0 +1,13 @@
+[build-system]
+requires = [
+	"setuptools>=42",
+    "Cython",
+    "numpy<2.0",
+]
+
+build-backend = "setuptools.build_meta"
+
+[tool.cibuildwheel.macos]
+repair-wheel-command = [
+  "delocate-wheel -w {dest_dir} -v {wheel}",
+]

@@ -1,0 +1,59 @@
+Notes on how to update our binary builds for PyPI uploads.
+
+
+* BACKGROUND: THE PROBLEM:
+
+Since we use delocate to copy shared libs (fftw, gsl, etc.) into our wheel, so the user
+doesn't need to worry about installing them, the wheels need to be single-binary.
+
+Currently, python setup.py bdist_wheel automatically generates a "universal2" wheel,
+e.g., pyimfit-0.12.2-cp312-cp312-macosx_10_9_universal2.whl
+which does indeed have a universal2 version of the main .so library file.
+BUT if we're using delocate on our Intel MBPro, it will copy the x86-64 shared libs
+(the only ones that exist!) into the .dylibs/ subdirectory inside the wheel.
+
+This is fine for running x86-64 versions of Python, since they'll load the x86-64 part
+of the .so file and link to the x86-64 shared libs. But this *won't* work under arm64
+Python, which will load the arm64 version of the .so file, but then try to link against
+the x86-64 shared libs.
+
+(Presumably the complementary problem will obtain if we build the wheel on an arm64 machine
+like my M1 MBPro.)
+
+
+HOW TO INSPECT A WHEEL
+
+$ wheel unpack pyimfit-0.12.2-cp312-cp312-macosx_10_9_universal2.whl
+
+This creates a directory pyimfit-0.12.2/
+	pyimfit/ -- has module files, including the binary library file, as well as the
+		.dylibs subdirectory with shared libs copied in by delocate
+	pyimfit-0.12.2.dist-info/ -- assorted metadata
+		NOTE that the WHEEL file in this subdirectory has a "Tag:" entry with the
+		python, macos, and binary info, e.g.
+		Tag: cp312-cp312-macosx_10_9_universal2
+
+
+* IDEAL FINAL APPROACH:
+
+Generage single-binary wheels (e.g., separate x86-64 and arm64 wheels, *not* universal2 wheels)
+
+Then upload all of these to PyPI (along with the source-only Linux wheel).
+
+
+
+* ONE APPROACH
+
+Generate the universal2 wheels as we currently do, then edit them to remove the non-native
+code (e.g. arm64 if building on x86-64) and rename the wheel
+
+We should probably also rename the "Tag:"" entry in pyimfit-<version>.dist-info/WHEEL,
+which currently is
+Tag: cp312-cp312-macosx_10_9_universal2
+
+
+
+* POSSIBLE WAYS TO GENERATE SINGLE-BINARY OUTPUT WHEELS PROPERLY:
+
+https://github.com/pypa/wheel/issues/573
+https://github.com/pypa/cibuildwheel/blob/93542c397cfe940bcbb8f1eff5c37d345ea16653/cibuildwheel/macos.py#L247-L260
