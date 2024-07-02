@@ -3,7 +3,7 @@
 from __future__ import division
 
 import glob
-from typing import List, Dict, Optional
+from typing import List
 
 import numpy as np   # type: ignore
 
