@@ -5,7 +5,6 @@
 #
 # [original author: Andre de Luiz Amorim; modifications by Peter Erwin]
 
-import sys
 import copy
 from typing import Union
 

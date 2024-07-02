@@ -10,7 +10,7 @@ ModelDescription class.
 
 from collections import OrderedDict
 
-from typing import List, Any
+from typing import List
 
 from .descriptions import ParameterDescription, FunctionDescription, FunctionSetDescription, ModelDescription
 
