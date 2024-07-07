@@ -15,7 +15,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 from astropy.io import fits
 
-from pyimfit import Imfit, make_imfit_function, gaussian_psf
+from pyimfit import Imfit, make_imfit_function
 from pyimfit import ParameterDescription, FunctionDescription, FunctionSetDescription
 from pyimfit import SimpleModelDescription, ModelDescription
 from ..pyimfit_lib import make_imfit_function
@@ -111,28 +111,6 @@ def test_bad_instantiation():
         imfit = Imfit()
     with pytest.raises(ValueError):
         imfit = Imfit(1.0)
-
-
-# def test_fitting():
-#     psf = gaussian_psf(2.5, size=9)
-#     this_model = create_model()
-#     imfit = Imfit(this_model, psf=psf, quiet=True)
-#
-#     noise_level = 0.1
-#     shape = (100, 100)
-#     image = imfit.getModelImage(shape)
-#     noise = image * noise_level
-#     image += (np.random.random(shape) * noise)
-#     mask = np.zeros_like(image, dtype='bool')
-#
-#     imfit.fit(image, noise, mask)
-#     model_fitted = imfit.getModelDescription()
-#
-#     orig_params = get_model_param_array(model_orig)
-#     fitted_params = get_model_param_array(model_fitted)
-#
-#     assert_allclose(orig_params, fitted_params, rtol=noise_level)
-
 
 
 # here, we load the data, then test for pre-fit conditions

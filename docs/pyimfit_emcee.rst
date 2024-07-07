@@ -19,6 +19,15 @@ Some initial setup for nice-looking plots:
    matplotlib.rcParams['ytick.labelsize'] = 16
    matplotlib.rcParams['axes.labelsize'] = 20
 
+::
+
+   Populating the interactive namespace from numpy and matplotlib
+
+
+   /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/IPython/core/magics/pylab.py:160: UserWarning: pylab import has clobbered these variables: ['mean']
+   `%matplotlib` prevents importing * from pylab and numpy
+     "\n`%matplotlib` prevents importing * from pylab and numpy"
+
 Create image-fitting model using PyImfit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -86,6 +95,11 @@ I_0, sigma):
    for i in range(len(p_bestfit) - 1):
        print("{0:g}".format(p_bestfit[i]), end=", ")
    print("{0:g}\n".format(p_bestfit[-1]))
+
+::
+
+   Best-fitting parameter values:
+   5.64339, 6.18794, 155.354, 0.0950157, 268.92, 1.00772
 
 Define log-probability functions for use with emcee
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -218,9 +232,19 @@ I_0 values):
 
    PlotAllWalkers(sampler.chain, 3, 'ellipticity')
 
+.. figure:: pyimfit_emcee_files/pyimfit_emcee_32_0.png
+   :alt: png
+
+   png
+
 .. code:: python
 
    PlotAllWalkers(sampler.chain, 4, 'I_0')
+
+.. figure:: pyimfit_emcee_files/pyimfit_emcee_33_0.png
+   :alt: png
+
+   png
 
 Define the “converged” subset of the chains as step numbers
 :math:`\ge 200`, and merge all the individual walkers:
@@ -229,6 +253,10 @@ Define the “converged” subset of the chains as step numbers
 
    converged_samples = sampler.chain[:, 200:, :].reshape((-1, ndims))
    print("Number of samples in \"converged\" chain = {0}".format(len(converged_samples)))
+
+::
+
+   Number of samples in "converged" chain = 30000
 
 Corner plot of converged MCMC samples
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -255,6 +283,11 @@ the plot]:
 .. code:: python
 
    fig = corner.corner(converged_samples, labels=cornerLabels, range=ranges, truths=p_bestfit)
+
+.. figure:: pyimfit_emcee_files/pyimfit_emcee_40_0.png
+   :alt: png
+
+   png
 
 One thing to notice is that the PA values are running up against our
 (rather narrow) limits for that parameter, so a next step might be to

@@ -13,6 +13,23 @@ https://stackoverflow.com/questions/72764375/symbol-not-found-using-dlopen-in-py
 the C++ code with Python."
 
 
+* Problems with missing symbols when importing pyimfit into Python session -- Github CI
+
+At one point (late June 2024), the Github CI action was failing at the "test import" stage with"
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/runner/work/pyimfit/pyimfit/pyimfit/__init__.py", line 4, in <module>
+    from .pyimfit_lib import convolve_image, make_imfit_function, ModelObjectWrapper  # type: ignore
+ImportError: /home/runner/work/pyimfit/pyimfit/pyimfit/pyimfit_lib.cpython-39-x86_64-linux-gnu.so: undefined symbol: _Z12AddFunctionsP11ModelObjectRKSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS7_EERS9_RS1_IiSaIiEEbiRS1_ISt3mapIS7_S7_St4lessIS7_ESaISt4pairIKS7_S7_EEESaISN_EERKS1_IbSaIbEE
+
+It's not clear to me whether this was a mismatched-compiler issue, or some change in
+how AddFunctions was declared between the previous compilation of the Linux version
+of libifmit.a and now.
+
+This was fixed by using a recompiled version of libimfit.a, generated on a Linux VM.
+
+
 
 * Problems with missing symbols when importing pyimfit into Python session:
 

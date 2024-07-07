@@ -19,7 +19,8 @@ Additional bug reports and suggestions from André Luiz de Amorim, Giulia
 Savorgnan, David Streich, Guillermo Barro, Sergio Pascual, Lee Kelvin,
 Colleen Gilhuly, Semyeong Oh, Benne Holwerde, David Wilman, Iskren
 Georgiev, Corentin Schreiber, Dan Prole, Alex Borlaff, and Daria Kozlova
-are gratefully appreciated.
+are gratefully appreciated. Thanks also to Wolf Vollprecht for help with
+figuring out the building of conda package versions.
 
 Data Sources
 ~~~~~~~~~~~~
@@ -52,6 +53,10 @@ PyImfit makes use of the following external libraries:
 -  `GNU Scientific Library (GSL) <https://www.gnu.org/software/gsl/>`__
 
 -  `NLopt <https://nlopt.readthedocs.io/en/latest/>`__
+
+In addition, the DattathriPeanut3D image function was originaly
+developed by Shashank Dattathri, and is described in `Dattathri et
+al. (2024) <https://ui.adsabs.harvard.edu/abs/2024MNRAS.530.1195D/abstract>`__.
 
 Minpack
 '''''''

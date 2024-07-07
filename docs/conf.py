@@ -22,13 +22,13 @@ sys.path.insert(0, os.path.abspath('.pyimfit'))
 # -- Project information -----------------------------------------------------
 
 project = 'PyImfit'
-copyright = '2019-2023, Peter Erwin'
+copyright = '2019-2024, Peter Erwin'
 author = 'Peter Erwin'
 
 # The short X.Y version
-version = '0.13'
+version = '0.9'
 # The full version, including alpha/beta/rc tags
-release = '0.13.0'
+release = '0.9.0'
 
 
 # -- General configuration ---------------------------------------------------

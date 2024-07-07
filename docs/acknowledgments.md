@@ -25,7 +25,8 @@ for help with figuring out the building of conda package versions.
 ### Data Sources
 
 Sample FITS images for demonstration and testing use are taken
-from Data Release 7 of the Sloan Digital Sky Survey. Funding for the creation and distribution of the Sloan
+from Data Release 7 of the Sloan Digital Sky Survey. Funding for the 
+creation and distribution of the Sloan
 Digital Sky Survey Archive has been provided by the Alfred P. Sloan
 Foundation, the Participating Institutions, the National Aeronautics and
 Space Administration, the National Science Foundation, the U.S.
@@ -54,6 +55,9 @@ PyImfit makes use of the following external libraries:
    - [GNU Scientific Library (GSL)](https://www.gnu.org/software/gsl/)
    
    - [NLopt](https://nlopt.readthedocs.io/en/latest/)
+
+In addition, the DattathriPeanut3D image function was originaly developed by Shashank
+Dattathri, and is described in [Dattathri et al. (2024)](https://ui.adsabs.harvard.edu/abs/2024MNRAS.530.1195D/abstract).
 
 ##### Minpack
 This product includes software developed by the University of Chicago, as Operator of
