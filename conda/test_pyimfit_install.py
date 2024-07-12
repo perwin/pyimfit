@@ -5,6 +5,7 @@
 # unpacks this if it isn't in the lcoal directory).
 
 import sys, os, tarfile
+import argparse
 import requests
 import pyimfit
 from astropy.io import fits
@@ -21,6 +22,18 @@ CONFGI_FILE = "config_sersic_ic3478_256.dat"
 
 
 def main( argv ):
+    # parser = argparse.ArgumentParser(
+    #     prog='ProgramName',
+    #     description='What the program does',
+    #     epilog='Text at the bottom of help')
+
+    parser = argparse.ArgumentParser(prog="test_pyimfit_install.py")
+    parser.add_argument("--solver", help="Tell Imfit whch solver (LM, NM, DE) to use [default = LM]", default="LM")
+    args = parser.parse_args()
+    if args.solver not in ["lm", "LM", "nm", "NM", "de", "DE"]:
+        print("ERROR: unrecodnized solver name ('{0}')".format(args.solver))
+        return -1
+
     # By default, we look for a pre-existing Imfit examples/ subdirectory in the current directory
     # If not found, we look in BASE_DIR_ERWIN; if not found there, we download and unpack it
     # from the Imfit webpage at MPE
@@ -65,7 +78,17 @@ def main( argv ):
         model_desc = pyimfit.ModelDescription.load(configFile)
         imfit_fitter = pyimfit.Imfit(model_desc)
         print("Doing the fit...")
-        fit_result = imfit_fitter.fit(image_data, gain=4.725, read_noise=4.3, original_sky=130.14)
+        if args.solver in ["lm", "LM"]:
+            print("Using Levenberg-Marquardt solver...")
+            fit_result = imfit_fitter.fit(image_data, gain=4.725, read_noise=4.3, original_sky=130.14)
+        elif args.solver in ["nm", "NM"]:
+            print("Using Nelder-Mead solver...")
+            fit_result = imfit_fitter.fit(image_data, gain=4.725, read_noise=4.3, original_sky=130.14,
+                                          solver="NM")
+        elif args.solver in ["de", "DE"]:
+            print("Using Differential Evolution solver...")
+            fit_result = imfit_fitter.fit(image_data, gain=4.725, read_noise=4.3, original_sky=130.14,
+                                          solver="DE")
         print(fit_result)
         print("Done!\n")
 
