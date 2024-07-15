@@ -149,7 +149,7 @@ cdef extern from "solver_results.h":
         mp_result* GetMPResults( )
         bool ErrorsPresent( )
         void GetErrors( double *errors )
-        int GetNFunctionEvals
+        int GetNFunctionEvals()
 
 
 cdef extern from "dispatch_solver.h":

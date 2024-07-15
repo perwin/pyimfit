@@ -651,6 +651,7 @@ class Imfit( object ):
             result.solverName = self._lastSolverUsed
             result.fitConverged = self.fitConverged
             result.nIter = self.nIter
+            result.nFuncEvals = self.nFuncEvals
             result.fitStat = self.fitStatistic
             result.fitStatReduced = self.reducedFitStatistic
             result.aic = self.AIC
@@ -762,6 +763,14 @@ class Imfit( object ):
         int: number of solver iterations during fit.
         """
         return self._modelObjectWrapper.nIter
+
+
+    @property
+    def nFuncEvals(self):
+        """
+        int: number of 'function evaluations' (model-image computations) during fit.
+        """
+        return self._modelObjectWrapper.nFuncEvals
 
 
     @property

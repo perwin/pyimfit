@@ -3,7 +3,38 @@ PLAN:
 ** GENERAL/FUTURE TO-DO
 
 [ ] Add indications of n_iterations to FitResult output in case of NM or DE fits
+
+    solverResults.GetNFunctionEvals
+
     -- currently, FitResult.nIter = -1 when they succeed
+    fitting.py: Imfit.nIter
+        self._modelObjectWrapper.nIter
+       _modelObjectWrapper is set up by _setupModel
+        self._modelObjectWrapper = ModelObjectWrapper(...)
+
+    pyimfit_lib.pyx: ModelObjectWrapper class
+from .imfit_lib cimport Convolver, ModelObject, SolverResults, DispatchToSolver
+    cdef SolverResults *_solverResults
+    cdef mp_result *_fitResult
+
+    fit() method:
+        if mode == 'LM':
+            self._fitResult = self._solverResults.GetMPResults()
+            if self._solverResults.ErrorsPresent():
+                self._solverResults.GetErrors(self._fitErrorsVect)
+
+    @property
+    def nIter(self):
+        if self.fittedLM:
+            return self._fitResult.niter
+        else:
+            return -1
+
+    [x] Add retrieval and storage of nFuncEvals in Imfit class
+    [x] Add code to print out nFuncEvals
+
+    [ ] Figure out how to retain number of iterations/generations when NM or DE fit is done
+        and save it in the FitResult object.
 
 
 [X] Add ftol keyword to fitting.py --

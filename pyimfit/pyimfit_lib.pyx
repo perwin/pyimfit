@@ -10,8 +10,6 @@
 
 # cython: language_level=3
 
-from __future__ import print_function
-
 # the following is so we can use Cython decorators
 cimport cython
 
@@ -312,6 +310,7 @@ cdef class ModelObjectWrapper( object ):
     cdef SolverResults *_solverResults
     cdef mp_result *_fitResult
     cdef int _fitStatus
+    cdef int _nFuncEvals
 
     cdef double[::1] _imageData
     cdef double[::1] _errorData
@@ -344,6 +343,7 @@ cdef class ModelObjectWrapper( object ):
         self._fitMode = None
         self._freed = False
         self._fitStatus = 0
+        self._nFuncEvals = 0
 
         if not isinstance(model_descr, ModelDescription):
             raise ValueError('model_descr must be a ModelDescription object.')
@@ -738,6 +738,7 @@ cdef class ModelObjectWrapper( object ):
         self._fitMode = mode
         self._fitted = True
         self._modelImageComputed = True
+        self._nFuncEvals = self._solverResults.GetNFunctionEvals()
 
 
     def doBootstrapIterations( self, int nIters, double ftol=1e-8, bool verboseFlag=False,
@@ -907,11 +908,17 @@ cdef class ModelObjectWrapper( object ):
 
 
     @property
+    def nFuncEvals(self):
+        # this is initialized to 0, and then set to result from doing fit
+        return self._nFuncEvals
+
+
+    @property
     def nFev(self):
         if self.fittedLM:
             return self._fitResult.nfev
         else:
-            return -1
+            return 0
 
 
     @property
