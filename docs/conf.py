@@ -26,9 +26,9 @@ copyright = '2019-2024, Peter Erwin'
 author = 'Peter Erwin'
 
 # The short X.Y version
-version = '0.9'
+version = '0.99'
 # The full version, including alpha/beta/rc tags
-release = '0.9.0'
+release = '0.99.0'
 
 
 # -- General configuration ---------------------------------------------------
