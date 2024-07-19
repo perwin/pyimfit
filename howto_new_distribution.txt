@@ -70,13 +70,23 @@ Working by default in ~/coding/pyimfit on Mac.
 
 7. See if updated version passes Github Workflows CI tests
 
-8. Generate source distribution and Mac binary wheels on Mac, and upload to PyPI:
-    A. test version:
+
+8.A. Generate source distribution and Mac binary wheels on Intel Mac, and upload to PyPI:
+    1. test version:
         $ ./make_upload.py --test-upload x.x.x   [where "x.x.x" = version number]
-    B. For real:
+    2. For real:
         $ ./make_upload.py --upload x.x.x   [where "x.x.x" = version number]
 
+8.B. Same, on arm64 Mac
+    1. test version:
+        $ ./make_upload.py --test-upload x.x.x   [where "x.x.x" = version number]
+    2. For real:
+        $ ./make_upload.py --upload x.x.x   [where "x.x.x" = version number]
+
+
 9. Test installation via pip
+
+pip install -i https://test.pypi.org/simple/ pyimfit==0.9.0
 
 
 Note that we can in principle upload conda packages to anaconda from either Intel or arm64 mac.
