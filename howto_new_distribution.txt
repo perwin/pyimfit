@@ -71,18 +71,18 @@ Working by default in ~/coding/pyimfit on Mac.
 7. See if updated version passes Github Workflows CI tests
 
 
-8.A. Generate source distribution and Mac binary wheels on Intel Mac, and upload to PyPI:
-    1. test version:
-        $ ./make_upload.py --test-upload x.x.x   [where "x.x.x" = version number]
-    2. For real:
-        $ ./make_upload.py --upload x.x.x   [where "x.x.x" = version number]
+8.A. Generate source distribution and Mac binary wheels on Intel Mac:
+    $ ./make_upload.py x.x.x   [where "x.x.x" = version number]
 
 8.B. Same, on arm64 Mac
-    1. test version:
-        $ ./make_upload.py --test-upload x.x.x   [where "x.x.x" = version number]
-    2. For real:
-        $ ./make_upload.py --upload x.x.x   [where "x.x.x" = version number]
+    $ ./make_upload.py x.x.x   [where "x.x.x" = version number]
 
+8.C. Copy wheels tp one Mac (arm64 to Intel, or vice-versa)
+    copy binary wheels to ~/coding/pyimfit/dist/
+
+9. Upload wheels to PyPI
+    $ ./make_upload.py x.x.x --skip-build --test-upload
+    $ ./make_upload.py x.x.x --skip-build --upload
 
 9. Test installation via pip
 

@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 #
 
-import sys, optparse, subprocess, platform
+import sys, optparse, subprocess, platform, glob
+
+distDir = "/Users/erwin/coding/pyimfit/dist/"
 
 WHEEL_NAME_TEMPLATE = "pyimfit-{0}-cp{1}-cp{1}-{2}.whl"
+WHEEL_PREFIX_TEMPLATE = "pyimfit-{0}-"
 # delocate-wheel -w fixed_wheels -v pyimfit-${VERSION_NUM}-cp312-cp312-${WHEEL_SUFFIX}.whl
 
 def main( argv=None ):
@@ -74,9 +77,9 @@ def main( argv=None ):
         print(cmdLine)
         result = subprocess.run([cmdLine], shell=True)
         # binary wheels
-        for pythonVersion in pythonVersionList:
-            vname = pythonVersion.replace(".", "")
-            wheelname = WHEEL_NAME_TEMPLATE.format(versionNum, vname, wheelSuffix)
+        wheel_prefix = WHEEL_PREFIX_TEMPLATE.format(versionNum)
+        wheelList = glob.glob(distDir + "{0}*.whl".format(wheel_prefix))
+        for wheelname in wheelList:
             cmdLine = "python3 -m twine upload {0} dist/{1}".format(repoString, wheelname)
             print(cmdLine)
             result = subprocess.run([cmdLine], shell=True)
