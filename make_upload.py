@@ -31,7 +31,7 @@ def main( argv=None ):
     if proctype == "arm":
         usingAppleSilicon = True
         prelimString = "export _PYTHON_HOST_PLATFORM='macosx-11.0-arm64' ; export ARCHFLAGS='-arch arm64' ; "
-        wheelSuffix = "macosx_11_arm64"
+        wheelSuffix = "macosx_11_0_arm64"
         pythonVersionList = ["3.10", "3.11", "3.12"]
     else:
         usingAppleSilicon = False
