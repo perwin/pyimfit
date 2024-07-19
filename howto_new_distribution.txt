@@ -96,15 +96,15 @@ For the time being, it's probably best to focus on Intel mac, since we run the L
 10. Generate conda packages on Intel Mac
     A. [mac-x86] cd conda
     B. [mac-x86] Update rattler_setup/recipe.yaml file [e.g., update version number]
-    C. [mac-x86] rm -rf output
-    D. [mac-x86] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
+#     C. [mac-x86] rm -rf output
+    C. [mac-x86] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
 
 11. Generate conda packages on arm64 Mac
     A. [mac-arm64] cd conda
     B. [mac-arm64] Update rattler_setup/recipe.yaml file [e.g., update version number]
-    C. [mac-arm64] rm -rf output
-    D. [mac-arm64] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
-    E. [if using Intel Mac for uploading:] Transfer conda packages to Intel Mac; place them in
+#    C. [mac-arm64] rm -rf output
+    C. [mac-arm64] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
+    D. [if using Intel Mac for uploading:] Transfer conda packages to Intel Mac; place them in
         .../pyimfit/conda/output/osx-arm64/
 
 12. Generate conda packages on Linux VM
