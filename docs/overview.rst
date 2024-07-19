@@ -395,6 +395,27 @@ a Markov Chain Monte Carlo code such as
            bestfit_parameters_errs = results.paramErrs
            bestfit_parameters_errs = imfit_fitter.getParameterErrors()
 
+4. You can also see all the fit information at once, in a compact form,
+   by simply printing the ``FitResult`` object:
+
+   ::
+
+        print(results)
+
+        aic: 10460466.651003554
+        bic: 10460566.640878275
+        fitConverged: True
+        fitStat: 10460444.646974497
+        fitStatReduced: 159.64051349827542
+        nFuncEvals: 399
+        nIter: 34
+        paramErrs: array([0.01109552, 0.01360443, 0.09126936, 0.00065235, 0.00091312, 0.10136475, 0.0384935 , 0.21932252, 0.00158444, 0.,0.01976693])
+        params: array([1.28592487e+02, 1.29090431e+02, 2.13445827e+01, 2.21679174e-01, 2.05974929e-01, 3.17125548e+01, 4.19478455e+01, 1.88509744e+01, 2.34454487e-01, 5.00000000e+02, 9.75043337e+00])
+        solverName: 'LM'
+
+Note that the ``nIter`` value only has meaning for the
+Levenberg-Marquardt solver.
+
 Other things you might be interested in:
 
 1. Get the best-fitting model image (a 2D NumPy array)
@@ -457,7 +478,7 @@ data. In this case, you can call the ``getModelImage`` method on the
 
 where ``image_shape`` is a 2-element integer tuple defining the image
 shape in the usual NumPy fashion (i.e., an image with n_rows and
-n_colums has shape=(n_columns,n_rows)).
+n_colums has shape=(n_columns, n_rows)).
 
 If the ``Imfit`` object (``imfitter``) already has a data image assigned
 to it, then the output image will have the same dimensions as the data

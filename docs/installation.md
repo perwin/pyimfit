@@ -7,7 +7,8 @@ Python 3, then you don't need to explicitly specify `pip3`.
 
 ### Standard Installation: macOS
 
-A precompiled Intel (x86-64) binary version ("wheel") of PyImfit for macOS can be installed from PyPI via `pip`:
+Precompiled Intel (x86-64) and Apple silicon (arm64) binary versions ("wheels") of PyImfit for macOS 
+can be installed from PyPI via `pip`:
 
     $ pip3 install pyimfit
 
@@ -19,17 +20,6 @@ by `pip` if they are not already present):
 
 Astropy is also useful for reading in FITS files as numpy arrays (and is required by the
 unit tests).
-
-#### Installation on Apple Silicon (e.g., M1, M2) Macs
-
-At present, the precompiled version of PyImfit is an x86-64 ("Intel") binary. This will not
-work with arm64 (Apple Silicon, including M1 and M2 chips) versions of Python. However, you *can* 
-run PyImfit on an arm64-based Mac by running an x86-64 version of Python. How you do this depends 
-on how you prefer to install and use Python (e.g., python.org installers vs conda vs Homebrew); there
-are various suggestions available online for how to do this, depending on how you prefer to install Python.
-
-(The plan is to have a future release of PyImfit that natively supports arm64 as well as x86-64.)
-
 
 
 ### Standard Installation: Linux
@@ -45,3 +35,9 @@ If the installation fails with a message containing something like "fatal error:
 No such file or directory", then you may be missing headers files and static libraries for
 Python development; see [this Stackexchange question](https://stackoverflow.com/questions/21530577/fatal-error-python-h-no-such-file-or-directory)
 for guidance on how to do that.
+
+
+### Conda Installations:
+
+TBD
+
