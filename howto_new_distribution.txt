@@ -79,12 +79,16 @@ GENERAL PREP
 GENERATE WHEELS FOR PIP INSTALLATION:
 
 8.A. Generate source distribution and Mac binary wheels on Intel Mac:
-    $ ./make_upload.py x.x.x   [where "x.x.x" = version number]
+    [max-x86] $ ./make_upload.py x.x.x   [where "x.x.x" = version number]
 
 8.B. Same, on arm64 Mac
-    $ ./make_upload.py x.x.x   [where "x.x.x" = version number]
+    [mac-arm64] $ ./make_upload.py x.x.x   [where "x.x.x" = version number]
 
-8.C. Copy wheels tp one Mac (arm64 to Intel, or vice-versa)
+8.C. Same, on Linux VM
+    [vm] $ git pull
+    [vm] $ ./make_upload.py x.x.x   [where "x.x.x" = version number]
+
+8.D. Copy wheels tp one Mac (arm64 to Intel, or vice-versa)
     copy binary wheels to ~/coding/pyimfit/dist/
 
 9. Upload wheels to PyPI
@@ -92,7 +96,10 @@ GENERATE WHEELS FOR PIP INSTALLATION:
     $ ./make_upload.py x.x.x --skip-build --upload
 
 10. Test installation via pip
-    pip install -i https://test.pypi.org/simple/ pyimfit==0.99.0
+    pip3 install --extra-index-url https://test.pypi.org/simple/ pyimfit
+
+    (Note: don't use --index-url or -i, because that tells Pip to *only* look at that
+    URL, causing it to be unable to find things like setuptools)
 
 
 GENERATE CONDA PACKAGES:
@@ -122,6 +129,14 @@ For the time being, it's probably best to focus on Intel mac, since we run the L
         H. [vm] tar -cf linux-64.tar linux-64 && gzip linux-64.tar
     F. [if using Intel Mac for uploading:] Transfer conda packages to Intel Mac:
         $ cp ~/vagrant/iraf/transfer/pyimfit-<VERSION_NUMBER>*.conda ~/coding/pyimfit/conda/output/linux-64/
+
+    ALTERNATIVE: Do this on ex-sol.mpe.mpg.de
+    A. ssh erwin@ex-sol.mpe.mpg.de
+    B. cd data2/build/pyimfit
+    C. git pull
+    D. cd conda
+    E. rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
+    F. Transfer newly-generated conda packages from conda/output/linux64/ using Transmit
 
 
 UPLOAD CONDA PACKAGES:

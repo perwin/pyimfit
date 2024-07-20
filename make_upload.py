@@ -80,7 +80,7 @@ def main( argv=None ):
         wheel_prefix = WHEEL_PREFIX_TEMPLATE.format(versionNum)
         wheelList = glob.glob(distDir + "{0}*.whl".format(wheel_prefix))
         for wheelname in wheelList:
-            cmdLine = "python3 -m twine upload {0} dist/{1}".format(repoString, wheelname)
+            cmdLine = "python3 -m twine upload {0} {1}".format(repoString, wheelname)
             print(cmdLine)
             result = subprocess.run([cmdLine], shell=True)
 

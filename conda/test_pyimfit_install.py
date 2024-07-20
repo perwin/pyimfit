@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 
-# Simple test script to see if we can a) import pymfit; and b) run a simple fit
-# using it. Uses files in the default Imfit examples/ directory (downloads and
-# unpacks this if it isn't in the lcoal directory).
+# Simple test script to see if we can a) import pymfit; and b) run a simple, single-Sersic fit
+# using it. Uses files in the default Imfit examples/ directory (downloads and unpacks this if
+# it isn't in the lcoal directory).
 
-import sys, os, tarfile
-import argparse
-import requests
+import sys, os, tarfile, argparse
 import pyimfit
+import requests
 from astropy.io import fits
 
 
 # UPDATE THIS TO POING TO WHERE THE IMFIT-EXAMPLES DIRECTORY IS LOCATED
+# (if BASE_DIR_ERWIN does not exist/cannot be found, the files will be downloaded from EXAMPLES_URL)
 BASEDIR_PACKAGE = "../pyimfit/data/"
 BASE_DIR_ERWIN = "/Users/erwin/coding/imfit/examples/"
 EXAMPLES_URL = "https://www.mpe.mpg.de/~erwin/resources/imfit/imfit_examples.tar.gz"
@@ -47,7 +47,7 @@ def main( argv ):
         baseDir = BASE_DIR_ERWIN
         print("Using files in BASE_DIR_ERWIN examples/ directory.")
     else:
-        print("ERROR: Unable to locate pre-existing examples directory.")
+        print("WARNING: Unable to locate pre-existing examples directory.")
         print("Downloading and unpacking examples directory...")
         r = requests.get(EXAMPLES_URL, allow_redirects=True)
         open('examples.tar.gz', 'wb').write(r.content)

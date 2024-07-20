@@ -45,9 +45,9 @@ baseDir = os.getcwd() + "/"
 EXTRA_PATH = baseDir + "extra_libs/"
 if sys.platform == 'darwin':
     MACOS_COMPILATION = True
-    PREBUILT_PATH = baseDir + "prebuilt/macos/"
     # the following should be either "i386" for Intel or "arm" for Apple Silicon
     MACOS_PROCESSOR = platform.processor()
+    PREBUILT_PATH = baseDir + "prebuilt/macos/"
 else:
     MACOS_COMPILATION = False
     PREBUILT_PATH = baseDir + "prebuilt/linux64/"
