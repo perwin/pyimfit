@@ -21,6 +21,9 @@ by `pip` if they are not already present):
 Astropy is also useful for reading in FITS files as numpy arrays (and is required by the
 unit tests).
 
+Note that binary installs for Apple silicon (arm64) Macs are only available for Python version
+3.10 and later (binary installs for Intel Macs are also available for Python 3.8 and 3.9).
+
 
 ### Standard Installation: Linux
 
@@ -43,3 +46,4 @@ PyImfit can be installed into conda environments on macOS and Linux, via:
 
     $ conda install -c conda-forge perwin::pyimfit
 
+Note that conda installation is only available for Python version 3.10 and later.
