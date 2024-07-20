@@ -101,7 +101,6 @@ PyImfit can also be installed into a conda environment on macOS or Linux, via
 
     $ conda install -c conda-forge perwin::pyimfit
 
-**[Note that conda installation is currently a bit experimental, but should be standard soon]**
 
 
 ### Building the Whole Thing from Source

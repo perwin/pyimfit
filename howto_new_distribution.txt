@@ -10,7 +10,9 @@ Working by default in ~/coding/pyimfit on Mac.
 [opt] = possibly optional (i.e., do only "IF NECESSARY")
 
 
-[opt]1. Generate updated libimfit.a for macOS [x86-64], IF NECESSARY
+GENERAL PREP
+
+[opt]1.a Generate updated libimfit.a for macOS [x86-64], IF NECESSARY
     A. [mac-x86] cd imfit
     B. [mac-x86] git pull origin master   [if necessary]
     C. [mac-x86] scons --clang-openmp libimfit.a
@@ -18,7 +20,7 @@ Working by default in ~/coding/pyimfit on Mac.
     # copy updated Imfit C++ header files
     E. [mamac-x86c] cd .. ; ./update_from_imfit.sh
 
-[opt]1. Generate updated libimfit.a for macOS [arm64], IF NECESSARY
+[opt]1.b Generate updated libimfit.a for macOS [arm64], IF NECESSARY
     A. [mac-arm64] cd imfit
     B. [mac-arm64] git pull origin master   [if necessary]
     C. [mac-arm64]] scons --clang-openmp libimfit.a
@@ -50,11 +52,14 @@ Working by default in ~/coding/pyimfit on Mac.
     [vm] $ pip3 install --user -e ./
     [vm] $ cd pyimfit/tests ; pytest
 
-5. Update version number in pyimfit/__init__.py
+5. Update version numbers
+    A. Update version number in pyimfit/__init__.py
+    B. Update version number in docs/conf.py
+    C. Update version number in conda/rattler_setup/recipe.yaml
 
 6. Generate new version of docs [docs/howto_generate_docs.txt]
     A. cd docs
-    B. Update version number in conf.py
+    (B. Update version number in conf.py -- if not done in stage 5)
     C. IF the Jupyter notebook files have been updated, generate markdown versions with
         [NOTE: this currently works on my Intel MBPro *if* I do it from the py312_working conda
         environment]
@@ -71,6 +76,8 @@ Working by default in ~/coding/pyimfit on Mac.
 7. See if updated version passes Github Workflows CI tests
 
 
+GENERATE WHEELS FOR PIP INSTALLATION:
+
 8.A. Generate source distribution and Mac binary wheels on Intel Mac:
     $ ./make_upload.py x.x.x   [where "x.x.x" = version number]
 
@@ -84,45 +91,53 @@ Working by default in ~/coding/pyimfit on Mac.
     $ ./make_upload.py x.x.x --skip-build --test-upload
     $ ./make_upload.py x.x.x --skip-build --upload
 
-9. Test installation via pip
+10. Test installation via pip
+    pip install -i https://test.pypi.org/simple/ pyimfit==0.99.0
 
-pip install -i https://test.pypi.org/simple/ pyimfit==0.9.0
 
+GENERATE CONDA PACKAGES:
 
 Note that we can in principle upload conda packages to anaconda from either Intel or arm64 mac.
 The following steps assume we are doing the upload from Intel mac.
 For the time being, it's probably best to focus on Intel mac, since we run the Linux VM there.
 
-10. Generate conda packages on Intel Mac
+11. Generate conda packages on Intel Mac
     A. [mac-x86] cd conda
-    B. [mac-x86] Update rattler_setup/recipe.yaml file [e.g., update version number]
-#     C. [mac-x86] rm -rf output
-    C. [mac-x86] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
+    B. [mac-x86] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
 
-11. Generate conda packages on arm64 Mac
-    A. [mac-arm64] cd conda
-    B. [mac-arm64] Update rattler_setup/recipe.yaml file [e.g., update version number]
-#    C. [mac-arm64] rm -rf output
+12. Generate conda packages on arm64 Mac
+    A. [mac-arm64] git pull   (to get e.g. updated version numbers)
+    B. [mac-arm64] cd conda
     C. [mac-arm64] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
     D. [if using Intel Mac for uploading:] Transfer conda packages to Intel Mac; place them in
         .../pyimfit/conda/output/osx-arm64/
 
-12. Generate conda packages on Linux VM
+13. Generate conda packages on Linux VM (Intel Mac: /Users/erwin/vagrant/iraf)
     A. [vm] cd /home/vagrant/build/pyimfit
-    B. [vm] git pull origin master   [if necessary]
+    B. [vm] git pull   (to get e.g. updated version numbers)
     C. [vm] cd conda
-    D. [vm] rm -rf output
-    E. Update rattler_setup/recipe.yaml file [e.g., update version number], if necessary
-    F. [vm] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
-    G. [vm] cd output
-    H. [vm] tar -cf linux-64.tar linux-64 && gzip linux-64.tar
-    I. [vm] cp linux-64.tar.gz /vagrant/transfer/
-    K. [mac-x86] cd /Users/erwin/coding/pyimfit/conda
-    K. [mac-x86] tar -xf ~/vagrant/iraf/transfer/linux-64.tar.gz -C output
+    D. [vm] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
+    E. [vm] Transfer new package files to Mac
+        $ cp output/linux-64/pyimfit-<VERSION_NUMBER>*.conda /vagrant/transfer
+        H. [vm] tar -cf linux-64.tar linux-64 && gzip linux-64.tar
+    F. [if using Intel Mac for uploading:] Transfer conda packages to Intel Mac:
+        $ cp ~/vagrant/iraf/transfer/pyimfit-<VERSION_NUMBER>*.conda ~/coding/pyimfit/conda/output/linux-64/
 
-12. Upload conda packages to anaconda [from Intel mac
+
+UPLOAD CONDA PACKAGES:
+
+14. Upload conda packages to anaconda [from Intel Mac]
     A. [mac-x86] cd conda
-    A. [mac-x86] conda activate
-    B. [mac-x86] anaconda login
-    C. [mac-x86] anaconda upload output/osx-64/pyimfit-*.conda output/osx-arm64/pyimfit-*.conda output/linux-64/pyimfit-*.conda
+    B. [mac-x86] conda activate
+    C. [mac-x86] anaconda login   [if necessary; not necessary unless starting conda from scratch]
+    D. [mac-x86] anaconda upload output/osx-64/pyimfit-<VERSION>*.conda output/osx-arm64/pyimfit-<VERSION>*.conda output/linux-64/pyimfit-<VERSION>*.conda
 
+15. Test conda installation
+    A. [mac-x86] -- repeat for each of py310, py311, py312
+        $ conda activate py310_test
+        $ conda install -c conda-forge perwin::pyimfit
+        $ cd pyimfit/conda
+        $ ./test_pyimfit_install.py
+        $ conda uninstall pyimfit
+    B. [mac-arm64] -- same
+    c. [vm] -- same

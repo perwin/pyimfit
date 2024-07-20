@@ -14,4 +14,4 @@ from . import utils
 imageFunctionList = get_function_list()
 imageFunctionDict = get_function_dict()
 
-__version__ = "0.99.0"
+__version__ = "1.0.0"

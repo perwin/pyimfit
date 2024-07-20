@@ -36,3 +36,33 @@ was automatically generated as a requirement when pyimfit was built.
 
 (If people for some reason *don't* have anaconda as a default channel, they might
 have trouble finding perwin::pyimfit, so they could try adding "-c anaconda".)
+
+
+
+TROUBLESHOOTING:
+
+[19 July 2024]
+Intel Mac:
+After creating v0.99.0 conda packages and uploading them, installation & testing for
+py310_test and py311_test worked, but installation for py312_test kept failing, with errors like this:
+
+LibMambaUnsatisfiableError: Encountered problems while solving:
+  - nothing provides python_abi 3.11.* *_cp311 needed by pyimfit-0.13.3-py311he7fa5d1_0
+
+Could not solve for environment specs
+The following packages are incompatible
+└─ pyimfit is not installable because there are no viable options
+   ├─ pyimfit [0.13.3|0.99.0] would require
+   │  └─ python_abi 3.11.* *_cp311, which does not exist (perhaps a missing channel);
+   ├─ pyimfit 0.99.0 would require
+   │  └─ python_abi 3.10.* *_cp310, which does not exist (perhaps a missing channel);
+   └─ pyimfit 0.99.0 would require
+      └─ python_abi 3.12.* *_cp312, which does not exist (perhaps a missing channel).
+
+I was able to fix this by *first* installing python_abi, via
+$ conda install -c conda-forge python_abi
+
+[totally unclear why this is an issue]
+
+
+

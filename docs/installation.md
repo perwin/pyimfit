@@ -39,5 +39,7 @@ for guidance on how to do that.
 
 ### Conda Installations:
 
-TBD
+PyImfit can be installed into conda environments on macOS and Linux, via:
+
+    $ conda install -c conda-forge perwin::pyimfit
 
