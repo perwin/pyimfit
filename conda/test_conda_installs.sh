@@ -5,19 +5,23 @@
 
 OS=$(uname -s)
 
-if [[ "$OS" -eq "Darwin" ]]   # macOS
+if [[ "$OS" == "Darwin" ]]   # macOS
 then
+  echo "Running on macOS..."
   WORKING_DIR="$HOME/coding/pyimfit/conda"
   # Figure out which type of macOS architecture we're running under, so we know
   # how to set up conda within this script
   ARCH=$(uname -m)
-  if [[ "$ARCH" -eq "x86_64" ]]
+  if [[ "$ARCH" == "x86_64" ]]
   then
+    echo "   -- Intel!"
     source ~/miniconda3/etc/profile.d/conda.sh
   else
+    echo "   -- Apple silicon!"
     source /opt/miniconda3/etc/profile.d/conda.sh
   fi
 else   # Linux
+  echo "Running on Linux..."
   source ~/miniconda3/etc/profile.d/conda.sh
   WORKING_DIR="$HOME/build/pyimfit/conda"
 fi
@@ -45,3 +49,7 @@ conda install --yes -c conda-forge perwin::pyimfit
 ./test_pyimfit_install.py
 conda uninstall --yes pyimfit
 conda deactivate
+
+echo
+echo "All done!"
+echo
