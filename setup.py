@@ -184,12 +184,13 @@ elif MACOS_PROCESSOR == "i386":
 if MACOS_COMPILATION:
     libraryList = ["imfit"]   # OK, since there's no dynamic-library version of libimfit to confuse the linker
     staticLibraries = [MAC_STATIC_LIBRARY_PATH + libname for libname in
-                     ["libgsl.a", "libgslcblas.a", "libfftw3.a", "libfftw3_threads.a", "libnlopt.a"]]
+                     ["libgsl.a", "libgslcblas.a", "libfftw3.a", "libfftw3_threads.a", 
+                     "libnlopt.a", "libomp.a"]]
 else:   # Linux
     libraryList = ["imfit", "gsl", "gslcblas", "nlopt", "fftw3", "fftw3_threads"]
     staticLibraries = None
-if MACOS_COMPILATION and (compilerName == "clang++"):
-	libraryList.append("omp")
+# if MACOS_COMPILATION and (compilerName == "clang++"):
+# 	libraryList.append("omp")
 
 # note that to link the libimfit.a library, we have to
 #    A. Refer to it using the usual truncated form ("imfit" for filename "libimfit.a")
