@@ -25,7 +25,7 @@ def main( argv=None ):
     (options, args) = parser.parse_args(argv)
     # args[0] = name program was called with
     # args[1] = first actual argument, etc.
-    if len(argv) < 2:
+    if len(args) < 2:
         print("You must supply a version number!\n")
         return None
     versionNum = args[1]

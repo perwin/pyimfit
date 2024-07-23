@@ -366,7 +366,7 @@ setup(
     # NOTE: it's not clear we really need 'numpy' in the install_requires, since we
     # have numpy specified in requirements.txt
     setup_requires=['scons'],
-    install_requires=['numpy', 'scipy'],
+    install_requires=['numpy<2.0', 'scipy'],
     cmdclass={'build_ext': my_build_ext, 'clean': CleanCommand, 'cleanall': CleanAllCommand},
     ext_modules=extensions
 )

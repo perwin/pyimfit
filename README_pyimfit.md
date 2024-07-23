@@ -20,7 +20,7 @@ or Jupyter notebook):
     image_data = fits.getdata(imageFile)
 
     # construct model from config file; construct new Imfit fitter based on model,;
-    model_desc = pyimfit.ModelDescription.load(configFile)
+    model_desc = pyimfit.ModelDescription.load(imfitConfigFile)
 
     # create an Imfit object, using the previously loaded model configuration
     imfit_fitter = pyimfit.Imfit(model_desc)
