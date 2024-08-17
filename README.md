@@ -2,7 +2,9 @@
 
 PyImfit is a Python wrapper for [Imfit](https://github.com/perwin/imfit), a C++-based program for fitting
 2D models to scientific images. It is specialized for fitting astronomical images of galaxies, but can in 
-principle be used to fit any 2D Numpy array of data. 
+principle be used to fit any 2D Numpy array of data. The underlying, Imfit-based library -- and thus the main
+part of PyImfit's computation -- is multithreaded and naturally takes advantage of multiple CPU cores, and can
+thus be very fast.
 
 [Changelog](./CHANGELOG.md)
 
@@ -16,7 +18,7 @@ principle be used to fit any 2D Numpy array of data.
 ## A Simple Example of Use
 
 Assuming you want to fit an astronomical image (stored as a FITS file) named `galaxy.fits` using a model defined
-in an Imfit configuration file named `config_galaxy.dat`:
+in an Imfit configuration file named `config_galaxy.dat` (models can also be defined from within Python):
 
     from astropy.io import fits
     import pyimfit
@@ -48,7 +50,8 @@ in an Imfit configuration file named `config_galaxy.dat`:
 
 
 See the Jupyter notebook `pyfit_emcee.ipynb` in the `docs` subdirectory for
-an example of using PyImfit with the Markov Chain Monte Carlo code [`emcee`](http://dfm.io/emcee/current/).
+an example of using PyImfit with the Markov Chain Monte Carlo code [`emcee`](http://dfm.io/emcee/current/). (Online
+version of notebook available [here](https://pyimfit.readthedocs.io/en/latest/pyimfit_emcee.html).)
 
 Online documentation: [https://pyimfit.readthedocs.io/en/latest/](https://pyimfit.readthedocs.io/en/latest/).
 

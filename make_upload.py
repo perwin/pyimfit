@@ -4,6 +4,7 @@
 import sys, optparse, subprocess, platform, glob
 
 distDir = "/Users/erwin/coding/pyimfit/dist/"
+fixedWheelsDir = distDir + "fixed_wheels/"
 
 WHEEL_NAME_TEMPLATE = "pyimfit-{0}-cp{1}-cp{1}-{2}.whl"
 WHEEL_PREFIX_TEMPLATE = "pyimfit-{0}-"
@@ -78,7 +79,7 @@ def main( argv=None ):
         result = subprocess.run([cmdLine], shell=True)
         # binary wheels
         wheel_prefix = WHEEL_PREFIX_TEMPLATE.format(versionNum)
-        wheelList = glob.glob(distDir + "{0}*.whl".format(wheel_prefix))
+        wheelList = glob.glob(fixedWheelsDir + "{0}*.whl".format(wheel_prefix))
         for wheelname in wheelList:
             cmdLine = "python3 -m twine upload {0} {1}".format(repoString, wheelname)
             print(cmdLine)

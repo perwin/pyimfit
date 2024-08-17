@@ -120,15 +120,18 @@ For the time being, it's probably best to focus on Intel mac, since we run the L
         .../pyimfit/conda/output/osx-arm64/
 
 13. Generate conda packages on Linux VM (Intel Mac: /Users/erwin/vagrant/iraf)
-    A. [vm] cd /home/vagrant/build/pyimfit
-    B. [vm] git pull   (to get e.g. updated version numbers)
-    C. [vm] cd conda
-    D. [vm] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
-    E. [vm] Transfer new package files to Mac
+    A. Set VM memory to 4 GB (via VirtualBox)
+    B. Start up VM
+    C. [vm] cd /home/vagrant/build/pyimfit
+    D. [vm] git pull   (to get e.g. updated version numbers)
+    E. [vm] cd conda
+    F. [vm] rattler-build build --recipe ./rattler_setup --variant-config ./rattler_setup/variant_config.yaml
+    G. [vm] Transfer new package files to Mac
         $ cp output/linux-64/pyimfit-<VERSION_NUMBER>*.conda /vagrant/transfer
         H. [vm] tar -cf linux-64.tar linux-64 && gzip linux-64.tar
-    F. [if using Intel Mac for uploading:] Transfer conda packages to Intel Mac:
+    H. [if using Intel Mac for uploading:] Transfer conda packages to Intel Mac:
         $ cp ~/vagrant/iraf/transfer/pyimfit-<VERSION_NUMBER>*.conda ~/coding/pyimfit/conda/output/linux-64/
+    I. If everything went OK, shut down the VM and reset its memory allocation to 1 GB.
 
     ALTERNATIVE: Do this on ex-sol.mpe.mpg.de
     A. ssh erwin@ex-sol.mpe.mpg.de
