@@ -44,12 +44,13 @@ GENERAL PREP
     [mac-arm64] $ cd pyimfit/tests ; pytest
 
 4. Do new "develop" install and run tests on Linux VM
-    (note: currently we do this using the ubuntu64-16_dev VM because that has the right
-    Python installations, including numpy)
-    [mac] $ cd ~/vagrant/ubuntu64-16_dev/transfer
-    [mac] $ git clone ~/coding/pyimfit pyimfit
-    [vm] $ cd /vagrant/transfer/pyimfit
-    [vm] $ pip3 install --user -e ./
+    (note: currently we do this using the ubuntu64-16_dev VM and our conda installation,
+    because that has the right Python installations, including numpy)
+    [vm] $ cd ~/build
+    [vm] $ git clone https://github.com/perwin/pyimfit.git
+    [vm] $ cd pyimfit
+    [vm] $ conda activate
+    [vm] $ python -m pip install --user -e ./
     [vm] $ cd pyimfit/tests ; pytest
 
 5. Update version numbers
