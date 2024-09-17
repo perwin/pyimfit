@@ -2,8 +2,29 @@
 
 (Formatting and design based on Olivier Lacan's [Keep a CHANGELOG](http://keepachangelog.com/))
 
-**NOTE:** PyImfit is currently in a state of fairly rapid development; minor-version-number
-changes may contain significant changes to the API.
+
+# 1.0.2 -- 2024-09-xx
+
+### Fixed
+Update to descriptions.py to correctly index individual function sets (where there are multiple
+function sets, with one or more having multiple functions). Thanks to Zuyi Chen for identifying
+the problem and suggesting the fix.
+
+
+
+## 1.0.1 -- 2024-07-20
+Official "1.0" release; no dramatic changes from 0.13.
+
+## Added
+Conda packages for macOS and Linux (Python versions 3.10--3.12).
+
+Pre-compiled versions for macOS now include binaries for Apple silicon as well as Intel CPUs.
+
+### Changed
+No longer supporting Python 3.7.
+
+Minor updates to documentation.
+
 
 
 ## 0.13.0 -- 2024-04-27

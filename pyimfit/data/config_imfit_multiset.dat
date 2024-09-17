@@ -1,0 +1,48 @@
+# config file for imfit: multiple function sets with multiple functions
+# this is for testing purposes and is not meant to represent a meaningful model
+
+GAIN			1000
+
+X0              40		35,45
+Y0              40		35,45
+FUNCTION Gaussian
+PA                0		fixed
+ell               0		fixed
+I_0             105		20,150
+sigma           1.5		0.5,2.5
+
+X0              10		35,45
+Y0              10		35,45
+FUNCTION Gaussian
+PA                0		fixed
+ell               0		fixed
+I_0             25		20,150
+sigma            5		0.5,2.5
+FUNCTION Exponential
+PA		          0
+ell               0.5
+I_0		        500
+h		        10
+
+X0              15		10,20
+Y0              10		 5,15
+FUNCTION Gaussian
+PA                0		fixed
+ell               0		fixed
+I_0             95		20,150
+sigma           1.5		0.5,2.5
+FUNCTION Gaussian
+PA                0		fixed
+ell               0		fixed
+I_0             95		20,150
+sigma           1.5		0.5,2.5
+FUNCTION FlatSky
+I_0				100.0	fixed
+
+X0              35		10,20
+Y0              10		 5,15
+FUNCTION Exponential
+PA		          0
+ell               0.5
+I_0		        500
+h		        10

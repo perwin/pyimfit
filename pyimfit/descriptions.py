@@ -1033,7 +1033,9 @@ class ModelDescription(object):
         indices = [0]
         for i in range(self.nFunctionSets - 1):
             functionsThisSet = self._functionSets[i].functionList()
-            indices.append(len(functionsThisSet))
+            # code suggested by Zuyi Chen
+            indices.append(indices[-1] + len(functionsThisSet))
+            # indices.append(len(functionsThisSet))
         return indices
 
 

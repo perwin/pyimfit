@@ -13,7 +13,7 @@ from ..descriptions import ModelDescription, SimpleModelDescription
 
 CONFIG_EXAMPLE_EXPONENTIAL = "../data/config_exponential_ic3478_256.dat"
 CONFIG_EXAMPLE_2SETS = "../data/config_imfit_2gauss_small.dat"
-
+CONFIG_EXAMPLE_MULTISET = "../data/config_imfit_multiset.dat"
 
 
 class TestParameterDescription(object):
@@ -732,6 +732,13 @@ class TestModelDescription(object):
         modeldesc_from_dict = ModelDescription.dict_to_ModelDescription(modelDict_correct)
         modelDict = modeldesc_from_dict.getModelAsDict()
         assert modelDict == modelDict_correct
+
+    def test_functionSetIndices(self):
+        # test that we generate correct functionSetIndices when there are > 1 function sets, some
+        # with multiple functions
+        modeldesc = ModelDescription.load(CONFIG_EXAMPLE_MULTISET)
+        assert modeldesc.functionSetIndices() == [0, 1, 3, 6]
+
 
 
 class TestSimpleModelDescription(object):
