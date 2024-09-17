@@ -3,7 +3,7 @@
 (Formatting and design based on Olivier Lacan's [Keep a CHANGELOG](http://keepachangelog.com/))
 
 
-# 1.0.2 -- 2024-09-xx
+# 1.0.2 -- 2024-09-17
 
 ### Fixed
 Update to descriptions.py to correctly index individual function sets (where there are multiple
