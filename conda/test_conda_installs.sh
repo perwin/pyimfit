@@ -32,21 +32,24 @@ cd $WORKING_DIR
 # Python 3.10
 conda activate py310_test
 conda install --yes -c conda-forge perwin::pyimfit
-./test_pyimfit_install.py
+echo "Running Python 3.10 test (output saved to test_output.txt)..."
+./test_pyimfit_install.py > test_output.txt
 conda uninstall --yes pyimfit
 conda deactivate
 
 # Python 3.11
 conda activate py311_test
 conda install --yes -c conda-forge perwin::pyimfit
-./test_pyimfit_install.py
+echo "Running Python 3.11 test (output saved to test_output.txt)..."
+./test_pyimfit_install.py >> test_output.txt
 conda uninstall --yes pyimfit
 conda deactivate
 
 # Python 3.12
 conda activate py312_test
 conda install --yes -c conda-forge perwin::pyimfit
-./test_pyimfit_install.py
+echo "Running Python 3.12 test (output saved to test_output.txt)..."
+./test_pyimfit_install.py >> test_output.txt
 conda uninstall --yes pyimfit
 conda deactivate
 
