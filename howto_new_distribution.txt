@@ -97,7 +97,7 @@ GENERATE WHEELS FOR PIP INSTALLATION:
     $ ./make_upload.py x.x.x --skip-build --upload
 
 10. Test installation via pip
-    pip3 install --extra-index-url https://test.pypi.org/simple/ pyimfit
+    pip3 install --extra-index-url https://test.pypi.org/simple pyimfit
 
     (Note: don't use --index-url or -i, because that tells Pip to *only* look at that
     URL, causing it to be unable to find things like setuptools)
