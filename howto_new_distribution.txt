@@ -89,8 +89,8 @@ GENERATE WHEELS FOR PIP INSTALLATION:
     [vm] $ git pull
     [vm] $ ./make_upload.py x.x.x   [where "x.x.x" = version number]
 
-8.D. Copy wheels tp one Mac (arm64 to Intel, or vice-versa)
-    copy binary wheels to ~/coding/pyimfit/dist/
+8.D. Copy wheels to one Mac (arm64 to Intel, or vice-versa)
+    copy binary wheels to ~/coding/pyimfit/dist/fixed_wheels/
 
 9. Upload wheels to PyPI
     $ ./make_upload.py x.x.x --skip-build --test-upload
@@ -154,9 +154,9 @@ UPLOAD CONDA PACKAGES:
 15. Test conda installation
     A. [mac-x86] -- repeat for each of py310, py311, py312
         $ conda activate py310_test
-        $ conda install -c conda-forge perwin::pyimfit
+        $ conda install -y -c conda-forge perwin::pyimfit
         $ cd pyimfit/conda
         $ ./test_pyimfit_install.py
-        $ conda uninstall pyimfit
+        $ conda uninstall -y pyimfit
     B. [mac-arm64] -- same
     c. [vm] -- same

@@ -61,6 +61,10 @@ def main( argv=None ):
         print("\nRunning delocate...\n")
         for pythonVersion in pythonVersionList:
             vname = pythonVersion.replace(".", "")
+            if pythonVersion in ["3.12", "3.13"] and not usingAppleSilicon:
+                # special case of Python 3.12 (and 3.13?) on Intel macOS, where the resulting wheel
+                # is named with "macos_10_13"
+                wheelSuffix = "macosx_10_13_x86_64"
             wheelname = WHEEL_NAME_TEMPLATE.format(versionNum, vname, wheelSuffix)
             cmdLine = "cd dist ; delocate-wheel -w fixed_wheels -v {0}".format(wheelname)
             print(cmdLine)
