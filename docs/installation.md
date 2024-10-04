@@ -1,6 +1,6 @@
 # Installation of PyImfit
 
-Note that since PyImfit is only meant to work with Python 3 (specifically, versions 3.8 or
+Note that since PyImfit is only meant to work with Python 3 (specifically, versions 3.10 or
 later), I reference `pip3` instead of just `pip` in
 the example installation commands below. If your version of `pip` automatically installs into
 Python 3, then you don't need to explicitly specify `pip3`.
@@ -20,9 +20,6 @@ by `pip` if they are not already present):
 
 Astropy is also useful for reading in FITS files as numpy arrays (and is required by the
 unit tests).
-
-Note that binary installs for Apple silicon (arm64) Macs are only available for Python version
-3.10 and later (binary installs for Intel Macs are also available for Python 3.8 and 3.9).
 
 
 ### Standard Installation: Linux
@@ -45,5 +42,3 @@ for guidance on how to do that.
 PyImfit can be installed into conda environments on macOS and Linux, via:
 
     $ conda install -c conda-forge perwin::pyimfit
-
-Note that conda installation is only available for Python version 3.10 and later.
