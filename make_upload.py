@@ -22,12 +22,14 @@ def main( argv=None ):
                                       default=False, help="Upload to PyPI)")
     parser.add_option("--skip-build", action="store_false", dest="doBuild",
                                       default=True, help="Skip the build process")
+    parser.add_option("--python", dest="pyVersion", type="str", default=None,
+                      help="Build only for this version of Python [default = 3.10-3.12]")
 
     (options, args) = parser.parse_args(argv)
     # args[0] = name program was called with
     # args[1] = first actual argument, etc.
     if len(args) < 2:
-        print("You must supply a version number!\n")
+        print("You must supply a PyImfit version number!\n")
         return None
     versionNum = args[1]
     # Figure out which type of macOS architecture we're running under
@@ -41,7 +43,9 @@ def main( argv=None ):
         usingAppleSilicon = False
         prelimString = "export _PYTHON_HOST_PLATFORM='macosx-10.9-x86_64' ; export ARCHFLAGS='-arch x86_64' ; "
         wheelSuffix = "macosx_10_9_x86_64"
-        pythonVersionList = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        pythonVersionList = ["3.10", "3.11", "3.12"]
+    if options.pyVersion is not None:
+        pythonVersionList = [options.pyVersion]
 
     if options.doBuild:
         # Make sdist (.tar.gz) and macOS binary wheels

@@ -3,6 +3,13 @@
 (Formatting and design based on Olivier Lacan's [Keep a CHANGELOG](http://keepachangelog.com/))
 
 
+# 1.0.3 -- 2024-10-xx
+
+### Added
+Added support for Numpy version 2. PyImfit should now work with both versions 1 and 2 of Numpy.
+
+
+
 # 1.0.2 -- 2024-09-17
 
 ### Fixed

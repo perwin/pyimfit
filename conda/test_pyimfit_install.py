@@ -5,6 +5,7 @@
 # it isn't in the lcoal directory).
 
 import sys, os, tarfile, argparse
+import numpy
 import pyimfit
 import requests
 from astropy.io import fits
@@ -63,6 +64,7 @@ def main( argv ):
     print("\nStarting test...")
     vinfo = sys.version_info
     print("Python version {0}.{1}".format(vinfo[0], vinfo[1]))
+    print("Numpy version {0}".format(numpy.__version__))
     print("PyImfit version {0}".format(pyimfit.__version__))
 
     filesExist = True

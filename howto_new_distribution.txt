@@ -132,7 +132,7 @@ For the time being, it's probably best to focus on Intel mac, since we run the L
         H. [vm] tar -cf linux-64.tar linux-64 && gzip linux-64.tar
     H. [if using Intel Mac for uploading:] Transfer conda packages to Intel Mac:
         $ cp ~/vagrant/iraf/transfer/pyimfit-<VERSION_NUMBER>*.conda ~/coding/pyimfit/conda/output/linux-64/
-    I. If everything went OK, shut down the VM and reset its memory allocation to 1 GB.
+    I. If everything went OK, shut down the VM and reset its memory allocation to 2 GB.
 
     ALTERNATIVE: Do this on ex-sol.mpe.mpg.de
     A. ssh erwin@ex-sol.mpe.mpg.de

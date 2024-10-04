@@ -360,13 +360,13 @@ setup(
         "Operating System :: POSIX",
         "Intended Audience :: Science/Research",
     ],
-    python_requires='>=3.8',
+    python_requires='>=3.10',
     # setup_requires = temporary local installation in order to run this script
     # install_requires = standard pip installation for general future use
     # NOTE: it's not clear we really need 'numpy' in the install_requires, since we
     # have numpy specified in requirements.txt
     setup_requires=['scons'],
-    install_requires=['numpy<2.0', 'scipy'],
+    install_requires=['numpy', 'scipy'],
     cmdclass={'build_ext': my_build_ext, 'clean': CleanCommand, 'cleanall': CleanAllCommand},
     ext_modules=extensions
 )
