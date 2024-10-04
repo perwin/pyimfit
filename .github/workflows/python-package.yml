@@ -31,7 +31,7 @@ jobs:
       run: |
         # pip versions 23.x and 24.0 break editable installs in this scenario (unable to import
         # previously installed modules such as numpy), for some reason
-#        python -m pip install --upgrade pip==22.3.1
+        # python -m pip install --upgrade pip==22.3.1
         python -m pip install --upgrade pip
         python -m pip install flake8 astropy pytest scons
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
