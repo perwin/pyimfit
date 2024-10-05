@@ -61,12 +61,13 @@ Also useful: [Onine documentation for Imfit](https://imfit.readthedocs.io); and 
 
 ## Requirements and Installation
 
-PyImfit is designed to work with modern versions of Python 3 (3.8 or later on Linux and Intel macOS; 3.10 or later
-on Apple Silicon macOS); no support for Python 2 is planned.
+PyImfit is designed to work with modern versions of Python 3 (3.10 or later)  on Linux and macOS; no support for Python 2 is planned.
 
 ### Standard installation via pip: macOS
 
-A precompiled binary version ("wheel") of PyImfit for macOS can be installed from PyPI via `pip`:
+A precompiled binary version ("wheel") of PyImfit for macOS can be installed from PyPI via `pip` (I'm using
+`pip3` in this example just to ensure it's installed for Python 3; using just `pip` on macOS might try to
+install it into the system's Python 2.7 distribution, which is not what you want):
 
     $ pip3 install pyimfit
 
@@ -103,8 +104,6 @@ for guidance on how to deal with that.
 PyImfit can also be installed into a conda environment on macOS or Linux, via
 
     $ conda install -c conda-forge perwin::pyimfit
-
-Note that this only works for Python 3.10 or later.
 
 
 

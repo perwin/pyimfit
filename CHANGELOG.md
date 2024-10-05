@@ -99,6 +99,7 @@ The interface to the FunctionSetDescription class has changed: the "name" parame
 now optional (and defaults to None).
 
 
+
 ## 0.10.0 -- 2020-11-20
 ### Changed
 Updated to use version 1.8 of Imfit, including new image functions (GaussianRingAz, FlatBar)
@@ -150,8 +151,6 @@ User can now specify verbosity level of fit via `verbose` keyword in Imfit.doFit
 Data, PSF, mask, and error images added to an Imfit instance are automatically processed
 by the FixImage function, so it is no longer necessary to do this prior to adding them
 to an Imfit instance.
-
-### Changed
 
 ### Fixed
 The (limited) API documentation is now available on readthedocs.org! (After insane kludging with
